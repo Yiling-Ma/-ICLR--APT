@@ -1,0 +1,53 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.10}
+
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Held-out Disease}
+& \textbf{Fine Macro-F1}
+& \textbf{Fine Acc.}
+& \textbf{Coarse Macro-F1}
+& \textbf{Coarse Acc.}
+& \textbf{Tail Macro-F1} \\
+\midrule
+BTC
+& 0.086 & 0.317 & 0.310 & 0.479 & 0.073 \\
+CRC
+& 0.105 & 0.277 & 0.309 & 0.520 & 0.112 \\
+GC
+& 0.063 & 0.269 & 0.281 & 0.488 & 0.057 \\
+HCC
+& 0.063 & 0.246 & 0.264 & 0.383 & 0.072 \\
+% Normal
+% & 0.021 & 0.033 & 0.200 & 0.358 & 0.000 \\
+PC
+& 0.057 & 0.253 & 0.221 & 0.482 & 0.037 \\
+\midrule
+\textbf{Macro-average}
+& \textbf{0.066}
+& \textbf{0.232}
+& \textbf{0.264}
+& \textbf{0.452}
+& \textbf{0.059} \\
+\bottomrule
+\end{tabular}
+}
+
+\caption{
+Leave-one-disease-out (LODO) generalization for \ourmethod{}.
+Each row withholds all patients of the named disease from training
+entirely.
+The in-distribution reference using the same configuration and the
+standard patient-independent split, with no disease withheld, achieves
+a fine-subtype Macro-F1 of 0.171 and a coarse-lineage Macro-F1 of 0.360.
+These results are reported as motivation for the novelty-detection head
+(\S4.3), rather than as evidence that the current mechanism already
+resolves the generalization gap.
+}
+\label{tab:lodo}
+
+\end{table}

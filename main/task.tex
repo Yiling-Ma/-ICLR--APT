@@ -1,0 +1,27 @@
+\section{Problem Setup}
+\label{sec:data}
+
+\subsection{Dataset and Prediction Task}
+\label{sec:data:description}
+
+Our dataset comprises single-cell aptamer (APT) protein expression profiles collected from the peripheral blood of 40 patients across six disease categories: colorectal cancer (CRC), gastric cancer (GC), hepatocellular carcinoma (HCC), pancreatic cancer (PC), biliary tract cancer (BTC), and healthy controls (Normal), with 6--8 patients per category. The raw dataset contains 374{,}854 cells, each represented by a 293-dimensional APT expression vector that quantifies a panel of aptamer-target proteins. Like CyTOF and high-plex flow cytometry, APT profiling produces fixed-dimensional single-cell protein expression measurements. Expression values are log-transformed and $z$-scored feature-wise, with all preprocessing statistics estimated exclusively from the training data.
+
+The prediction task follows a three-level hierarchy, disease $\rightarrow$ lineage $\rightarrow$ subtype. At the disease level, each patient is assigned to one of six classes: CRC, GC, HCC, PC, BTC, or Normal. Because this task is already near saturation under our evaluation protocol, it is handled by a simple linear classifier and lies outside the architectural scope of \ourmethod{}. At the lineage level, each cell is assigned to one of five coarse immune-lineage groups: T, B, NK, Myeloid, or Other, with each fine-grained subtype mapped to a parent lineage using a manually curated lookup table. At the subtype level, cells are classified into 27 fine-grained categories spanning T-cell, B-cell, NK-cell, and myeloid subsets, including \emph{CD4 + Tcm-1/2}, \emph{CD8 + CTL-1/2/3}, \emph{Memory B-1/2}, and \emph{CD16/CD56 NK}, together with a small number of retained non-immune classes such as \emph{Erythrocyte} and \emph{platelet}. We exclude the \emph{Unknown} category, which contains 13{,}062 cells and represents $3.5\%$ of the raw dataset, because it denotes cells without a confident subtype assignment rather than a distinct biological state. We therefore do not use \emph{Unknown} as a proxy for novelty. Instead, novelty detection is evaluated using the leave-one-disease-out (LODO) protocol, which withholds an entire disease category and directly tests generalization to unseen diseases.
+\subsection{Evaluation Protocols}
+\label{sec:data:protocols}
+
+We consider three evaluation protocols with distinct purposes.
+
+\paragraph{Patient-level 5-fold cross-validation.}
+We use patient-level 5-fold cross-validation as the primary evaluation protocol. The 40 patients are partitioned into five disease-stratified folds using \texttt{StratifiedKFold} with a fixed random seed, which yields exactly eight test patients per fold in our cohort. The remaining patients are used for patient-level training and validation, and all preprocessing statistics are estimated exclusively from the corresponding training patients. Each patient therefore serves as a test case exactly once, while no cells from a test patient are observed during training or model selection. We pool the out-of-fold predictions from all five folds to obtain the final patient-disjoint evaluation set spanning all 40 patients. The same fold assignments are reused across all models and experiments, enabling paired statistical comparisons on identical test patients.
+
+\paragraph{Cell-level split.}
+As a protocol-sensitivity control, individual cells are stratified by subtype and assigned to training, validation, and test sets independently of patient identity. Cells from the same patient may therefore appear in both training and evaluation sets. We use this protocol only to quantify performance inflation caused by patient-level leakage relative to the primary patient-level evaluation protocol, as reported in \S\ref{sec:results:protocol} and Table~\ref{tab:protocol_sensitivity}.
+
+\paragraph{Leave-one-disease-out (LODO).}
+To evaluate generalization to unseen diseases, we withhold all patients from one disease category for testing and use the remaining five categories for patient-level training and validation. The held-out disease is excluded from feature standardization, optimization, and model selection. We repeat this procedure for all six disease categories, yielding six independently trained models. LODO is the only protocol in which the test set contains a disease category that is entirely absent from training. It therefore forms the basis of both the unseen-disease classification analysis in \S\ref{sec:results:lodo} and the novelty-detection evaluation in \S\ref{sec:results:novelty} and \S\ref{sec:method:novelty}.
+
+\subsection{Class Distribution}
+\label{sec:data:imbalance}
+
+The subtype distribution is strongly long-tailed. Disease-level support ranges from 39{,}002 cells for PC to 117{,}449 cells for Normal, while the 27 retained subtypes vary substantially in frequency within and across diseases. Common subsets such as \emph{Naive T} and \emph{CD16 NK} contain many cells, whereas rare subsets such as \emph{pDC} and \emph{Atypical Memory B} contain relatively few observations. We therefore use macro-F1 as the primary classification metric throughout \S\ref{sec:results}, since it assigns equal weight to all classes and is less dominated by highly prevalent subtypes than accuracy. We additionally report performance by subtype frequency group in Table~\ref{tab:tail_head}.

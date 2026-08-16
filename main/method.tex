@@ -1,0 +1,109 @@
+\section{Method}
+\label{sec:method}
+
+\ourmethod{} focuses on the two unsaturated levels of the hierarchy in \S\ref{sec:data}: lineage and subtype classification. Disease-level prediction is handled by a lightweight linear classifier, while the architectural contribution of \ourmethod{} is a differentiable cascade over the lineage $\rightarrow$ subtype hierarchy with explicit novelty detection. The framework consists of a shared cell encoder, a soft-routed lineage-subtype cascade, a cross-disease supervised contrastive objective, and a dedicated novelty-detection head.
+
+\subsection{Cell Encoder}
+\label{sec:method:backbone}
+
+Each cell is represented by a log-transformed and $z$-scored APT expression vector $x \in \mathbb{R}^{d}$ with $d=293$. We represent each APT feature as a token by combining a learned feature embedding $\mathrm{Emb}(i) \in \mathbb{R}^{h}$ with a value embedding produced by an MLP:
+\begin{equation}
+t_i = \mathrm{Emb}(i) + \mathrm{MLP}_{\text{val}}(x_i), \qquad i=1,\dots,d.
+\end{equation}
+A learnable \texttt{[CLS]} token is prepended to $(t_1,\dots,t_d)$, and the resulting sequence is processed by a pre-norm Transformer encoder with 4 layers, 8 attention heads, hidden dimension $h=256$, feed-forward dimension 512, GELU activations, and dropout 0.1. The resulting \texttt{[CLS]} representation
+\begin{equation}
+z = \mathrm{Encode}(x) \in \mathbb{R}^{h}
+\end{equation}
+serves as the shared cell representation for all downstream components.
+
+\subsection{Soft-Routed Hierarchical Cascade}
+\label{sec:method:cascade}
+
+Let $M=5$ denote the number of coarse lineages and $K=27$ the number of fine-grained subtypes. Each subtype $k$ belongs to exactly one parent lineage $m(k)$ according to the hierarchy defined in \S\ref{sec:data}. A linear lineage head produces logits
+\begin{equation}
+c = W_c z \in \mathbb{R}^{M},
+\end{equation}
+from which we obtain the routing distribution
+\begin{equation}
+p(m \mid x) = \mathrm{softmax}(c/\tau)_m,
+\end{equation}
+with temperature $\tau=1$.
+
+A hard cascade would restrict subtype prediction to the lineage with the highest posterior probability, making fine-level recovery difficult when the lineage prediction is incorrect. Instead, \ourmethod{} performs differentiable soft routing and retains an unconditional global prediction path. The logit for subtype $k$ is
+\begin{equation}
+s_k(x) =
+\underbrace{g_k(z)}_{\text{global path}}
++
+\alpha \, p(m(k)\mid x) \, e_{m(k),k}(z)
++
+\gamma \log\!\big(\epsilon + (1-\epsilon)p(m(k)\mid x)\big),
+\label{eq:cascade}
+\end{equation}
+where $g(z)=W_g z \in \mathbb{R}^{K}$ is a global subtype head and $e_{m,k}(z)$ is the output of the expert associated with lineage $m$. The global path allows subtype prediction independently of the lineage decision, while the expert term incorporates lineage-specific information through continuous routing. We set $\alpha=1.0$. The final term introduces a lineage-dependent log prior while preventing low lineage probabilities from eliminating a subtype entirely. We set $\epsilon=0.1$ and linearly increase $\gamma$ from 0 to 0.5 during the first 10 epochs. Final predictions are
+\begin{equation}
+\hat{k} = \arg\max_k s_k(x),
+\qquad
+\hat{m} = \arg\max_m c_m.
+\end{equation}
+
+For analysis, we evaluate three routing regimes by replacing $p(m\mid x)$ in Eq.~\ref{eq:cascade}. Soft routing uses the predicted lineage posterior, hard routing uses a one-hot distribution at $\arg\max_m c_m$, and oracle routing uses a one-hot distribution at the ground-truth lineage. Soft routing is the default inference mode, while the hard and oracle variants are used to separate errors caused by lineage routing from those caused by subtype classification.
+
+\subsection{Cross-Disease Supervised Contrastive Learning}
+\label{sec:method:contrastive}
+
+We encourage cells of the same subtype to share representations across disease contexts. Given the normalized projection
+\begin{equation}
+u = \frac{\mathrm{Proj}(z)}
+{\lVert \mathrm{Proj}(z) \rVert_2},
+\end{equation}
+we construct supervised contrastive pairs using both subtype and disease labels. For an anchor cell $i$ with subtype $k_i$ and disease $d_i$, positive examples are cells with the same subtype but a different disease, satisfying $k_j=k_i$ and $d_j\neq d_i$. Same-subtype cells from the same disease are excluded from both the numerator and denominator because they do not provide evidence that subtype representations generalize across disease contexts. Cells with different subtypes are treated as negatives, with additional weight assigned to negatives from the same lineage to emphasize biologically similar but distinct subtypes. Minibatches are constructed to include cross-disease positive pairs when available. The contrastive loss weight is increased linearly from 0 to 0.2 over epochs 6--15.
+
+\subsection{Novelty Detection}
+\label{sec:method:novelty}
+
+Closed-set classification requires every input to be assigned to one of the known classes, even when the input originates from a disease absent during training. We therefore augment \ourmethod{} with a per-cell novelty score that can identify inputs inconsistent with the training distribution.
+
+\paragraph{Training-free scores.}
+We first consider two standard training-free baselines. Given fine-level logits $s(x)$, we compute the maximum softmax probability novelty score
+\begin{equation}
+\mathrm{MSP}(x)
+=
+1-\max_k \mathrm{softmax}(s(x))_k
+\end{equation}
+\citep{hendrycks2016baseline}
+and the energy score
+\begin{equation}
+\mathrm{Energy}(x)
+=
+-\log \sum_k \exp(s_k(x))
+\end{equation}
+\citep{liu2020energy}.
+The same scores are computed from the lineage logits $c(x)$ to obtain coarse-level training-free baselines.
+
+\paragraph{Trained novelty head.}
+Our final model uses a dedicated novelty head trained to recognize the specific form of distribution shift considered in this work, namely an entirely unseen disease. For each LODO fold, let $D$ denote the true held-out disease and let $\mathcal{D}_{\mathrm{known}}$ denote the remaining five diseases. We first freeze the trained encoder and classification cascade. We then select one disease $P \in \mathcal{D}_{\mathrm{known}}$ as a proxy-novel disease and train a lightweight MLP
+\begin{equation}
+\mathrm{NoveltyHead}: \mathbb{R}^{h} \rightarrow \mathbb{R}
+\end{equation}
+on the frozen representation $z$. Cells from $P$ receive novelty label 1, while cells from $\mathcal{D}_{\mathrm{known}}\setminus\{P\}$ receive label 0. The head is optimized with class-weighted binary cross-entropy and early stopping on a held-out $10\%$ development split of the training cells.
+
+At evaluation, known cells are drawn from the validation data of $\mathcal{D}_{\mathrm{known}}\setminus\{P\}$, while novel cells are drawn exclusively from the test set of the true held-out disease $D$. The evaluation disease therefore influences neither cascade training nor novelty-head training. This nested design evaluates whether novelty learned from a simulated unseen disease $P$ transfers to a different disease $D$ that is completely absent from training. We use a deterministic proxy selection rule and discuss the resulting limited proxy diversity in \S\ref{sec:discussion}.
+
+\subsection{Optimization}
+\label{sec:method:training}
+
+The classification cascade is trained jointly using
+\begin{equation}
+\mathcal{L}
+=
+\lambda_{\text{fine}}\mathcal{L}_{\text{fine}}
++
+\lambda_{\text{coarse}}\mathcal{L}_{\text{coarse}}
++
+w_{\text{contrast}}(t)\mathcal{L}_{\text{contrast}},
+\end{equation}
+where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-entropy losses with $\lambda_{\text{fine}}=1.0$ and $\lambda_{\text{coarse}}=0.5$. The contrastive weight $w_{\text{contrast}}(t)$ increases to 0.2 according to the schedule in \S\ref{sec:method:contrastive}.
+
+We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling, as our experiments found that it did not improve performance after correcting an implementation issue. Additional details are provided in Appendix~\ref{sec:appendix:sampler}.
+
+The novelty head is trained after the corresponding cascade checkpoint is fixed. We use AdamW with learning rate $10^{-3}$ and weight decay $10^{-4}$ for at most 30 epochs, with early-stopping patience 5. Full configurations and reproduction commands are provided in the accompanying code repository.

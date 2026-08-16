@@ -1,0 +1,159 @@
+
+
+% ------------------------------------------------------------
+% Table 2: MAIN RESULTS
+% Coarse-lineage and fine-subtype classification
+% ------------------------------------------------------------
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{llccc}
+\toprule
+\textbf{Task}
+& \textbf{Model}
+& \textbf{Macro-F1}
+& \textbf{Accuracy}
+& \textbf{95\% CI (Macro-F1)} \\
+\midrule
+
+\multirow{6}{*}{Coarse lineage}
+& \textbf{\ourmethod{}}
+& \textbf{0.360}
+& 0.505
+& [0.295, 0.379] \\
+
+& XGBoost
+& 0.337$^{*}$
+& \textbf{0.518}
+& [0.275, 0.357] \\
+
+& Linear SVM
+& 0.295$^{*}$
+& 0.375
+& [0.262, 0.319] \\
+
+& Logistic Regression
+& 0.272$^{*}$
+& 0.317
+& [0.242, 0.304] \\
+
+& Random Forest
+& 0.241$^{*}$
+& 0.492
+& [0.208, 0.303] \\
+
+& Reference Correlation
+& 0.162$^{*}$
+& 0.211
+& [0.095, 0.218] \\
+
+\midrule
+
+\multirow{7}{*}{Fine subtype}
+& \textbf{\ourmethod{}}
+& \textbf{0.171}
+& 0.315
+& [0.084, 0.179] \\
+
+& XGBoost
+& 0.162$^{\mathrm{n.s.}}$
+& \textbf{0.322}
+& [0.082, 0.168] \\
+
+& Hierarchical (JEPA-init)
+& 0.154$^{*}$
+& 0.204
+& [0.060, 0.169] \\
+
+& Logistic Regression
+& 0.135$^{*}$
+& 0.170
+& [0.061, 0.153] \\
+
+& Linear SVM
+& 0.110$^{*}$
+& 0.184
+& [0.056, 0.119] \\
+
+& Random Forest
+& 0.105$^{*}$
+& 0.313
+& [0.057, 0.109] \\
+
+& Reference Correlation
+& 0.067$^{*}$
+& 0.102
+& [0.024, 0.071] \\
+
+\bottomrule
+\end{tabular}
+}
+
+\caption{
+Coarse-lineage (5-class) and fine-subtype (27-class) classification
+under patient-independent evaluation.
+95\% confidence intervals are obtained from 2,000 paired
+patient-level bootstrap resamples over the six held-out test patients.
+$^{*}$ indicates that \ourmethod{}'s margin over the corresponding
+baseline excludes zero at the 95\% level;
+$^{\mathrm{n.s.}}$ indicates that it does not.
+}
+\label{tab:main}
+
+\end{table}
+
+
+
+
+
+% ------------------------------------------------------------
+% Table 4: Structural advantage over independently-trained baselines
+% ------------------------------------------------------------
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular}{lc}
+\toprule
+\textbf{Model}
+& \textbf{Coarse--Fine Consistency} \\
+\midrule
+
+\textbf{\ourmethod{}}
+& \textbf{0.780} \\
+
+XGBoost
+& 0.657 \\
+
+Linear SVM
+& 0.653 \\
+
+Logistic Regression
+& 0.572 \\
+
+Random Forest
+& 0.424 \\
+
+Reference Correlation
+& 0.311 \\
+
+\bottomrule
+\end{tabular}
+
+\caption{
+Coarse--fine prediction consistency, defined as the fraction of test
+cells for which the independently predicted coarse lineage matches the
+true lineage associated with the independently predicted fine subtype.
+Classical baselines train coarse and fine classifiers separately and
+therefore impose no explicit consistency constraint, whereas
+\ourmethod{}'s consistency follows directly from its cascade routing.
+}
+\label{tab:consistency}
+
+\end{table}

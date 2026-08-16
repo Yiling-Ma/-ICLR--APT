@@ -1,0 +1,129 @@
+
+\documentclass{article} % For LaTeX2e
+\usepackage{iclr2027_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{makecell}
+
+
+\title{\ourmethod{}:A Hierarchical Novelty-Aware Cascade for Multi-Cancer Liquid Biopsy Diagnosis}
+% Global paper constants
+
+\definecolor{Brown}{HTML}{6B3A32}
+\definecolor{Red}{HTML}{A01822}
+
+\newcommand{\ourmethod}{%
+  % \textsc{
+  \textcolor{Red}{Drop}\textsc{\textcolor{Brown}{Cascade}}\xspace%
+}
+
+\newcommand{\numsubtypes}{28}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the \iclrfinalcopy macro remains commented out below.
+% Non-anonymous submissions will be rejected without review.
+
+\author{Antiquus S.~Hippocampus, Natalia Cerebro \& Amelie P. Amygdale \thanks{ Use footnote for providing further information
+about author (webpage, alternative address)---\emph{not} for acknowledging
+funding agencies.  Funding acknowledgements go at the end of the paper.} \\
+Department of Computer Science\\
+Cranberry-Lemon University\\
+Pittsburgh, PA 15213, USA \\
+\texttt{\{hippo,brain,jen\}@cs.cranberry-lemon.edu} \\
+\And
+Ji Q. Ren \& Yevgeny LeNet \\
+Department of Computational Neuroscience \\
+University of the Witwatersrand \\
+Joburg, South Africa \\
+\texttt{\{robot,net\}@wits.ac.za} \\
+\AND
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+Multi-cancer early detection remains challenging because current diagnostic pathways often rely on invasive tissue biopsy, limiting repeated population-scale screening. Single-cell aptamer (APT) protein profiling offers a non-invasive liquid biopsy alternative, but clinically interpreting a single blood draw requires answering three nested questions: whether disease is present and which cancer type is involved (disease), how circulating immune cell lineages are distributed (lineage), and how fine-grained cell subtypes are composed (subtype). A reliable model should address these hierarchical predictions without becoming overconfident on cancer types or cellular states unseen during training. We introduce \ourmethod{}, a hierarchical, novelty-aware cascade for multi-cancer characterization from a single blood draw. Because disease-level prediction is near saturation under our protocol, a lightweight linear front end handles this level, while \ourmethod{} focuses on lineage and subtype prediction through differentiable soft routing over the lineage-subtype taxonomy with joint classification and novelty scores. This design identifies insufficient evidence for assigning cells to known categories rather than forcing closed-set predictions. We evaluate \ourmethod{} on a real-world multi-cancer APT dataset of 40 patients and more than 370,000 single cells using a strict patient-independent protocol with classical machine learning and neural baselines, patient-level bootstrap confidence intervals, and leave-one-disease-out (LODO) generalization tests. \ourmethod{} matches or exceeds XGBoost in macro-F1 and improves coarse-fine prediction consistency to 78.0\%, compared with 65.7\% for XGBoost. Under a nested LODO training scheme, the novelty detection head achieves a mean AUROC of 0.81 and mean AUPR of 0.86 across six held-out disease groups for detecting cells from unseen diseases, outperforming a training-free confidence-based baseline with a mean AUROC of 0.63. These results demonstrate a unified approach to hierarchical prediction, patient-independent evaluation, and explicit novelty detection for small-sample, long-tailed classification in liquid biopsy and related clinical machine learning settings.
+\end{abstract}
+
+
+\input{main/intro}
+
+\input{main/related_work}
+
+\input{main/task}
+
+\input{main/method}
+\subsection*{AI use statement}
+
+% (This section is \textbf{required} and does not count toward the page limit.)
+
+% In this work, we used generative AI tools for [tasks with required disclosure].
+% We have not used generative AI tools for [other tasks with required disclosure],
+% and [the rest of the required disclosure tasks] are not applicable to this work.
+% Additionally, we used generative AI tools for [tasks with recommended
+% disclosure]. We have reviewed all AI-assisted work. [Elaborate. For example, “we
+% checked LLM-generated research ideas for potential plagiarism through a manual
+% literature survey”, “LLM-generated code was verified and tested for correctness
+% by 2 authors”, etc.]. We take responsibility for the final content of this work,
+% including text, claims or artifacts produced with the aid of generative AI.
+
+% See the ICLR 2027 AI Policy for Authors for more details. This statement should
+% not be more than 1 page.
+
+\subsection*{Ethics statement}
+
+% (This section is \textbf{recommended} and does not count toward the page limit.)
+
+% If authors feel that their paper submission raises questions regarding the Code
+% of Ethics, they are encouraged to include a paragraph of Ethics Statement (at
+% the end of the main text before references) to address potential concerns where
+% appropriate. Topics include, but are not limited to, studies that involve human
+% subjects, practices to data set releases, potentially harmful insights,
+% methodologies and applications, potential conflicts of interest and sponsorship,
+% discrimination/bias/fairness concerns, privacy and security issues, legal
+% compliance, and research integrity issues (e.g., IRB, documentation, research
+% ethics). This statement should not be more than 1 page.
+
+\subsection*{Reproducibility statement}
+
+
+\subsubsection*{Author Contributions}
+
+\subsubsection*{Acknowledgments}
+
+\bibliography{iclr2027_conference}
+\bibliographystyle{iclr2027_conference}
+
+\appendix
+\section{Appendix}
+
+
+
+\end{document}

@@ -1,0 +1,72 @@
+% ------------------------------------------------------------
+% Table 1: Disease-level detection
+% ------------------------------------------------------------
+\begin{table}[t]
+\centering
+\small
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccc@{}}
+\toprule
+\textbf{Model}
+& \textbf{Accuracy}
+& \textbf{Macro-F1}
+& \textbf{Weighted-F1}
+& \textbf{Balanced Acc.} \\
+\midrule
+
+Linear SVM
+& 0.998
+& \textbf{0.997}
+& 0.998
+& 0.998 \\
+
+Logistic Regression
+& \textbf{0.998}
+& 0.997
+& \textbf{0.998}
+& \textbf{0.998} \\
+
+XGBoost
+& 0.993
+& 0.991
+& 0.993
+& 0.990 \\
+
+Random Forest
+& 0.964
+& 0.946
+& 0.963
+& 0.938 \\
+
+Reference Correlation$^\dagger$
+& 0.953
+& 0.918
+& 0.953
+& 0.936 \\
+
+\bottomrule
+\end{tabular*}
+
+\vspace{3pt}
+
+\parbox{\columnwidth}{
+\footnotesize
+$^\dagger$ SingleR-style reference-correlation classifier
+(Spearman nearest-centroid mapping), following the template-matching
+principle used by reference-mapping methods such as
+SingleR \citep{aran2019reference}.
+}
+
+\caption{
+Disease-level (6-class) detection under patient-independent evaluation.
+Simple linear classifiers achieve near-perfect performance, motivating
+our decision not to introduce a separate disease-level head in
+\ourmethod{}: the full pipeline instead uses Logistic Regression
+(bolded above) as a lightweight front-end gate, reserving \ourmethod{}'s
+architectural contribution for the substantially harder
+lineage$\rightarrow$subtype cascade (Table~\ref{tab:main}).
+}
+\label{tab:disease}
+
+\end{table}
