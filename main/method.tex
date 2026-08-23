@@ -6,7 +6,7 @@
 \subsection{Cell Encoder}
 \label{sec:method:backbone}
 
-Each cell is represented by a log-transformed and $z$-scored APT expression vector $x \in \mathbb{R}^{d}$ with $d=293$. We represent each APT feature as a token by combining a learned feature embedding $\mathrm{Emb}(i) \in \mathbb{R}^{h}$ with a value embedding produced by an MLP:
+Each cell is represented by a log-transformed and $z$-scored APT expression vector $x \in \mathbb{R}^{d}$ with $d=293$, where each dimension corresponds to a distinct, individually designed aptamer-target protein (\S\ref{sec:data:description}) rather than an arbitrary or learned coordinate. We represent each APT feature as a token by combining a learned feature embedding $\mathrm{Emb}(i) \in \mathbb{R}^{h}$ with a value embedding produced by an MLP:
 \begin{equation}
 t_i = \mathrm{Emb}(i) + \mathrm{MLP}_{\text{val}}(x_i), \qquad i=1,\dots,d.
 \end{equation}
