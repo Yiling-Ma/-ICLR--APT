@@ -22,72 +22,67 @@
 
 \multirow{6}{*}{Coarse lineage}
 & \textbf{\ourmethod{}}
-& \textbf{0.360}
-& 0.505
-& [0.295, 0.379] \\
+& \textbf{0.333}
+& 0.506
+& [0.309, 0.356] \\
 
 & XGBoost
-& 0.337$^{*}$
-& \textbf{0.518}
-& [0.275, 0.357] \\
+& 0.322$^{*}$
+& \textbf{0.517}
+& [0.300, 0.345] \\
 
 & Linear SVM
-& 0.295$^{*}$
-& 0.375
-& [0.262, 0.319] \\
+& 0.311$^{*}$
+& 0.413
+& [0.296, 0.326] \\
 
 & Logistic Regression
-& 0.272$^{*}$
-& 0.317
-& [0.242, 0.304] \\
+& 0.299$^{*}$
+& 0.348
+& [0.283, 0.315] \\
 
 & Random Forest
-& 0.241$^{*}$
-& 0.492
-& [0.208, 0.303] \\
+& 0.250$^{*}$
+& 0.500
+& [0.228, 0.272] \\
 
 & Reference Correlation
-& 0.162$^{*}$
-& 0.211
-& [0.095, 0.218] \\
+& 0.172$^{*}$
+& 0.209
+& [0.150, 0.189] \\
 
 \midrule
 
-\multirow{7}{*}{Fine subtype}
+\multirow{6}{*}{Fine subtype}
 & \textbf{\ourmethod{}}
-& \textbf{0.171}
-& 0.315
-& [0.084, 0.179] \\
+& \textbf{0.156}
+& 0.305
+& [0.133, 0.169] \\
 
 & XGBoost
-& 0.162$^{\mathrm{n.s.}}$
-& \textbf{0.322}
-& [0.082, 0.168] \\
-
-& Hierarchical (JEPA-init)
-& 0.154$^{*}$
-& 0.204
-& [0.060, 0.169] \\
+& 0.143$^{\mathrm{n.s.}}$
+& \textbf{0.323}
+& [0.128, 0.158] \\
 
 & Logistic Regression
-& 0.135$^{*}$
-& 0.170
-& [0.061, 0.153] \\
+& 0.132$^{\mathrm{n.s.}}$
+& 0.166
+& [0.112, 0.146] \\
 
 & Linear SVM
-& 0.110$^{*}$
-& 0.184
-& [0.056, 0.119] \\
+& 0.111$^{*}$
+& 0.179
+& [0.093, 0.126] \\
 
 & Random Forest
-& 0.105$^{*}$
-& 0.313
-& [0.057, 0.109] \\
+& 0.092$^{*}$
+& 0.319
+& [0.081, 0.100] \\
 
 & Reference Correlation
-& 0.067$^{*}$
-& 0.102
-& [0.024, 0.071] \\
+& 0.072$^{*}$
+& 0.092
+& [0.055, 0.083] \\
 
 \bottomrule
 \end{tabular}
@@ -95,12 +90,16 @@
 
 \caption{
 Coarse-lineage (5-class) and fine-subtype (27-class) classification
-under patient-independent evaluation.
+under patient-level 5-fold cross-validation (\S\ref{sec:data:protocols}).
+Macro-F1 and accuracy are computed on the pooled out-of-fold predictions
+spanning all 40 patients.
 95\% confidence intervals are obtained from 2,000 paired
-patient-level bootstrap resamples over the six held-out test patients.
+patient-level bootstrap resamples over these 40 pooled test patients.
 $^{*}$ indicates that \ourmethod{}'s margin over the corresponding
 baseline excludes zero at the 95\% level;
 $^{\mathrm{n.s.}}$ indicates that it does not.
+The single-split Hierarchical (JEPA-init) baseline is omitted here pending
+a 5-fold rerun under the same protocol; see \S\ref{sec:discussion}.
 }
 \label{tab:main}
 
