@@ -124,6 +124,18 @@ Multi-cancer early detection remains challenging because current diagnostic path
 \appendix
 \section{Appendix}
 
+\subsection{Lineage-Resolved Disease-Specific Aptamer Signatures}
+\label{sec:appendix:apt_markers}
 
+To assess whether the APT panel captures molecular differences beyond cell-type composition, we examined, within each of the three major immune lineages (T/NK, B, and myeloid), the aptamer whose average expression was most enriched in a given disease relative to the other five groups (disease-specific aptamer, selected independently per lineage). Figure~\ref{fig:apt_markers} shows the resulting six disease-specific aptamers (one per disease category, including Normal) within each lineage. Several aptamers show a consistent, lineage-independent pattern: for example, the HCC-specific aptamer is elevated in HCC relative to all other categories in the T/NK, B, and myeloid compartments alike, suggesting a disease-associated signal that is not restricted to a single cell type. This lineage-resolved characterization is descriptive and based on the full panel prior to any train/test partitioning; it is intended to establish molecular plausibility for the APT modality rather than as a validated biomarker panel, and none of these aptamers are used as hand-selected features by \ourmethod{} or any baseline in \S\ref{sec:results}, which instead consume the full 293-dimensional panel.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/apt_tnk_page-6_crop.png}
+\includegraphics[width=\textwidth]{figures/apt_b_page-7_crop.png}
+\includegraphics[width=\textwidth]{figures/apt_mono_page-8_crop.png}
+\caption{Disease-specific aptamer expression (mean per-cell value, boxplots over cells) within the T/NK (top), B (middle), and myeloid (bottom) lineages. Each panel shows the aptamer most enriched in the named disease relative to the other five categories, computed independently within that lineage.}
+\label{fig:apt_markers}
+\end{figure}
 
 \end{document}
