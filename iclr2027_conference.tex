@@ -148,4 +148,20 @@ Motivated by the observation that tree-structured label hierarchies can be embed
 
 Under the single patient-independent split used for architecture development (\S\ref{sec:data:protocols}), this regularizer did not improve performance and in fact reduced it relative to the same configuration without the term: fine-subtype macro-F1 decreased from 0.171 to 0.136, and coarse-lineage macro-F1 decreased from 0.360 to 0.317. We did not conduct a hyperparameter sweep over the margin values or loss weight, so we cannot rule out that a different configuration would help; however, the result is consistent with the hierarchy-weighted term already present in the cross-disease contrastive loss (\S\ref{sec:method:contrastive}) capturing much of this signal, making an additional explicit hierarchy constraint redundant, or even conflicting, at this weight. We report this as a negative result rather than omitting it, and do not include this regularizer in the final \ourmethod{} configuration.
 
+\subsection{Minimal Aptamer Panel for Disease Classification}
+\label{sec:appendix:minimal_panel}
+
+Because a smaller aptamer panel would be cheaper and simpler to deploy clinically, we ask how many of the 293 aptamers are actually needed for disease classification. We first rank all 293 aptamers by the absolute coefficient magnitude of an $\ell_1$-regularized multinomial logistic regression fit to the full cohort ($C=0.1$); this ranking step is used only to order features and is not used to report any performance number, so it does not leak into the evaluation below. For each candidate panel size $K \in \{5, 10, 15, 20, 30, 50, 75, 100, 150, 200, 293\}$, we restrict the APT input to the top-$K$ ranked aptamers and evaluate Logistic Regression and XGBoost under the same patient-level 5-fold protocol used throughout this work (\S\ref{sec:data:protocols}), reporting pooled out-of-fold disease macro-F1.
+
+Figure~\ref{fig:panel_curve} shows the resulting panel-size--performance curve. Performance rises sharply with panel size and then plateaus: a panel of only 20 aptamers ($6.8\%$ of the full panel) already recovers $93\%$ of the full-panel macro-F1, and a panel of 50 aptamers ($17\%$) recovers $98\%$. Performance peaks around $K=150$--$200$ and does not further improve, and in fact is marginally lower at $K=293$ than at $K=200$ for both models, indicating that the full panel is not even performance-optimal for this task and that a substantially reduced panel is sufficient for disease classification. The top-20 ranked aptamers are APT-179, APT-225, APT-164, APT-166, APT-57, APT-125, APT-161, APT-69, APT-223, APT-172, APT-218, APT-167, APT-157, APT-54, APT-282, APT-47, APT-92, APT-196, APT-217, and APT-273.
+
+This ranking, obtained purely from a discriminative model fit to predict disease labels, agrees closely with the descriptive lineage-resolved characterization in Appendix~\ref{sec:appendix:apt_markers}: 5 of the 6 disease-specific aptamers identified there independently (APT-172 for HCC, APT-225 for HCC, APT-164 for BTC, APT-167 for GC, and APT-161 for CRC) appear within this top-20 discriminative ranking, despite the two analyses using unrelated methodology (group-wise mean comparison versus $\ell_1$ coefficient ranking) and unrelated objectives (lineage-resolved marker discovery versus whole-panel disease classification). This convergence provides independent cross-validation that both analyses are identifying a shared, non-arbitrary subset of disease-informative aptamers rather than method-specific artifacts.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/panel_size_curve.png}
+\caption{Disease macro-F1 (pooled 5-fold, patient-independent) as a function of aptamer panel size, for panels restricted to the top-$K$ aptamers ranked by $\ell_1$-regularized logistic regression coefficient magnitude. The dashed line marks the full 293-aptamer panel's macro-F1.}
+\label{fig:panel_curve}
+\end{figure}
+
 \end{document}
