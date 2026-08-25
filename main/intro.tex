@@ -10,15 +10,11 @@ We incorporate novelty detection into the representation learned by the hierarch
 
 Applying hierarchical and novelty-aware prediction to real clinical data introduces several practical challenges. First, our cohort contains only 40 patients but more than 370,000 single cells, creating a substantial mismatch between patient-level sample size and cell-level observations. Evaluation must therefore prevent cells from the same patient from appearing across training and test sets, since such leakage can substantially overestimate generalization. Second, lineage and subtype labels obey a strict hierarchy, yet independently trained classifiers can produce biologically inconsistent predictions across these levels. Third, the 27 subtype classes are strongly imbalanced, making macro-level performance particularly sensitive to rare classes. Finally, deployment requires the model to recognize inputs from diseases or cellular states absent from training rather than forcing them into the fixed set of known classes. These challenges motivate a framework that combines patient-independent evaluation, hierarchical prediction, and explicit novelty detection.
 
-We address these challenges with the following contributions.
+We address these challenges by introducing, to our knowledge, the first benchmark for hierarchical, novelty-aware classification on aptamer-based single-cell liquid biopsy data, together with a cascade architecture validated on it. Our contributions are as follows.
 
 \begin{itemize}
-    \item \textbf{A hierarchical multi-cancer liquid biopsy pipeline.} We introduce the first aptamer-based single-cell framework that integrates disease-level detection with lineage and subtype prediction to provide coordinated diagnostic and immune characterization from a single blood draw.
+    \item \textbf{A patient-independent multi-cancer APT benchmark.} We introduce the first aptamer-based single-cell benchmark for coordinated disease, lineage, and subtype prediction with explicit novelty detection, comprising a real-world cohort of 40 patients and more than 370,000 cells, a patient-level 5-fold cross-validation protocol with pooled bootstrap confidence intervals, a leave-one-disease-out (LODO) generalization suite, and a systematic comparison against five classical machine learning baselines. We additionally quantify how cell-level splitting inflates hierarchical classification performance relative to patient-independent evaluation, underscoring the importance of preventing patient-level leakage in small-cohort single-cell studies.
 
     \item \textbf{\ourmethod{}, a hierarchical, novelty-aware cascade.} Because disease classification is already near saturation under our patient-independent protocol, \ourmethod{} focuses on the more challenging lineage and subtype levels through differentiable soft routing and a dedicated novelty detection head trained on the shared cascade representation.
-
-    \item \textbf{A rigorous patient-independent evaluation protocol.} We evaluate classical and neural baselines using patient-independent splits, patient-level bootstrap confidence intervals, and leave-one-disease-out tests that directly measure generalization to entirely unseen diseases.
-
-    \item \textbf{An analysis of evaluation protocol sensitivity.} We show that cell-level splitting systematically inflates hierarchical classification performance relative to patient-independent evaluation, highlighting the importance of preventing patient-level leakage in small-cohort single-cell studies.
 \end{itemize}
 
