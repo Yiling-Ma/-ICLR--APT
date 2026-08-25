@@ -125,33 +125,34 @@ a 5-fold rerun under the same protocol; see \S\ref{sec:discussion}.
 \midrule
 
 \textbf{\ourmethod{}}
-& \textbf{0.780} \\
+& \textbf{0.828} \\
 
 XGBoost
-& 0.657 \\
+& 0.736 \\
 
 Linear SVM
-& 0.653 \\
-
-Logistic Regression
-& 0.572 \\
+& 0.631 \\
 
 Random Forest
-& 0.424 \\
+& 0.573 \\
+
+Logistic Regression
+& 0.568 \\
 
 Reference Correlation
-& 0.311 \\
+& 0.380 \\
 
 \bottomrule
 \end{tabular}
 
 \caption{
-Coarse--fine prediction consistency, defined as the fraction of test
-cells for which the independently predicted coarse lineage matches the
-true lineage associated with the independently predicted fine subtype.
-Classical baselines train coarse and fine classifiers separately and
-therefore impose no explicit consistency constraint, whereas
-\ourmethod{}'s consistency follows directly from its cascade routing.
+Coarse--fine prediction consistency under patient-level 5-fold
+cross-validation, defined as the fraction of pooled out-of-fold cells for
+which the independently predicted coarse lineage matches the true lineage
+associated with the independently predicted fine subtype. Classical
+baselines train coarse and fine classifiers separately and therefore
+impose no explicit consistency constraint, whereas \ourmethod{}'s
+consistency follows directly from its cascade routing.
 }
 \label{tab:consistency}
 
