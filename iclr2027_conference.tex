@@ -227,7 +227,7 @@ We additionally ran a reduced-scale patient-level label-permutation test
 computationally feasible within this project's budget). Disease labels
 were shuffled across the 40 patients, with every cell from a given patient
 receiving that patient's shuffled label, and the same fixed 5-fold patient
-partition was reused unchanged for every permutation. [PERMUTATION\_RESULT\_PLACEHOLDER]
+partition was reused unchanged for every permutation. None of the 30 permutations reached the observed patient accuracy of $1.000$ (permuted patient accuracy ranged from $0.075$ to $0.250$), giving an empirical $p=(1+0)/(1+30)=0.032$ for cell-level macro-F1, patient accuracy, and patient macro-F1 alike; this is the smallest attainable $p$-value at this permutation count and should be read only as "beyond this coarse resolution," not as a precise estimate.
 A permutation test at this scale can only detect a signal beyond chance;
 it cannot rule out a disease-correlated technical batch effect, since a
 sufficiently disease-correlated confound would also survive

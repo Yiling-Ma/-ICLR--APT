@@ -283,9 +283,22 @@ attainable p-value resolution to steps of 1/31 ≈ 0.032, so it cannot
 distinguish, e.g., p=0.001 from p=0.03. Results below should be read as a
 coarse plausibility check only.
 
-[to be filled in after the reduced permutation run completes — see below]
+Results (`patient_permutation_test.py`, `cell_JEPA/outputs/patient_level_disease/permutation_results_n30.csv`):
+observed cell macro-F1 = 0.9888, patient accuracy = 1.000, patient macro-F1 = 1.000.
+Across 30 permutations, patient accuracy ranged 0.075–0.250 (well within
+chance-adjacent range for a 6-class task), and 0/30 permutations reached the
+observed value for any of the three metrics, giving the floor empirical
+p-value at this permutation count: p = (1+0)/(1+30) = 0.032 for all three
+metrics. This confirms the real-label result is not an artifact of the
+fixed fold structure or pipeline mechanics beyond this coarse resolution,
+but — per the mandated interpretation rule — a permutation test cannot
+distinguish genuine disease biology from a sufficiently disease-correlated
+technical confound, since both would equally fail to survive label
+permutation only if the confound is patient-identity-linked but not
+disease-label-linked; a confound that happens to correlate with disease
+assignment would survive this test just as real signal does.
 
-## Phase 12 — Claim-level determination (preliminary, pending Phase 11 reduced-scale result)
+## Phase 12 — Claim-level determination
 
 Based on Phases 0-10: the evidence supports **Level A (exploratory
 within-cohort feasibility)**, not Level B or C. Rationale: patient-level
@@ -300,13 +313,56 @@ without acquisition-batch metadata that does not exist for this cohort.
 Level C (external generalization) is explicitly not supported and not
 claimed; there is no independent cohort.
 
-## Remaining work (this pass)
+## Completed this pass
 
-- [ ] Run reduced-scale (n=30) patient-level permutation test, fill in Phase 11.
-- [ ] Revise `tables/disease.tex` (Phase 13): patient-level primary table;
-      move pooled cell-level numbers to an explicitly-labeled
-      "cell-level prediction of disease source" appendix table.
-- [ ] Revise manuscript text (Phase 14): abstract, intro, task.tex,
-      results.tex, and any Discussion text touching disease/0.989/"near
-      saturation" language.
-- [ ] Final QA pass (Phase 15) and result manifest.
+- [x] Phase 11 (reduced scale, n=30) permutation test.
+- [x] Phase 13: `tables/disease.tex` replaced with patient-level primary
+      table; pooled cell-level numbers moved to
+      `tables/disease_cell_level.tex`, explicitly labeled "cell-level
+      prediction of the disease source of a held-out patient."
+- [x] Phase 14: abstract, `main/intro.tex` (contributions bullet),
+      `main/task.tex`, `main/results.tex` disease paragraph all revised to
+      remove unqualified "near saturation"/"already solved" framing and
+      add the required cohort-size / no-batch-metadata / within-cohort
+      caveats. New Appendix subsection
+      `sec:appendix:disease_patient_level` added with the full sensitivity
+      analysis writeup (centering collapse, fingerprint diagnostic,
+      permutation test, final cautious interpretation paragraph using the
+      spec's recommended wording).
+
+## Remaining / explicitly deferred (documented, not silently skipped)
+
+- [ ] Mean/median cell-probability patient-level aggregation (Phase 4)
+      not run as a separate comparison row; majority vote and the
+      patient-level summary-feature model were prioritized instead.
+- [ ] Explicit patient-balanced sample-weighted training (Phase 5B) not
+      run; equal-cell subsampling (already done) answers the same
+      practical question.
+- [ ] Predicted-label (as opposed to gold-label) composition baselines
+      (Phase 7) not run, given DropCascade's own fine-subtype macro-F1
+      (0.156) would dominate/confound interpretation.
+- [ ] Nested inner-CV for composition/summary-model regularization
+      strength (Phase 7/8) not run; a single prespecified C=0.1 used
+      instead, per the spec's own fallback instruction for small cohorts.
+- [ ] Robust (median/IQR) scaling and rank/percentile transforms (Phase 9,
+      items C/D) not run; median-centering alone already gives a clear,
+      interpretable result.
+- [ ] Embedding visualizations (PDF) for the fingerprint diagnostic
+      (Phase 10) not produced; numeric result reported instead.
+- [ ] Full-scale permutation test (200-1,000 permutations, all models) not
+      run; reduced-scale (n=30, LR only) version completed instead, with
+      the resulting p-value-resolution limitation stated explicitly in
+      both this document and the manuscript.
+- [ ] Phase 15 result manifest (`result_manifest.csv` with per-claim
+      source-file/script/seed traceability) not separately produced as a
+      structured CSV; traceability is instead documented inline in this
+      file's phase-by-phase sections.
+
+## Final claim-level determination
+
+**Level A — exploratory within-cohort feasibility.** This is the claim
+level reflected in the revised manuscript text. Level B is not claimed
+because performance is not stable under patient-wise centering. Level C
+(external generalization) is explicitly not claimed anywhere in the
+manuscript; there is no independent cohort or acquisition-batch metadata
+available to support it.
