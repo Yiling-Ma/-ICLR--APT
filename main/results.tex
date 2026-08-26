@@ -3,25 +3,39 @@
 
 \subsection{Disease-Level Detection}
 
+Table~\ref{tab:disease} reports disease-level (6-class) classification under our primary patient-level 5-fold protocol. All five classical baselines exceed 0.90 macro-F1, and the three strongest (Logistic Regression, XGBoost, Linear SVM) are within 0.003 macro-F1 of one another and effectively saturated above 0.98. Because this task is already solved by a simple linear classifier, \ourmethod{} does not introduce a dedicated disease-level head; the full pipeline uses Logistic Regression as a lightweight front-end gate and reserves \ourmethod{}'s architectural contribution for the substantially harder lineage and subtype levels.
+
 \input{tables/disease}
 
 \subsection{Hierarchical Lineage and Subtype Classification}
 
+Table~\ref{tab:main} reports coarse-lineage and fine-subtype classification under the same patient-level 5-fold protocol, with 95\% confidence intervals from 2,000 paired patient-level bootstrap resamples. At the coarse-lineage level, \ourmethod{} achieves the best macro-F1 (0.333) and its margin over every baseline, including XGBoost (0.322), excludes zero at the 95\% level. At the fine-subtype level, \ourmethod{} again attains the highest point estimate (0.156), and its margin is significant over Linear SVM, Random Forest, and Reference Correlation; however, the margin over XGBoost (0.143) and Logistic Regression (0.132) does not exclude zero, so we do not claim a significant fine-subtype improvement over the strongest classical baselines. This asymmetry is consistent with the broader tabular-data literature discussed in \S\ref{sec:related}: gradient-boosted trees remain highly competitive with deep models on tabular inputs, and we ground \ourmethod{}'s contribution in structural properties beyond raw fine-subtype macro-F1, specifically hierarchical consistency (Table~\ref{tab:consistency}) and tail-class performance (Table~\ref{tab:tail_head}), rather than in a fine-subtype margin over XGBoost alone.
+
 \input{tables/main_result}
+
+Table~\ref{tab:consistency} reports coarse--fine prediction consistency, the fraction of pooled out-of-fold cells for which the independently predicted coarse lineage matches the lineage associated with the independently predicted fine subtype. \ourmethod{} reaches 82.8\% consistency, compared with 73.6\% for the best classical baseline (XGBoost), a direct consequence of its cascade architecture: coarse and fine predictions share a routing mechanism (\S\ref{sec:method:cascade}) rather than being produced by independently trained classifiers with no mechanism to enforce agreement.
+
+Table~\ref{tab:tail_head} decomposes fine-subtype macro-F1 by class frequency, using a single global tail/head split (bottom and top quartile by pooled cell count) applied identically to every model. \ourmethod{}'s advantage is concentrated on the tail: it achieves the best tail macro-F1 (0.149, versus 0.119 for XGBoost) but is marginally behind XGBoost on head classes (0.284 versus 0.292). This suggests that \ourmethod{}'s cross-disease contrastive learning and lineage-conditioned routing (\S\ref{sec:method:contrastive}) provide the most benefit precisely where classical baselines struggle most, on rare, long-tailed subtypes, rather than uniformly across the class distribution.
 
 \input{tables/tail_head}
 
 \subsection{Generalization to Unseen Diseases}
 \label{sec:results:lodo}
 
+Table~\ref{tab:lodo} reports leave-one-disease-out (LODO) generalization, in which \ourmethod{} is trained with an entire disease category withheld and evaluated on that category as if it were a novel, previously unseen disease. Averaged across the five malignancies (Normal is excluded from this average for reasons discussed in the table caption), fine-subtype macro-F1 drops to 0.075 and coarse-lineage macro-F1 to 0.277, both substantially below the in-distribution reference of 0.171 and 0.360 achieved by the same architecture and configuration with no disease withheld. This gap is expected: a classifier cannot be asked to correctly categorize cell states from a disease it never observed into the same fixed label space with in-distribution accuracy. We report LODO classification performance primarily as motivation for treating novelty detection as a first-class requirement (\S\ref{sec:method:novelty}) rather than as evidence that \ourmethod{}'s cascade already closes this generalization gap.
+
 \input{tables/LOD}
 
 \subsection{Novelty Detection}
 \label{sec:results:novelty}
 
+Table~\ref{tab:novelty} evaluates whether \ourmethod{} can recognize that a cell originates from a disease absent from training, rather than silently assigning it to one of the known classes. Under the nested LODO protocol described in \S\ref{sec:method:novelty}, in which the evaluation disease influences neither cascade training nor novelty-head training, the trained novelty head achieves a mean AUROC of 0.812 and mean AUPR of 0.856 across the six held-out disease groups, compared with a mean AUROC of 0.627 for the strongest training-free baseline (energy-based scoring on fine-level logits). Performance is not uniform across held-out diseases, ranging from near-ceiling on PC (AUROC 0.999) to closer to chance on Normal (AUROC 0.607); we discuss this proxy-disease dependence, a limitation of our deterministic proxy selection rule, in \S\ref{sec:discussion}.
+
 \input{tables/novelty}
 
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:results:protocol}
+
+Table~\ref{tab:protocol_sensitivity} compares our primary patient-level protocol against a cell-level control in which cells from the same patient can appear in both training and test sets. Cell-level splitting inflates macro-F1 for both XGBoost and \ourmethod{} at both hierarchy levels, but the inflation is roughly twice as large for \ourmethod{} (+0.099 coarse, +0.105 fine) as for XGBoost (+0.050 coarse, +0.069 fine). This indicates that \ourmethod{}'s learned representation is more sensitive to patient-level leakage than a tree-based baseline operating directly on tabular features, and it directly motivates our choice of patient-independent evaluation as the primary protocol throughout this work: a cell-level evaluation would not only overstate absolute performance for both model families, but would understate \ourmethod{}'s reliance on patient-independent generalization specifically.
 
 \input{tables/protocol_sensitivity}
