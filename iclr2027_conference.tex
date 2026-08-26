@@ -164,4 +164,11 @@ This ranking, obtained purely from a discriminative model fit to predict disease
 \label{fig:panel_curve}
 \end{figure}
 
+\subsection{Balanced Sampling Ablation}
+\label{sec:appendix:sampler}
+
+The final \ourmethod{} configuration (\S\ref{sec:method:training}) does not use class-balanced sampling. We initially implemented a balanced subtype-disease batch sampler to counteract the long-tailed subtype distribution (\S\ref{sec:data:imbalance}), but found and fixed an implementation issue in which \texttt{steps\_per\_epoch} was computed from the natural data loader's batch size (512) rather than the sampler's own, much smaller, per-batch cell count (e.g., $14$ subtypes $\times$ $2$ diseases $\times$ $4$ cells $= 112$); this mismatch caused each nominal epoch to cover only about $22\%$ of the training set when the sampler was enabled, silently under-training the model and desynchronizing every epoch-indexed schedule (warmup, contrastive ramp-up, routing ramp-up, early-stopping patience) relative to the sampler-disabled baseline.
+
+After fixing this issue, the balanced sampler improved fine-subtype macro-F1 from $0.102$ to $0.119$ on the single patient-independent split used for architecture development, but both remain below the $0.171$ achieved without any balanced sampling at all. We report this ablation as a diagnostic finding about our specific sampler implementation, not as evidence against balanced sampling in general, and did not further redesign the sampler given this result; the final configuration therefore omits it.
+
 \end{document}

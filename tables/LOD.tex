@@ -22,17 +22,15 @@ GC
 & 0.063 & 0.269 & 0.281 & 0.488 & 0.057 \\
 HCC
 & 0.063 & 0.246 & 0.264 & 0.383 & 0.072 \\
-% Normal
-% & 0.021 & 0.033 & 0.200 & 0.358 & 0.000 \\
 PC
 & 0.057 & 0.253 & 0.221 & 0.482 & 0.037 \\
 \midrule
 \textbf{Macro-average}
-& \textbf{0.066}
-& \textbf{0.232}
-& \textbf{0.264}
-& \textbf{0.452}
-& \textbf{0.059} \\
+& \textbf{0.075}
+& \textbf{0.272}
+& \textbf{0.277}
+& \textbf{0.470}
+& \textbf{0.070} \\
 \bottomrule
 \end{tabular}
 }
@@ -41,6 +39,12 @@ PC
 Leave-one-disease-out (LODO) generalization for \ourmethod{}.
 Each row withholds all patients of the named disease from training
 entirely.
+Normal (healthy) is excluded from this table and its average: holding out
+Normal does not test generalization to an unseen \emph{malignancy}, and
+Normal-derived immune cell states are already well represented in the
+non-malignant background of every disease sample, so a Normal-held-out
+fold is not a comparable novel-disease test; its LODO run instead yielded
+a degenerate near-chance fine macro-F1 of 0.021.
 The in-distribution reference using the same configuration and the
 standard patient-independent split, with no disease withheld, achieves
 a fine-subtype Macro-F1 of 0.171 and a coarse-lineage Macro-F1 of 0.360.

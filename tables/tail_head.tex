@@ -1,0 +1,33 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular}{lcc}
+\toprule
+\textbf{Model} & \textbf{Tail Macro-F1} & \textbf{Head Macro-F1} \\
+\midrule
+
+\textbf{\ourmethod{}}       & \textbf{0.149} & 0.284 \\
+XGBoost                     & 0.119 & \textbf{0.292} \\
+Logistic Regression         & 0.114 & 0.197 \\
+Linear SVM                  & 0.082 & 0.204 \\
+Random Forest               & 0.072 & 0.245 \\
+Reference Correlation       & 0.060 & 0.114 \\
+
+\bottomrule
+\end{tabular}
+
+\caption{
+Fine-subtype macro-F1 restricted to the 7 rarest (tail) and 7 most common
+(head) subtypes by pooled patient-level 5-fold cell count, using a single
+global frequency-based split (bottom and top quartile) applied identically
+to every model's pooled out-of-fold predictions. \ourmethod{} achieves the
+best tail performance but is marginally behind XGBoost on head classes,
+indicating that its advantage is concentrated on the harder, more
+imbalanced subtypes rather than on the easier, well-represented ones.
+}
+\label{tab:tail_head}
+
+\end{table}

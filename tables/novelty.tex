@@ -1,0 +1,37 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular}{lccc}
+\toprule
+\textbf{Held-out Disease} & \textbf{Trained Head AUROC} & \textbf{Trained Head AUPR} & \textbf{Energy Baseline AUROC} \\
+\midrule
+
+BTC     & 0.782 & 0.855 & 0.591 \\
+CRC     & 0.874 & 0.901 & 0.779 \\
+GC      & 0.729 & 0.698 & 0.575 \\
+HCC     & 0.881 & 0.842 & 0.558 \\
+Normal  & 0.607 & 0.843 & 0.722 \\
+PC      & 0.999 & 0.999 & 0.539 \\
+\midrule
+\textbf{Macro-average} & \textbf{0.812} & \textbf{0.856} & \textbf{0.627} \\
+
+\bottomrule
+\end{tabular}
+
+\caption{
+Novelty detection under the nested leave-one-disease-out (LODO) protocol
+(\S\ref{sec:method:novelty}): for each held-out disease, the trained
+novelty head is fit on a proxy-novel disease from the remaining five and
+evaluated on cells from the true held-out disease, which is never seen
+during cascade or novelty-head training. The trained head substantially
+outperforms the training-free energy-based baseline (mean AUROC $0.812$
+versus $0.627$) on average, though performance varies considerably across
+held-out diseases, from near-ceiling on PC ($0.999$) to closer to chance
+on Normal ($0.607$).
+}
+\label{tab:novelty}
+
+\end{table}
