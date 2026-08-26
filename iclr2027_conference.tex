@@ -69,7 +69,7 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Multi-cancer early detection remains challenging because current diagnostic pathways often rely on invasive tissue biopsy, limiting repeated population-scale screening. Single-cell aptamer (APT) protein profiling offers a non-invasive liquid biopsy alternative, but clinically interpreting a single blood draw requires characterization at two distinct observational units: a sample-level diagnostic call of whether disease is present and which cancer type is involved (disease), and a cell-level annotation of how circulating immune cell lineages are distributed (lineage) and how fine-grained cell subtypes are composed within each lineage (subtype). The latter two form a genuine cell-level taxonomy, while disease is a separate, patient-level target; we refer to their joint prediction as multi-resolution characterization. A reliable model should address both without becoming overconfident on cancer types or cellular states unseen during training. We introduce, to our knowledge, the first benchmark for multi-resolution, novelty-aware characterization on aptamer-based single-cell liquid biopsy data, together with \ourmethod{}, a novelty-aware cascade over the cell-level lineage-subtype taxonomy for multi-cancer characterization from a single blood draw, validated on this benchmark. Because disease-level prediction is near saturation under our protocol, a lightweight linear front end handles this level, while \ourmethod{} focuses on lineage and subtype prediction through differentiable soft routing over the lineage-subtype taxonomy with joint classification and novelty scores. This design identifies insufficient evidence for assigning cells to known categories rather than forcing closed-set predictions. We evaluate \ourmethod{} on a real-world multi-cancer APT dataset of 40 patients and more than 370,000 single cells using a strict patient-independent protocol with classical machine learning and neural baselines, patient-level bootstrap confidence intervals, and leave-one-disease-out (LODO) generalization tests. Under patient-level 5-fold cross-validation, \ourmethod{} matches or exceeds XGBoost in macro-F1 and improves coarse-fine prediction consistency to 82.8\%, compared with 73.6\% for XGBoost. Under a nested LODO training scheme, the novelty detection head achieves a mean AUROC of 0.81 and mean AUPR of 0.86 across six held-out disease groups for detecting cells from unseen diseases, outperforming a training-free confidence-based baseline with a mean AUROC of 0.63. These results demonstrate a unified approach to hierarchical prediction, patient-independent evaluation, and explicit novelty detection for small-sample, long-tailed classification in liquid biopsy and related clinical machine learning settings.
+Multi-cancer early detection remains challenging because current diagnostic pathways often rely on invasive tissue biopsy, limiting repeated population-scale screening. Single-cell aptamer (APT) protein profiling offers a non-invasive liquid biopsy alternative, but clinically interpreting a single blood draw requires characterization at two distinct observational units: a sample-level diagnostic call of whether disease is present and which cancer type is involved (disease), and a cell-level annotation of how circulating immune cell lineages are distributed (lineage) and how fine-grained cell subtypes are composed within each lineage (subtype). The latter two form a genuine cell-level taxonomy, while disease is a separate, patient-level target; we refer to their joint prediction as multi-resolution characterization. A reliable model should address both without becoming overconfident on cancer types or cellular states unseen during training. We introduce, to our knowledge, the first benchmark for multi-resolution, novelty-aware characterization on aptamer-based single-cell liquid biopsy data, together with \ourmethod{}, a novelty-aware cascade over the cell-level lineage-subtype taxonomy for multi-cancer characterization from a single blood draw, validated on this benchmark. A lightweight linear front end already achieves strong within-cohort patient-level disease classification under our protocol (a result we report with explicit caveats about cohort size and unavailable acquisition-batch metadata), so \ourmethod{} instead focuses on lineage and subtype prediction through differentiable soft routing over the lineage-subtype taxonomy with joint classification and novelty scores. This design identifies insufficient evidence for assigning cells to known categories rather than forcing closed-set predictions. We evaluate \ourmethod{} on a real-world multi-cancer APT dataset of 40 patients and more than 370,000 single cells using a strict patient-independent protocol with classical machine learning and neural baselines, patient-level bootstrap confidence intervals, and leave-one-disease-out (LODO) generalization tests. Under patient-level 5-fold cross-validation, \ourmethod{} matches or exceeds XGBoost in macro-F1 and improves coarse-fine prediction consistency to 82.8\%, compared with 73.6\% for XGBoost. Under a nested LODO training scheme, the novelty detection head achieves a mean AUROC of 0.81 and mean AUPR of 0.86 across six held-out disease groups for detecting cells from unseen diseases, outperforming a training-free confidence-based baseline with a mean AUROC of 0.63. These results demonstrate a unified approach to hierarchical prediction, patient-independent evaluation, and explicit novelty detection for small-sample, long-tailed classification in liquid biopsy and related clinical machine learning settings.
 \end{abstract}
 
 
@@ -170,5 +170,78 @@ This ranking, obtained purely from a discriminative model fit to predict disease
 The final \ourmethod{} configuration (\S\ref{sec:method:training}) does not use class-balanced sampling. We initially implemented a balanced subtype-disease batch sampler to counteract the long-tailed subtype distribution (\S\ref{sec:data:imbalance}), but found and fixed an implementation issue in which \texttt{steps\_per\_epoch} was computed from the natural data loader's batch size (512) rather than the sampler's own, much smaller, per-batch cell count (e.g., $14$ subtypes $\times$ $2$ diseases $\times$ $4$ cells $= 112$); this mismatch caused each nominal epoch to cover only about $22\%$ of the training set when the sampler was enabled, silently under-training the model and desynchronizing every epoch-indexed schedule (warmup, contrastive ramp-up, routing ramp-up, early-stopping patience) relative to the sampler-disabled baseline.
 
 After fixing this issue, the balanced sampler improved fine-subtype macro-F1 from $0.102$ to $0.119$ on the single patient-independent split used for architecture development, but both remain below the $0.171$ achieved without any balanced sampling at all. We report this ablation as a diagnostic finding about our specific sampler implementation, not as evidence against balanced sampling in general, and did not further redesign the sampler given this result; the final configuration therefore omits it.
+
+\subsection{Disease Classification: Cell-Level Source Prediction and Patient-Level Sensitivity Analyses}
+\label{sec:appendix:disease_patient_level}
+
+\paragraph{Cell-level prediction of the disease source of a held-out patient.}
+Table~\ref{tab:disease} reports patient-level disease classification, the
+correct statistical unit for a per-patient diagnostic call. For reference
+and comparability with earlier reporting conventions in this literature,
+Table~\ref{tab:disease_cell_level} additionally reports the pooled
+\emph{cell-level} metric: every held-out cell is treated as an independent
+prediction target (``from which disease does this cell originate?''),
+pooled across all 361{,}792 cells from the 5 test folds. This is a
+different, easier statistical task than patient-level diagnosis, since
+cells from the same patient are correlated observations rather than
+independent draws, and a patient contributing more cells contributes more
+weight to this pooled metric. We report it only as a lower-level
+diagnostic and do not use it as our primary disease result.
+
+\input{tables/disease_cell_level}
+
+\paragraph{Patient-wise centering sensitivity.}
+To probe whether disease classification relies on each patient's absolute
+expression level rather than only on relative, within-patient cell-to-cell
+structure, we repeated cell-level Logistic Regression training and
+evaluation (same 5-fold protocol) after subtracting each patient's own
+per-aptamer median from every cell belonging to that patient, both in
+training and test data. This transformation removes a patient-specific
+location shift while preserving relative cell-to-cell variation within
+each patient. Cell-level accuracy drops from $0.991$ to $0.401$
+(macro-F1 $0.989 \to 0.348$), and patient-level majority-vote accuracy
+drops from $40/40$ to $26/40$. This large collapse indicates that
+classification substantially relies on each patient's absolute expression
+level; it does not by itself establish whether that patient-level
+signature is biological, technical, or a mixture of both, since no
+acquisition-batch metadata (plate, run, or date) exists for this cohort to
+test directly.
+
+\paragraph{Patient-fingerprint diagnostic.}
+We additionally trained a 40-way classifier to predict patient identity
+from individual cells, using a within-patient 50/50 cell split (cells from
+the same 40 patients appear in both the training and test sets of this
+diagnostic; this is not a generalization experiment and is not used
+anywhere else in this work). The classifier identifies the correct patient
+from a single held-out cell with $88.4\%$ accuracy (macro-F1 $0.862$),
+against a $2.5\%$ chance level. Individual cells therefore carry a strong,
+easily recoverable patient-specific signature, consistent with the
+centering-sensitivity result above: whatever generates this signature is
+plausibly a major contributor to the patient-level absolute expression
+level that disease classification is also shown to rely on.
+
+\paragraph{Permutation test.}
+We additionally ran a reduced-scale patient-level label-permutation test
+(30 permutations, Logistic Regression only; the full specification of
+200--1{,}000 permutations with complete pipeline retraining was not
+computationally feasible within this project's budget). Disease labels
+were shuffled across the 40 patients, with every cell from a given patient
+receiving that patient's shuffled label, and the same fixed 5-fold patient
+partition was reused unchanged for every permutation. [PERMUTATION\_RESULT\_PLACEHOLDER]
+A permutation test at this scale can only detect a signal beyond chance;
+it cannot rule out a disease-correlated technical batch effect, since a
+sufficiently disease-correlated confound would also survive
+label-independent fold structure.
+
+\paragraph{Interpretation.}
+Taken together, these analyses support only a cautious claim: aggregating
+out-of-fold cell-level predictions yields correct disease assignment for
+all 40 patients in this cohort, and this exceeds what composition or
+chance alone can explain, but the cohort's small size (6--8 patients per
+disease), the absence of acquisition-batch metadata, and the absence of
+external validation mean this result should be interpreted as
+within-cohort feasibility rather than evidence of clinical
+generalization. We discuss this limitation further in
+\S\ref{sec:discussion}.
 
 \end{document}

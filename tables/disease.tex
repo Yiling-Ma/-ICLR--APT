@@ -1,71 +1,90 @@
 % ------------------------------------------------------------
-% Table 1: Disease-level detection
+% Table 1: Patient-level disease classification (primary)
 % ------------------------------------------------------------
 \begin{table}[t]
 \centering
 \small
+\setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.10}
 
-\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccc@{}}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Model}
-& \textbf{Accuracy}
-& \textbf{Macro-F1}
-& \textbf{Weighted-F1}
-& \textbf{Balanced Acc.} \\
+\textbf{Aggregation / Representation}
+& \textbf{Patient Acc.}
+& \textbf{Patient Macro-F1}
+& \textbf{Macro-AUROC}
+& \textbf{95\% CI (Acc.)} \\
 \midrule
 
-Logistic Regression
-& \textbf{0.991}
-& \textbf{0.989}
-& \textbf{0.991}
-& \textbf{0.989} \\
+Cell LR, majority vote
+& \textbf{1.000} & \textbf{1.000} & --
+& [0.912, 1.000] \\
 
-XGBoost
-& 0.990
-& 0.988
-& 0.990
-& 0.987 \\
+Cell XGBoost, majority vote
+& \textbf{1.000} & \textbf{1.000} & --
+& [0.912, 1.000] \\
 
-Linear SVM
-& 0.988
-& 0.986
-& 0.988
-& 0.985 \\
+Cell Linear SVM, majority vote
+& \textbf{1.000} & \textbf{1.000} & --
+& [0.912, 1.000] \\
 
-Random Forest
-& 0.963
-& 0.955
-& 0.963
-& 0.953 \\
+Cell Random Forest, majority vote
+& \textbf{1.000} & \textbf{1.000} & --
+& [0.912, 1.000] \\
 
-Reference Correlation$^\dagger$
-& 0.921
-& 0.909
-& 0.921
-& 0.915 \\
+Cell Reference Correlation, majority vote
+& \textbf{1.000} & \textbf{1.000} & --
+& [0.912, 1.000] \\
+
+\midrule
+
+Patient-level APT median $+$ LR$^\dagger$
+& 0.950 & 0.948 & 1.000
+& -- \\
+
+Gold subtype composition (CLR) $+$ LR$^\ddagger$
+& 0.575 & 0.572 & 0.842
+& -- \\
+
+Gold lineage composition (CLR) $+$ LR$^\ddagger$
+& 0.400 & 0.377 & 0.678
+& -- \\
 
 \bottomrule
-\end{tabular*}
+\end{tabular}
 
 \vspace{3pt}
 
 \parbox{\columnwidth}{
 \footnotesize
-$^\dagger$ SingleR-style reference-correlation classifier
-(Spearman nearest-centroid mapping), following the template-matching
-principle used by reference-mapping methods such as
-SingleR \citep{aran2019reference}.
+$^\dagger$ Genuinely patient-level feature (median APT expression per
+patient per aptamer, $n=40$, no cell-level pseudo-replication).
+$^\ddagger$ Gold-label immune-cell composition (paired transcriptomic
+annotation, not model-predicted subtypes); CLR = centered log-ratio
+transform of the compositional proportions.
+All rows use the same patient-level 5-fold partition
+(\S\ref{sec:data:protocols}); the confusion matrix for the majority-vote
+rows is diagonal ($40/40$ patients correctly assigned; see
+Appendix~\ref{sec:appendix:disease_patient_level}).
 }
 
 \caption{
-Disease-level (6-class) detection under patient-independent evaluation.
-Simple linear classifiers achieve near-perfect performance, motivating
-our decision not to introduce a separate disease-level head in
-\ourmethod{}: the full pipeline instead uses Logistic Regression
-(bolded above) as a lightweight front-end gate, reserving \ourmethod{}'s
-architectural contribution for the substantially harder
-lineage$\rightarrow$subtype cascade (Table~\ref{tab:main}).
+\textbf{Patient-level} disease classification ($n=40$ patients), the
+correct statistical unit for a per-patient diagnostic call. All five
+cell-level classifiers agree perfectly once cell-level predictions are
+aggregated to the patient by majority vote (95\% Clopper-Pearson CI on the
+$40/40$ result: $[0.912, 1.000]$). A model trained on purely patient-level
+summary features, with no cell-level pseudo-replication at all, achieves
+comparably strong discrimination, and immune-cell composition alone
+(gold-label, CLR-transformed) is also clearly above chance. Because the
+cohort contains only 40 patients (6--8 per disease) and no
+acquisition-batch metadata (plate, run, or date) exists for this dataset,
+we cannot exclude a disease-correlated technical contribution to this
+performance; see Appendix~\ref{sec:appendix:disease_patient_level} for the
+sensitivity analyses (patient-wise centering, patient-fingerprint
+diagnostic) that motivate this caveat, and \S\ref{sec:discussion} for a
+full discussion. This result should be read as within-cohort feasibility,
+not evidence of clinical generalization.
 }
 \label{tab:disease}
 

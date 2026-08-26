@@ -1,0 +1,70 @@
+\begin{table}[h]
+\centering
+\small
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccc@{}}
+\toprule
+\textbf{Model}
+& \textbf{Accuracy}
+& \textbf{Macro-F1}
+& \textbf{Weighted-F1}
+& \textbf{Balanced Acc.} \\
+\midrule
+
+Logistic Regression
+& \textbf{0.991}
+& \textbf{0.989}
+& \textbf{0.991}
+& \textbf{0.989} \\
+
+XGBoost
+& 0.990
+& 0.988
+& 0.990
+& 0.987 \\
+
+Linear SVM
+& 0.988
+& 0.986
+& 0.988
+& 0.985 \\
+
+Random Forest
+& 0.963
+& 0.955
+& 0.963
+& 0.953 \\
+
+Reference Correlation$^\dagger$
+& 0.921
+& 0.909
+& 0.921
+& 0.915 \\
+
+\bottomrule
+\end{tabular*}
+
+\vspace{3pt}
+
+\parbox{\columnwidth}{
+\footnotesize
+$^\dagger$ SingleR-style reference-correlation classifier
+(Spearman nearest-centroid mapping), following the template-matching
+principle used by reference-mapping methods such as
+SingleR \citep{aran2019reference}.
+}
+
+\caption{
+\textbf{Cell-level} prediction of the disease source of a held-out
+patient's cells (6-class), pooled over all 361{,}792 out-of-fold cells
+from the patient-level 5-fold protocol. This is a different, easier
+statistical task than the patient-level diagnosis reported in
+Table~\ref{tab:disease}: cells from the same patient are correlated
+observations rather than independent draws, and this metric implicitly
+weights patients with more cells more heavily. We report it here only as
+a cell-level reference point, not as a patient-level diagnostic result.
+}
+\label{tab:disease_cell_level}
+
+\end{table}
