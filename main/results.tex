@@ -51,3 +51,10 @@ Table~\ref{tab:novelty} evaluates whether \ourmethod{} can recognize that a cell
 Finally, Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint protocol with the cell-level split control. Both \ourmethod{} and XGBoost look stronger under cell-level splitting, but the inflation is larger for \ourmethod{}: +0.099 versus +0.050 on coarse lineage, and +0.105 versus +0.069 on fine subtype. This shows that leakage can change not only absolute performance but also the apparent advantage of a method family. APT-Bench therefore treats patient-disjoint evaluation as a non-negotiable requirement, not a reporting detail.
 
 \input{tables/protocol_sensitivity}
+
+\subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
+\label{sec:results:measurement}
+
+The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. At the same time, random panels approach full performance as the budget increases, and removing many top-ranked aptamers often leaves disease performance nearly unchanged. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced measurement budgets.
+
+This result complements, rather than weakens, the main disease caveat. The fact that disease labels are recoverable from a compact panel does not resolve whether the underlying signal is biological, technical, or mixed. What it does show is that the within-cohort disease task is easier than the patient-disjoint cell-level hierarchy task, both statistically and operationally. That asymmetry is one of the central empirical messages of APT-Bench.
