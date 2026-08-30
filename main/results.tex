@@ -57,4 +57,20 @@ Finally, Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjo
 
 The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. At the same time, random panels approach full performance as the budget increases, and removing many top-ranked aptamers often leaves disease performance nearly unchanged. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced measurement budgets.
 
+\input{tables/panel_budget}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
+\caption{
+Patient-level disease macro-F1 as a function of aptamer budget under the
+nested panel-selection analysis. Top-ranked panels saturate quickly, but
+random panels also approach full performance as the budget increases, and
+remove-top controls remain strong over a wide range of budgets. The
+within-cohort disease signal is therefore measurement-efficient but
+predictively distributed across many aptamers.
+}
+\label{fig:panel_curve_main}
+\end{figure}
+
 This result complements, rather than weakens, the main disease caveat. The fact that disease labels are recoverable from a compact panel does not resolve whether the underlying signal is biological, technical, or mixed. What it does show is that the within-cohort disease task is easier than the patient-disjoint cell-level hierarchy task, both statistically and operationally. That asymmetry is one of the central empirical messages of APT-Bench.
