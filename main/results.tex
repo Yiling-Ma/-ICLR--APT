@@ -59,9 +59,10 @@ The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides
 
 \input{tables/panel_budget}
 
-\begin{figure}[t]
+\begin{wrapfigure}{l}{0.50\columnwidth}
+\vspace{-10pt}
 \centering
-\includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
+\includegraphics[width=0.48\columnwidth]{figures/panel_size_curve.png}
 \caption{
 Patient-level disease macro-F1 as a function of aptamer budget under the
 nested panel-selection analysis. Top-ranked panels saturate quickly, but
@@ -71,6 +72,7 @@ within-cohort disease signal is therefore measurement-efficient but
 predictively distributed across many aptamers.
 }
 \label{fig:panel_curve_main}
-\end{figure}
+\vspace{-10pt}
+\end{wrapfigure}
 
 This result complements, rather than weakens, the main disease caveat. The fact that disease labels are recoverable from a compact panel does not resolve whether the underlying signal is biological, technical, or mixed. What it does show is that the within-cohort disease task is easier than the patient-disjoint cell-level hierarchy task, both statistically and operationally. That asymmetry is one of the central empirical messages of APT-Bench.
