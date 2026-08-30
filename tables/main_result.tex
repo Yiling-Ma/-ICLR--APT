@@ -89,17 +89,15 @@
 }
 
 \caption{
-Coarse-lineage (5-class) and fine-subtype (27-class) classification
-under patient-level 5-fold cross-validation (\S\ref{sec:data:protocols}).
-Macro-F1 and accuracy are computed on the pooled out-of-fold predictions
-spanning all 40 patients.
-95\% confidence intervals are obtained from 2,000 paired
-patient-level bootstrap resamples over these 40 pooled test patients.
-$^{*}$ indicates that \ourmethod{}'s margin over the corresponding
-baseline excludes zero at the 95\% level;
-$^{\mathrm{n.s.}}$ indicates that it does not.
-The single-split Hierarchical (JEPA-init) baseline is omitted here pending
-a 5-fold rerun under the same protocol; see \S\ref{sec:discussion}.
+Patient-disjoint 5-fold results for the genuine cell-level hierarchy.
+Macro-F1 and accuracy are computed on pooled out-of-fold predictions
+across all 40 patients. Confidence intervals come from 2{,}000 paired
+patient-level bootstrap resamples. $^{*}$ indicates that \ourmethod{}'s
+paired margin over the corresponding baseline excludes zero at the 95\%
+level; $^{\mathrm{n.s.}}$ indicates that it does not. The main conclusion
+is metric- and granularity-specific: \ourmethod{} yields a supported gain
+at the coarse level, while XGBoost remains statistically competitive at
+the fine level.
 }
 \label{tab:main}
 
@@ -128,31 +126,30 @@ a 5-fold rerun under the same protocol; see \S\ref{sec:discussion}.
 & \textbf{0.828} \\
 
 XGBoost
-& 0.736 \\
+& 0.657 \\
 
 Linear SVM
-& 0.631 \\
+& 0.653 \\
 
 Random Forest
-& 0.573 \\
+& 0.424 \\
 
 Logistic Regression
-& 0.568 \\
+& 0.572 \\
 
 Reference Correlation
-& 0.380 \\
+& 0.311 \\
 
 \bottomrule
 \end{tabular}
 
 \caption{
-Coarse--fine prediction consistency under patient-level 5-fold
-cross-validation, defined as the fraction of pooled out-of-fold cells for
-which the independently predicted coarse lineage matches the true lineage
-associated with the independently predicted fine subtype. Classical
-baselines train coarse and fine classifiers separately and therefore
-impose no explicit consistency constraint, whereas \ourmethod{}'s
-consistency follows directly from its cascade routing.
+Natural coarse--fine consistency diagnostic under patient-disjoint
+evaluation, computed from the independently predicted coarse label and
+the parent lineage of the independently predicted fine label. Higher
+consistency indicates that a method's outputs better respect the cell
+taxonomy, but this diagnostic is not used as a standalone superiority
+metric because post-hoc constrained decoding can also alter consistency.
 }
 \label{tab:consistency}
 

@@ -6,7 +6,7 @@
 
 \begin{tabular}{lccc}
 \toprule
-\textbf{Held-out Disease} & \textbf{Trained Head AUROC} & \textbf{Trained Head AUPR} & \textbf{Energy Baseline AUROC} \\
+\textbf{Held-out Disease} & \textbf{Trained Head AUROC} & \textbf{Trained Head AUPR} & \textbf{Energy AUROC} \\
 \midrule
 
 BTC     & 0.782 & 0.855 & 0.591 \\
@@ -22,15 +22,14 @@ PC      & 0.999 & 0.999 & 0.539 \\
 \end{tabular}
 
 \caption{
-Novelty detection under the nested leave-one-disease-out (LODO) protocol
-(\S\ref{sec:method:novelty}): for each held-out disease, the trained
-novelty head is fit on a proxy-novel disease from the remaining five and
-evaluated on cells from the true held-out disease, which is never seen
-during cascade or novelty-head training. The trained head substantially
-outperforms the training-free energy-based baseline (mean AUROC $0.812$
-versus $0.627$) on average, though performance varies considerably across
-held-out diseases, from near-ceiling on PC ($0.999$) to closer to chance
-on Normal ($0.607$).
+Novelty detection under the nested leave-one-disease-out protocol. For
+each held-out disease, the trained novelty head is learned on a
+proxy-novel disease drawn from the remaining training diseases and then
+evaluated on the truly held-out disease, which is unseen during both
+cascade and novelty-head training. The trained head substantially
+outperforms the strongest training-free baseline on average, but
+performance varies across diseases, showing that unseen-disease novelty is
+learnable yet heterogeneous in this small-cohort setting.
 }
 \label{tab:novelty}
 

@@ -6,7 +6,7 @@
 
 \begin{tabular}{llccc}
 \toprule
-\textbf{Task} & \textbf{Model} & \textbf{Patient-level} & \textbf{Cell-level} & \textbf{Inflation} \\
+\textbf{Task} & \textbf{Model} & \textbf{Patient-disjoint} & \textbf{Cell split} & \textbf{Inflation} \\
 \midrule
 
 \multirow{2}{*}{Coarse lineage}
@@ -22,16 +22,13 @@
 \end{tabular}
 
 \caption{
-Macro-F1 under the primary patient-level 5-fold protocol versus the
-cell-level protocol-sensitivity control (\S\ref{sec:data:protocols}), both
-evaluated on the same models. Cell-level splitting, which allows cells from
-the same patient to appear in both training and test sets, inflates
-macro-F1 for both models, and inflates \ourmethod{}'s score by roughly
-twice as much as XGBoost's. This indicates that \ourmethod{}'s
-representation is more sensitive to patient-level leakage than a
-tree-based baseline, underscoring why patient-independent evaluation is
-necessary to avoid overstating hierarchical classification performance in
-this small-cohort setting.
+Macro-F1 under the primary patient-disjoint protocol versus a leakage-prone
+cell-level split control. Cell-level splitting inflates performance for
+both methods, and does so more strongly for \ourmethod{} than for
+XGBoost. This demonstrates that evaluation protocol can change both
+absolute performance and the apparent relative advantage of model
+families, which is why APT-Bench treats patient-disjoint evaluation as a
+requirement rather than a reporting option.
 }
 \label{tab:protocol_sensitivity}
 

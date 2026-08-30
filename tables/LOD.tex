@@ -36,21 +36,15 @@ PC
 }
 
 \caption{
-Leave-one-disease-out (LODO) generalization for \ourmethod{}.
-Each row withholds all patients of the named disease from training
-entirely.
-Normal (healthy) is excluded from this table and its average: holding out
-Normal does not test generalization to an unseen \emph{malignancy}, and
-Normal-derived immune cell states are already well represented in the
-non-malignant background of every disease sample, so a Normal-held-out
-fold is not a comparable novel-disease test; its LODO run instead yielded
-a degenerate near-chance fine macro-F1 of 0.021.
-The in-distribution reference using the same configuration and the
-standard patient-independent split, with no disease withheld, achieves
-a fine-subtype Macro-F1 of 0.171 and a coarse-lineage Macro-F1 of 0.360.
-These results are reported as motivation for the novelty-detection head
-(\S4.3), rather than as evidence that the current mechanism already
-resolves the generalization gap.
+Leave-one-disease-out generalization for \ourmethod{} over the five
+malignant held-out diseases. Each row withholds all patients of the named
+disease from training. The in-distribution reference using the same model
+under the standard patient-disjoint 5-fold protocol is fine Macro-F1
+0.156 and coarse Macro-F1 0.333. A separate Normal-held-out run produces
+near-chance fine performance and is discussed in the text as additional
+evidence that unseen-disease transfer is difficult. LODO is reported here
+as motivation for explicit novelty detection, not as proof that the model
+already solves cross-disease generalization.
 }
 \label{tab:lodo}
 

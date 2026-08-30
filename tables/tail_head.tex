@@ -20,13 +20,12 @@ Reference Correlation       & 0.060 & 0.114 \\
 \end{tabular}
 
 \caption{
-Fine-subtype macro-F1 restricted to the 7 rarest (tail) and 7 most common
-(head) subtypes by pooled patient-level 5-fold cell count, using a single
-global frequency-based split (bottom and top quartile) applied identically
-to every model's pooled out-of-fold predictions. \ourmethod{} achieves the
-best tail performance but is marginally behind XGBoost on head classes,
-indicating that its advantage is concentrated on the harder, more
-imbalanced subtypes rather than on the easier, well-represented ones.
+Fine-subtype macro-F1 on the seven rarest and seven most common subtypes
+under the pooled patient-disjoint evaluation. \ourmethod{} has the best
+tail point estimate, while XGBoost is slightly stronger on head classes.
+Because the tail advantage is not statistically secure under patient-level
+resampling, we treat this table as supporting evidence about regime
+dependence rather than as a headline superiority claim.
 }
 \label{tab:tail_head}
 
