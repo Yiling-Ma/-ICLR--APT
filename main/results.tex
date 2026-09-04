@@ -29,22 +29,6 @@ Independent coarse and fine classifiers can disagree about hierarchy. Table~\ref
 
 We do not treat this number alone as proof of predictive superiority. Consistency can be improved post hoc by constraining fine predictions to their parent lineage, and such corrections may raise structural agreement while discarding information elsewhere. We therefore use consistency as a diagnostic that complements, rather than replaces, coarse and fine macro-F1.
 
-\subsection{Generalization to Unseen Diseases}
-\label{sec:results:lodo}
-
-Table~\ref{tab:lodo} reports leave-one-disease-out (LODO) generalization, in which \ourmethod{} is trained with an entire disease category withheld and evaluated on that category as if it were a novel, previously unseen disease. Averaged across the five malignant held-out diseases, fine-subtype macro-F1 falls from the in-distribution reference of 0.156 to 0.075, while coarse-lineage macro-F1 falls from 0.333 to 0.277. The held-out Normal fold is even worse, with near-chance fine performance, and is therefore discussed separately rather than folded into the malignant average.
-
-This result should not be read as a failure of the benchmark. It is precisely the point of the benchmark: a model that looks competitive in-distribution can degrade sharply when the disease context changes, even if many of the same cell subtypes remain present. LODO therefore motivates novelty detection as a first-class requirement rather than an optional add-on.
-
-\input{tables/LOD}
-
-\subsection{Novelty Detection}
-\label{sec:results:novelty}
-
-Table~\ref{tab:novelty} evaluates whether \ourmethod{} can recognize that a cell originates from a disease absent from training, rather than silently assigning it to one of the known classes. Under the nested LODO protocol described in \S\ref{sec:method:novelty}, in which the evaluation disease influences neither cascade training nor novelty-head training, the trained novelty head achieves a mean AUROC of 0.812 and mean AUPR of 0.856 across the six held-out disease groups, compared with a mean AUROC of 0.627 for the strongest training-free baseline, energy-based scoring on fine-level logits. Performance is not uniform across held-out diseases, ranging from near-ceiling on PC (AUROC 0.999) to much weaker discrimination on Normal (AUROC 0.607). We interpret this variation as evidence that unseen-disease novelty is learnable but not uniform, especially when proxy-novel training is limited by the small number of disease groups.
-
-\input{tables/novelty}
-
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:results:protocol}
 
@@ -55,7 +39,7 @@ Finally, Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjo
 \subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
 \label{sec:results:measurement}
 
-The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. At the same time, random panels approach full performance as the budget increases, and removing many top-ranked aptamers often leaves disease performance nearly unchanged. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced measurement budgets.
+The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. A complementary equal-cell-per-patient subsampling diagnostic, computed from held-out disease predictions without retraining, preserves 100\% patient-level accuracy across 50 random trials with only 10 cells per patient. At the same time, random panels approach full performance as the aptamer budget increases, and removing many top-ranked aptamers often leaves disease performance nearly unchanged. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced aptamer and cell-count budgets.
 
 \input{tables/panel_budget}
 

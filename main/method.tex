@@ -1,7 +1,7 @@
 \section{Method}
 \label{sec:method}
 
-APT-Bench is intentionally broader than any single model. We nevertheless need a hierarchy-aware and novelty-aware reference architecture that can operate directly on APT profiles under the benchmark protocols. \ourmethod{} plays this role. It focuses on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves disease recognition to a separate lightweight front end.
+APT-Bench is intentionally broader than any single model. We nevertheless need a hierarchy-aware reference architecture that can operate directly on APT profiles under the benchmark protocols. \ourmethod{} plays this role. It focuses on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves disease recognition to separate tabular baselines and patient-level aggregation.
 
 \subsection{Cell Encoder}
 \label{sec:method:backbone}
@@ -57,35 +57,6 @@ u = \frac{\mathrm{Proj}(z)}{\lVert \mathrm{Proj}(z) \rVert_2}
 \end{equation}
 be a normalized projection of the encoder representation. For anchor cell $i$, positives are cells with the same subtype but a different disease label. Same-subtype cells from the same disease are excluded because they do not test cross-disease invariance. Cells from different subtypes are treated as negatives, with additional emphasis on negatives that share the same coarse lineage. The contrastive loss weight is ramped from 0 to 0.2 after the early warmup period.
 
-\subsection{Novelty Detection}
-\label{sec:method:novelty}
-
-Closed-set hierarchy prediction is insufficient for deployment because a new patient's cells may belong to a disease category absent from training. We therefore evaluate two novelty mechanisms.
-
-\paragraph{Training-free scores.}
-We first consider two standard training-free baselines. Given fine-level logits $s(x)$, we compute the maximum softmax probability novelty score
-\begin{equation}
-\mathrm{MSP}(x)
-=
-1-\max_k \mathrm{softmax}(s(x))_k
-\end{equation}
-\citep{hendrycks2016baseline}
-and the energy score
-\begin{equation}
-\mathrm{Energy}(x)
-=
--\log \sum_k \exp(s_k(x))
-\end{equation}
-\citep{liu2020energy}.
-The same scores are computed from the lineage logits $c(x)$ to obtain coarse-level baselines.
-
-\paragraph{Trained novelty head.}
-For each LODO fold, we first train the encoder and cascade on the known diseases. We then freeze the representation and train a lightweight MLP novelty head on a proxy-novel disease selected from the known set:
-\begin{equation}
-\mathrm{NoveltyHead}: \mathbb{R}^{256} \rightarrow \mathbb{R}
-\end{equation}
-Cells from this proxy disease receive novelty label 1; cells from the remaining known diseases receive label 0. The true held-out disease is never used during either cascade training or novelty-head training. This nested design asks whether novelty learned from one simulated unseen disease transfers to a different truly unseen disease.
-
 \subsection{Optimization and Model Scope}
 \label{sec:method:training}
 
@@ -103,4 +74,4 @@ where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-en
 
 We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling, as our experiments found that it did not improve performance after correcting an implementation issue; additional details are provided in Appendix~\ref{sec:appendix:sampler}.
 
-The novelty head is trained after the corresponding cascade checkpoint is fixed. We use AdamW with learning rate $10^{-3}$ and weight decay $10^{-4}$ for at most 30 epochs, with early-stopping patience 5. Disease recognition is not handled by a dedicated head inside \ourmethod{}. This is a deliberate modeling decision rather than a claim that disease is solved in a strong external sense: within-cohort disease prediction is already nearly saturated by simple classical baselines, while the architectural challenge addressed by \ourmethod{} is the unresolved cell-level hierarchy and novelty problem.
+Disease recognition is not handled by a dedicated head inside \ourmethod{}. This is a deliberate modeling decision rather than a claim that disease is solved in a strong external sense: within-cohort disease prediction is already nearly saturated by simple classical baselines, while the architectural challenge addressed by \ourmethod{} is the unresolved cell-level hierarchy problem.

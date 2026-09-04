@@ -26,7 +26,7 @@ This is the primary protocol for all headline claims. Patients are partitioned i
 As a protocol-sensitivity control, cells are randomly split irrespective of patient identity. Cells from the same patient can therefore appear in both training and evaluation sets. We do not treat this as a realistic deployment protocol. Its only role is to quantify performance inflation caused by leakage.
 
 \paragraph{Leave-one-disease-out (LODO).}
-To evaluate novelty with respect to disease category, we hold out all patients from one disease group for testing and train on the remaining five groups. This is the only protocol in which the test set contains a disease entirely absent from training. LODO is used for both the unseen-disease generalization analysis and the novelty-detection experiments.
+As an exploratory appendix stress test, we hold out all patients from one disease group for testing and train on the remaining five groups. This is the only protocol in which the test set contains a disease entirely absent from training, but it is not part of the main benchmark claims.
 
 \subsection{Class Distribution}
 \label{sec:data:imbalance}
