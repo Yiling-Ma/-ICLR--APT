@@ -17,16 +17,13 @@ Disease is therefore not treated as the root of a three-level hierarchy. It is a
 \subsection{Evaluation Protocols}
 \label{sec:data:protocols}
 
-We evaluate models under three protocols with different purposes.
+We evaluate models under two main protocols with different purposes.
 
 \paragraph{Patient-level 5-fold cross-validation.}
 This is the primary protocol for all headline claims. Patients are partitioned into five disease-stratified folds, each containing eight held-out test patients. At every fold, preprocessing statistics, model fitting, and hyperparameter selection use only the training and validation patients from the remaining folds. We pool out-of-fold predictions across all five test folds, yielding a patient-disjoint evaluation spanning all 40 patients.
 
 \paragraph{Cell-level split control.}
 As a protocol-sensitivity control, cells are randomly split irrespective of patient identity. Cells from the same patient can therefore appear in both training and evaluation sets. We do not treat this as a realistic deployment protocol. Its only role is to quantify performance inflation caused by leakage.
-
-\paragraph{Leave-one-disease-out (LODO).}
-As an exploratory appendix stress test, we hold out all patients from one disease group for testing and train on the remaining five groups. This is the only protocol in which the test set contains a disease entirely absent from training, but it is not part of the main benchmark claims.
 
 \subsection{Class Distribution}
 \label{sec:data:imbalance}

@@ -188,13 +188,13 @@ After fixing this issue, the balanced sampler improved fine-subtype macro-F1 fro
 \subsection{Exploratory Disease-Level Novelty Track}
 \label{sec:appendix:novelty}
 
-We treat disease-level novelty as an exploratory appendix track rather than a main contribution. In this protocol, all patients from one disease category are withheld during training and evaluated as a disease-level distribution shift. This is useful for stress-testing representations, but it is easier to attack than the main benchmark because the cohort contains only six disease groups and the proxy-novel training rule has limited diversity.
+We treat disease-level novelty as an exploratory appendix track rather than a main contribution. In this protocol, all patients from one disease category are withheld during training and evaluated as a disease-level distribution shift. This is useful for stress-testing representations, but it is not a fair basis for method ranking because the cohort contains only six disease groups, proxy-disease supervision is limited, and the supervised detector and training-free confidence scores do not receive matched novelty supervision.
 
-We compare two standard training-free scores, maximum softmax probability \citep{hendrycks2016baseline} and energy \citep{liu2020energy}, with a trained novelty head. For each held-out disease, the cascade is trained only on the known diseases. The encoder is then frozen, and a lightweight MLP novelty head is trained to distinguish one proxy-novel known disease from the remaining known diseases. The truly held-out disease is never used during either cascade training or novelty-head training.
+Table~\ref{tab:novelty} reports two standard training-free scores, maximum softmax probability \citep{hendrycks2016baseline} and energy \citep{liu2020energy}, alongside a proxy-supervised novelty head. For each held-out disease, the cascade is trained only on the known diseases. The encoder is then frozen, and a lightweight MLP novelty head is trained to distinguish one proxy-novel known disease from the remaining known diseases. The truly held-out disease is never used during either cascade training or novelty-head training.
 
 \input{tables/LOD}
 \input{tables/novelty}
 
-Under this exploratory nested leave-one-disease-out protocol, the trained novelty head reaches mean AUROC 0.812 and mean AUPR 0.856 across the six held-out disease groups, compared with mean AUROC 0.627 for the strongest training-free energy score. These numbers suggest that disease-level novelty detection is promising, but we do not use them as a headline claim for APT-Bench.
+Under this exploratory nested leave-one-disease-out protocol, the proxy-supervised head attains higher descriptive AUROC than the training-free confidence scores. This should be interpreted narrowly: proxy disease supervision can help separate a withheld disease from known diseases in this cohort. It does not establish that the novelty head is intrinsically better than energy scoring, because the comparison lacks matched supervised probes on raw APT features, classical classifiers, patient-clustered uncertainty intervals, proxy-choice sensitivity, and a formal ID/OOD patient manifest.
 
 \end{document}
