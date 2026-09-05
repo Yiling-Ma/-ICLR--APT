@@ -45,11 +45,14 @@ The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.68\columnwidth]{figures/panel_size_curve.png}
+\includegraphics[width=\columnwidth]{figures/panel_size_curve.png}
 \caption{
-Patient-level disease macro-F1 versus aptamer budget under nested panel
-selection. Performance saturates quickly, while random and remove-top
-controls show that disease signal is distributed across many aptamers.
+Patient-level disease macro-F1 under aptamer-budget controls. Left:
+Top-$B$ selected panels use $B$ retained aptamers; Random-$B$ shows the
+mean random-panel performance with the saved summary interval
+(mean $\pm 1.96$ SD). Right: Remove-Top-$B$ uses a separate x-axis,
+where $B$ denotes the number of top-ranked aptamers removed rather than
+the number retained. The full-panel reference uses all 293 aptamers.
 }
 \label{fig:panel_curve_main}
 \end{figure}
