@@ -1,7 +1,7 @@
-\section{Method}
+\section{Hierarchy-Aware Reference Model}
 \label{sec:method}
 
-APT-Bench is intentionally broader than any single model. We nevertheless need a hierarchy-aware reference architecture that can operate directly on APT profiles under the benchmark protocols. \ourmethod{} plays this role. It focuses on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves disease recognition to separate tabular baselines and patient-level aggregation.
+APT-Bench is intentionally broader than any single model. We nevertheless need a hierarchy-aware reference architecture that can operate directly on APT profiles under the benchmark protocols. \ourmethod{} plays this role. It focuses on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves disease recognition to separate tabular baselines and patient-level aggregation. We do not present the architecture as a primary contribution: without full five-fold component ablations, its global path, coarse auxiliary objective, soft routing, and contrastive construction should be read as implementation choices rather than independently validated sources of performance.
 
 \subsection{Cell Encoder}
 \label{sec:method:backbone}
@@ -39,7 +39,7 @@ s_k(x) =
 \gamma \log\!\big(\epsilon + (1-\epsilon)p(m(k)\mid x)\big),
 \label{eq:cascade}
 \end{equation}
-Here $g(z)$ is a global subtype head, $e_{m,k}(z)$ is the expert associated with lineage $m$, $\alpha=1.0$, $\epsilon=0.1$, and $\gamma$ is ramped from 0 to 0.5 during early training. The global path prevents the model from collapsing to a hard hierarchy and allows recovery from coarse routing errors. Final predictions are
+Here $g(z)$ is a global subtype head, $e_{m,k}(z)$ is the expert associated with lineage $m$, $\alpha=1.0$, $\epsilon=0.1$, and $\gamma$ is ramped from 0 to 0.5 during early training. The global path retains a direct subtype-logit contribution alongside the routed expert contribution; we do not isolate its effect from the other components. Final predictions are
 \begin{equation}
 \hat{k} = \arg\max_k s_k(x),
 \qquad
@@ -49,11 +49,11 @@ Here $g(z)$ is a global subtype head, $e_{m,k}(z)$ is the expert associated with
 \subsection{Cross-Disease Contrastive Regularization}
 \label{sec:method:contrastive}
 
-We encourage subtype representations to align across disease contexts. Let
+The reference model includes a cross-disease supervised contrastive term. Let
 \begin{equation}
 u = \frac{\mathrm{Proj}(z)}{\lVert \mathrm{Proj}(z) \rVert_2}
 \end{equation}
-be a normalized projection of the encoder representation. For anchor cell $i$, positives are cells with the same subtype but a different disease label. Same-subtype cells from the same disease are excluded because they do not test cross-disease invariance. Cells from different subtypes are treated as negatives, with additional emphasis on negatives that share the same coarse lineage. The contrastive loss weight is ramped from 0 to 0.2 after the early warmup period.
+be a normalized projection of the encoder representation. For anchor cell $i$, positives are cells with the same subtype but a different disease label. Same-subtype cells from the same disease are excluded by construction. Cells from different subtypes are treated as negatives, with additional emphasis on negatives that share the same coarse lineage. The contrastive loss weight is ramped from 0 to 0.2 after the early warmup period. Because we do not compare this construction with standard supervised contrastive learning across all five folds, we make no claim that the cross-disease positive rule independently improves generalization.
 
 \subsection{Optimization and Model Scope}
 \label{sec:method:training}
