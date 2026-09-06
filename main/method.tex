@@ -46,8 +46,6 @@ Here $g(z)$ is a global subtype head, $e_{m,k}(z)$ is the expert associated with
 \hat{m} = \arg\max_m c_m.
 \end{equation}
 
-For analysis, we also compare soft routing with hard routing and oracle routing to separate errors caused by lineage uncertainty from those caused by subtype discrimination itself.
-
 \subsection{Cross-Disease Contrastive Regularization}
 \label{sec:method:contrastive}
 
@@ -73,5 +71,26 @@ w_{\text{contrast}}(t)\mathcal{L}_{\text{contrast}},
 where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-entropy losses with $\lambda_{\text{fine}}=1.0$ and $\lambda_{\text{coarse}}=0.5$. The contrastive weight increases to 0.2 according to the schedule in \S\ref{sec:method:contrastive}.
 
 We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling, as our experiments found that it did not improve performance after correcting an implementation issue; additional details are provided in Appendix~\ref{sec:appendix:sampler}.
+
+\paragraph{Matched Transformer controls.}
+\label{sec:method:baselines}
+To isolate encoder capacity from hierarchical modeling, a flat FT-style Transformer
+control \citep{gorishniy2021revisiting} removes the cascade while retaining the
+identical APT tokenizer, Transformer dimensions, optimizer, early stopping, and
+training budget above. We call it FT-style because its tokenizer is exactly the APT
+feature tokenizer used by \ourmethod{}, rather than the original numerical/categorical
+FT-Transformer tokenizer. This model and its HCE counterpart predict the same $M+K$
+lineage-and-subtype nodes. The flat model applies independent cross-entropy to the
+lineage and subtype logit slices. For HCE \citep{cultrera2026improving}, let
+$R_{ij}=1$ when node $j$ is node $i$ or its descendant,
+$p=\operatorname{softmax}(q)$ over all nodes, and $s=Rp$. We minimize
+$-\lambda_{\mathrm{fine}}\log s_{M+k}-\lambda_{\mathrm{coarse}}\log s_m$ for
+observed subtype $k$ and lineage $m$. Because every fine label here is a leaf, the
+fine HCE term alone would reduce to ordinary CE; including the simultaneously
+observed parent label makes this a stated two-level adaptation rather than an
+unqualified reproduction of the mixed-granularity setting in the original work.
+All three Transformer models are evaluated from the checkpoint selected by
+patient-validation fine macro-F1, without an additional post-selection calibration
+stage.
 
 Disease recognition is not handled by a dedicated head inside \ourmethod{}. This is a deliberate modeling decision rather than a claim that disease is solved in a strong external sense: within-cohort disease prediction is already nearly saturated by simple classical baselines, while the architectural challenge addressed by \ourmethod{} is the unresolved cell-level hierarchy problem.

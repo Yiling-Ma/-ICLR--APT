@@ -27,7 +27,7 @@ loss:
   epsilon: 0.000001
 
 schedule:
-  calibration_epochs: 5
+  calibration_epochs: 0
   calibration_lr: 0.0003
 
 train:

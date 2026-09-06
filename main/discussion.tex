@@ -1,28 +1,28 @@
 \section{Discussion}
 \label{sec:discussion}
 
-The main lesson of APT-Bench is not that a single architecture solves multi-cancer liquid biopsy. It is that this problem decomposes into targets with different statistical units, different failure modes, and different evidentiary standards. Once those distinctions are enforced, the story becomes clearer. Coarse lineage prediction is measurably easier than fine subtype prediction. The subtype audit explains part of this failure: raw cell abundance is more informative than patient coverage in the current cohort, but neither fully determines performance, and most incorrect subtype calls cross lineage boundaries. Disease recognition is extremely strong within cohort but vulnerable to patient-specific absolute-expression effects. The same disease signal can be recovered with compact aptamer panels and few sampled cells per patient, indicating measurement efficiency but not unique causal biomarker discovery.
+APT-Bench shows that multi-cancer liquid biopsy decomposes into targets with different statistical units and evidentiary standards. Across matched models, coarse lineage prediction is easier than fine subtype prediction; abundance explains more subtype variation than patient coverage, yet most errors still cross lineage boundaries. Disease recognition is strong within cohort but vulnerable to patient-specific absolute-expression effects. Compact aptamer and cell budgets preserve this signal, indicating measurement efficiency rather than unique causal biomarkers.
 
-This framing also clarifies what \ourmethod{} does and does not establish. The model provides a statistically supported improvement over strong classical baselines on coarse-lineage macro-F1, but it does not significantly beat XGBoost on fine-subtype macro-F1. More importantly, its sibling-error rate is similar to XGBoost's, so the hierarchy-aware architecture has not solved the dominant cross-lineage component of fine-level failure. We view that as a useful benchmark diagnosis: the remaining problem requires better patient-independent representations, not only a constrained decoder.
+Matched controls show no significant \ourmethod{} advantage at either resolution; persistent cross-lineage errors instead point toward better patient-independent representations.
 
 \subsection{Limitations}
 \label{sec:discussion:limitations}
 
 \paragraph{Disease-level novelty is exploratory.}
-We report leave-one-disease-out novelty detection only in Appendix~\ref{sec:appendix:novelty}. This track is useful as a stress test, but the small number of disease groups and limited proxy-novel diversity make it too fragile to serve as a main contribution.
+The appendix leave-one-disease-out stress test has too few disease groups and too little proxy-novel diversity to support a main claim.
 
 \paragraph{The disease result is within-cohort and potentially confounded.}
-The cohort contains only 40 patients, and acquisition-batch metadata are unavailable. The strong patient-fingerprint diagnostic and the degradation under patient-wise centering show that disease recognition may depend partly on technical or patient-specific offsets that are inseparable in the current dataset.
+Only 40 patients are available and acquisition-batch metadata are missing; patient fingerprints and centering sensitivity show that biological and technical offsets cannot be separated.
 
-\paragraph{Method ranking depends on metric choice.}
-DropCascade's strongest evidence is at the coarse level, whereas XGBoost remains highly competitive on fine subtype prediction. We therefore caution against compressing the benchmark into a single scalar ranking.
+\paragraph{Matched baselines narrow the method claim.}
+The flat and HCE controls prevent attributing Transformer capacity to the cascade. They do not support a DropCascade-specific gain, so it remains a reference implementation rather than a superior model.
 
 \paragraph{Compact panels imply measurement efficiency, not unique biomarkers.}
-The small-panel and equal-cell subsampling analyses show that strong within-cohort disease recognition can be preserved with far fewer aptamers and few sampled cells per patient. This should be read as evidence that predictive signal is distributed and that measurement budgets can be reduced, not as proof that a universal causal biomarker set has been identified.
+Small-panel and equal-cell analyses show distributed predictive signal and lower measurement budgets, not a universal causal biomarker set.
 
-Future work should test external cohorts with batch metadata, improve patient-independent subtype modeling, and re-evaluate compact panels out of cohort.
+Future work requires external cohorts with batch metadata and out-of-cohort validation of subtype models and compact panels.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench separates patient-disjoint coarse-to-fine typing, patient-level disease audit, and measurement efficiency. Within-cohort disease recognition remains strong under compact measurement budgets but is sensitive to patient-specific expression structure, whereas fine-subtype typing remains difficult despite 361{,}792 cells. \ourmethod{} significantly improves coarse-lineage macro-F1 but does not significantly beat XGBoost at the fine level. Uneven abundance, saturated patient coverage, and predominantly cross-lineage errors show why scale alone is insufficient and motivate more patient-independent fine-grained representations.
+APT-Bench separates patient-disjoint hierarchy typing, patient-level disease audit, and measurement efficiency. Disease recognition remains strong under compact budgets but is sensitive to patient-specific structure, while subtype typing remains difficult despite 361{,}792 cells. Matched Transformer and HCE controls do not support a \ourmethod{}-specific gain; the persistent granularity gap and cross-lineage errors instead motivate more patient-independent representations.

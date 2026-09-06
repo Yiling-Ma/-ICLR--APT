@@ -204,6 +204,11 @@ def parse_args():
     parser.add_argument("--config", default="cell_JEPA/apt_jepa/configs/matched_ft_transformer.yaml")
     parser.add_argument("--variant", choices=("flat_ce", "hce"))
     parser.add_argument("--fold", type=int, choices=range(5))
+    parser.add_argument(
+        "--reuse-best",
+        action="store_true",
+        help="Skip encoder training and rerun validation-selected head calibration.",
+    )
     parser.add_argument("--override", nargs="*", default=[])
     return parser.parse_args()
 
@@ -279,38 +284,43 @@ def main():
     )
     amp = cfg["train"].get("use_amp", True) and device.type == "cuda"
     scaler = torch.cuda.amp.GradScaler(enabled=amp)
-    history = []
-    best_score = -1.0
-    patience = 0
-    for epoch in range(1, cfg["train"].get("epochs", 50) + 1):
-        train_result = run_epoch(
-            model,
-            bundle.train_loader,
-            device,
-            reachability,
-            cfg["loss"],
-            optimizer=optimizer,
-            scaler=scaler,
-            grad_clip_norm=cfg["train"].get("grad_clip_norm", 1.0),
-        )
-        val_result = run_epoch(model, bundle.val_loader, device, reachability, cfg["loss"])
-        row = {
-            "epoch": epoch,
-            **{f"train_{k}": train_result[k] for k in ("loss", "fine_loss", "coarse_loss", "fine_macro_f1", "coarse_macro_f1")},
-            **{f"val_{k}": val_result[k] for k in ("loss", "fine_loss", "coarse_loss", "fine_macro_f1", "coarse_macro_f1")},
-        }
-        history.append(row)
-        print(json.dumps(row))
-        score = val_result["fine_macro_f1"]
-        if score > best_score:
-            best_score = score
-            patience = 0
-            save_checkpoint(output_dir / "best.pt", model, optimizer, epoch, score, cfg)
-        else:
-            patience += 1
-        pd.DataFrame(history).to_csv(output_dir / "training_log.csv", index=False)
-        if patience >= cfg["train"].get("patience", 10):
-            break
+    if args.reuse_best:
+        if not (output_dir / "best.pt").exists():
+            raise FileNotFoundError(f"Missing encoder checkpoint: {output_dir / 'best.pt'}")
+        best_score = float(torch.load(output_dir / "best.pt", map_location="cpu")["score"])
+    else:
+        history = []
+        best_score = -1.0
+        patience = 0
+        for epoch in range(1, cfg["train"].get("epochs", 50) + 1):
+            train_result = run_epoch(
+                model,
+                bundle.train_loader,
+                device,
+                reachability,
+                cfg["loss"],
+                optimizer=optimizer,
+                scaler=scaler,
+                grad_clip_norm=cfg["train"].get("grad_clip_norm", 1.0),
+            )
+            val_result = run_epoch(model, bundle.val_loader, device, reachability, cfg["loss"])
+            row = {
+                "epoch": epoch,
+                **{f"train_{k}": train_result[k] for k in ("loss", "fine_loss", "coarse_loss", "fine_macro_f1", "coarse_macro_f1")},
+                **{f"val_{k}": val_result[k] for k in ("loss", "fine_loss", "coarse_loss", "fine_macro_f1", "coarse_macro_f1")},
+            }
+            history.append(row)
+            print(json.dumps(row))
+            score = val_result["fine_macro_f1"]
+            if score > best_score:
+                best_score = score
+                patience = 0
+                save_checkpoint(output_dir / "best.pt", model, optimizer, epoch, score, cfg)
+            else:
+                patience += 1
+            pd.DataFrame(history).to_csv(output_dir / "training_log.csv", index=False)
+            if patience >= cfg["train"].get("patience", 10):
+                break
 
     best = torch.load(output_dir / "best.pt", map_location=device)
     model.load_state_dict(best["model"])
@@ -321,7 +331,10 @@ def main():
         lr=cfg["schedule"].get("calibration_lr", 3e-4),
         weight_decay=cfg["train"].get("weight_decay", 1e-5),
     )
-    for _ in range(cfg["schedule"].get("calibration_epochs", 5)):
+    calibration_score = best_score
+    selected_calibration_epoch = 0
+    calibrated_path = output_dir / "best_calibrated.pt"
+    for calibration_epoch in range(1, cfg["schedule"].get("calibration_epochs", 5) + 1):
         run_epoch(
             model,
             bundle.train_loader,
@@ -332,6 +345,35 @@ def main():
             scaler=scaler,
             grad_clip_norm=cfg["train"].get("grad_clip_norm", 1.0),
         )
+        calibration_val = run_epoch(
+            model, bundle.val_loader, device, reachability, cfg["loss"]
+        )
+        score = calibration_val["fine_macro_f1"]
+        print(
+            json.dumps(
+                {
+                    "calibration_epoch": calibration_epoch,
+                    "val_fine_macro_f1": score,
+                    "val_coarse_macro_f1": calibration_val["coarse_macro_f1"],
+                }
+            )
+        )
+        if score > calibration_score:
+            calibration_score = score
+            selected_calibration_epoch = calibration_epoch
+            save_checkpoint(
+                calibrated_path,
+                model,
+                calibration_optimizer,
+                best["epoch"],
+                score,
+                cfg,
+            )
+
+    if selected_calibration_epoch:
+        model.load_state_dict(torch.load(calibrated_path, map_location=device)["model"])
+    else:
+        model.load_state_dict(best["model"])
 
     test = run_epoch(model, bundle.test_loader, device, reachability, cfg["loss"])
     metrics = {
@@ -344,6 +386,8 @@ def main():
         "coarse_accuracy": float(accuracy_score(test["coarse_true"], test["coarse_pred"])),
         "best_epoch": int(best["epoch"]),
         "best_val_fine_macro_f1": float(best_score),
+        "selected_calibration_epoch": selected_calibration_epoch,
+        "selected_val_fine_macro_f1": float(calibration_score),
     }
     (output_dir / "test_metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
     pd.DataFrame(

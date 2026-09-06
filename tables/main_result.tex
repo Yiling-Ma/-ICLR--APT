@@ -1,104 +1,25 @@
-
-
-% ------------------------------------------------------------
-% Table 2: MAIN RESULTS
-% Coarse-lineage and fine-subtype classification
-% ------------------------------------------------------------
 \begin{table}[t]
 \centering
 \small
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.12}
-
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{llccc}
 \toprule
-\textbf{Task}
-& \textbf{Model}
-& \textbf{Macro-F1}
-& \textbf{Accuracy}
-& \textbf{95\% CI (Macro-F1)} \\
+\textbf{Task} & \textbf{Model} & \textbf{Macro-F1} & \textbf{Accuracy} & \textbf{95\% CI (Macro-F1)} \\
 \midrule
-
-\multirow{6}{*}{Coarse lineage}
-& \textbf{\ourmethod{}}
-& \textbf{0.333}
-& 0.506
-& [0.309, 0.356] \\
-
-& XGBoost
-& 0.322$^{*}$
-& \textbf{0.517}
-& [0.300, 0.345] \\
-
-& Linear SVM
-& 0.311$^{*}$
-& 0.413
-& [0.296, 0.326] \\
-
-& Logistic Regression
-& 0.299$^{*}$
-& 0.348
-& [0.283, 0.315] \\
-
-& Random Forest
-& 0.250$^{*}$
-& 0.500
-& [0.228, 0.272] \\
-
-& Reference Correlation
-& 0.172$^{*}$
-& 0.209
-& [0.150, 0.189] \\
-
+\multirow{4}{*}{Coarse lineage} & \ourmethod{} & 0.326 & 0.502 & [0.301, 0.352] \\
+ & Flat FT-style Transformer & 0.323$^{\mathrm{n.s.}}$ & 0.507 & [0.302, 0.345] \\
+ & FT-style Transformer $+$ HCE & \textbf{0.333$^{\mathrm{n.s.}}$} & 0.503 & [0.312, 0.354] \\
+ & XGBoost & 0.322$^{\mathrm{n.s.}}$ & \textbf{0.517} & [0.300, 0.345] \\
 \midrule
-
-\multirow{6}{*}{Fine subtype}
-& \textbf{\ourmethod{}}
-& \textbf{0.156}
-& 0.305
-& [0.133, 0.169] \\
-
-& XGBoost
-& 0.143$^{\mathrm{n.s.}}$
-& \textbf{0.323}
-& [0.128, 0.158] \\
-
-& Logistic Regression
-& 0.132$^{\mathrm{n.s.}}$
-& 0.166
-& [0.112, 0.146] \\
-
-& Linear SVM
-& 0.111$^{*}$
-& 0.179
-& [0.093, 0.126] \\
-
-& Random Forest
-& 0.092$^{*}$
-& 0.319
-& [0.081, 0.100] \\
-
-& Reference Correlation
-& 0.072$^{*}$
-& 0.092
-& [0.055, 0.083] \\
-
+\multirow{4}{*}{Fine subtype} & \ourmethod{} & \textbf{0.152} & 0.305 & [0.129, 0.166] \\
+ & Flat FT-style Transformer & 0.147$^{\mathrm{n.s.}}$ & 0.315 & [0.121, 0.161] \\
+ & FT-style Transformer $+$ HCE & 0.151$^{\mathrm{n.s.}}$ & 0.306 & [0.128, 0.167] \\
+ & XGBoost & 0.143$^{\mathrm{n.s.}}$ & \textbf{0.323} & [0.128, 0.158] \\
 \bottomrule
 \end{tabular}
 }
-
-\caption{
-Patient-disjoint 5-fold results for the genuine cell-level hierarchy.
-Macro-F1 and accuracy are computed on pooled out-of-fold predictions
-across all 40 patients. Confidence intervals come from 2{,}000 paired
-patient-level bootstrap resamples. $^{*}$ indicates that \ourmethod{}'s
-paired margin over the corresponding baseline excludes zero at the 95\%
-level; $^{\mathrm{n.s.}}$ indicates that it does not. The main conclusion
-is metric- and granularity-specific: \ourmethod{} yields a supported gain
-at the coarse level, while XGBoost remains statistically competitive at
-the fine level.
-}
+\caption{Patient-disjoint 5-fold hierarchy results on pooled out-of-fold predictions from all 40 patients. The two FT-style Transformer controls match \ourmethod{}'s APT tokenizer, encoder dimensions, optimizer, early stopping, training budget, and validation-based checkpoint rule. HCE is the two-level adaptation in \S\ref{sec:method:baselines}. Intervals use 2{,}000 paired patient bootstrap resamples. Relative to \ourmethod{}, $^{\dagger}$ denotes a significantly lower baseline, $^{\ddagger}$ a significantly higher baseline, and $^{\mathrm{n.s.}}$ no significant difference.}
 \label{tab:main}
-
 \end{table}

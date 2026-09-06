@@ -7,7 +7,9 @@
 \toprule
 \textbf{Model} & $\boldsymbol{\rho}_{\mathrm{cell}}$ & $\boldsymbol{\rho}_{\mathrm{patient}}$ & $G$ & $R_{\mathrm{sibling}}$ & \textbf{Cross-lineage} \\
 \midrule
-\ourmethod{} & 0.503 & 0.297 & 0.176 & 0.259 & 0.741 \\
+\ourmethod{} & 0.486 & 0.288 & 0.174 & 0.250 & 0.750 \\
+Flat FT-style Transformer & 0.505 & 0.255 & 0.176 & 0.243 & 0.757 \\
+FT-style Transformer $+$ HCE & 0.513 & 0.318 & 0.183 & 0.257 & 0.743 \\
 XGBoost & 0.540 & 0.275 & 0.179 & 0.246 & 0.754 \\
 Logistic Regression & 0.435 & 0.107 & 0.167 & 0.295 & 0.705 \\
 Linear SVM & 0.339 & -0.012 & 0.200 & 0.265 & 0.735 \\

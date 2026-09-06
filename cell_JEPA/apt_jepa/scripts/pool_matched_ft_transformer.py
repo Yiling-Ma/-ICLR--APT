@@ -41,7 +41,7 @@ def main():
             raise ValueError(f"{variant}: a patient appears in multiple test folds")
         pooled.to_csv(variant_dir / "pooled_oof_predictions.csv", index=False)
         row = {
-            "model": "Flat FT-Transformer" if variant == "flat_ce" else "FT-Transformer + HCE",
+            "model": "Flat FT-style Transformer" if variant == "flat_ce" else "FT-style Transformer + HCE",
             "variant": variant,
             "n_cells": len(pooled),
             "n_patients": pooled["sample_id"].nunique(),
