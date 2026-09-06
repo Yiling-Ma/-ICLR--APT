@@ -15,6 +15,8 @@ The harder unresolved problem is cell-level hierarchy prediction under patient-d
 
 Within this harder setting, \ourmethod{} provides its clearest performance gain at the coarse level. It improves coarse-lineage macro-F1 over XGBoost by 0.0107, and the paired patient-bootstrap confidence interval on the difference excludes zero. At the fine level, \ourmethod{} remains competitive but does not significantly exceed XGBoost. This is the right scope of the claim: explicit hierarchy helps, but it does not create a universal advantage over strong tabular baselines once patient-independent evaluation is enforced.
 
+A coarse--fine consistency diagnostic computed from these same pooled out-of-fold predictions is reported in Appendix~\ref{sec:appendix:consistency}. We keep it as supporting evidence because consistency can be altered mechanically by constrained decoding and is not a standalone measure of predictive quality.
+
 \input{tables/main_result}
 
 \subsection{Tail Performance Is Suggestive, Not Headline Evidence}
@@ -22,12 +24,6 @@ Within this harder setting, \ourmethod{} provides its clearest performance gain 
 Because subtype frequencies are highly imbalanced, we also examine head and tail classes. Table~\ref{tab:tail_head} shows that \ourmethod{} achieves the highest tail macro-F1 point estimate, while XGBoost remains slightly stronger on head classes. However, the tail advantage is not statistically secure under patient-level resampling, so we treat it as a supporting observation rather than a main claim. The important qualitative point is that the relative behavior of methods depends on biological resolution and class regime, not just on a single pooled metric.
 
 \input{tables/tail_head}
-
-\subsection{Consistency Is a Structural Diagnostic}
-
-Independent coarse and fine classifiers can disagree about hierarchy. Table~\ref{tab:consistency} reports the natural consistency diagnostic obtained from the independently predicted coarse label and the parent lineage of the independently predicted fine label. \ourmethod{} achieves 0.828, compared with 0.657 for XGBoost, reflecting the fact that its fine predictions are produced through a hierarchy-aware routing mechanism rather than by two unrelated heads.
-
-We do not treat this number alone as proof of predictive superiority. Consistency can be improved post hoc by constraining fine predictions to their parent lineage, and such corrections may raise structural agreement while discarding information elsewhere. We therefore use consistency as a diagnostic that complements, rather than replaces, coarse and fine macro-F1.
 
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:results:protocol}

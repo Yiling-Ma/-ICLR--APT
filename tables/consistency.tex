@@ -1,0 +1,47 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.10}
+
+\begin{tabular}{lc}
+\toprule
+\textbf{Model}
+& \textbf{Coarse--Fine Consistency} \\
+\midrule
+
+\textbf{\ourmethod{}}
+& \textbf{0.828} \\
+
+XGBoost
+& 0.736 \\
+
+Linear SVM
+& 0.631 \\
+
+Random Forest
+& 0.573 \\
+
+Logistic Regression
+& 0.568 \\
+
+Reference Correlation
+& 0.380 \\
+
+\bottomrule
+\end{tabular}
+
+\caption{
+Natural coarse--fine consistency as a supporting structural diagnostic.
+All values are computed on the same 361{,}792-cell, 40-patient pooled
+out-of-fold prediction artifacts used for Table~\ref{tab:main}. For the
+independently trained baselines, we map each uncalibrated hard fine-subtype
+prediction to its parent lineage and compare it with the corresponding hard
+coarse-lineage prediction. The mapping is shared across methods, and the
+\emph{Unknown} subtype is excluded before training and evaluation. Higher
+consistency does not by itself establish predictive superiority because
+post-hoc constrained decoding can change this metric.
+}
+\label{tab:consistency}
+
+\end{table}
