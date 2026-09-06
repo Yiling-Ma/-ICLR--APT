@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{Model} & $\boldsymbol{\rho}_{\mathrm{cell}}$ & $\boldsymbol{\rho}_{\mathrm{patient}}$ & $G$ & $R_{\mathrm{sibling}}$ & \textbf{Cross-lineage} \\
+\midrule
+\ourmethod{} & 0.503 & 0.297 & 0.176 & 0.259 & 0.741 \\
+XGBoost & 0.540 & 0.275 & 0.179 & 0.246 & 0.754 \\
+Logistic Regression & 0.435 & 0.107 & 0.167 & 0.295 & 0.705 \\
+Linear SVM & 0.339 & -0.012 & 0.200 & 0.265 & 0.735 \\
+Random Forest & 0.661 & 0.418 & 0.158 & 0.191 & 0.809 \\
+Reference Correlation & 0.376 & 0.003 & 0.099 & 0.225 & 0.775 \\
+\bottomrule
+\end{tabular}
+\caption{Subtype support, granularity, and error diagnostics on pooled patient-disjoint predictions. The two $\rho$ columns are Spearman associations of per-subtype F1 with log cell count and patient coverage. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among incorrect subtype predictions, $R_{\mathrm{sibling}}$ retains the true parent lineage and Cross-lineage is its complement. These are descriptive benchmark findings, not proposed ranking metrics.}
+\label{tab:subtype_diagnostics}
+\end{table}

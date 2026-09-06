@@ -1,32 +1,20 @@
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \small
 \setlength{\tabcolsep}{8pt}
 \renewcommand{\arraystretch}{1.10}
-
 \begin{tabular}{lcc}
 \toprule
 \textbf{Model} & \textbf{Tail Macro-F1} & \textbf{Head Macro-F1} \\
 \midrule
-
-\textbf{\ourmethod{}}       & \textbf{0.149} & 0.284 \\
-XGBoost                     & 0.119 & \textbf{0.292} \\
-Logistic Regression         & 0.114 & 0.197 \\
-Linear SVM                  & 0.082 & 0.204 \\
-Random Forest               & 0.072 & 0.245 \\
-Reference Correlation       & 0.060 & 0.114 \\
-
+\ourmethod{} & 0.149 & 0.284 \\
+XGBoost & 0.119 & 0.292 \\
+Logistic Regression & 0.114 & 0.197 \\
+Linear SVM & 0.082 & 0.204 \\
+Random Forest & 0.072 & 0.245 \\
+Reference Correlation & 0.060 & 0.114 \\
 \bottomrule
 \end{tabular}
-
-\caption{
-Fine-subtype macro-F1 on the seven rarest and seven most common subtypes
-under the pooled patient-disjoint evaluation. \ourmethod{} has the best
-tail point estimate, while XGBoost is slightly stronger on head classes.
-Because the tail advantage is not statistically secure under patient-level
-resampling, we treat this table as supporting evidence about regime
-dependence rather than as a headline superiority claim.
-}
+\caption{Fine-subtype macro-F1 on the seven least and seven most abundant subtypes under pooled patient-disjoint evaluation. This aggregate is reported as a descriptive complement to the complete per-subtype audit in Table~\ref{tab:subtype_per_class}.}
 \label{tab:tail_head}
-
 \end{table}

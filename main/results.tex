@@ -19,38 +19,40 @@ A coarse--fine consistency diagnostic computed from these same pooled out-of-fol
 
 \input{tables/main_result}
 
-\subsection{Tail Performance Is Suggestive, Not Headline Evidence}
+\subsection{Why 361{,}792 Cells Still Yield Only 0.15 Subtype Macro-F1}
+\label{sec:results:subtype_audit}
 
-Because subtype frequencies are highly imbalanced, we also examine head and tail classes. Table~\ref{tab:tail_head} shows that \ourmethod{} achieves the highest tail macro-F1 point estimate, while XGBoost remains slightly stronger on head classes. However, the tail advantage is not statistically secure under patient-level resampling, so we treat it as a supporting observation rather than a main claim. The important qualitative point is that the relative behavior of methods depends on biological resolution and class regime, not just on a single pooled metric.
+\paragraph{Cell abundance explains more than patient coverage, but neither is sufficient.}
+For subtype $k$, let $n_k$ be its cell count, $P_k$ its patient count, and $F_{1,k}$ its pooled out-of-fold F1. We compare $\rho_{\mathrm{cell}}=\operatorname{Spearman}(F_{1,k},\log n_k)$ with $\rho_{\mathrm{patient}}=\operatorname{Spearman}(F_{1,k},P_k)$. Table~\ref{tab:subtype_diagnostics} shows that the former is larger for all six models (0.503 versus 0.297 for \ourmethod{}; 0.540 versus 0.275 for XGBoost). Patient coverage has limited resolution because 16 of 27 subtypes occur in all 40 patients. Abundance is still incomplete: tail subtype Plasma reaches F1 $\approx 0.60$, whereas head subtype Memory B-1 remains near 0.04. Appendix~\ref{sec:appendix:subtype_audit} reports all requested per-subtype quantities.
 
-\input{tables/tail_head}
+\paragraph{Most subtype errors cross lineage boundaries.}
+We define $R_{\mathrm{sibling}}=\Pr(m(\hat{k})=m(k)\mid \hat{k}\neq k)$ using the fixed parent map $m(\cdot)$. Only 25.9\% of \ourmethod{} errors and 24.6\% of XGBoost errors are sibling confusions; across all models, 70.5--80.9\% of errors cross the true lineage (Table~\ref{tab:subtype_diagnostics}). Low fine-level F1 is therefore not primarily benign confusion among nearby siblings.
+
+\paragraph{The granularity gap is a benchmark finding.}
+For each model, $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$ is positive and ranges from 0.099 to 0.200. We use $G$ only to expose persistent coarse-to-fine difficulty, not as a new metric contribution.
+
+\input{tables/subtype_diagnostics}
 
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:results:protocol}
 
-Finally, Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint protocol with the cell-level split control. Both \ourmethod{} and XGBoost look stronger under cell-level splitting, but the inflation is larger for \ourmethod{}: +0.099 versus +0.050 on coarse lineage, and +0.105 versus +0.069 on fine subtype. This shows that leakage can change not only absolute performance but also the apparent advantage of a method family. APT-Bench therefore treats patient-disjoint evaluation as a non-negotiable requirement, not a reporting detail.
-
-\input{tables/protocol_sensitivity}
+The cell-level split control (Appendix~\ref{sec:appendix:protocol_sensitivity}) makes both \ourmethod{} and XGBoost look stronger, but the inflation is larger for \ourmethod{}: +0.099 versus +0.050 on coarse lineage, and +0.105 versus +0.069 on fine subtype. Leakage can therefore change not only absolute performance but also the apparent advantage of a method family. APT-Bench treats patient-disjoint evaluation as a non-negotiable requirement, not a reporting detail.
 
 \subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
 \label{sec:results:measurement}
 
 The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. A complementary equal-cell-per-patient subsampling diagnostic, computed from held-out disease predictions without retraining, preserves 100\% patient-level accuracy across 50 random trials with only 10 cells per patient. At the same time, random panels approach full performance as the aptamer budget increases, and removing many top-ranked aptamers often leaves disease performance nearly unchanged. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced aptamer and cell-count budgets.
 
-\input{tables/panel_budget}
-
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\columnwidth]{figures/panel_size_curve.png}
+\includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
 \caption{
-Patient-level disease macro-F1 under aptamer-budget controls. Left:
-Top-$B$ selected panels use $B$ retained aptamers; Random-$B$ shows the
-mean random-panel performance with the saved summary interval
-(mean $\pm 1.96$ SD). Right: Remove-Top-$B$ uses a separate x-axis,
-where $B$ denotes the number of top-ranked aptamers removed rather than
-the number retained. The full-panel reference uses all 293 aptamers.
+Patient-level disease macro-F1 under aptamer-budget controls. Left: Top-$B$
+and Random-$B$ retained panels (mean $\pm 1.96$ SD for random panels).
+Right: Remove-Top-$B$, with a separate x-axis denoting aptamers removed.
+The dashed line is the full 293-aptamer reference.
 }
 \label{fig:panel_curve_main}
 \end{figure}
 
-This result complements, rather than weakens, the main disease caveat. The fact that disease labels are recoverable from a compact panel does not resolve whether the underlying signal is biological, technical, or mixed. What it does show is that the within-cohort disease task is easier than the patient-disjoint cell-level hierarchy task, both statistically and operationally. That asymmetry is one of the central empirical messages of APT-Bench.
+Compact-panel recovery does not resolve whether the disease signal is biological, technical, or mixed. It instead shows a central asymmetry: within-cohort disease recognition is statistically and operationally easier than patient-disjoint cell-level hierarchy prediction.
