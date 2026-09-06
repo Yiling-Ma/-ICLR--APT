@@ -3,7 +3,7 @@
 
 \subsection{Disease Recognition Is Strong Within Cohort, but Requires Caveats}
 
-We begin with disease because it is the clinically salient target, then immediately separate it from the central hierarchy benchmark analysis. Under the patient-level 5-fold protocol, all five classical cell-level baselines yield the same patient-level majority-vote result: all 40 patients are correctly assigned, for a Clopper-Pearson 95\% interval of $[0.912, 1.000]$ (Table~\ref{tab:disease}). A genuinely patient-level model using each patient's median APT profile also performs strongly, reaching accuracy 0.950 and macro-AUROC 1.000.
+We begin with disease because it is the clinically salient target, then immediately separate it from the central hierarchy benchmark analysis. Under the patient-level 5-fold protocol, all five classical cell-level baselines yield the same patient-level majority-vote result: all 40 patients are correctly assigned, for a Clopper-Pearson 95\% interval of $[0.912, 1.000]$ (Table~\ref{tab:disease}). A genuinely patient-level model using each patient's median APT profile also performs strongly, reaching accuracy 0.950 and macro-AUROC 1.000. In 1,000 patient-label permutations, none matched its observed accuracy (plus-one $p=0.000999$; Appendix~\ref{sec:appendix:disease_patient_level}).
 
 These results do not justify a claim of solved clinical diagnosis. Sensitivity analyses in Appendix~\ref{sec:appendix:disease_patient_level} show that the disease signal depends strongly on patient-specific absolute-expression structure: patient-wise centering reduces patient-level accuracy from 1.000 to 0.650, and a 40-way patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because acquisition-batch metadata are unavailable, the observed offsets cannot be cleanly decomposed into biological versus technical sources. We therefore use disease recognition primarily to motivate the need for careful statistical-unit accounting in APT-Bench, not as the main architectural success story.
 
@@ -41,16 +41,17 @@ The cell-level split control (Appendix~\ref{sec:appendix:protocol_sensitivity}) 
 \subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
 \label{sec:results:measurement}
 
-The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. A complementary equal-cell-per-patient subsampling diagnostic, computed from held-out disease predictions without retraining, preserves 100\% patient-level accuracy across 50 random trials with only 10 cells per patient. At the same time, random panels approach full performance as the aptamer budget increases, and removing many top-ranked aptamers often leaves disease performance nearly unchanged. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced aptamer and cell-count budgets.
+The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under a nested patient-level selection pipeline, all five outer folds choose the same development tolerance budget, $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. An LR sensitivity analysis obtains the same macro-F1 for all 50 equal-cell subsamples at 100 cells per patient. Across 100 Random-$B$ panels per compact budget, performance also rises quickly with $B$; moreover, LR-coefficient and XGBoost-SHAP Top-10 panels overlap only moderately but both retain perfect patient-level performance. The correct interpretation is therefore not that the dataset isolates a unique minimal biomarker set, but that within-cohort disease information is highly redundant and can be recovered with substantially reduced aptamer and cell-count budgets.
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
 \caption{
-Patient-level disease macro-F1 under aptamer-budget controls. Left: Top-$B$
-and Random-$B$ retained panels (mean $\pm 1.96$ SD for random panels).
-Right: Remove-Top-$B$, with a separate x-axis denoting aptamers removed.
-The dashed line is the full 293-aptamer reference.
+Patient-level disease macro-F1 under compact aptamer-budget controls. Solid
+lines show fold-specific Top-$B$ panels; dotted lines and ribbons show the mean
+and empirical 95\% interval over 100 independently sampled Random-$B$ panels.
+The dashed line is the full 293-aptamer reference. Scores pool the 40 outer-test
+patients, each evaluated exactly once.
 }
 \label{fig:panel_curve_main}
 \end{figure}

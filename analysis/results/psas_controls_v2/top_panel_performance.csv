@@ -1,0 +1,7 @@
+B,model,patient_macro_f1,patient_accuracy
+5,LR,0.8982905982905983,0.9
+5,XGBoost,0.9249084249084248,0.925
+10,LR,1.0,1.0
+10,XGBoost,1.0,1.0
+20,LR,1.0,1.0
+20,XGBoost,1.0,1.0

@@ -1,0 +1,41 @@
+{
+  "statistical_unit": "patient",
+  "representation": "293-dimensional patient median APT profile",
+  "n_patients": 40,
+  "n_permutations": 1000,
+  "fixed_original_patient_folds": true,
+  "class_counts_preserved": true,
+  "cell_level_label_shuffling": false,
+  "disease_classes": [
+    "BTC",
+    "CRC",
+    "GC",
+    "HCC",
+    "Normal",
+    "PC"
+  ],
+  "disease_patient_counts": [
+    6,
+    8,
+    7,
+    7,
+    6,
+    6
+  ],
+  "observed_patient_accuracy": 0.95,
+  "observed_patient_macro_f1": 0.9480963480963482,
+  "accuracy_n_as_extreme": 0,
+  "accuracy_p_value_plus_one": 0.000999000999000999,
+  "macro_f1_n_as_extreme": 0,
+  "macro_f1_p_value_plus_one": 0.000999000999000999,
+  "null_accuracy_mean": 0.13727499999999998,
+  "null_accuracy_95pct": [
+    0.025,
+    0.275
+  ],
+  "null_macro_f1_mean": 0.12796894632464798,
+  "null_macro_f1_95pct": [
+    0.022187500000000002,
+    0.27615601868891343
+  ]
+}

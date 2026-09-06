@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{clllll}
+\toprule
+$B$ & 100 cells & 500 cells & 1,000 cells & 5,000 cells & All cells \\
+\midrule
+5 & 0.881 [0.845, 0.925] & 0.894 [0.852, 0.925] & 0.906 [0.875, 0.925] & 0.899 [0.898, 0.898] & 0.898 [0.898, 0.898] \\
+10 & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
+20 & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
+293 & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
+\bottomrule
+\end{tabular}
+\caption{LR patient-level macro-F1 under equal-cell subsampling. Entries are mean [empirical 95\% interval] over 50 sampling seeds; predictions are pooled across the five outer test folds before scoring the 40 patients.}
+\label{tab:psas_cellcount}
+\end{table*}
