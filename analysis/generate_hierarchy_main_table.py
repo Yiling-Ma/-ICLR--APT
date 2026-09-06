@@ -28,6 +28,11 @@ MAIN_MODEL_ORDER = [
     "XGBoost",
 ]
 
+PRIMARY_COMPARATORS = {
+    "FT-style Transformer + HCE",
+    "XGBoost",
+}
+
 TEX_NAMES = {
     "DropCascade": r"\ourmethod{}",
     "Flat FT-style Transformer": "Flat FT-style Transformer",
@@ -120,6 +125,18 @@ def macro_f1(tp: np.ndarray, fp: np.ndarray, fn: np.ndarray) -> np.ndarray:
     return scores.mean(axis=-1)
 
 
+def holm_adjust(p_values: pd.Series) -> pd.Series:
+    """Holm-adjust a family of p-values while preserving the original index."""
+    ordered = p_values.sort_values()
+    adjusted = pd.Series(index=ordered.index, dtype=float)
+    running_max = 0.0
+    family_size = len(ordered)
+    for rank, (index, value) in enumerate(ordered.items()):
+        running_max = max(running_max, (family_size - rank) * value)
+        adjusted.loc[index] = min(running_max, 1.0)
+    return adjusted.reindex(p_values.index)
+
+
 def evaluate(
     models: dict[str, dict[str, pd.DataFrame]], n_boot: int, seed: int
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -173,38 +190,40 @@ def evaluate(
         for model_name in MODEL_ORDER[1:]:
             difference = reference_boot - boot_scores[model_name]
             lower, upper = np.percentile(difference, [2.5, 97.5])
+            p_lower = (np.sum(difference <= 0) + 1) / (n_boot + 1)
+            p_upper = (np.sum(difference >= 0) + 1) / (n_boot + 1)
             comparisons.append(
                 {
                     "task": task,
                     "comparison": f"DropCascade - {model_name}",
+                    "comparator": model_name,
+                    "is_primary": model_name in PRIMARY_COMPARATORS,
                     "point_difference": point_scores["DropCascade"]
                     - point_scores[model_name],
                     "ci95_lower": float(lower),
                     "ci95_upper": float(upper),
-                    "direction": (
-                        "dropcascade_better"
-                        if lower > 0
-                        else "baseline_better"
-                        if upper < 0
-                        else "not_significant"
-                    ),
+                    "p_value_two_sided": min(1.0, 2 * min(p_lower, p_upper)),
                 }
             )
-    return pd.DataFrame(metrics), pd.DataFrame(comparisons)
+    comparison_frame = pd.DataFrame(comparisons)
+    comparison_frame["p_value_holm"] = np.nan
+    primary = comparison_frame["is_primary"]
+    comparison_frame.loc[primary, "p_value_holm"] = holm_adjust(
+        comparison_frame.loc[primary, "p_value_two_sided"]
+    )
+    return pd.DataFrame(metrics), comparison_frame
 
 
 def significance_marker(task: str, model: str, comparisons: pd.DataFrame) -> str:
-    if model == "DropCascade":
+    if model not in PRIMARY_COMPARATORS:
         return ""
     row = comparisons.loc[
         (comparisons["task"] == task)
         & (comparisons["comparison"] == f"DropCascade - {model}")
     ].iloc[0]
-    return {
-        "dropcascade_better": r"$^{\dagger}$",
-        "baseline_better": r"$^{\ddagger}$",
-        "not_significant": r"$^{\mathrm{n.s.}}$",
-    }[row["direction"]]
+    if row["p_value_holm"] >= 0.05:
+        return r"$^{\mathrm{n.s.}}$"
+    return r"$^{\dagger}$" if row["point_difference"] > 0 else r"$^{\ddagger}$"
 
 
 def write_table(metrics: pd.DataFrame, comparisons: pd.DataFrame, path: Path) -> None:
@@ -247,7 +266,7 @@ def write_table(metrics: pd.DataFrame, comparisons: pd.DataFrame, path: Path) ->
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Patient-disjoint 5-fold hierarchy results on pooled out-of-fold predictions from all 40 patients. The two FT-style Transformer controls match \ourmethod{}'s APT tokenizer, encoder dimensions, optimizer, early stopping, training budget, and validation-based checkpoint rule. HCE is the two-level adaptation in \S\ref{sec:method:baselines}. Intervals use 2{,}000 paired patient bootstrap resamples. Relative to \ourmethod{}, $^{\dagger}$ denotes a significantly lower baseline, $^{\ddagger}$ a significantly higher baseline, and $^{\mathrm{n.s.}}$ no significant difference.}",
+            r"\caption{Patient-disjoint 5-fold hierarchy results on pooled out-of-fold predictions from all 40 patients. The primary comparisons are \ourmethod{} versus HCE and versus XGBoost, for coarse and fine macro-F1. Intervals and two-sided tests use the same 2{,}000 paired patient bootstrap resamples; the four primary test $p$-values are Holm-corrected. The matched Flat FT-style Transformer is an encoder-capacity diagnostic, and all other row-wise comparisons are exploratory. The two FT-style controls match \ourmethod{}'s tokenizer, encoder dimensions, optimizer, early stopping, training budget, and checkpoint rule; HCE is defined in \S\ref{sec:method:baselines}. For primary comparisons, $^{\dagger}$ denotes a significantly lower comparator, $^{\ddagger}$ a significantly higher comparator, and $^{\mathrm{n.s.}}$ no Holm-adjusted significance. Coarse--fine consistency is reported only in Appendix~\ref{sec:appendix:consistency}.}",
             r"\label{tab:main}",
             r"\end{table}",
         ]
