@@ -81,7 +81,7 @@ training budget above. We call it FT-style because its tokenizer is exactly the 
 feature tokenizer used by \ourmethod{}, rather than the original numerical/categorical
 FT-Transformer tokenizer. This model and its HCE counterpart predict the same $M+K$
 lineage-and-subtype nodes. The flat model applies independent cross-entropy to the
-lineage and subtype logit slices. For HCE \citep{cultrera2026improving}, let
+lineage and subtype logit slices. \mbox{For HCE \citep{cultrera2026improving},} let
 $R_{ij}=1$ when node $j$ is node $i$ or its descendant,
 $p=\operatorname{softmax}(q)$ over all nodes, and $s=Rp$. We minimize
 $-\lambda_{\mathrm{fine}}\log s_{M+k}-\lambda_{\mathrm{coarse}}\log s_m$ for
