@@ -168,17 +168,18 @@ Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint proto
 
 \input{tables/protocol_sensitivity}
 
-\subsection{Lineage-Resolved Disease-Specific Aptamer Signatures}
+\subsection{Patient-Level Lineage-Resolved Attribution Audit}
 \label{sec:appendix:apt_markers}
 
-To assess whether the APT panel captures molecular differences beyond cell-type composition, we examined, within each of the three major immune lineages (T/NK, B, and myeloid), the aptamer whose average expression was most enriched in a given disease relative to the other five groups (disease-specific aptamer, selected independently per lineage). Figure~\ref{fig:apt_markers} shows the resulting six disease-specific aptamers (one per disease category, including Normal) within each lineage. Several aptamers show a consistent, lineage-independent pattern: for example, the HCC-specific aptamer is elevated in HCC relative to all other categories in the T/NK, B, and myeloid compartments alike, suggesting a disease-associated signal that is not restricted to a single cell type. This lineage-resolved characterization is descriptive and based on the full panel prior to any train/test partitioning; it is intended to establish molecular plausibility for the APT modality rather than as a validated biomarker panel, and none of these aptamers are used as hand-selected features by \ourmethod{} or any baseline in \S\ref{sec:results}, which instead consume the full 293-dimensional panel.
+We revisit disease attribution at the patient, rather than cell, level. For patient $p$, lineage $m$, and aptamer $j$, we compute $\bar{x}_{pmj}=n_{pm}^{-1}\sum_{i\in(p,m)}x_{ij}$, so every point in Figure~\ref{fig:apt_markers} represents one patient regardless of cell count. We show the three aptamers with the best mean rank across the five outer-fold PSAS rankings (APT-179, APT-225, and APT-164) in the three major immune compartments. The raw view is paired with a patient-centered view obtained by subtracting each patient's per-aptamer median across all of their cells before lineage aggregation. Disease groups contain only 6--8 patients, and the two views use the same vertical scale.
+
+This is an exploratory full-cohort visualization, not an independently validated biomarker analysis. Raw patient means separate several disease groups, but much of that separation contracts toward zero after patient centering, consistent with the centering sensitivity in Appendix~\ref{sec:appendix:disease_patient_level}. The available feature manifest contains only anonymized APT identifiers and no verified protein-target mapping. We therefore make no molecular-plausibility, protein-target, or pathway claim from these panels.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{figures/apt_tnk_page-6_crop.png}
-\includegraphics[width=\textwidth]{figures/apt_b_page-7_crop.png}
-\includegraphics[width=\textwidth]{figures/apt_mono_page-8_crop.png}
-\caption{Disease-specific aptamer expression (mean per-cell value, boxplots over cells) within the T/NK (top), B (middle), and myeloid (bottom) lineages. Each panel shows the aptamer most enriched in the named disease relative to the other five categories, computed independently within that lineage.}
+\includegraphics[width=\textwidth]{figures/patient_lineage_attribution_raw.png}
+\includegraphics[width=\textwidth]{figures/patient_lineage_attribution_centered.png}
+\caption{Patient-balanced lineage-resolved distributions for the three highest-ranked stable PSAS aptamers. Top: raw patient-lineage means. Bottom: means after subtracting each patient's per-aptamer median. Each dot is one patient and boxes summarize patients, not cells; group sizes are shown on the horizontal axis. Corresponding raw and centered panels share the same vertical scale. Aptamer selection and visualization use the full cohort and are exploratory.}
 \label{fig:apt_markers}
 \end{figure}
 
@@ -205,7 +206,7 @@ The resulting development-selected 10-aptamer panels reproduce the full-panel pa
 
 \input{tables/panel_budget}
 
-The fold-overlap ranking is also stable. The highest-ranked aptamers by mean outer-fold rank are APT-179, APT-225, APT-164, APT-166, APT-57, APT-69, APT-125, APT-161, APT-172, and APT-218, and 290 of the 293 aptamers are retained after a simple redundancy screen at $|r| \le 0.9$. This again suggests that predictive signal is distributed across the panel. The descriptive lineage-resolved marker analysis in Appendix~\ref{sec:appendix:apt_markers} remains useful here: several aptamers highlighted independently by that descriptive analysis also appear near the top of the discriminative ranking, providing qualitative cross-support without turning either analysis into a causal biomarker claim.
+The fold-overlap ranking is also stable. The highest-ranked aptamers by mean outer-fold rank are APT-179, APT-225, APT-164, APT-166, APT-57, APT-69, APT-125, APT-161, APT-172, and APT-218, and 290 of the 293 aptamers are retained after a simple redundancy screen at $|r| \le 0.9$. This again suggests that predictive signal is distributed across the panel. Appendix~\ref{sec:appendix:apt_markers} visualizes the top three at the patient-lineage level, including a patient-centering control; because only anonymized IDs are available, neither analysis supports protein-target or pathway interpretation.
 
 \subsection{Balanced Sampling Ablation}
 \label{sec:appendix:sampler}
