@@ -358,20 +358,47 @@ Independent coarse and fine classifiers can disagree about the hierarchy even wh
 
 Because a smaller aptamer panel would be cheaper and simpler to deploy clinically, we asked how many of the 293 aptamers are needed to preserve the observed within-cohort disease result. Patient-Stable Aptamer Selection (PSAS) denotes the fold-specific ranking and development-only budget-selection protocol below; ``stable'' refers to comparison of ranks across outer folds, not to patient-balanced fitting of the LR ranker.
 
-\paragraph{PSAS protocol.}
+\noindent\fbox{\begin{minipage}{0.96\linewidth}
+\small
+\textbf{Algorithm 1: PSAS within outer fold $o$.}
 \begin{enumerate}
-    \item \textbf{Outer isolation.} For outer fold $o$, the eight test patients are sealed; the other 32 patients form the outer-development set. Feature standardization, ranking, budget selection, and model fitting use no outer-test cells.
-    \item \textbf{LR ranking score.} On all cells in the outer-development set, each aptamer is standardized using development-only mean and variance. We fit an L1-regularized six-class multinomial LR (SAGA, $C=0.1$) and rank aptamer $j$ by $s_j=\sum_{d=1}^{6}|\beta_{dj}|$, the sum of its absolute coefficients over disease classes. Cells are not first aggregated by patient and receive equal weight, so this ranking is cell-count weighted.
-    \item \textbf{Development folds.} The 32 development patients are shuffled with the seeded pipeline RNG and divided into five patient-disjoint, non-stratified inner folds. The outer-development ranking is held fixed; for each $B\in\{5,10,20,40,80,160,293\}$, an LR is refitted on each inner-training split using its Top-$B$ features and scored by patient-majority-vote macro-F1 on the corresponding inner validation patients.
-    \item \textbf{Budget rule.} Let $\bar F_B$ be mean inner-fold patient macro-F1. We select $B^*=\min\{B:\bar F_B\geq \bar F_{293}-0.02\}$. The absolute margin $\delta=0.02$ was fixed in the analysis code before outer-test scoring, but was not prospectively preregistered. Because ranking is fixed from all outer-development patients rather than refitted inside each inner split, this is development-only budget selection conditional on one ranking, not fully nested inner re-ranking.
-    \item \textbf{Outer evaluation.} The fold-specific Top-$B^*$ features are taken from that outer-development ranking. LR and XGBoost are then trained from scratch on all outer-development cells restricted to those features, with standardization refitted there, and evaluated once on the outer-test patients. $B^*$ is selected using LR only; XGBoost in Table~\ref{tab:panel_budget} and Figure~\ref{fig:panel_curve_main} evaluates the LR-selected features.
-    \item \textbf{Random controls.} For each $B\in\{5,10,20\}$, 100 feature sets are sampled uniformly without replacement. One sampled set per repeat is shared across the five outer folds, while LR and XGBoost are independently refitted within every fold. Thus panels are independent across repeats, not independently redrawn across outer folds.
-    \item \textbf{SHAP control.} The separate XGBoost-SHAP analysis fits a full-panel XGBoost model in each outer-development set, forms a patient-balanced mean absolute TreeSHAP ranking, and evaluates both LR and XGBoost on either the LR-selected or SHAP-selected Top-10/20 features. SHAP features do not determine $B^*$ or the main curve.
+    \setlength{\itemsep}{1pt}
+    \setlength{\parskip}{0pt}
+    \item Seal the eight outer-test patients; denote the other 32 patients by $D_o$.
+    \item Using all cells in $D_o$, fit development-only standardization and an L1-regularized six-class multinomial LR (SAGA, $C=0.1$); rank aptamer $j$ by $s_j=\sum_{d=1}^{6}|\beta_{dj}|$.
+    \item Seed-shuffle the patients in $D_o$ into five patient-disjoint, non-stratified inner folds.
+    \item For every $B\in\{5,10,20,40,80,160,293\}$ and inner fold, refit LR on the inner-training patients using the fixed Top-$B$ ranking and score patient-majority-vote macro-F1 on inner-validation patients.
+    \item Let $\bar F_B$ denote mean inner-validation macro-F1 and select $B^*=\min\{B:\bar F_B\geq\bar F_{293}-\delta\}$ with $\delta=0.02$.
+    \item Refit LR and XGBoost from scratch on all patients in $D_o$, using only the LR-selected Top-$B^*$ features, and evaluate once on the sealed outer-test patients.
+    \item Repeat independently for all five outer folds; report the pooled outer-test predictions.
 \end{enumerate}
+\end{minipage}}
+\par\vspace{4pt}
+
+\noindent\textbf{Implementation scope and controls.}
+The LR ranker is a cell-level disease model: cells are not first aggregated to
+patient medians and receive equal weight, so its coefficients are cell-count
+weighted rather than patient-balanced. The full-panel reference $\bar F_{293}$
+is the mean inner-validation score, not a resubstitution estimate on all of
+$D_o$. The absolute margin $\delta=0.02$ was fixed in code before outer-test
+scoring but was not prospectively preregistered. Because the ranking is computed
+once from all of $D_o$ and then held fixed across its inner folds, budget
+selection is development-only but conditional on that ranking, not fully nested
+inner re-ranking.
+
+For Random-$B$, each $B\in\{5,10,20\}$ has 100 uniformly sampled feature sets.
+The feature set for one repeat is shared across the five outer folds, but LR and
+XGBoost are trained from scratch within every fold. XGBoost in
+Table~\ref{tab:panel_budget} and Figure~\ref{fig:panel_curve_main} uses the
+LR-selected panel. The separate SHAP control instead fits full-panel XGBoost in
+each outer-development set, constructs a patient-balanced mean absolute
+TreeSHAP ranking, and refits both classifiers on SHAP-selected Top-10/20
+features; it does not determine $B^*$ or the main curve.
 
 All five outer folds select $B^*=10$ under this rule.
 
-\paragraph{Budget terminology.}
+\par\vspace{4pt}
+\noindent\textbf{Budget terminology.}
 An \emph{aptamer measurement budget} $B$ means that a model is retrained and evaluated using only those $B$ input features. An \emph{inference-time cell budget} $C$ means that, after training on all available outer-development cells, only $C$ cached predictions are sampled from each held-out patient before majority-vote aggregation. We do not reduce or evaluate a \emph{training-time cell budget}; the cell-count sensitivity therefore supports low-cell inference aggregation, not training with only $C$ cells per patient.
 
 The resulting development-selected 10-aptamer panels reproduce the full-panel patient-level macro-F1 of 1.0 for both Logistic Regression and XGBoost on all five outer test folds. Figure~\ref{fig:panel_curve_main} compares these selected panels with 100 Random-$B$ repeats at each compact budget. For every model and budget, we report the random-panel mean, empirical 2.5th--97.5th percentile interval, and the empirical midrank percentile of Top-$B$ within that distribution (Table~\ref{tab:psas_random}).
