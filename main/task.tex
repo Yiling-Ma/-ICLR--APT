@@ -18,19 +18,25 @@ construction.
 The assay jointly measures transcriptomic state and binding of 293
 target-specific nucleic-acid aptamers on the same cells. Transcriptome and
 aptamer-barcode libraries are constructed separately and linked at the cell
-level by their shared barcodes. Cell clustering and biological annotation are
-performed from the transcriptomic modality; these annotations define the
-lineage and subtype targets used by APT-Bench. Disease labels come from the
-participant-level cohort assignment. The benchmark input contains only the 293
-APT measurements, so transcriptomic measurements are used to construct labels
-but are never exposed to a prediction model.
+level by their shared barcodes. Transcriptomic counts were processed and
+clustered with the standard Seurat workflow \citep{hao2021integrated}; predicted
+doublets were removed with DoubletFinder \citep{mcginnis2019doubletfinder}, and
+low-quality cells were filtered using per-cell UMI count, detected-gene count,
+and mitochondrial-transcript fraction. Investigators then manually annotated
+clusters from canonical subtype marker expression reported in prior PBMC and
+pan-cancer studies \citep{zhang2024pan,yang2024pan}. These transcriptome-derived
+annotations define the lineage and subtype targets, while disease labels come
+from participant-level cohort assignment. The benchmark input contains only
+the 293 APT measurements; transcriptomic measurements construct the reference
+labels but are never exposed to a prediction model. Exact parameters and label
+limitations are documented in Appendix~\ref{sec:appendix:dataset_documentation}.
 
-\noindent\todo{Complete the cohort, specimen-processing, assay, quality-control,
-and annotation fields listed in Appendix~\ref{sec:appendix:dataset_documentation};
+\noindent\todo{Complete the remaining cohort, specimen-processing, assay, and
+annotation parameters listed in Appendix~\ref{sec:appendix:dataset_documentation};
 report unavailable metadata explicitly rather than leaving them implicit.}
 
 \paragraph{Benchmark cohort.}
-The raw cohort contains 374{,}854 cells. After excluding the
+The linked post-QC cohort contains 374{,}854 cells. After excluding the
 transcriptome-derived \emph{Unknown} subtype label, which denotes uncertain
 annotation rather than a validated biological state, the main benchmark contains
 361{,}792 cells. Each cell is represented by a 293-dimensional APT expression
@@ -41,9 +47,12 @@ are designed probes rather than an arbitrary learned basis.
 APT-Bench contains two kinds of targets at different observational units.
 \begin{itemize}
     \item \textbf{Patient-level disease recognition.} Each patient is assigned to one of six disease groups.
-    \item \textbf{Cell-level hierarchy prediction.} Each cell is assigned to one of five coarse immune lineages and one of \numsubtypes{} fine subtypes. Every subtype maps to exactly one parent lineage through a manually curated lookup table.
+    \item \textbf{Cell-level hierarchy prediction.} Each cell is assigned to one of five coarse immune lineages and one of \numsubtypes{} fine subtypes. Every subtype maps to exactly one parent lineage through a manually curated lookup table. The same subtype names and operational definitions are used across all six disease groups rather than being redefined by disease.
 \end{itemize}
 Disease is therefore not treated as the root of a three-level hierarchy. It is a separate patient-level label observed on the same blood draw.
+
+\noindent\todo{Document independent biological review of the subtype-to-lineage
+lookup, including reviewers, disagreements, and adjudication.}
 
 \subsection{Benchmark Contract and Extensibility}
 \label{sec:data:contract}

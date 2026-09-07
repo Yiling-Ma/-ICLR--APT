@@ -151,6 +151,42 @@ transcriptome-derived clusters and annotations provide the cell labels. For a
 benchmark release, this overview must be accompanied by the following provenance
 and protocol fields.
 
+\paragraph{Transcriptomic preprocessing and cell quality control.}
+The transcriptomic count matrix was processed with Seurat following its standard
+workflow of normalization, feature selection, dimensionality reduction,
+neighborhood-graph construction, and clustering \citep{hao2021integrated}.
+DoubletFinder was used to identify and remove predicted doublets
+\citep{mcginnis2019doubletfinder}. Low-quality cells were additionally filtered
+using per-cell UMI count, detected-gene count, and mitochondrial-transcript
+fraction. These steps preceded cluster annotation and construction of the linked
+APT benchmark cohort. \todo{Report the Seurat and DoubletFinder versions, every
+parameter and random seed, the exact UMI/gene/mitochondrial thresholds, and cell
+counts before and after each filter.}
+
+\paragraph{Manual annotation and reference-label reliability.}
+After Seurat clustering, investigators manually assigned lineage and subtype
+names by inspecting canonical marker-gene expression reported in prior PBMC and
+pan-cancer studies \citep{zhang2024pan,yang2024pan}. No quantitative annotation
+confidence, inter-annotator agreement, or external reference-transfer score is
+available. Accordingly, these labels are operational reference annotations, not
+error-free biological ground truth, and benchmark scores are conditional on this
+manual taxonomy. The \emph{Unknown} label was assigned when a cluster did not show
+a coherent canonical marker pattern for the expected PBMC subtypes; this was a
+manual reject decision rather than a calibrated confidence threshold. Unknown
+cells are excluded from the primary 27-subtype benchmark. \todo{Provide the full
+subtype-by-marker citation table, the number and expertise of annotators, whether
+they were blinded to disease, the adjudication procedure, and the explicit rule
+used to assign Unknown.}
+
+\paragraph{Cross-disease semantics and hierarchy mapping.}
+The same 27 subtype labels and definitions were applied across all six disease
+groups; no subtype was renamed or redefined for a particular disease. This gives
+the labels a consistent operational meaning, but it does not prove that marker
+expression or biological state is invariant across diseases. Each subtype is
+assigned to one of five parent lineages by a manually curated lookup.
+\todo{Document independent validation of the subtype-to-lineage mapping, including
+reviewers, disagreements, adjudication, and any marker-based checks.}
+
 \begin{itemize}
     \item \todo{Report recruiting site(s) and dates, prospective versus retrospective
     collection, exact patient count per group, inclusion/exclusion and diagnostic
@@ -164,10 +200,9 @@ and protocol fields.
     \item \todo{Report assay/platform and reagent versions, sequencing instruments and
     depth, 293-probe panel design, and a verified protein-target manifest or explicitly
     state why only anonymized probe identifiers can be released.}
-    \item \todo{Report barcode matching, doublet removal, transcriptomic preprocessing,
-    clustering, marker-based annotation and adjudication, APT normalization and
-    filtering, all software versions and parameters, and whether annotators were
-    blinded to patient and disease identity.}
+    \item \todo{Report barcode-matching rates, APT normalization and filtering,
+    all remaining software versions and parameters, and whether annotation was
+    performed before investigators examined APT profiles or disease labels.}
     \item \todo{Add a cohort-flow diagram with participant and cell counts after every
     exclusion step, and provide the ethics approval/consent, de-identification,
     data-access, license, and intended-use terms referenced in the Ethics and
