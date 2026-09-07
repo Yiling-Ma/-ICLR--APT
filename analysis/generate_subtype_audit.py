@@ -136,7 +136,7 @@ def hierarchy_error_null(
     patients: list[str],
     draws: np.ndarray,
 ) -> dict[str, float]:
-    """Compare observed cross-lineage errors with a fixed-marginal shuffle null."""
+    """Compare cross-lineage errors with an error-conditioned marginal null."""
     errors = frame.loc[frame["y_true"].astype(str) != frame["y_pred"].astype(str)].copy()
     errors["true_lineage"] = errors["y_true"].astype(str).map(mapping)
     errors["pred_lineage"] = errors["y_pred"].astype(str).map(mapping)
@@ -158,48 +158,79 @@ def hierarchy_error_null(
     np.add.at(pred_counts, (patient_ids, pred_ids), 1)
     np.add.at(cross_counts, patient_ids, true_ids != pred_ids)
 
-    def summarize(
+    def unconditional_summary(
         true_margin: np.ndarray,
         pred_margin: np.ndarray,
         cross: np.ndarray,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         totals = true_margin.sum(axis=-1)
         observed = cross / totals
         null = 1 - (true_margin * pred_margin).sum(axis=-1) / totals**2
-        difference = observed - null
-        retention = (null - observed) / null
-        return observed, null, difference, retention
+        return observed, null
 
-    point = summarize(
+    point_observed, point_unconditional = unconditional_summary(
         true_counts.sum(axis=0, keepdims=True),
         pred_counts.sum(axis=0, keepdims=True),
         np.asarray([cross_counts.sum()]),
     )
-    sampled = summarize(draws @ true_counts, draws @ pred_counts, draws @ cross_counts)
-    difference_ci = np.percentile(sampled[2], [2.5, 97.5])
-    retention_ci = np.percentile(sampled[3], [2.5, 97.5])
-    predicted_subtype = errors["y_pred"].astype(str).value_counts(normalize=True)
-    true_subtype = errors["y_true"].astype(str).value_counts(normalize=True)
-    wrong_conditioned_null = 0.0
-    for true_label, true_weight in true_subtype.items():
-        denominator = 1 - predicted_subtype.get(true_label, 0.0)
-        cross_probability = sum(
-            probability
-            for predicted_label, probability in predicted_subtype.items()
-            if mapping[predicted_label] != mapping[true_label]
-        ) / denominator
-        wrong_conditioned_null += true_weight * cross_probability
+    sampled_observed, _ = unconditional_summary(
+        draws @ true_counts, draws @ pred_counts, draws @ cross_counts
+    )
+
+    subtype_labels = sorted(mapping)
+    subtype_index = {label: index for index, label in enumerate(subtype_labels)}
+    true_subtype_ids = errors["y_true"].astype(str).map(subtype_index).to_numpy().astype(int)
+    pred_subtype_ids = errors["y_pred"].astype(str).map(subtype_index).to_numpy().astype(int)
+    subtype_shape = (len(patients), len(subtype_labels))
+    true_subtype_counts = np.zeros(subtype_shape, dtype=np.float64)
+    pred_subtype_counts = np.zeros(subtype_shape, dtype=np.float64)
+    np.add.at(true_subtype_counts, (patient_ids, true_subtype_ids), 1)
+    np.add.at(pred_subtype_counts, (patient_ids, pred_subtype_ids), 1)
+    cross_lineage_mask = np.asarray(
+        [
+            [mapping[predicted] != mapping[true] for predicted in subtype_labels]
+            for true in subtype_labels
+        ],
+        dtype=np.float64,
+    )
+
+    def wrong_conditioned_null(
+        true_margin: np.ndarray, pred_margin: np.ndarray
+    ) -> np.ndarray:
+        totals = true_margin.sum(axis=1, keepdims=True)
+        true_probability = true_margin / totals
+        pred_probability = pred_margin / totals
+        cross_probability_mass = pred_probability @ cross_lineage_mask.T
+        denominator = 1.0 - pred_probability
+        active = true_probability > 0
+        if np.any(active & (denominator <= 0)):
+            raise ValueError("Cannot condition the null on a remaining wrong prediction")
+        conditional_cross_probability = np.divide(
+            cross_probability_mass,
+            denominator,
+            out=np.zeros_like(cross_probability_mass),
+            where=denominator > 0,
+        )
+        return (true_probability * conditional_cross_probability).sum(axis=1)
+
+    point_wrong_conditioned = wrong_conditioned_null(
+        true_subtype_counts.sum(axis=0, keepdims=True),
+        pred_subtype_counts.sum(axis=0, keepdims=True),
+    )
+    sampled_wrong_conditioned = wrong_conditioned_null(
+        draws @ true_subtype_counts, draws @ pred_subtype_counts
+    )
+    point_difference = point_observed - point_wrong_conditioned
+    sampled_difference = sampled_observed - sampled_wrong_conditioned
+    difference_ci = np.percentile(sampled_difference, [2.5, 97.5])
     return {
         "error_count": int(len(errors)),
-        "observed_cross_lineage": float(point[0][0]),
-        "null_cross_lineage": float(point[1][0]),
-        "wrong_conditioned_null": float(wrong_conditioned_null),
-        "observed_minus_null": float(point[2][0]),
+        "observed_cross_lineage": float(point_observed[0]),
+        "wrong_conditioned_null": float(point_wrong_conditioned[0]),
+        "observed_minus_wrong_conditioned_null": float(point_difference[0]),
         "difference_ci_lower": float(difference_ci[0]),
         "difference_ci_upper": float(difference_ci[1]),
-        "normalized_retention": float(point[3][0]),
-        "retention_ci_lower": float(retention_ci[0]),
-        "retention_ci_upper": float(retention_ci[1]),
+        "unconditional_null_sensitivity": float(point_unconditional[0]),
     }
 
 
@@ -371,28 +402,28 @@ def write_error_null_table(summary: pd.DataFrame, path: Path) -> None:
         r"\begin{table}[H]",
         r"\centering",
         r"\small",
-        r"\setlength{\tabcolsep}{4.2pt}",
+        r"\setlength{\tabcolsep}{4.5pt}",
         r"\renewcommand{\arraystretch}{1.08}",
         r"\resizebox{\columnwidth}{!}{",
-        r"\begin{tabular}{lrrrrrr}",
+        r"\begin{tabular}{lrrrrr}",
         r"\toprule",
-        r"\textbf{Model} & \textbf{Errors} & \textbf{Observed} & \textbf{Null} & \textbf{Wrong-cond. null} & \textbf{Obs.$-$Null [95\% CI]} & \textbf{Norm. retention} \\",
+        r"\textbf{Model} & \textbf{Errors} & \textbf{Observed} & \textbf{Wrong-cond. null} & \textbf{Obs.$-$WC null [95\% CI]} & \textbf{Uncond. null (sens.)} \\",
         r"\midrule",
     ]
     for row in summary.itertuples(index=False):
         lines.append(
             f"{tex_names[row.model]} & {row.error_count:,} & "
-            f"{row.observed_cross_lineage:.3f} & {row.null_cross_lineage:.3f} & "
-            f"{row.wrong_conditioned_null:.3f} & "
-            f"{row.observed_minus_null:+.3f} [{row.difference_ci_lower:+.3f}, "
-            f"{row.difference_ci_upper:+.3f}] & {row.normalized_retention:+.3f} \\\\"
+            f"{row.observed_cross_lineage:.3f} & {row.wrong_conditioned_null:.3f} & "
+            f"{row.observed_minus_wrong_conditioned_null:+.3f} "
+            f"[{row.difference_ci_lower:+.3f}, {row.difference_ci_upper:+.3f}] & "
+            f"{row.unconditional_null_sensitivity:.3f} \\\\"
         )
     lines.extend(
         [
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Cross-lineage error against fixed-marginal nulls. Null permutes predicted subtype labels within each model's errors while preserving true- and predicted-subtype marginals; its expectation is exact. Wrong-cond. null renormalizes the predicted marginal after excluding each true subtype, preventing chance exact matches but no longer preserving the realized prediction marginal exactly. Confidence intervals for Observed$-$Null use 2{,}000 patient-clustered bootstrap resamples. Normalized retention is $(\mathrm{Null}-\mathrm{Observed})/\mathrm{Null}$; positive values indicate fewer cross-lineage errors than expected.}",
+            r"\caption{Cross-lineage error relative to an error-conditioned marginal null. The primary wrong-conditioned (WC) null draws from each model's predicted-subtype marginal after excluding the true subtype and renormalizing, so every randomized outcome remains wrong. Observed$-$WC-null confidence intervals recompute both terms in 2{,}000 patient-clustered bootstrap resamples. The unconditional permutation preserves the realized true- and predicted-subtype marginals but can create chance exact matches; it is reported only as a sensitivity analysis.}",
             r"\label{tab:hierarchy_error_null}",
             r"\end{table}",
         ]

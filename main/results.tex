@@ -41,7 +41,8 @@ Only 25.0\% of \ourmethod{} errors and 24.6\% of XGBoost errors retain the true
 parent; across models, 70.5--80.9\% cross lineage (Table~\ref{tab:subtype_diagnostics}).
 Because this rate depends on class marginals, it is descriptive rather than
 evidence of hierarchy awareness; Appendix~\ref{sec:appendix:subtype_audit}
-provides fixed-marginal null comparisons.
+compares it with an error-conditioned marginal null and reports an
+unconditional permutation only as a sensitivity analysis.
 
 \paragraph{The granularity gap is a benchmark finding.}
 For each model, $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$ is positive and ranges from 0.099 to 0.200. We use $G$ only to expose persistent coarse-to-fine difficulty, not as a new metric contribution.

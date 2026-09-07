@@ -1,24 +1,24 @@
 \begin{table}[H]
 \centering
 \small
-\setlength{\tabcolsep}{4.2pt}
+\setlength{\tabcolsep}{4.5pt}
 \renewcommand{\arraystretch}{1.08}
 \resizebox{\columnwidth}{!}{
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-\textbf{Model} & \textbf{Errors} & \textbf{Observed} & \textbf{Null} & \textbf{Wrong-cond. null} & \textbf{Obs.$-$Null [95\% CI]} & \textbf{Norm. retention} \\
+\textbf{Model} & \textbf{Errors} & \textbf{Observed} & \textbf{Wrong-cond. null} & \textbf{Obs.$-$WC null [95\% CI]} & \textbf{Uncond. null (sens.)} \\
 \midrule
-\ourmethod{} & 251,354 & 0.750 & 0.675 & 0.744 & +0.075 [+0.048, +0.098] & -0.111 \\
-Flat FT-style Transformer & 247,798 & 0.757 & 0.675 & 0.745 & +0.082 [+0.055, +0.105] & -0.122 \\
-FT-style Transformer $+$ HCE & 250,944 & 0.743 & 0.671 & 0.741 & +0.072 [+0.045, +0.094] & -0.107 \\
-XGBoost & 244,990 & 0.754 & 0.672 & 0.741 & +0.082 [+0.053, +0.106] & -0.121 \\
-Logistic Regression & 301,566 & 0.705 & 0.720 & 0.752 & -0.015 [-0.031, +0.003] & +0.021 \\
-Linear SVM & 296,904 & 0.735 & 0.738 & 0.774 & -0.003 [-0.022, +0.015] & +0.004 \\
-Random Forest & 246,420 & 0.809 & 0.685 & 0.749 & +0.124 [+0.095, +0.144] & -0.180 \\
-Reference Correlation & 328,596 & 0.775 & 0.758 & 0.785 & +0.018 [+0.001, +0.034] & -0.023 \\
+\ourmethod{} & 251,354 & 0.750 & 0.744 & +0.005 [-0.025, +0.028] & 0.675 \\
+Flat FT-style Transformer & 247,798 & 0.757 & 0.745 & +0.011 [-0.020, +0.035] & 0.675 \\
+FT-style Transformer $+$ HCE & 250,944 & 0.743 & 0.741 & +0.002 [-0.028, +0.023] & 0.671 \\
+XGBoost & 244,990 & 0.754 & 0.741 & +0.013 [-0.020, +0.038] & 0.672 \\
+Logistic Regression & 301,566 & 0.705 & 0.752 & -0.047 [-0.061, -0.036] & 0.720 \\
+Linear SVM & 296,904 & 0.735 & 0.774 & -0.039 [-0.053, -0.028] & 0.738 \\
+Random Forest & 246,420 & 0.809 & 0.749 & +0.059 [+0.021, +0.083] & 0.685 \\
+Reference Correlation & 328,596 & 0.775 & 0.785 & -0.009 [-0.022, +0.003] & 0.758 \\
 \bottomrule
 \end{tabular}
 }
-\caption{Cross-lineage error against fixed-marginal nulls. Null permutes predicted subtype labels within each model's errors while preserving true- and predicted-subtype marginals; its expectation is exact. Wrong-cond. null renormalizes the predicted marginal after excluding each true subtype, preventing chance exact matches but no longer preserving the realized prediction marginal exactly. Confidence intervals for Observed$-$Null use 2{,}000 patient-clustered bootstrap resamples. Normalized retention is $(\mathrm{Null}-\mathrm{Observed})/\mathrm{Null}$; positive values indicate fewer cross-lineage errors than expected.}
+\caption{Cross-lineage error relative to an error-conditioned marginal null. The primary wrong-conditioned (WC) null draws from each model's predicted-subtype marginal after excluding the true subtype and renormalizing, so every randomized outcome remains wrong. Observed$-$WC-null confidence intervals recompute both terms in 2{,}000 patient-clustered bootstrap resamples. The unconditional permutation preserves the realized true- and predicted-subtype marginals but can create chance exact matches; it is reported only as a sensitivity analysis.}
 \label{tab:hierarchy_error_null}
 \end{table}
