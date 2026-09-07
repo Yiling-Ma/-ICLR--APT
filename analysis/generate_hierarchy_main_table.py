@@ -69,7 +69,9 @@ def standardize(frame: pd.DataFrame, true_col: str, pred_col: str) -> pd.DataFra
     return result
 
 
-def load_predictions(args: argparse.Namespace) -> dict[str, dict[str, pd.DataFrame]]:
+def load_predictions(
+    args: argparse.Namespace,
+) -> tuple[dict[str, dict[str, pd.DataFrame]], dict[str, pd.DataFrame]]:
     drop = pd.read_csv(args.dropcascade)
     models = {
         "coarse": {
@@ -79,6 +81,11 @@ def load_predictions(args: argparse.Namespace) -> dict[str, dict[str, pd.DataFra
             "DropCascade": standardize(drop, "fine_true", "fine_pred"),
         },
     }
+    joint_models = {
+        "DropCascade": drop[
+            ["sample_id", "coarse_true", "coarse_pred", "fine_true", "fine_pred"]
+        ].copy()
+    }
     for variant, display_name in (
         ("flat_ce", "Flat FT-style Transformer"),
         ("hce", "FT-style Transformer + HCE"),
@@ -86,13 +93,87 @@ def load_predictions(args: argparse.Namespace) -> dict[str, dict[str, pd.DataFra
         frame = pd.read_csv(args.matched_root / variant / "pooled_oof_predictions.csv")
         models["coarse"][display_name] = standardize(frame, "coarse_true", "coarse_pred")
         models["fine"][display_name] = standardize(frame, "fine_true", "fine_pred")
+        joint_models[display_name] = frame[
+            ["sample_id", "coarse_true", "coarse_pred", "fine_true", "fine_pred"]
+        ].copy()
     for task in ("coarse", "fine"):
         for directory, display_name in CLASSICAL_NAMES.items():
             frame = pd.read_csv(
                 args.classical_root / task / directory / "pooled_oof_predictions.csv"
             )
             models[task][display_name] = standardize(frame, "y_true", "y_pred")
-    return models
+
+    coarse = pd.read_csv(
+        args.classical_root / "coarse" / "xgboost" / "pooled_oof_predictions.csv"
+    )
+    fine = pd.read_csv(
+        args.classical_root / "fine" / "xgboost" / "pooled_oof_predictions.csv"
+    )
+    if not coarse["cell_id"].is_unique or not fine["cell_id"].is_unique:
+        raise ValueError("XGBoost pooled predictions require unique cell_id values")
+    merged = coarse.merge(
+        fine, on="cell_id", suffixes=("_coarse", "_fine"), validate="one_to_one"
+    )
+    if len(merged) != len(coarse) or len(merged) != len(fine):
+        raise ValueError("XGBoost coarse/fine artifacts use different cell sets")
+    if not merged["sample_id_coarse"].astype(str).equals(
+        merged["sample_id_fine"].astype(str)
+    ):
+        raise ValueError("XGBoost coarse/fine artifacts disagree on patient identity")
+    joint_models["XGBoost"] = pd.DataFrame(
+        {
+            "sample_id": merged["sample_id_coarse"],
+            "coarse_true": merged["y_true_coarse"],
+            "coarse_pred": merged["y_pred_coarse"],
+            "fine_true": merged["y_true_fine"],
+            "fine_pred": merged["y_pred_fine"],
+        }
+    )
+    return models, joint_models
+
+
+def evaluate_hierarchy(joint_models: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """Score the two-level lineage/subtype path for each main-table model."""
+    reference = joint_models["DropCascade"].astype(str)
+    parent_counts = reference.groupby("fine_true")["coarse_true"].nunique()
+    if parent_counts.max() != 1:
+        raise ValueError("Each subtype must have exactly one parent lineage")
+    parent = (
+        reference[["fine_true", "coarse_true"]]
+        .drop_duplicates("fine_true")
+        .set_index("fine_true")["coarse_true"]
+        .to_dict()
+    )
+
+    rows = []
+    for model_name in MAIN_MODEL_ORDER:
+        frame = joint_models[model_name].astype(str)
+        if len(frame) != len(reference):
+            raise ValueError(f"{model_name} uses a different number of test cells")
+        if not frame["fine_true"].map(parent).equals(frame["coarse_true"]):
+            raise ValueError(f"{model_name} uses an inconsistent subtype parent map")
+        predicted_parent = frame["fine_pred"].map(parent)
+        if predicted_parent.isna().any():
+            raise ValueError(f"{model_name} predicts a subtype outside the hierarchy")
+
+        coarse_correct = frame["coarse_pred"] == frame["coarse_true"]
+        fine_correct = frame["fine_pred"] == frame["fine_true"]
+        same_subtype_parent = predicted_parent == frame["coarse_true"]
+        # Both node sets have size two, so per-cell hierarchical P, R, and F1
+        # equal the fraction of correctly predicted lineage/subtype nodes.
+        hierarchical_f1 = (coarse_correct.astype(float) + fine_correct.astype(float)) / 2
+        tree_distance = (
+            2 * (~fine_correct).astype(int) + 2 * (~same_subtype_parent).astype(int)
+        )
+        rows.append(
+            {
+                "model": model_name,
+                "exact_path_accuracy": float((coarse_correct & fine_correct).mean()),
+                "hierarchical_f1": float(hierarchical_f1.mean()),
+                "subtype_tree_distance": float(tree_distance.mean()),
+            }
+        )
+    return pd.DataFrame(rows)
 
 
 def patient_confusions(
@@ -226,47 +307,72 @@ def significance_marker(task: str, model: str, comparisons: pd.DataFrame) -> str
     return r"$^{\dagger}$" if row["point_difference"] > 0 else r"$^{\ddagger}$"
 
 
-def write_table(metrics: pd.DataFrame, comparisons: pd.DataFrame, path: Path) -> None:
+def write_table(
+    metrics: pd.DataFrame,
+    comparisons: pd.DataFrame,
+    hierarchy: pd.DataFrame,
+    path: Path,
+) -> None:
     lines = [
         r"\begin{table}[t]",
         r"\centering",
         r"\small",
-        r"\setlength{\tabcolsep}{3.5pt}",
+        r"\setlength{\tabcolsep}{3.0pt}",
         r"\renewcommand{\arraystretch}{1.08}",
         r"\resizebox{\columnwidth}{!}{",
-        r"\begin{tabular}{llccc}",
+        r"\begin{tabular}{lrrrrrr}",
         r"\toprule",
-        r"\textbf{Task} & \textbf{Model} & \textbf{Macro-F1} & \textbf{Accuracy} & \textbf{95\% CI (Macro-F1)} \\",
+        r"\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Fine Acc.} & \textbf{Exact Path} & \textbf{Hier. F1} & \textbf{Tree Dist.}$\downarrow$ \\",
         r"\midrule",
     ]
-    for task_index, (task, task_label) in enumerate(
-        (("coarse", "Coarse lineage"), ("fine", "Fine subtype"))
-    ):
-        task_rows = metrics.loc[metrics["task"] == task].set_index("model")
-        best_f1 = task_rows["macro_f1"].max()
-        best_accuracy = task_rows["accuracy"].max()
-        for row_index, model in enumerate(MAIN_MODEL_ORDER):
-            row = task_rows.loc[model]
-            task_cell = rf"\multirow{{{len(MAIN_MODEL_ORDER)}}}{{*}}{{{task_label}}}" if row_index == 0 else ""
-            model_cell = TEX_NAMES.get(model, model)
-            f1_text = f"{row.macro_f1:.3f}" + significance_marker(task, model, comparisons)
-            accuracy_text = f"{row.accuracy:.3f}"
-            if np.isclose(row.macro_f1, best_f1):
-                f1_text = rf"\textbf{{{f1_text}}}"
-            if np.isclose(row.accuracy, best_accuracy):
-                accuracy_text = rf"\textbf{{{accuracy_text}}}"
-            lines.append(
-                f"{task_cell} & {model_cell} & {f1_text} & {accuracy_text} & "
-                f"[{row.ci95_lower:.3f}, {row.ci95_upper:.3f}] \\\\"
-            )
-        if task_index == 0:
-            lines.append(r"\midrule")
+    coarse = metrics.loc[metrics["task"] == "coarse"].set_index("model")
+    fine = metrics.loc[metrics["task"] == "fine"].set_index("model")
+    hierarchy = hierarchy.set_index("model")
+    best = {
+        "coarse": coarse.loc[MAIN_MODEL_ORDER, "macro_f1"].max(),
+        "fine": fine.loc[MAIN_MODEL_ORDER, "macro_f1"].max(),
+        "fine_accuracy": fine.loc[MAIN_MODEL_ORDER, "accuracy"].max(),
+        "exact_path": hierarchy["exact_path_accuracy"].max(),
+        "hierarchical_f1": hierarchy["hierarchical_f1"].max(),
+        "tree_distance": hierarchy["subtype_tree_distance"].min(),
+    }
+    for model in MAIN_MODEL_ORDER:
+        coarse_f1 = f"{coarse.loc[model, 'macro_f1']:.3f}" + significance_marker(
+            "coarse", model, comparisons
+        )
+        fine_f1 = f"{fine.loc[model, 'macro_f1']:.3f}" + significance_marker(
+            "fine", model, comparisons
+        )
+        values = {
+            "coarse": coarse_f1,
+            "fine": fine_f1,
+            "fine_accuracy": f"{fine.loc[model, 'accuracy']:.3f}",
+            "exact_path": f"{hierarchy.loc[model, 'exact_path_accuracy']:.3f}",
+            "hierarchical_f1": f"{hierarchy.loc[model, 'hierarchical_f1']:.3f}",
+            "tree_distance": f"{hierarchy.loc[model, 'subtype_tree_distance']:.3f}",
+        }
+        observed = {
+            "coarse": coarse.loc[model, "macro_f1"],
+            "fine": fine.loc[model, "macro_f1"],
+            "fine_accuracy": fine.loc[model, "accuracy"],
+            "exact_path": hierarchy.loc[model, "exact_path_accuracy"],
+            "hierarchical_f1": hierarchy.loc[model, "hierarchical_f1"],
+            "tree_distance": hierarchy.loc[model, "subtype_tree_distance"],
+        }
+        for metric_name in values:
+            if np.isclose(observed[metric_name], best[metric_name]):
+                values[metric_name] = rf"\textbf{{{values[metric_name]}}}"
+        lines.append(
+            f"{TEX_NAMES.get(model, model)} & {values['coarse']} & {values['fine']} & "
+            f"{values['fine_accuracy']} & {values['exact_path']} & "
+            f"{values['hierarchical_f1']} & {values['tree_distance']} \\\\"
+        )
     lines.extend(
         [
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Patient-disjoint 5-fold hierarchy results on pooled out-of-fold predictions from all 40 patients. The primary comparisons are \ourmethod{} versus HCE and versus XGBoost, for coarse and fine macro-F1. Intervals and two-sided tests use the same 2{,}000 paired patient bootstrap resamples; the four primary test $p$-values are Holm-corrected. The matched Flat FT-style Transformer is an encoder-capacity diagnostic, and all other row-wise comparisons are exploratory. The two FT-style controls match \ourmethod{}'s tokenizer, encoder dimensions, optimizer, early stopping, training budget, and checkpoint rule; HCE is defined in \S\ref{sec:method:baselines}. For primary comparisons, $^{\dagger}$ denotes a significantly lower comparator, $^{\ddagger}$ a significantly higher comparator, and $^{\mathrm{n.s.}}$ no Holm-adjusted significance. Coarse--fine consistency is reported only in Appendix~\ref{sec:appendix:consistency}.}",
+            r"\caption{Patient-disjoint 5-fold hierarchy evaluation on the same pooled out-of-fold predictions from 40 patients. Exact Path requires both lineage and subtype to be correct. Hierarchical F1 is the example-averaged F1 between the two-node true and predicted sets $\{\text{lineage},\text{subtype}\}$. Tree Dist. is the mean subtype-tree edge distance: 0 for the correct subtype, 2 for a sibling, and 4 for a cross-lineage prediction (lower is better). The primary comparisons are \ourmethod{} versus HCE and versus XGBoost for coarse and fine macro-F1; their two-sided tests use 2{,}000 paired patient bootstrap resamples with Holm correction across four tests. Other comparisons and the three hierarchy metrics are descriptive. $^{\mathrm{n.s.}}$ denotes no Holm-adjusted significance; coarse--fine consistency remains in Appendix~\ref{sec:appendix:consistency}.}",
             r"\label{tab:main}",
             r"\end{table}",
         ]
@@ -277,11 +383,13 @@ def write_table(metrics: pd.DataFrame, comparisons: pd.DataFrame, path: Path) ->
 def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    models = load_predictions(args)
+    models, joint_models = load_predictions(args)
     metrics, comparisons = evaluate(models, args.n_boot, args.seed)
+    hierarchy = evaluate_hierarchy(joint_models)
     metrics.to_csv(args.output_dir / "hierarchy_main_metrics.csv", index=False)
     comparisons.to_csv(args.output_dir / "hierarchy_paired_comparisons.csv", index=False)
-    write_table(metrics, comparisons, args.table_path)
+    hierarchy.to_csv(args.output_dir / "hierarchy_path_metrics.csv", index=False)
+    write_table(metrics, comparisons, hierarchy, args.table_path)
 
 
 if __name__ == "__main__":

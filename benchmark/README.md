@@ -29,6 +29,10 @@ and budget selection must use development patients only.
 Cell-typing submissions must provide pseudonymous `cell_id`, `sample_id`, true
 and predicted lineage, and true and predicted subtype. Disease submissions must
 provide one row per `sample_id` with the true disease and six class scores.
+The hierarchy evaluator reports coarse and fine Macro-F1, exact-path accuracy,
+example-averaged hierarchical F1, and subtype-tree distance. Natural
+coarse--fine consistency is supplementary because constrained decoding can alter
+it without improving correctness.
 
 ## Release Status
 

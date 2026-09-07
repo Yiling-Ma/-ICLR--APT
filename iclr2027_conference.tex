@@ -186,8 +186,9 @@ new models to be scored without reproducing their internal training pipelines.
 
 The evaluation layer is portable to other clinical single-cell datasets. It
 implements group-disjoint out-of-fold prediction; patient-clustered bootstrap
-uncertainty; coarse and fine macro-F1, granularity gap, and sibling versus
-cross-lineage error; patient-level aggregation versus cell-level
+uncertainty; coarse and fine macro-F1, exact-path accuracy, hierarchical F1,
+subtype-tree distance, granularity gap, and sibling versus cross-lineage error;
+patient-level aggregation versus cell-level
 pseudoreplication; patient-centering and identity diagnostics; and nested feature-
 and cell-budget curves. A future dataset can replace the assay features,
 hierarchy, or clinical endpoint while retaining these interfaces. This modular

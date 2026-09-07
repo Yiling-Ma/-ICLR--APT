@@ -1,25 +1,20 @@
 \begin{table}[t]
 \centering
 \small
-\setlength{\tabcolsep}{3.5pt}
+\setlength{\tabcolsep}{3.0pt}
 \renewcommand{\arraystretch}{1.08}
 \resizebox{\columnwidth}{!}{
-\begin{tabular}{llccc}
+\begin{tabular}{lrrrrrr}
 \toprule
-\textbf{Task} & \textbf{Model} & \textbf{Macro-F1} & \textbf{Accuracy} & \textbf{95\% CI (Macro-F1)} \\
+\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Fine Acc.} & \textbf{Exact Path} & \textbf{Hier. F1} & \textbf{Tree Dist.}$\downarrow$ \\
 \midrule
-\multirow{4}{*}{Coarse lineage} & \ourmethod{} & 0.326 & 0.502 & [0.301, 0.352] \\
- & Flat FT-style Transformer & 0.323 & 0.507 & [0.302, 0.345] \\
- & FT-style Transformer $+$ HCE & \textbf{0.333$^{\mathrm{n.s.}}$} & 0.503 & [0.312, 0.354] \\
- & XGBoost & 0.322$^{\mathrm{n.s.}}$ & \textbf{0.517} & [0.300, 0.345] \\
-\midrule
-\multirow{4}{*}{Fine subtype} & \ourmethod{} & \textbf{0.152} & 0.305 & [0.129, 0.166] \\
- & Flat FT-style Transformer & 0.147 & 0.315 & [0.121, 0.161] \\
- & FT-style Transformer $+$ HCE & 0.151$^{\mathrm{n.s.}}$ & 0.306 & [0.128, 0.167] \\
- & XGBoost & 0.143$^{\mathrm{n.s.}}$ & \textbf{0.323} & [0.128, 0.158] \\
+\ourmethod{} & 0.326 & \textbf{0.152} & 0.305 & 0.253 & 0.404 & 2.431 \\
+Flat FT-style Transformer & 0.323 & 0.147 & 0.315 & 0.257 & 0.411 & 2.407 \\
+FT-style Transformer $+$ HCE & \textbf{0.333$^{\mathrm{n.s.}}$} & 0.151$^{\mathrm{n.s.}}$ & 0.306 & \textbf{0.259} & 0.405 & 2.418 \\
+XGBoost & 0.322$^{\mathrm{n.s.}}$ & 0.143$^{\mathrm{n.s.}}$ & \textbf{0.323} & 0.248 & \textbf{0.420} & \textbf{2.375} \\
 \bottomrule
 \end{tabular}
 }
-\caption{Patient-disjoint 5-fold hierarchy results on pooled out-of-fold predictions from all 40 patients. The primary comparisons are \ourmethod{} versus HCE and versus XGBoost, for coarse and fine macro-F1. Intervals and two-sided tests use the same 2{,}000 paired patient bootstrap resamples; the four primary test $p$-values are Holm-corrected. The matched Flat FT-style Transformer is an encoder-capacity diagnostic, and all other row-wise comparisons are exploratory. The two FT-style controls match \ourmethod{}'s tokenizer, encoder dimensions, optimizer, early stopping, training budget, and checkpoint rule; HCE is defined in \S\ref{sec:method:baselines}. For primary comparisons, $^{\dagger}$ denotes a significantly lower comparator, $^{\ddagger}$ a significantly higher comparator, and $^{\mathrm{n.s.}}$ no Holm-adjusted significance. Coarse--fine consistency is reported only in Appendix~\ref{sec:appendix:consistency}.}
+\caption{Patient-disjoint 5-fold hierarchy evaluation on the same pooled out-of-fold predictions from 40 patients. Exact Path requires both lineage and subtype to be correct. Hierarchical F1 is the example-averaged F1 between the two-node true and predicted sets $\{\text{lineage},\text{subtype}\}$. Tree Dist. is the mean subtype-tree edge distance: 0 for the correct subtype, 2 for a sibling, and 4 for a cross-lineage prediction (lower is better). The primary comparisons are \ourmethod{} versus HCE and versus XGBoost for coarse and fine macro-F1; their two-sided tests use 2{,}000 paired patient bootstrap resamples with Holm correction across four tests. Other comparisons and the three hierarchy metrics are descriptive. $^{\mathrm{n.s.}}$ denotes no Holm-adjusted significance; coarse--fine consistency remains in Appendix~\ref{sec:appendix:consistency}.}
 \label{tab:main}
 \end{table}

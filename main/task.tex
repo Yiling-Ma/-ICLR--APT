@@ -80,6 +80,10 @@ As a protocol-sensitivity control, cells are randomly split irrespective of pati
 
 Because the subtype distribution is long-tailed, we use macro-F1 as the primary metric for coarse-lineage and fine-subtype prediction. Accuracy is reported as a secondary metric. For uncertainty quantification under the main patient-level protocol, we compute 95\% confidence intervals from 2{,}000 paired patient-level bootstrap resamples over the 40 pooled test patients. The primary inferential family contains \ourmethod{} versus HCE and versus XGBoost at the coarse and fine endpoints. Two-sided bootstrap $p$-values use twice the smaller tail probability with a plus-one correction and are Holm-adjusted across these four tests; comparisons outside this family are exploratory.
 
-From the same pooled predictions, we also report per-subtype support and F1, support--performance rank correlations, sibling versus cross-lineage errors, and each model's coarse-minus-fine gap as descriptive difficulty diagnostics rather than new ranking metrics.
+From the same pooled predictions, we evaluate the hierarchy jointly using
+exact-path accuracy, example-averaged hierarchical F1 over the lineage and
+subtype nodes, and subtype-tree distance. We also report per-subtype support and
+F1, support--performance rank correlations, sibling versus cross-lineage errors,
+and each model's coarse-minus-fine gap as descriptive difficulty diagnostics.
 
 We report disease recognition at the patient level, since the clinical decision is made per patient rather than per cell. Cell-level disease accuracies are included only as supplementary evidence and are not interpreted as though hundreds of thousands of cells were independent disease observations.
