@@ -1,0 +1,25 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{llrrr}
+\toprule
+\textbf{Task} & \textbf{Model} & \textbf{Pooled M-F1} & \textbf{Equal-cell M-F1 [95\% interval]} & $\boldsymbol{\Delta}$ \\
+\midrule
+\multirow{4}{*}{Coarse lineage} & \ourmethod{} & 0.326 & 0.331 [0.325, 0.337] & +0.005 \\
+ & Flat FT-style Transformer & 0.323 & 0.326 [0.322, 0.330] & +0.003 \\
+ & FT-style Transformer $+$ HCE & 0.333 & 0.334 [0.328, 0.340] & +0.000 \\
+ & XGBoost & 0.322 & 0.324 [0.320, 0.329] & +0.002 \\
+\midrule
+\multirow{4}{*}{Fine subtype} & \ourmethod{} & 0.152 & 0.144 [0.138, 0.153] & -0.008 \\
+ & Flat FT-style Transformer & 0.147 & 0.138 [0.131, 0.147] & -0.008 \\
+ & FT-style Transformer $+$ HCE & 0.151 & 0.142 [0.137, 0.151] & -0.009 \\
+ & XGBoost & 0.143 & 0.136 [0.131, 0.144] & -0.007 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Patient-balanced cell-count sensitivity. For each of 50 seeds, 1{,}900 cells are sampled without replacement from every patient, and pooled macro-F1 is recomputed on the resulting 76{,}000 cells. All models use identical sampled row indices. The interval is the empirical 2.5th--97.5th percentile across seeds; $\Delta$ is the equal-cell mean minus the original pooled metric. This diagnostic changes evaluation weights only and does not retrain or reselect models.}
+\label{tab:patient_balanced_cell_sensitivity}
+\end{table}

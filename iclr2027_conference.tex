@@ -278,6 +278,19 @@ Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint proto
 
 \input{tables/protocol_sensitivity}
 
+\paragraph{Patient-balanced cell-count sensitivity.}
+Patient-disjoint evaluation prevents leakage but does not make a pooled
+cell-level point estimate patient-balanced: patient cell counts range from
+1{,}929 to 22{,}627. Table~\ref{tab:patient_balanced_cell_sensitivity} therefore
+recomputes both hierarchy endpoints after sampling 1{,}900 cells without
+replacement from every patient for each of 50 seeds. Coarse macro-F1 changes by
+at most $+0.005$, while fine macro-F1 changes by $-0.007$ to $-0.009$; the
+qualitative model ordering is unchanged. The main conclusions are therefore not
+driven by a few high-cell-count patients, although the headline pooled metric
+remains explicitly cell-weighted.
+
+\input{tables/patient_balanced_cell_sensitivity}
+
 \subsection{Patient-Level Lineage-Resolved Attribution Audit}
 \label{sec:appendix:apt_markers}
 
