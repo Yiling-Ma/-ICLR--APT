@@ -27,10 +27,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dropcascade-predictions", type=Path, required=True)
     parser.add_argument("--classical-root", type=Path, required=True)
     parser.add_argument("--matched-root", type=Path, required=True)
-    parser.add_argument("--pooled-summary", type=Path, required=True)
-    parser.add_argument("--mapping", type=Path, required=True)
+    parser.add_argument("--mapping", type=Path)
     parser.add_argument("--output-dir", type=Path, default=Path("analysis/generated"))
     parser.add_argument("--table-dir", type=Path, default=Path("tables"))
+    parser.add_argument("--n-boot", type=int, default=2000)
+    parser.add_argument("--seed", type=int, default=42)
     return parser.parse_args()
 
 
@@ -43,6 +44,13 @@ def load_mapping(path: Path) -> dict[str, str]:
     if not mapping:
         raise ValueError(f"No subtype mapping found in {path}")
     return mapping
+
+
+def derive_mapping(frame: pd.DataFrame) -> dict[str, str]:
+    pairs = frame[["fine_true", "coarse_true"]].astype(str).drop_duplicates()
+    if pairs.groupby("fine_true")["coarse_true"].nunique().max() != 1:
+        raise ValueError("Each subtype must map to exactly one lineage")
+    return pairs.set_index("fine_true")["coarse_true"].to_dict()
 
 
 def per_class_f1(frame: pd.DataFrame, labels: list[str]) -> np.ndarray:
@@ -62,6 +70,64 @@ def spearman(left: np.ndarray, right: np.ndarray) -> float:
     left_rank = pd.Series(left).rank(method="average").to_numpy()
     right_rank = pd.Series(right).rank(method="average").to_numpy()
     return float(np.corrcoef(left_rank, right_rank)[0, 1])
+
+
+def partial_spearman(
+    outcome: np.ndarray, predictor: np.ndarray, control: np.ndarray
+) -> float:
+    """Correlate rank residuals after linear adjustment for one control."""
+    ranked = np.column_stack(
+        [pd.Series(values).rank(method="average").to_numpy() for values in (outcome, predictor, control)]
+    )
+    design = np.column_stack([np.ones(len(ranked)), ranked[:, 2]])
+    outcome_residual = ranked[:, 0] - design @ np.linalg.lstsq(
+        design, ranked[:, 0], rcond=None
+    )[0]
+    predictor_residual = ranked[:, 1] - design @ np.linalg.lstsq(
+        design, ranked[:, 1], rcond=None
+    )[0]
+    return float(np.corrcoef(outcome_residual, predictor_residual)[0, 1])
+
+
+def patient_bootstrap_f1(
+    frame: pd.DataFrame,
+    labels: list[str],
+    patients: list[str],
+    draws: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return classwise percentile intervals from patient-clustered resamples."""
+    patient_index = {patient: index for index, patient in enumerate(patients)}
+    label_index = {label: index for index, label in enumerate(labels)}
+    patient_ids = frame["sample_id"].astype(str).map(patient_index).to_numpy()
+    true_ids = frame["y_true"].astype(str).map(label_index).to_numpy()
+    pred_ids = frame["y_pred"].astype(str).map(label_index).to_numpy()
+    if np.isnan(patient_ids).any() or np.isnan(true_ids).any() or np.isnan(pred_ids).any():
+        raise ValueError("Bootstrap input contains an unknown patient or subtype")
+    patient_ids = patient_ids.astype(int)
+    true_ids = true_ids.astype(int)
+    pred_ids = pred_ids.astype(int)
+
+    shape = (len(patients), len(labels))
+    tp = np.zeros(shape, dtype=np.float64)
+    fp = np.zeros(shape, dtype=np.float64)
+    fn = np.zeros(shape, dtype=np.float64)
+    correct = true_ids == pred_ids
+    np.add.at(tp, (patient_ids[correct], true_ids[correct]), 1)
+    wrong = ~correct
+    np.add.at(fp, (patient_ids[wrong], pred_ids[wrong]), 1)
+    np.add.at(fn, (patient_ids[wrong], true_ids[wrong]), 1)
+
+    sampled_tp = draws @ tp
+    sampled_fp = draws @ fp
+    sampled_fn = draws @ fn
+    denominator = 2 * sampled_tp + sampled_fp + sampled_fn
+    scores = np.divide(
+        2 * sampled_tp,
+        denominator,
+        out=np.full_like(denominator, np.nan),
+        where=denominator > 0,
+    )
+    return np.nanpercentile(scores, 2.5, axis=0), np.nanpercentile(scores, 97.5, axis=0)
 
 
 def standardize(frame: pd.DataFrame, true_col: str, pred_col: str) -> pd.DataFrame:
@@ -110,17 +176,19 @@ def write_diagnostics_table(summary: pd.DataFrame, path: Path) -> None:
         r"\begin{table}[H]",
         r"\centering",
         r"\small",
-        r"\setlength{\tabcolsep}{4.5pt}",
+        r"\setlength{\tabcolsep}{3.5pt}",
         r"\renewcommand{\arraystretch}{1.08}",
-        r"\begin{tabular}{lrrrrr}",
+        r"\resizebox{\columnwidth}{!}{",
+        r"\begin{tabular}{lrrrrrrr}",
         r"\toprule",
-        r"\textbf{Model} & $\boldsymbol{\rho}_{\mathrm{cell}}$ & $\boldsymbol{\rho}_{\mathrm{patient}}$ & $G$ & $R_{\mathrm{sibling}}$ & \textbf{Cross-lineage} \\",
+        r"\textbf{Model} & $\rho_{c}$ & $\rho_{p}$ & $\rho_{c\mid p}$ & $\rho_{p\mid c}$ & $G$ & $R_{\mathrm{sibling}}$ & \textbf{Cross-lineage} \\",
         r"\midrule",
     ]
     tex_names = dict((name, tex) for name, _, tex in MODEL_SPECS)
     for row in summary.itertuples(index=False):
         lines.append(
             f"{tex_names[row.model]} & {row.rho_cell:.3f} & {row.rho_patient:.3f} & "
+            f"{row.partial_rho_cell:.3f} & {row.partial_rho_patient:.3f} & "
             f"{row.granularity_gap:.3f} & {row.sibling_error_rate:.3f} & "
             f"{row.cross_lineage_error_rate:.3f} \\\\"
         )
@@ -128,7 +196,8 @@ def write_diagnostics_table(summary: pd.DataFrame, path: Path) -> None:
         [
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption{Subtype support, granularity, and error diagnostics on pooled patient-disjoint predictions. The two $\rho$ columns are Spearman associations of per-subtype F1 with log cell count and patient coverage. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among incorrect subtype predictions, $R_{\mathrm{sibling}}$ retains the true parent lineage and Cross-lineage is its complement. These are descriptive benchmark findings, not proposed ranking metrics.}",
+            r"}",
+            r"\caption{Exploratory subtype diagnostics on pooled patient-disjoint predictions. $\rho_c$ and $\rho_p$ are marginal Spearman associations of subtype F1 with log cell count and patient coverage; $\rho_{c\mid p}$ and $\rho_{p\mid c}$ are partial Spearman correlations computed by residualizing rank-transformed variables. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among errors, $R_{\mathrm{sibling}}$ retains the true parent lineage and Cross-lineage is its complement. With only 27 subtypes and limited variation in patient coverage, these associations are descriptive and do not establish causality.}",
             r"\label{tab:subtype_diagnostics}",
             r"\end{table}",
         ]
@@ -143,13 +212,13 @@ def write_per_subtype_table(frame: pd.DataFrame, path: Path) -> None:
         r"\setlength{\tabcolsep}{3.2pt}",
         r"\renewcommand{\arraystretch}{1.04}",
         r"\begin{longtable}{llrrrrrr}",
-        r"\caption{Per-subtype support and pooled out-of-fold F1. Cells/patient is the mean among patients in which that subtype is observed. Head and Tail denote the seven most and seven least abundant subtypes; all others are Mid.}\label{tab:subtype_per_class} \\",
+        r"\caption{Per-subtype support and pooled out-of-fold F1 with 95\% percentile intervals from 2{,}000 patient-clustered bootstrap resamples. Cells/patient is the mean among patients in which that subtype is observed. Head and Tail denote the seven most and seven least abundant subtypes; all others are Mid.}\label{tab:subtype_per_class} \\",
         r"\toprule",
-        r"\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1} & \textbf{XGB F1} \\",
+        r"\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1 [95\% CI]} & \textbf{XGB F1 [95\% CI]} \\",
         r"\midrule",
         r"\endfirsthead",
         r"\toprule",
-        r"\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1} & \textbf{XGB F1} \\",
+        r"\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1 [95\% CI]} & \textbf{XGB F1 [95\% CI]} \\",
         r"\midrule",
         r"\endhead",
         r"\midrule",
@@ -161,7 +230,9 @@ def write_per_subtype_table(frame: pd.DataFrame, path: Path) -> None:
     for row in frame.itertuples(index=False):
         lines.append(
             f"{row.subtype} & {row.lineage} & {row.cell_count:,} & {row.patient_count} & "
-            f"{row.mean_cells_per_patient:.1f} & {row.regime} & {row.dropcascade_f1:.3f} & {row.xgboost_f1:.3f} \\\\"
+            f"{row.mean_cells_per_patient:.1f} & {row.regime} & "
+            f"{row.dropcascade_f1:.3f} [{row.dropcascade_ci_lower:.3f}, {row.dropcascade_ci_upper:.3f}] & "
+            f"{row.xgboost_f1:.3f} [{row.xgboost_ci_lower:.3f}, {row.xgboost_ci_upper:.3f}] \\\\"
         )
     lines.extend([r"\end{longtable}", r"\endgroup"])
     path.write_text("\n".join(lines) + "\n")
@@ -225,8 +296,8 @@ def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.table_dir.mkdir(parents=True, exist_ok=True)
-    mapping = load_mapping(args.mapping)
     models, raw_dropcascade, matched_predictions = load_predictions(args)
+    mapping = load_mapping(args.mapping) if args.mapping else derive_mapping(raw_dropcascade)
 
     reference = models["DropCascade"]
     counts = reference.groupby("y_true").size().sort_values()
@@ -252,7 +323,19 @@ def main() -> None:
     per_subtype["dropcascade_f1"] = per_class_f1(models["DropCascade"], labels)
     per_subtype["xgboost_f1"] = per_class_f1(models["XGBoost"], labels)
 
-    pooled = pd.read_csv(args.pooled_summary)
+    patients = sorted(reference["sample_id"].astype(str).unique())
+    rng = np.random.default_rng(args.seed)
+    sampled_indices = rng.integers(
+        0, len(patients), size=(args.n_boot, len(patients))
+    )
+    draws = np.stack(
+        [np.bincount(indices, minlength=len(patients)) for indices in sampled_indices]
+    )
+    for model, prefix in (("DropCascade", "dropcascade"), ("XGBoost", "xgboost")):
+        lower, upper = patient_bootstrap_f1(models[model], labels, patients, draws)
+        per_subtype[f"{prefix}_ci_lower"] = lower
+        per_subtype[f"{prefix}_ci_upper"] = upper
+
     model_rows = []
     for model_name, source, _ in MODEL_SPECS:
         frame = models[model_name]
@@ -308,20 +391,27 @@ def main() -> None:
                 frame["y_pred"].astype(str).map(mapping).reset_index(drop=True)
             )
             coarse_f1 = float(
-                pooled.loc[
-                    (pooled["task"] == "coarse") & (pooled["model"] == directory), "macro_f1"
-                ].iloc[0]
+                per_class_f1(
+                    coarse_frame[["sample_id", "y_true", "y_pred"]],
+                    sorted(coarse_frame["y_true"].astype(str).unique()),
+                ).mean()
             )
-            fine_f1 = float(
-                pooled.loc[
-                    (pooled["task"] == "fine") & (pooled["model"] == directory), "macro_f1"
-                ].iloc[0]
-            )
+            fine_f1 = float(f1_values.mean())
         model_rows.append(
             {
                 "model": model_name,
                 "rho_cell": spearman(f1_values, np.log(counts.to_numpy())),
                 "rho_patient": spearman(f1_values, patient_counts.loc[labels].to_numpy()),
+                "partial_rho_cell": partial_spearman(
+                    f1_values,
+                    np.log(counts.to_numpy()),
+                    patient_counts.loc[labels].to_numpy(),
+                ),
+                "partial_rho_patient": partial_spearman(
+                    f1_values,
+                    patient_counts.loc[labels].to_numpy(),
+                    np.log(counts.to_numpy()),
+                ),
                 "coarse_macro_f1": coarse_f1,
                 "fine_macro_f1": fine_f1,
                 "granularity_gap": coarse_f1 - fine_f1,

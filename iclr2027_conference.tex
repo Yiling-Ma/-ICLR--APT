@@ -72,7 +72,7 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell assays produce hundreds of thousands of cells, but the effective sample size for clinical prediction is determined by independent subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. Subtype F1 is more strongly associated with cell abundance than patient coverage, while most errors cross lineage boundaries, exposing a persistent granularity gap. Aggregated out-of-fold cell predictions correctly classify all 40 patients by disease, but patient-wise centering and identity-prediction audits reveal strong patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under nested patient-level selection, every outer fold chooses $B^*=10$; the resulting 10-aptamer panels match the observed within-cohort performance of the full 293-aptamer panel. Random-panel and cross-model attribution controls indicate that this discriminative signal is distributed across alternative feature subsets. APT-Bench provides a statistically explicit setting for multiresolution, measurement-efficient single-cell learning, while limiting its disease conclusions to this cohort pending external validation.
+Single-cell assays produce hundreds of thousands of cells, but the effective sample size for clinical prediction is determined by independent subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. In this cohort, subtype F1 is more strongly associated with cell abundance than patient coverage, although coverage has limited variation and neither association establishes causality; most errors also cross lineage boundaries, exposing a persistent granularity gap. Aggregated out-of-fold cell predictions correctly classify all 40 patients by disease, but patient-wise centering and identity-prediction audits reveal strong patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under nested patient-level selection, every outer fold chooses $B^*=10$; the resulting 10-aptamer panels match the observed within-cohort performance of the full 293-aptamer panel. Random-panel and cross-model attribution controls indicate that this discriminative signal is distributed across alternative feature subsets. APT-Bench provides a statistically explicit setting for multiresolution, measurement-efficient single-cell learning, while limiting its disease conclusions to this cohort pending external validation.
 \end{abstract}
 
 
@@ -229,8 +229,29 @@ We evaluated the same patient-level median-profile classifier under 1,000 label 
 \subsection{Per-Subtype Support and Performance Audit}
 \label{sec:appendix:subtype_audit}
 
-Table~\ref{tab:subtype_per_class} gives the complete subtype-level quantities underlying the coverage analysis in \S\ref{sec:results:subtype_audit}. Counts and patient coverage are computed from the pooled ground-truth labels, while F1 is computed from the same patient-disjoint out-of-fold predictions used for the main results. Mean cells per patient averages only over patients in which the subtype is observed. The table includes both \ourmethod{} and XGBoost to show that the main abundance-versus-coverage pattern is not specific to one architecture.
+Figure~\ref{fig:subtype_support} visualizes the two marginal support--F1
+associations for \ourmethod{} and XGBoost. The vertical stack at 40 patients
+makes the coverage ceiling explicit. These plots and the partial correlations
+are exploratory: they neither establish causality nor test whether two dependent
+correlations differ significantly.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\columnwidth]{figures/subtype_support_associations.png}
+\caption{Per-subtype pooled out-of-fold F1 versus cell abundance (left) and
+patient coverage (right). Each marker is one of 27 subtypes; both models use the
+same ground-truth support values. Spearman correlations are marginal, and 16 of
+27 subtypes occur in all 40 patients.}
+\label{fig:subtype_support}
+\end{figure}
+
+Table~\ref{tab:subtype_per_class} gives all subtype-level quantities and 95\%
+percentile intervals from 2{,}000 patient-clustered bootstrap resamples. Counts
+and coverage use pooled ground truth, while F1 uses the same patient-disjoint OOF
+predictions as Table~\ref{tab:main}. Mean cells per patient averages only over
+patients in which the subtype is observed.
+
+\clearpage
 \input{tables/subtype_per_class}
 
 For continuity with common long-tail reporting, Table~\ref{tab:tail_head} aggregates the seven least and seven most abundant subtypes. This summary is secondary to the per-class audit because individual subtypes can depart sharply from the abundance trend.

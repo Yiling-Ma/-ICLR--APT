@@ -3,13 +3,13 @@
 \setlength{\tabcolsep}{3.2pt}
 \renewcommand{\arraystretch}{1.04}
 \begin{longtable}{llrrrrrr}
-\caption{Per-subtype support and pooled out-of-fold F1. Cells/patient is the mean among patients in which that subtype is observed. Head and Tail denote the seven most and seven least abundant subtypes; all others are Mid.}\label{tab:subtype_per_class} \\
+\caption{Per-subtype support and pooled out-of-fold F1 with 95\% percentile intervals from 2{,}000 patient-clustered bootstrap resamples. Cells/patient is the mean among patients in which that subtype is observed. Head and Tail denote the seven most and seven least abundant subtypes; all others are Mid.}\label{tab:subtype_per_class} \\
 \toprule
-\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1} & \textbf{XGB F1} \\
+\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1 [95\% CI]} & \textbf{XGB F1 [95\% CI]} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1} & \textbf{XGB F1} \\
+\textbf{Subtype} & \textbf{Lineage} & \textbf{Cells} & \textbf{Patients} & \textbf{Cells/patient} & \textbf{Regime} & \textbf{DropCascade F1 [95\% CI]} & \textbf{XGB F1 [95\% CI]} \\
 \midrule
 \endhead
 \midrule
@@ -17,32 +17,32 @@
 \endfoot
 \bottomrule
 \endlastfoot
-Erythrocyte & Other & 65 & 6 & 10.8 & Tail & 0.253 & 0.133 \\
-Atypical Memory B & B & 781 & 34 & 23.0 & Tail & 0.005 & 0.005 \\
-CD4 Monocyte-4 & Myeloid & 1,405 & 35 & 40.1 & Tail & 0.027 & 0.014 \\
-platelet & Other & 1,574 & 38 & 41.4 & Tail & 0.078 & 0.063 \\
-Tcm & T & 2,121 & 36 & 58.9 & Tail & 0.000 & 0.004 \\
-Memory B-2 & B & 2,130 & 33 & 64.5 & Tail & 0.017 & 0.011 \\
-Plasma & B & 2,173 & 40 & 54.3 & Tail & 0.611 & 0.599 \\
-pDC & Myeloid & 2,615 & 40 & 65.4 & Mid & 0.029 & 0.019 \\
-CD14 Monocyte-3 & Myeloid & 2,977 & 32 & 93.0 & Mid & 0.258 & 0.177 \\
-CD8 + CTL-3 & T & 3,244 & 27 & 120.1 & Mid & 0.020 & 0.023 \\
-GCB & B & 3,283 & 31 & 105.9 & Mid & 0.039 & 0.047 \\
-Cycling T & T & 3,667 & 40 & 91.7 & Mid & 0.028 & 0.012 \\
-CD14 Monocyte-2 & Myeloid & 3,931 & 40 & 98.3 & Mid & 0.075 & 0.078 \\
-CD8 + CTL-2 & T & 4,049 & 33 & 122.7 & Mid & 0.069 & 0.078 \\
-CD16 Monocyte-2 & Myeloid & 5,142 & 40 & 128.6 & Mid & 0.111 & 0.117 \\
-CD8 + CTL-1 & T & 7,303 & 40 & 182.6 & Mid & 0.009 & 0.002 \\
-cDC2 & Myeloid & 7,376 & 40 & 184.4 & Mid & 0.132 & 0.125 \\
-CD8 Tem-2 & T & 10,548 & 40 & 263.7 & Mid & 0.019 & 0.017 \\
-CD16 Monocyte-1 & Myeloid & 14,678 & 40 & 366.9 & Mid & 0.152 & 0.118 \\
-CD4 + Tcm-2 & T & 16,861 & 39 & 432.3 & Mid & 0.188 & 0.188 \\
-Naive T & T & 17,960 & 40 & 449.0 & Head & 0.131 & 0.149 \\
-Memory B-1 & B & 23,722 & 40 & 593.0 & Head & 0.034 & 0.032 \\
-CD8 Tem-1 & T & 26,714 & 40 & 667.9 & Head & 0.187 & 0.162 \\
-CD14 Monocyte-1 & Myeloid & 29,871 & 40 & 746.8 & Head & 0.437 & 0.451 \\
-CD56 NK & NK & 38,442 & 40 & 961.0 & Head & 0.398 & 0.437 \\
-CD16 NK & NK & 58,507 & 40 & 1462.7 & Head & 0.383 & 0.376 \\
-CD4 + Tcm-1 & T & 70,653 & 40 & 1766.3 & Head & 0.417 & 0.435 \\
+Erythrocyte & Other & 65 & 6 & 10.8 & Tail & 0.253 [0.000, 0.395] & 0.133 [0.000, 0.545] \\
+Atypical Memory B & B & 781 & 34 & 23.0 & Tail & 0.005 [0.000, 0.014] & 0.005 [0.000, 0.014] \\
+CD4 Monocyte-4 & Myeloid & 1,405 & 35 & 40.1 & Tail & 0.027 [0.006, 0.053] & 0.014 [0.000, 0.033] \\
+platelet & Other & 1,574 & 38 & 41.4 & Tail & 0.078 [0.016, 0.125] & 0.063 [0.015, 0.106] \\
+Tcm & T & 2,121 & 36 & 58.9 & Tail & 0.000 [0.000, 0.000] & 0.004 [0.000, 0.016] \\
+Memory B-2 & B & 2,130 & 33 & 64.5 & Tail & 0.017 [0.004, 0.033] & 0.011 [0.000, 0.024] \\
+Plasma & B & 2,173 & 40 & 54.3 & Tail & 0.611 [0.522, 0.684] & 0.599 [0.496, 0.685] \\
+pDC & Myeloid & 2,615 & 40 & 65.4 & Mid & 0.029 [0.010, 0.061] & 0.019 [0.005, 0.040] \\
+CD14 Monocyte-3 & Myeloid & 2,977 & 32 & 93.0 & Mid & 0.258 [0.170, 0.306] & 0.177 [0.103, 0.211] \\
+CD8 + CTL-3 & T & 3,244 & 27 & 120.1 & Mid & 0.020 [0.004, 0.035] & 0.023 [0.008, 0.043] \\
+GCB & B & 3,283 & 31 & 105.9 & Mid & 0.039 [0.007, 0.071] & 0.047 [0.001, 0.073] \\
+Cycling T & T & 3,667 & 40 & 91.7 & Mid & 0.028 [0.015, 0.043] & 0.012 [0.003, 0.022] \\
+CD14 Monocyte-2 & Myeloid & 3,931 & 40 & 98.3 & Mid & 0.075 [0.046, 0.102] & 0.078 [0.056, 0.097] \\
+CD8 + CTL-2 & T & 4,049 & 33 & 122.7 & Mid & 0.069 [0.017, 0.116] & 0.078 [0.015, 0.113] \\
+CD16 Monocyte-2 & Myeloid & 5,142 & 40 & 128.6 & Mid & 0.111 [0.064, 0.161] & 0.117 [0.063, 0.164] \\
+CD8 + CTL-1 & T & 7,303 & 40 & 182.6 & Mid & 0.009 [0.000, 0.024] & 0.002 [0.001, 0.004] \\
+cDC2 & Myeloid & 7,376 & 40 & 184.4 & Mid & 0.132 [0.099, 0.181] & 0.125 [0.079, 0.167] \\
+CD8 Tem-2 & T & 10,548 & 40 & 263.7 & Mid & 0.019 [0.005, 0.038] & 0.017 [0.008, 0.030] \\
+CD16 Monocyte-1 & Myeloid & 14,678 & 40 & 366.9 & Mid & 0.152 [0.111, 0.198] & 0.118 [0.090, 0.150] \\
+CD4 + Tcm-2 & T & 16,861 & 39 & 432.3 & Mid & 0.188 [0.111, 0.236] & 0.188 [0.136, 0.220] \\
+Naive T & T & 17,960 & 40 & 449.0 & Head & 0.131 [0.067, 0.183] & 0.149 [0.073, 0.199] \\
+Memory B-1 & B & 23,722 & 40 & 593.0 & Head & 0.034 [0.020, 0.048] & 0.032 [0.017, 0.047] \\
+CD8 Tem-1 & T & 26,714 & 40 & 667.9 & Head & 0.187 [0.128, 0.250] & 0.162 [0.107, 0.221] \\
+CD14 Monocyte-1 & Myeloid & 29,871 & 40 & 746.8 & Head & 0.437 [0.378, 0.495] & 0.451 [0.392, 0.507] \\
+CD56 NK & NK & 38,442 & 40 & 961.0 & Head & 0.398 [0.320, 0.436] & 0.437 [0.373, 0.480] \\
+CD16 NK & NK & 58,507 & 40 & 1462.7 & Head & 0.383 [0.326, 0.434] & 0.376 [0.317, 0.429] \\
+CD4 + Tcm-1 & T & 70,653 & 40 & 1766.3 & Head & 0.417 [0.368, 0.460] & 0.435 [0.393, 0.473] \\
 \end{longtable}
 \endgroup

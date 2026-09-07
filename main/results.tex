@@ -15,20 +15,24 @@ The harder unresolved problem is cell-level hierarchy prediction under patient-d
 
 The matched comparison changes the architectural conclusion. Relative to the flat Transformer, \ourmethod{} differs by only $+0.0036$ coarse macro-F1 (paired patient-bootstrap 95\% CI $[-0.0078,0.0146]$) and $+0.0055$ fine macro-F1 (95\% CI $[-0.0021,0.0125]$). HCE has the highest coarse point estimate (0.333), but its difference from \ourmethod{} is also unsupported: \ourmethod{}$-$HCE is $-0.0069$ (95\% CI $[-0.0154,0.0026]$) at the coarse level and $+0.0015$ (95\% CI $[-0.0083,0.0047]$) at the fine level. Differences from XGBoost likewise do not exclude zero. Thus the experiment does not isolate a performance gain from the cascade: the defensible result is the persistent coarse-to-fine difficulty under patient-disjoint evaluation, not superiority of a routing mechanism.
 
-The hierarchy-aware metrics reinforce this conclusion. Exact-path accuracy is
-only 0.248--0.259 across the four main models; HCE has the highest value, whereas
-XGBoost has the highest hierarchical F1 (0.420) and lowest subtype-tree distance
-(2.375). A natural coarse--fine consistency diagnostic from the same predictions
-remains in Appendix~\ref{sec:appendix:consistency} because constrained decoding
-can change consistency mechanically without improving predictive quality.
+Exact-path accuracy is only 0.248--0.259; HCE has the highest value, whereas
+XGBoost has the highest hierarchical F1 (0.420) and lowest tree distance (2.375).
+Natural consistency remains in Appendix~\ref{sec:appendix:consistency} because
+constrained decoding can alter it without improving predictive quality.
 
 \input{tables/main_result}
 
 \subsection{Why 361{,}792 Cells Still Yield Only 0.15 Subtype Macro-F1}
 \label{sec:results:subtype_audit}
 
-\paragraph{Cell abundance explains more than patient coverage, but neither is sufficient.}
-For subtype $k$, let $n_k$ be its cell count, $P_k$ its patient count, and $F_{1,k}$ its pooled out-of-fold F1. We compare $\rho_{\mathrm{cell}}=\operatorname{Spearman}(F_{1,k},\log n_k)$ with $\rho_{\mathrm{patient}}=\operatorname{Spearman}(F_{1,k},P_k)$. Table~\ref{tab:subtype_diagnostics} shows that the former is larger for all eight models (0.486 versus 0.288 for \ourmethod{}; 0.540 versus 0.275 for XGBoost). Patient coverage has limited resolution because 16 of 27 subtypes occur in all 40 patients. Abundance is still incomplete: tail subtype Plasma reaches F1 $\approx 0.61$, whereas head subtype Memory B-1 remains near 0.03. Appendix~\ref{sec:appendix:subtype_audit} reports all requested per-subtype quantities.
+\paragraph{Subtype support associations are exploratory.}
+For subtype $k$, marginal $\operatorname{Spearman}(F_{1,k},\log n_k)$ versus
+$\operatorname{Spearman}(F_{1,k},P_k)$ is 0.486/0.288 for \ourmethod{} and
+0.540/0.275 for XGBoost. After rank residualization, $\rho_{c\mid p}$ is
+0.411/0.496 and $\rho_{p\mid c}$ is $-0.051/-0.130$. With only 27 subtypes and
+16 at the 40-patient coverage ceiling, these are exploratory associations: they
+establish neither causality nor a significant difference. Appendix~\ref{sec:appendix:subtype_audit}
+provides plots and patient-clustered F1 intervals for every subtype.
 
 \paragraph{Most subtype errors cross lineage boundaries.}
 We define $R_{\mathrm{sibling}}=\Pr(m(\hat{k})=m(k)\mid \hat{k}\neq k)$ using the fixed parent map $m(\cdot)$. Only 25.0\% of \ourmethod{} errors and 24.6\% of XGBoost errors are sibling confusions; across all models, 70.5--80.9\% of errors cross the true lineage (Table~\ref{tab:subtype_diagnostics}). Low fine-level F1 is therefore not primarily benign confusion among nearby siblings.
