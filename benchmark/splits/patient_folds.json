@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "description": "Immutable outer patient folds used by APT-Bench.",
+  "validation_rule": "For outer fold i, fold (i + 1) mod 5 is validation and the remaining three folds are training.",
+  "folds": {
+    "0": ["CRC11", "CRC16", "GC29_P_cDNA", "GC30_P_cDNA", "HCC-2-2", "PBMC-6", "PC-3", "PRZ2"],
+    "1": ["CRC22", "CRC24", "GC31_P_cDNA", "HCC-2-1_1", "HCC-24", "PBMC-1", "PC-5", "PRZ6"],
+    "2": ["CRC13", "CRC23", "GC32_P_cDNA", "HCC-1", "HCC-3-2_1", "PBMC-4", "PC-1", "PRZ5"],
+    "3": ["CRC25", "GC36_P_cDNA", "HCC-3-1_2", "PBMC-3", "PC-4", "PC-6", "PRZ3", "PRZ4"],
+    "4": ["CRC17", "GC28_P_cDNA", "GC2_P_cDNA", "HCC-22", "PBMC-2", "PBMC-5", "PC-2", "PRZ1"]
+  }
+}

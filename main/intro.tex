@@ -4,9 +4,21 @@ Cancer screening and diagnosis are usually framed at the patient level: does a p
 
 This mismatch matters for evaluation. Our cohort contains more than 370{,}000 single cells, but only 40 patients. Treating cells as independent disease observations would substantially overstate the effective sample size of the diagnostic task. It would also hide a second asymmetry: lineage and subtype form a genuine cell-level hierarchy, but disease does not sit above that hierarchy. The clinically relevant problem is therefore not a single three-level taxonomy. It is a multi-resolution setting in which different targets require different evaluation protocols, inductive biases, and interpretations.
 
-We study this setting on aptamer-based single-cell protein profiling. Aptamer (APT) measurements provide a fixed 293-dimensional panel of protein-target binding signals for each cell, offering a minimally invasive view of both disease-associated molecular state and immune composition from peripheral blood \citep{wu2025high}. This modality is attractive for repeated testing and potentially broad deployment, but it raises three intertwined modeling questions. First, how much predictive information is present at coarse versus fine biological resolution? Second, how sensitive is patient-level disease recognition to the mismatch between hundreds of thousands of correlated cells and only 40 independent patients? Third, how many aptamers and cells are needed to preserve disease recognition, and is that signal concentrated in a small unique panel or distributed across the assay?
+We study aptamer-based single-cell profiling. Apt-seq uses sequencable
+nucleic-acid affinity reagents to quantify molecules such as surface proteins
+while retaining cell barcodes and paired transcriptomic state \citep{wu2025high}.
+Unlike gene-vocabulary scRNA-seq or antibody-derived-tag integration benchmarks,
+our predictive input is a fixed 293-aptamer binding panel. This enables three
+questions: how performance changes from coarse lineage to fine subtype; how
+patient-level disease evaluation handles many correlated cells but only 40
+subjects; and how many aptamers and cells preserve that disease signal.
 
-We address these questions with APT-Bench, a patient-disjoint benchmark for multi-resolution characterization from single-cell APT profiles. The benchmark is organized around three primary tracks: cell-level coarse-to-fine hierarchy prediction, patient-level disease recognition with statistical-unit and confounding audits, and measurement-efficiency analysis over aptamer and cell budgets. This framing emphasizes that the central unresolved cell-level problem is not disease classification, which is already nearly saturated within cohort by simple baselines, but reliable hierarchical annotation under patient-independent evaluation.
+APT-Bench fixes three patient-disjoint tracks: coarse-to-fine cell typing,
+patient-level disease recognition with statistical-unit audits, and measurement
+efficiency over aptamer and cell budgets. Its reusable contribution is not a
+claim that one cohort spans deployment, but a common contract for a new modality:
+immutable patient folds, explicit observational units, leakage-resistant metrics,
+and nested budget controls that can extend to future clinical single-cell cohorts.
 
 To instantiate the hierarchy track, we use \ourmethod{}, a differentiable lineage-subtype cascade. The model combines a shared APT encoder, soft lineage routing, and subtype experts. We compare it with classical models and encoder-matched flat and HCE-trained Transformer controls. It serves as a hierarchy-aware neural reference rather than a claimed universal winner; the matched controls test whether any gain survives control of encoder capacity and training budget.
 
@@ -14,7 +26,7 @@ This perspective leads to three empirical findings. First, coarse lineage recogn
 
 Our contributions are therefore as follows.
 \begin{itemize}
-    \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize coarse lineage prediction, fine subtype prediction, patient-level disease recognition, statistical-unit audits, and measurement-efficiency analysis within a single evaluation setting over 40 patients and more than 370{,}000 cells.
+    \item \textbf{APT-Bench, a patient-disjoint reference benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
     \item \textbf{A subtype-centered account of the granularity gap.} Beyond aggregate macro-F1, we quantify how cell abundance and patient coverage relate to each subtype's performance, decompose incorrect subtype predictions into sibling and cross-lineage errors, and report the coarse-to-fine gap for every model. We use \ourmethod{} as a hierarchy-aware reference model rather than claiming universal superiority.
     \item \textbf{A disciplined disease-recognition and measurement-efficiency audit.} We show that disease recognition is extremely strong within cohort but sensitive to patient-specific absolute-expression structure, and that nested aptamer-panel selection plus equal-cell subsampling reveal a low measurement budget under the current within-cohort task.
 \end{itemize}

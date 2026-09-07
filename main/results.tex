@@ -36,7 +36,10 @@ For each model, $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$ is positive an
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:results:protocol}
 
-The cell-level split control (Appendix~\ref{sec:appendix:protocol_sensitivity}) makes both \ourmethod{} and XGBoost look stronger, but the inflation is larger for \ourmethod{}: +0.090 versus +0.050 on coarse lineage, and +0.108 versus +0.069 on fine subtype. Leakage can therefore change not only absolute performance but also the apparent advantage of a method family. APT-Bench treats patient-disjoint evaluation as a non-negotiable requirement, not a reporting detail.
+Cell-level splitting inflates coarse/fine macro-F1 by $+0.090/+0.108$ for
+\ourmethod{} and $+0.050/+0.069$ for XGBoost
+(Appendix~\ref{sec:appendix:protocol_sensitivity}). APT-Bench therefore fixes
+patient-disjoint evaluation rather than treating the split as a reporting detail.
 
 \subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
 \label{sec:results:measurement}

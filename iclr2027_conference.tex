@@ -174,6 +174,37 @@ and protocol fields.
     Reproducibility Statements.}
 \end{itemize}
 
+\subsection{Benchmark Interface and Release Contract}
+\label{sec:appendix:benchmark_release}
+
+The hierarchy submission interface contains pseudonymous cell and patient IDs,
+true and predicted lineage, and true and predicted subtype. The disease interface
+contains one row per patient with the true disease and six class scores. The
+efficiency track additionally records the aptamer budget, cell budget, selection
+seed, and the development-only feature ranking. These common interfaces permit
+new models to be scored without reproducing their internal training pipelines.
+
+The evaluation layer is portable to other clinical single-cell datasets. It
+implements group-disjoint out-of-fold prediction; patient-clustered bootstrap
+uncertainty; coarse and fine macro-F1, granularity gap, and sibling versus
+cross-lineage error; patient-level aggregation versus cell-level
+pseudoreplication; patient-centering and identity diagnostics; and nested feature-
+and cell-budget curves. A future dataset can replace the assay features,
+hierarchy, or clinical endpoint while retaining these interfaces. This modular
+task--dataset--metric separation follows recent living single-cell benchmarks
+\citep{luecken2025open}; standardized metadata and programmatic access similarly
+enable cross-study reuse in CZ CELLxGENE \citep{czi2025cellxgene}.
+
+A complete release must contain the processed APT matrix; pseudonymous cell and
+patient identifiers; disease and cell labels; hierarchy and feature metadata;
+the immutable fold manifest; metric implementations; baseline configurations;
+and a single command that regenerates the headline tables from model predictions.
+\todo{Before submission, add data and code URLs, explicit licenses, file
+checksums, an environment lockfile, an archival DOI, and the end-to-end command.
+If participant-level data require controlled access, release the complete schema,
+all labels permitted by consent, the split manifest, evaluator, and access
+procedure.}
+
 \subsection{Disease Classification: Cell-Level Source Prediction and Patient-Level Sensitivity Analyses}
 \label{sec:appendix:disease_patient_level}
 

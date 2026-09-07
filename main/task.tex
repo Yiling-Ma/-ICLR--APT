@@ -44,6 +44,26 @@ APT-Bench contains two kinds of targets at different observational units.
     \item \textbf{Cell-level hierarchy prediction.} Each cell is assigned to one of five coarse immune lineages and one of \numsubtypes{} fine subtypes. Every subtype maps to exactly one parent lineage through a manually curated lookup table.
 \end{itemize}
 Disease is therefore not treated as the root of a three-level hierarchy. It is a separate patient-level label observed on the same blood draw.
+
+\subsection{Benchmark Contract and Extensibility}
+\label{sec:data:contract}
+
+APT-Bench fixes the unit of input, prediction target, split, and metric for each
+track: five-lineage and 27-subtype prediction from one APT vector per cell;
+six-class disease prediction from all cells of one participant; and nested
+aptamer- and cell-budget evaluation of that participant-level task. Novelty is
+not part of the primary contract. The machine-readable manifest at
+\texttt{benchmark/splits/patient\_folds.json} assigns every pseudonymous patient
+to one outer fold; all selection remains inside development patients. Portable
+components include patient-clustered uncertainty, hierarchy diagnostics,
+pseudoreplication and fingerprint audits, and nested budget curves. The full
+interface and release contract appear in Appendix~\ref{sec:appendix:benchmark_release}.
+This cohort cannot estimate cross-site or cross-platform generalization.
+
+\noindent\todo{Deposit the versioned data and executable evaluation release
+specified in Appendix~\ref{sec:appendix:benchmark_release}; otherwise describe
+the work as a dataset case study rather than a reusable benchmark.}
+
 \subsection{Evaluation Protocols}
 \label{sec:data:protocols}
 
