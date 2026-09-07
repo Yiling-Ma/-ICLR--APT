@@ -258,6 +258,19 @@ For continuity with common long-tail reporting, Table~\ref{tab:tail_head} aggreg
 
 \input{tables/tail_head}
 
+\paragraph{Cross-lineage error relative to fixed-marginal nulls.}
+Table~\ref{tab:hierarchy_error_null} separates raw error severity from the
+cross-lineage rate expected after random reassignment of the same predicted
+subtype labels. For the four main models, observed rates are 0.743--0.757 versus
+fixed-marginal expectations of 0.671--0.675, yielding negative normalized
+retention. Because an unconstrained permutation can create chance exact matches,
+we also report a wrong-conditioned sensitivity null; its 0.741--0.745 range is
+close to, but not above, the observed rates. Thus the raw 75\% cross-lineage
+finding does not show that these models preserve more hierarchy than their class
+marginals predict.
+
+\input{tables/hierarchy_error_null}
+
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:appendix:protocol_sensitivity}
 

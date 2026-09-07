@@ -1,0 +1,24 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4.2pt}
+\renewcommand{\arraystretch}{1.08}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{Model} & \textbf{Errors} & \textbf{Observed} & \textbf{Null} & \textbf{Wrong-cond. null} & \textbf{Obs.$-$Null [95\% CI]} & \textbf{Norm. retention} \\
+\midrule
+\ourmethod{} & 251,354 & 0.750 & 0.675 & 0.744 & +0.075 [+0.048, +0.098] & -0.111 \\
+Flat FT-style Transformer & 247,798 & 0.757 & 0.675 & 0.745 & +0.082 [+0.055, +0.105] & -0.122 \\
+FT-style Transformer $+$ HCE & 250,944 & 0.743 & 0.671 & 0.741 & +0.072 [+0.045, +0.094] & -0.107 \\
+XGBoost & 244,990 & 0.754 & 0.672 & 0.741 & +0.082 [+0.053, +0.106] & -0.121 \\
+Logistic Regression & 301,566 & 0.705 & 0.720 & 0.752 & -0.015 [-0.031, +0.003] & +0.021 \\
+Linear SVM & 296,904 & 0.735 & 0.738 & 0.774 & -0.003 [-0.022, +0.015] & +0.004 \\
+Random Forest & 246,420 & 0.809 & 0.685 & 0.749 & +0.124 [+0.095, +0.144] & -0.180 \\
+Reference Correlation & 328,596 & 0.775 & 0.758 & 0.785 & +0.018 [+0.001, +0.034] & -0.023 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Cross-lineage error against fixed-marginal nulls. Null permutes predicted subtype labels within each model's errors while preserving true- and predicted-subtype marginals; its expectation is exact. Wrong-cond. null renormalizes the predicted marginal after excluding each true subtype, preventing chance exact matches but no longer preserving the realized prediction marginal exactly. Confidence intervals for Observed$-$Null use 2{,}000 patient-clustered bootstrap resamples. Normalized retention is $(\mathrm{Null}-\mathrm{Observed})/\mathrm{Null}$; positive values indicate fewer cross-lineage errors than expected.}
+\label{tab:hierarchy_error_null}
+\end{table}

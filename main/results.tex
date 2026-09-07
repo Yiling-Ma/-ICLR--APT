@@ -34,8 +34,12 @@ $\operatorname{Spearman}(F_{1,k},P_k)$ is 0.486/0.288 for \ourmethod{} and
 establish neither causality nor a significant difference. Appendix~\ref{sec:appendix:subtype_audit}
 provides plots and patient-clustered F1 intervals for every subtype.
 
-\paragraph{Most subtype errors cross lineage boundaries.}
-We define $R_{\mathrm{sibling}}=\Pr(m(\hat{k})=m(k)\mid \hat{k}\neq k)$ using the fixed parent map $m(\cdot)$. Only 25.0\% of \ourmethod{} errors and 24.6\% of XGBoost errors are sibling confusions; across all models, 70.5--80.9\% of errors cross the true lineage (Table~\ref{tab:subtype_diagnostics}). Low fine-level F1 is therefore not primarily benign confusion among nearby siblings.
+\paragraph{Raw error structure is dominated by cross-lineage predictions.}
+Only 25.0\% of \ourmethod{} errors and 24.6\% of XGBoost errors retain the true
+parent; across models, 70.5--80.9\% cross lineage (Table~\ref{tab:subtype_diagnostics}).
+Because this rate depends on class marginals, it is descriptive rather than
+evidence of hierarchy awareness; Appendix~\ref{sec:appendix:subtype_audit}
+provides fixed-marginal null comparisons.
 
 \paragraph{The granularity gap is a benchmark finding.}
 For each model, $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$ is positive and ranges from 0.099 to 0.200. We use $G$ only to expose persistent coarse-to-fine difficulty, not as a new metric contribution.

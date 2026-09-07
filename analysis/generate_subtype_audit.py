@@ -130,6 +130,79 @@ def patient_bootstrap_f1(
     return np.nanpercentile(scores, 2.5, axis=0), np.nanpercentile(scores, 97.5, axis=0)
 
 
+def hierarchy_error_null(
+    frame: pd.DataFrame,
+    mapping: dict[str, str],
+    patients: list[str],
+    draws: np.ndarray,
+) -> dict[str, float]:
+    """Compare observed cross-lineage errors with a fixed-marginal shuffle null."""
+    errors = frame.loc[frame["y_true"].astype(str) != frame["y_pred"].astype(str)].copy()
+    errors["true_lineage"] = errors["y_true"].astype(str).map(mapping)
+    errors["pred_lineage"] = errors["y_pred"].astype(str).map(mapping)
+    if errors[["true_lineage", "pred_lineage"]].isna().any().any():
+        raise ValueError("Error-null input contains a subtype outside the hierarchy")
+
+    patient_index = {patient: index for index, patient in enumerate(patients)}
+    lineages = sorted(set(mapping.values()))
+    lineage_index = {lineage: index for index, lineage in enumerate(lineages)}
+    patient_ids = errors["sample_id"].astype(str).map(patient_index).to_numpy().astype(int)
+    true_ids = errors["true_lineage"].map(lineage_index).to_numpy().astype(int)
+    pred_ids = errors["pred_lineage"].map(lineage_index).to_numpy().astype(int)
+
+    shape = (len(patients), len(lineages))
+    true_counts = np.zeros(shape, dtype=np.float64)
+    pred_counts = np.zeros(shape, dtype=np.float64)
+    cross_counts = np.zeros(len(patients), dtype=np.float64)
+    np.add.at(true_counts, (patient_ids, true_ids), 1)
+    np.add.at(pred_counts, (patient_ids, pred_ids), 1)
+    np.add.at(cross_counts, patient_ids, true_ids != pred_ids)
+
+    def summarize(
+        true_margin: np.ndarray,
+        pred_margin: np.ndarray,
+        cross: np.ndarray,
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        totals = true_margin.sum(axis=-1)
+        observed = cross / totals
+        null = 1 - (true_margin * pred_margin).sum(axis=-1) / totals**2
+        difference = observed - null
+        retention = (null - observed) / null
+        return observed, null, difference, retention
+
+    point = summarize(
+        true_counts.sum(axis=0, keepdims=True),
+        pred_counts.sum(axis=0, keepdims=True),
+        np.asarray([cross_counts.sum()]),
+    )
+    sampled = summarize(draws @ true_counts, draws @ pred_counts, draws @ cross_counts)
+    difference_ci = np.percentile(sampled[2], [2.5, 97.5])
+    retention_ci = np.percentile(sampled[3], [2.5, 97.5])
+    predicted_subtype = errors["y_pred"].astype(str).value_counts(normalize=True)
+    true_subtype = errors["y_true"].astype(str).value_counts(normalize=True)
+    wrong_conditioned_null = 0.0
+    for true_label, true_weight in true_subtype.items():
+        denominator = 1 - predicted_subtype.get(true_label, 0.0)
+        cross_probability = sum(
+            probability
+            for predicted_label, probability in predicted_subtype.items()
+            if mapping[predicted_label] != mapping[true_label]
+        ) / denominator
+        wrong_conditioned_null += true_weight * cross_probability
+    return {
+        "error_count": int(len(errors)),
+        "observed_cross_lineage": float(point[0][0]),
+        "null_cross_lineage": float(point[1][0]),
+        "wrong_conditioned_null": float(wrong_conditioned_null),
+        "observed_minus_null": float(point[2][0]),
+        "difference_ci_lower": float(difference_ci[0]),
+        "difference_ci_upper": float(difference_ci[1]),
+        "normalized_retention": float(point[3][0]),
+        "retention_ci_lower": float(retention_ci[0]),
+        "retention_ci_upper": float(retention_ci[1]),
+    }
+
+
 def standardize(frame: pd.DataFrame, true_col: str, pred_col: str) -> pd.DataFrame:
     return frame[["sample_id", true_col, pred_col]].rename(
         columns={true_col: "y_true", pred_col: "y_pred"}
@@ -292,6 +365,41 @@ def write_consistency_table(summary: pd.DataFrame, path: Path) -> None:
     path.write_text("\n".join(lines) + "\n")
 
 
+def write_error_null_table(summary: pd.DataFrame, path: Path) -> None:
+    tex_names = dict((name, tex) for name, _, tex in MODEL_SPECS)
+    lines = [
+        r"\begin{table}[H]",
+        r"\centering",
+        r"\small",
+        r"\setlength{\tabcolsep}{4.2pt}",
+        r"\renewcommand{\arraystretch}{1.08}",
+        r"\resizebox{\columnwidth}{!}{",
+        r"\begin{tabular}{lrrrrrr}",
+        r"\toprule",
+        r"\textbf{Model} & \textbf{Errors} & \textbf{Observed} & \textbf{Null} & \textbf{Wrong-cond. null} & \textbf{Obs.$-$Null [95\% CI]} & \textbf{Norm. retention} \\",
+        r"\midrule",
+    ]
+    for row in summary.itertuples(index=False):
+        lines.append(
+            f"{tex_names[row.model]} & {row.error_count:,} & "
+            f"{row.observed_cross_lineage:.3f} & {row.null_cross_lineage:.3f} & "
+            f"{row.wrong_conditioned_null:.3f} & "
+            f"{row.observed_minus_null:+.3f} [{row.difference_ci_lower:+.3f}, "
+            f"{row.difference_ci_upper:+.3f}] & {row.normalized_retention:+.3f} \\\\"
+        )
+    lines.extend(
+        [
+            r"\bottomrule",
+            r"\end{tabular}",
+            r"}",
+            r"\caption{Cross-lineage error against fixed-marginal nulls. Null permutes predicted subtype labels within each model's errors while preserving true- and predicted-subtype marginals; its expectation is exact. Wrong-cond. null renormalizes the predicted marginal after excluding each true subtype, preventing chance exact matches but no longer preserving the realized prediction marginal exactly. Confidence intervals for Observed$-$Null use 2{,}000 patient-clustered bootstrap resamples. Normalized retention is $(\mathrm{Null}-\mathrm{Observed})/\mathrm{Null}$; positive values indicate fewer cross-lineage errors than expected.}",
+            r"\label{tab:hierarchy_error_null}",
+            r"\end{table}",
+        ]
+    )
+    path.write_text("\n".join(lines) + "\n")
+
+
 def main() -> None:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -425,13 +533,21 @@ def main() -> None:
             }
         )
     model_summary = pd.DataFrame(model_rows)
+    null_rows = []
+    for model_name, _, _ in MODEL_SPECS:
+        null_rows.append(
+            {"model": model_name, **hierarchy_error_null(models[model_name], mapping, patients, draws)}
+        )
+    error_null = pd.DataFrame(null_rows)
 
     per_subtype.to_csv(args.output_dir / "subtype_per_class.csv", index=False)
     model_summary.to_csv(args.output_dir / "subtype_model_summary.csv", index=False)
+    error_null.to_csv(args.output_dir / "hierarchy_error_null.csv", index=False)
     write_diagnostics_table(model_summary, args.table_dir / "subtype_diagnostics.tex")
     write_per_subtype_table(per_subtype, args.table_dir / "subtype_per_class.tex")
     write_tail_table(model_summary, args.table_dir / "tail_head.tex")
     write_consistency_table(model_summary, args.table_dir / "consistency.tex")
+    write_error_null_table(error_null, args.table_dir / "hierarchy_error_null.tex")
 
 
 if __name__ == "__main__":
