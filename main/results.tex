@@ -18,7 +18,8 @@ The harder unresolved problem is cell-level hierarchy prediction under patient-d
 The matched comparison changes the architectural conclusion. Relative to the flat Transformer, \ourmethod{} differs by only $+0.0036$ coarse macro-F1 (paired patient-bootstrap 95\% CI $[-0.0078,0.0146]$) and $+0.0055$ fine macro-F1 (95\% CI $[-0.0021,0.0125]$). HCE has the highest coarse point estimate (0.333), but its difference from \ourmethod{} is also unsupported: \ourmethod{}$-$HCE is $-0.0069$ (95\% CI $[-0.0154,0.0026]$) at the coarse level and $+0.0015$ (95\% CI $[-0.0083,0.0047]$) at the fine level. Differences from XGBoost likewise do not exclude zero. Thus the experiment does not isolate a performance gain from the cascade: the defensible result is the persistent coarse-to-fine difficulty under patient-disjoint evaluation, not superiority of a routing mechanism.
 
 Exact-path accuracy is only 0.248--0.259; HCE has the highest value, whereas
-XGBoost has the highest hierarchical F1 (0.420) and lowest tree distance (2.375).
+XGBoost has the highest root-excluded hierarchical F1 (0.420) and lowest tree
+distance (2.375).
 Natural consistency remains in Appendix~\ref{sec:appendix:consistency} because
 constrained decoding can alter it without improving predictive quality.
 

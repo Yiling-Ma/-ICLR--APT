@@ -90,7 +90,7 @@ As a protocol-sensitivity control, cells are randomly split irrespective of pati
 Because the subtype distribution is long-tailed, we use macro-F1 as the primary metric for coarse-lineage and fine-subtype prediction. Accuracy is secondary. Primary point estimates pool cells and are therefore cell-weighted despite patient-disjoint splits; Appendix~\ref{sec:appendix:protocol_sensitivity} reports equal-cell-per-patient sensitivity results. For uncertainty, we compute 95\% confidence intervals from 2{,}000 paired patient-level bootstrap resamples over the 40 pooled test patients. The primary inferential family contains \ourmethod{} versus HCE and versus XGBoost at the coarse and fine endpoints. Two-sided bootstrap $p$-values use twice the smaller tail probability with a plus-one correction and are Holm-adjusted across these four tests; comparisons outside this family are exploratory.
 
 From the same pooled predictions, joint hierarchy metrics are exact-path
-accuracy, example-averaged lineage/subtype F1, and subtype-tree distance;
+accuracy, root-excluded example-averaged lineage/subtype F1, and subtype-tree distance;
 support correlations, sibling errors, and the coarse--fine gap are exploratory
 difficulty diagnostics.
 

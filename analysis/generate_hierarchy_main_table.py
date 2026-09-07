@@ -159,9 +159,11 @@ def evaluate_hierarchy(joint_models: dict[str, pd.DataFrame]) -> pd.DataFrame:
         coarse_correct = frame["coarse_pred"] == frame["coarse_true"]
         fine_correct = frame["fine_pred"] == frame["fine_true"]
         same_subtype_parent = predicted_parent == frame["coarse_true"]
-        # Both node sets have size two, so per-cell hierarchical P, R, and F1
-        # equal the fraction of correctly predicted lineage/subtype nodes.
-        hierarchical_f1 = (coarse_correct.astype(float) + fine_correct.astype(float)) / 2
+        # The always-correct root is excluded. With two remaining nodes, per-cell
+        # hierarchical precision, recall, and F1 equal the correct-node fraction.
+        root_excluded_hierarchical_f1 = (
+            coarse_correct.astype(float) + fine_correct.astype(float)
+        ) / 2
         tree_distance = (
             2 * (~fine_correct).astype(int) + 2 * (~same_subtype_parent).astype(int)
         )
@@ -169,7 +171,9 @@ def evaluate_hierarchy(joint_models: dict[str, pd.DataFrame]) -> pd.DataFrame:
             {
                 "model": model_name,
                 "exact_path_accuracy": float((coarse_correct & fine_correct).mean()),
-                "hierarchical_f1": float(hierarchical_f1.mean()),
+                "root_excluded_hierarchical_f1": float(
+                    root_excluded_hierarchical_f1.mean()
+                ),
                 "subtype_tree_distance": float(tree_distance.mean()),
             }
         )
@@ -322,7 +326,7 @@ def write_table(
         r"\resizebox{\columnwidth}{!}{",
         r"\begin{tabular}{lrrrrrr}",
         r"\toprule",
-        r"\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Fine Acc.} & \textbf{Exact Path} & \textbf{Hier. F1} & \textbf{Tree Dist.}$\downarrow$ \\",
+        r"\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Fine Acc.} & \textbf{Exact Path} & \textbf{Root-excluded Hier. F1} & \textbf{Tree Dist.}$\downarrow$ \\",
         r"\midrule",
     ]
     coarse = metrics.loc[metrics["task"] == "coarse"].set_index("model")
@@ -333,7 +337,9 @@ def write_table(
         "fine": fine.loc[MAIN_MODEL_ORDER, "macro_f1"].max(),
         "fine_accuracy": fine.loc[MAIN_MODEL_ORDER, "accuracy"].max(),
         "exact_path": hierarchy["exact_path_accuracy"].max(),
-        "hierarchical_f1": hierarchy["hierarchical_f1"].max(),
+        "root_excluded_hierarchical_f1": hierarchy[
+            "root_excluded_hierarchical_f1"
+        ].max(),
         "tree_distance": hierarchy["subtype_tree_distance"].min(),
     }
     for model in MAIN_MODEL_ORDER:
@@ -348,7 +354,9 @@ def write_table(
             "fine": fine_f1,
             "fine_accuracy": f"{fine.loc[model, 'accuracy']:.3f}",
             "exact_path": f"{hierarchy.loc[model, 'exact_path_accuracy']:.3f}",
-            "hierarchical_f1": f"{hierarchy.loc[model, 'hierarchical_f1']:.3f}",
+            "root_excluded_hierarchical_f1": (
+                f"{hierarchy.loc[model, 'root_excluded_hierarchical_f1']:.3f}"
+            ),
             "tree_distance": f"{hierarchy.loc[model, 'subtype_tree_distance']:.3f}",
         }
         observed = {
@@ -356,7 +364,9 @@ def write_table(
             "fine": fine.loc[model, "macro_f1"],
             "fine_accuracy": fine.loc[model, "accuracy"],
             "exact_path": hierarchy.loc[model, "exact_path_accuracy"],
-            "hierarchical_f1": hierarchy.loc[model, "hierarchical_f1"],
+            "root_excluded_hierarchical_f1": hierarchy.loc[
+                model, "root_excluded_hierarchical_f1"
+            ],
             "tree_distance": hierarchy.loc[model, "subtype_tree_distance"],
         }
         for metric_name in values:
@@ -365,14 +375,14 @@ def write_table(
         lines.append(
             f"{TEX_NAMES.get(model, model)} & {values['coarse']} & {values['fine']} & "
             f"{values['fine_accuracy']} & {values['exact_path']} & "
-            f"{values['hierarchical_f1']} & {values['tree_distance']} \\\\"
+            f"{values['root_excluded_hierarchical_f1']} & {values['tree_distance']} \\\\"
         )
     lines.extend(
         [
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Patient-disjoint 5-fold hierarchy evaluation on the same pooled out-of-fold predictions from 40 patients. Exact Path requires both lineage and subtype to be correct. Hierarchical F1 is the example-averaged F1 between the two-node true and predicted sets $\{\text{lineage},\text{subtype}\}$. Tree Dist. is the mean subtype-tree edge distance: 0 for the correct subtype, 2 for a sibling, and 4 for a cross-lineage prediction (lower is better). The primary comparisons are \ourmethod{} versus HCE and versus XGBoost for coarse and fine macro-F1; their two-sided tests use 2{,}000 paired patient bootstrap resamples with Holm correction across four tests. Other comparisons and the three hierarchy metrics are descriptive. $^{\mathrm{n.s.}}$ denotes no Holm-adjusted significance; coarse--fine consistency remains in Appendix~\ref{sec:appendix:consistency}.}",
+            r"\caption{Patient-disjoint 5-fold hierarchy evaluation on the same pooled out-of-fold predictions from 40 patients. Exact Path and Root-excluded Hier. F1 use the independent coarse and fine predictions. Exact Path requires both predictions to be correct. Root-excluded Hier. F1 is the example-averaged F1 between the two-node true and predicted sets $\{\text{lineage},\text{subtype}\}$; we exclude the always-correct root node to avoid inflating every model through a trivial shared ancestor. Tree Dist. compares the true and predicted subtypes through their mapped parents and does not use the separate coarse prediction: 0 for the correct subtype, 2 for a sibling, and 4 for a cross-lineage prediction (lower is better). No metric uses constrained decoding. The primary comparisons are \ourmethod{} versus HCE and versus XGBoost for coarse and fine macro-F1; their two-sided tests use 2{,}000 paired patient bootstrap resamples with Holm correction across four tests. Other comparisons and the three hierarchy metrics are descriptive. $^{\mathrm{n.s.}}$ denotes no Holm-adjusted significance; coarse--fine consistency remains in Appendix~\ref{sec:appendix:consistency}.}",
             r"\label{tab:main}",
             r"\end{table}",
         ]
