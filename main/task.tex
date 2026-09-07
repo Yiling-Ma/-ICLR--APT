@@ -4,9 +4,39 @@
 \subsection{Dataset and Prediction Targets}
 \label{sec:data:description}
 
-Our dataset contains single-cell aptamer (APT) protein expression profiles from peripheral blood collected from 40 patients across six disease groups: colorectal cancer (CRC), gastric cancer (GC), hepatocellular carcinoma (HCC), pancreatic cancer (PC), biliary tract cancer (BTC), and healthy controls (Normal), with 6--8 patients per group. The raw cohort contains 374{,}854 cells. After excluding the transcriptome-derived \emph{Unknown} subtype label, which denotes uncertain annotation rather than a validated biological state, the main benchmark contains 361{,}792 cells. Each cell is represented by a 293-dimensional APT expression vector.
+\paragraph{Cohort construction and specimen source.}
+APT-Bench is derived from peripheral-blood clinical specimens collected from 40
+participants: patients with colorectal cancer (CRC), gastric cancer (GC),
+hepatocellular carcinoma (HCC), pancreatic cancer (PC), or biliary tract cancer
+(BTC), and healthy controls (Normal). The six groups contain 6--8 participants
+each. Clinical specimens were processed into single-cell suspensions before
+assay preparation. The study workflow documents quality control using the
+forward/side-scatter cell profile and viable-cell proportion before library
+construction.
 
-The 293 aptamers correspond to designed protein-target probes rather than an arbitrary learned basis. Expression values are log-transformed and standardized feature-wise using statistics estimated from the training partition only. Lineage and subtype labels are obtained from paired transcriptomic profiling on the same cells through barcode matching. The transcriptomic modality is used only to define supervision and is never provided as input to the models.
+\paragraph{Paired single-cell assay and label construction.}
+The assay jointly measures transcriptomic state and binding of 293
+target-specific nucleic-acid aptamers on the same cells. Transcriptome and
+aptamer-barcode libraries are constructed separately and linked at the cell
+level by their shared barcodes. Cell clustering and biological annotation are
+performed from the transcriptomic modality; these annotations define the
+lineage and subtype targets used by APT-Bench. Disease labels come from the
+participant-level cohort assignment. The benchmark input contains only the 293
+APT measurements, so transcriptomic measurements are used to construct labels
+but are never exposed to a prediction model.
+
+\noindent\todo{Complete the cohort, specimen-processing, assay, quality-control,
+and annotation fields listed in Appendix~\ref{sec:appendix:dataset_documentation};
+report unavailable metadata explicitly rather than leaving them implicit.}
+
+\paragraph{Benchmark cohort.}
+The raw cohort contains 374{,}854 cells. After excluding the
+transcriptome-derived \emph{Unknown} subtype label, which denotes uncertain
+annotation rather than a validated biological state, the main benchmark contains
+361{,}792 cells. Each cell is represented by a 293-dimensional APT expression
+vector. Expression values are log-transformed and standardized feature-wise
+using statistics estimated from the training partition only. The 293 aptamers
+are designed probes rather than an arbitrary learned basis.
 
 APT-Bench contains two kinds of targets at different observational units.
 \begin{itemize}

@@ -139,6 +139,41 @@ Single-cell assays produce hundreds of thousands of cells, but the effective sam
 \appendix
 \section{Appendix}
 
+\subsection{Dataset Construction and Documentation Checklist}
+\label{sec:appendix:dataset_documentation}
+
+The available study workflow establishes the high-level sequence used to construct
+APT-Bench: clinical peripheral-blood specimens from five cancer groups and healthy
+controls are converted to single-cell suspensions; cell-profile and viability quality
+control precedes a paired single-cell transcriptome and 293-aptamer assay; separate
+transcriptome and aptamer-barcode libraries are linked at the cell level; and
+transcriptome-derived clusters and annotations provide the cell labels. For a
+benchmark release, this overview must be accompanied by the following provenance
+and protocol fields.
+
+\begin{itemize}
+    \item \todo{Report recruiting site(s) and dates, prospective versus retrospective
+    collection, exact patient count per group, inclusion/exclusion and diagnostic
+    criteria, and whether each participant contributed exactly one specimen.}
+    \item \todo{Report available demographics and clinical covariates, including age,
+    sex, disease stage, treatment status, and comorbidities; summarize missingness and
+    state which fields cannot be released.}
+    \item \todo{Report blood volume, collection tubes, time to processing, cell-isolation
+    and cryopreservation procedures, quality-control thresholds, and sample/cell
+    exclusion counts.}
+    \item \todo{Report assay/platform and reagent versions, sequencing instruments and
+    depth, 293-probe panel design, and a verified protein-target manifest or explicitly
+    state why only anonymized probe identifiers can be released.}
+    \item \todo{Report barcode matching, doublet removal, transcriptomic preprocessing,
+    clustering, marker-based annotation and adjudication, APT normalization and
+    filtering, all software versions and parameters, and whether annotators were
+    blinded to patient and disease identity.}
+    \item \todo{Add a cohort-flow diagram with participant and cell counts after every
+    exclusion step, and provide the ethics approval/consent, de-identification,
+    data-access, license, and intended-use terms referenced in the Ethics and
+    Reproducibility Statements.}
+\end{itemize}
+
 \subsection{Disease Classification: Cell-Level Source Prediction and Patient-Level Sensitivity Analyses}
 \label{sec:appendix:disease_patient_level}
 
