@@ -309,13 +309,6 @@ This is an exploratory full-cohort visualization, not an independently validated
 \label{fig:apt_markers}
 \end{figure}
 
-\subsection{A Euclidean Heuristic Inspired by Hyperbolic Hierarchy Embedding}
-\label{sec:appendix:hierarchy_margin}
-
-Motivated by the observation that tree-structured label hierarchies can be embedded with lower distortion under hyperbolic geometry than Euclidean geometry \citep{nickel2017poincare}, we explored a lightweight Euclidean heuristic that directly enforces hierarchy-consistent distances between subtype representations, without the optimization overhead of a full hyperbolic parameterization (e.g., Riemannian optimization over a Poincar\'e ball). For each training batch we compute the mean encoder representation (\S\ref{sec:method:backbone}) of every subtype present in the batch as a prototype, and add a margin-based regularizer that penalizes same-lineage subtype prototypes farther apart than a margin $m_{\text{intra}}=1.0$ and different-lineage subtype prototypes closer together than a margin $m_{\text{inter}}=2.0$, added to the training objective (\S\ref{sec:method:training}) with weight $0.1$.
-
-Under the single patient-independent split used for architecture development (\S\ref{sec:data:protocols}), this regularizer did not improve performance and in fact reduced it relative to the same configuration without the term: fine-subtype macro-F1 decreased from 0.171 to 0.136, and coarse-lineage macro-F1 decreased from 0.360 to 0.317. We did not conduct a hyperparameter sweep over the margin values or loss weight, so this diagnostic cannot determine whether the result reflects redundancy, optimization conflict, or an unsuitable configuration. We report the negative single-split result rather than omitting it, but do not treat it as a component ablation or evidence for the necessity of any retained \ourmethod{} component.
-
 \subsection{Coarse--Fine Consistency Diagnostic}
 \label{sec:appendix:consistency}
 
@@ -365,20 +358,15 @@ The fold-overlap LR ranking is also stable. The highest-ranked aptamers by mean 
 \subsection{Balanced Sampling Ablation}
 \label{sec:appendix:sampler}
 
-The final \ourmethod{} configuration (\S\ref{sec:method:training}) does not use class-balanced sampling. We initially implemented a balanced subtype-disease batch sampler to counteract the long-tailed subtype distribution (\S\ref{sec:data:imbalance}), but found and fixed an implementation issue in which \texttt{steps\_per\_epoch} was computed from the natural data loader's batch size (512) rather than the sampler's own, much smaller, per-batch cell count (e.g., $14$ subtypes $\times$ $2$ diseases $\times$ $4$ cells $= 112$); this mismatch caused each nominal epoch to cover only about $22\%$ of the training set when the sampler was enabled, silently under-training the model and desynchronizing every epoch-indexed schedule (warmup, contrastive ramp-up, routing ramp-up, early-stopping patience) relative to the sampler-disabled baseline.
+The final \ourmethod{} configuration does not use class-balanced sampling. We evaluated a class-balanced sampler during development but did not retain it because it underperformed natural sampling after controlling the number of optimization steps. This single-split diagnostic is not used to support any component claim.
 
-After fixing this issue, the balanced sampler improved fine-subtype macro-F1 from $0.102$ to $0.119$ on the single patient-independent split used for architecture development, but both remain below the $0.171$ achieved without any balanced sampling at all. We report this ablation as a diagnostic finding about our specific sampler implementation, not as evidence against balanced sampling in general, and did not further redesign the sampler given this result; the final configuration therefore omits it.
-
-\subsection{Exploratory Disease-Level Novelty Track}
+\subsection{Exploratory Leave-One-Disease-Out Stress Test}
 \label{sec:appendix:novelty}
 
-We treat disease-level novelty as an exploratory appendix track rather than a main contribution. In this protocol, all patients from one disease category are withheld during training and evaluated as a disease-level distribution shift. This is useful for stress-testing representations, but it is not a fair basis for method ranking because the cohort contains only six disease groups, proxy-disease supervision is limited, and the supervised detector and training-free confidence scores do not receive matched novelty supervision.
-
-Table~\ref{tab:novelty} reports two standard training-free scores, maximum softmax probability \citep{hendrycks2016baseline} and energy \citep{liu2020energy}, alongside a proxy-supervised novelty head. For each held-out disease, the cascade is trained only on the known diseases. The encoder is then frozen, and a lightweight MLP novelty head is trained to distinguish one proxy-novel known disease from the remaining known diseases. The truly held-out disease is never used during either cascade training or novelty-head training.
+We retain only a leave-one-disease-out (LODO) representation stress test. For each run, all patients from one disease category are withheld from training and used only for evaluation. Table~\ref{tab:lodo} shows that generalization weakens substantially relative to the standard patient-disjoint folds, especially for fine subtypes. Because there are only six disease groups and no external cohort, LODO is descriptive rather than an estimate of deployment robustness.
 
 \input{tables/LOD}
-\input{tables/novelty}
 
-Under this exploratory nested leave-one-disease-out protocol, the proxy-supervised head attains higher descriptive AUROC than the training-free confidence scores. This should be interpreted narrowly: proxy disease supervision can help separate a withheld disease from known diseases in this cohort. It does not establish that the novelty head is intrinsically better than energy scoring, because the comparison lacks matched supervised probes on raw APT features, classical classifiers, patient-clustered uncertainty intervals, proxy-choice sensitivity, and a formal ID/OOD patient manifest.
+We omit unmatched detector rankings. Disease-level rejection remains future work requiring prespecified ID/OOD patients, matched supervision, patient-clustered uncertainty, and complete prevalence reporting.
 
 \end{document}

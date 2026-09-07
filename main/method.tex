@@ -70,7 +70,7 @@ w_{\text{contrast}}(t)\mathcal{L}_{\text{contrast}},
 \end{equation}
 where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-entropy losses with $\lambda_{\text{fine}}=1.0$ and $\lambda_{\text{coarse}}=0.5$. The contrastive weight increases to 0.2 according to the schedule in \S\ref{sec:method:contrastive}.
 
-We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling, as our experiments found that it did not improve performance after correcting an implementation issue; additional details are provided in Appendix~\ref{sec:appendix:sampler}.
+We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling because it underperformed natural sampling after matching the number of optimization steps; the single-split development diagnostic is provided in Appendix~\ref{sec:appendix:sampler}.
 
 \paragraph{Matched Transformer controls.}
 \label{sec:method:baselines}

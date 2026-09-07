@@ -14,8 +14,9 @@ cross-site clinical generalization.
 3. Measurement efficiency: repeat patient-level recognition under
    outer-test-isolated aptamer selection and inference-time cell subsampling.
 
-Disease novelty detection is exploratory and is not part of the primary
-benchmark contract.
+Leave-one-disease-out generalization is an exploratory stress test. Disease
+novelty detection is not evaluated and is not part of the primary benchmark
+contract.
 
 The two efficiency controls have different meanings. An aptamer budget retrains
 the model using only the selected input features. A cell budget subsamples
