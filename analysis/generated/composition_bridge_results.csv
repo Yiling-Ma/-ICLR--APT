@@ -1,0 +1,5 @@
+representation,n_features,patient_accuracy,patient_macro_f1,patient_macro_auroc,n_patients,cell_label_source,clr_pseudocount,logistic_regression_c
+Gold subtype composition,27,0.575,0.5718595130359837,0.8416581121084797,40,gold annotation,0.0001,0.1
+OOF predicted subtype composition,27,0.4,0.3999497234791352,0.7491266392920805,40,patient-disjoint cell-level OOF prediction,0.0001,0.1
+Gold lineage composition,5,0.4,0.37727272727272726,0.6781042435913759,40,gold annotation,0.0001,0.1
+OOF predicted lineage composition,5,0.3,0.28232714138286896,0.6271807491936169,40,patient-disjoint cell-level OOF prediction,0.0001,0.1

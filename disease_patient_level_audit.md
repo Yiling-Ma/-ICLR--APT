@@ -179,28 +179,27 @@ across patients). Documented as not run rather than silently omitted.
 
 ## Phase 7 — Composition-only patient-level baselines
 
-Gold labels (`Celltypes_new` from paired transcriptomic annotation,
-explicitly NOT DropCascade predictions) used throughout; predicted-label
-composition was not additionally evaluated in this pass (scoping decision;
-DropCascade's own fine-subtype macro-F1 is only 0.156, so a
-predicted-composition baseline would be dominated by subtype-classifier
-error rather than informative about disease — flagged rather than run).
+Gold labels (`Celltypes_new` from paired transcriptomic annotation) and
+patient-disjoint DropCascade OOF predictions are evaluated under the same
+patient folds. Every predicted cell label for patient `p` comes from a model
+whose training and validation sets exclude `p`; no fitted-patient cell
+predictions enter the composition features.
 
 | Representation | Transform | Regularization | Patient accuracy | Macro-F1 | Macro-AUROC (OvR) |
 |---|---|---|---|---|---|
 | Subtype (27-dim) | raw proportions | default (C=1.0) | 0.275 | 0.243 | 0.557 |
 | Subtype (27-dim) | CLR | C=0.1 | 0.575 | 0.572 | 0.842 |
+| OOF-predicted subtype (27-dim) | CLR | C=0.1 | 0.400 | 0.400 | 0.749 |
 | Lineage (5-dim) | CLR | C=0.1 | 0.400 | 0.377 | 0.678 |
+| OOF-predicted lineage (5-dim) | CLR | C=0.1 | 0.300 | 0.282 | 0.627 |
 
-Interpretation (per the required conservative wording): under the current
-small-cohort evaluation, raw-proportion composition features did not
-provide reliable disease discrimination, but a CLR-transformed,
-appropriately regularized composition model achieves clearly
-above-chance discrimination (AUROC 0.84 for subtype-level). This
-**corrects an earlier over-strong claim made mid-session** ("disease
-signal comes from cell-intrinsic expression, not composition") — that
-claim is not supported; composition alone carries real, non-trivial
-disease signal, just less than the full APT feature set.
+Interpretation (per the required conservative wording): CLR-transformed gold
+composition carries non-trivial disease information, but replacing gold labels
+with strictly OOF predicted labels reduces every endpoint. Cell-typing error
+therefore propagates to downstream patient characterization. Both predicted
+composition representations remain substantially weaker than the patient-level
+median APT model, so composition is not the principal carrier of the observed
+within-cohort disease separation.
 
 **Nested inner-CV for regularization strength was not implemented**; C=0.1
 was a single prespecified value (documented per the spec's own fallback
@@ -338,9 +337,10 @@ claimed; there is no independent cohort.
 - [ ] Explicit patient-balanced sample-weighted training (Phase 5B) not
       run; equal-cell subsampling (already done) answers the same
       practical question.
-- [ ] Predicted-label (as opposed to gold-label) composition baselines
-      (Phase 7) not run, given DropCascade's own fine-subtype macro-F1
-      (0.156) would dominate/confound interpretation.
+- [x] Predicted-label composition baselines completed from the pooled
+      patient-disjoint DropCascade OOF predictions. The gold-to-predicted
+      degradation is reported as downstream error propagation rather than as a
+      clean estimate of biological composition utility.
 - [ ] Nested inner-CV for composition/summary-model regularization
       strength (Phase 7/8) not run; a single prespecified C=0.1 used
       instead, per the spec's own fallback instruction for small cohorts.

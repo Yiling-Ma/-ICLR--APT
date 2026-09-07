@@ -3,11 +3,13 @@
 
 \subsection{Disease Recognition Is Strong Within Cohort, but Requires Caveats}
 
-We begin with disease because it is the clinically salient target, then immediately separate it from the central hierarchy benchmark analysis. Under the patient-level 5-fold protocol, all five classical cell-level baselines yield the same patient-level majority-vote result: all 40 patients are correctly assigned, for a Clopper-Pearson 95\% interval of $[0.912, 1.000]$ (Table~\ref{tab:disease}). A genuinely patient-level model using each patient's median APT profile also performs strongly, reaching accuracy 0.950 and macro-AUROC 1.000. In 1,000 patient-label permutations, none matched its observed accuracy (plus-one $p=0.000999$; Appendix~\ref{sec:appendix:disease_patient_level}).
-
-These results do not justify a claim of solved clinical diagnosis. Sensitivity analyses in Appendix~\ref{sec:appendix:disease_patient_level} show that the disease signal depends strongly on patient-specific absolute-expression structure: patient-wise centering reduces patient-level accuracy from 1.000 to 0.650, and a 40-way patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because acquisition-batch metadata are unavailable, the observed offsets cannot be cleanly decomposed into biological versus technical sources. We therefore use disease recognition primarily to motivate the need for careful statistical-unit accounting in APT-Bench, not as the main architectural success story.
+Under the fixed patient-level folds, five classical cell-level baselines all yield the same majority-vote result: $40/40$ patients are correctly assigned (95\% CI $[0.912,1.000]$; Table~\ref{tab:disease}). A genuinely patient-level median-APT model reaches accuracy 0.950 and macro-AUROC 1.000; none of 1,000 patient-label permutations matches its accuracy (plus-one $p=0.000999$; Appendix~\ref{sec:appendix:disease_patient_level}).
 
 \input{tables/disease}
+
+Composition directly connects cell typing to patient characterization. Replacing gold labels with strictly OOF \ourmethod{} predictions reduces subtype-composition macro-F1/AUROC from $0.572/0.842$ to $0.400/0.749$ and lineage-composition macro-F1 from $0.377$ to $0.282$. Typing errors therefore propagate downstream, while all composition variants remain well below median APT, indicating that absolute APT structure carries the stronger within-cohort disease signal.
+
+These results do not justify a claim of solved clinical diagnosis. Sensitivity analyses in Appendix~\ref{sec:appendix:disease_patient_level} show that the disease signal depends strongly on patient-specific absolute-expression structure: patient-wise centering reduces patient-level accuracy from 1.000 to 0.650, and a 40-way patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because acquisition-batch metadata are unavailable, the observed offsets cannot be cleanly decomposed into biological versus technical sources. We therefore use disease recognition primarily to motivate the need for careful statistical-unit accounting in APT-Bench, not as the main architectural success story.
 
 \subsection{Patient-Disjoint Cell-Level Hierarchy Prediction Remains Difficult}
 

@@ -1,38 +1,37 @@
 % ------------------------------------------------------------
 % Table 1: Patient-level disease classification (primary)
 % ------------------------------------------------------------
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \small
-\setlength{\tabcolsep}{1.9pt}
+\setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.10}
 
-\begin{tabular}{lcccc}
+\begin{tabular}{lccc}
 \toprule
 \textbf{Aggregation / Representation}
-& \textbf{Patient Acc.}
-& \textbf{Patient Macro-F1}
-& \textbf{Macro-AUROC}
-& \textbf{95\% CI (Acc.)} \\
+& \textbf{Patient Acc.} & \textbf{Macro-F1} & \textbf{Macro-AUROC} \\
 \midrule
 
 Cell-level classifiers$^{*}$, majority vote
-& \textbf{1.000} & \textbf{1.000} & --
-& [0.912, 1.000] \\
+& \textbf{1.000} & \textbf{1.000} & -- \\
 
 \midrule
 
 Patient-level APT median $+$ LR$^\dagger$
-& 0.950 & 0.948 & 1.000
-& -- \\
+& 0.950 & 0.948 & 1.000 \\
 
-Gold subtype composition (CLR) $+$ LR$^\ddagger$
-& 0.575 & 0.572 & 0.842
-& -- \\
+Gold subtype composition $+$ LR$^\ddagger$
+& 0.575 & 0.572 & 0.842 \\
 
-Gold lineage composition (CLR) $+$ LR$^\ddagger$
-& 0.400 & 0.377 & 0.678
-& -- \\
+OOF subtype composition $+$ LR$^\S$
+& 0.400 & 0.400 & 0.749 \\
+
+Gold lineage composition $+$ LR$^\ddagger$
+& 0.400 & 0.377 & 0.678 \\
+
+OOF lineage composition $+$ LR$^\S$
+& 0.300 & 0.282 & 0.627 \\
 
 \bottomrule
 \end{tabular}
@@ -41,39 +40,21 @@ Gold lineage composition (CLR) $+$ LR$^\ddagger$
 
 \parbox{\columnwidth}{
 \footnotesize
-$^{*}$ All five cell-level classifiers (Logistic Regression, XGBoost,
-Linear SVM, Random Forest, Reference Correlation) reach the identical
-$40/40$ majority-vote result and are therefore collapsed into a single
-row; see Table~\ref{tab:disease_cell_level} for their (distinct)
-cell-level accuracies.
-$^\dagger$ Genuinely patient-level feature (median APT expression per
-patient per aptamer, $n=40$, no cell-level pseudo-replication).
-$^\ddagger$ Gold-label immune-cell composition (paired transcriptomic
-annotation, not model-predicted subtypes); CLR = centered log-ratio
-transform of the compositional proportions.
-All rows use the same patient-level 5-fold partition
-(\S\ref{sec:data:protocols}); the confusion matrix for the majority-vote
-rows is diagonal ($40/40$ patients correctly assigned; see
-Appendix~\ref{sec:appendix:disease_patient_level}).
+$^{*}$ Five cell-level classifiers share the $40/40$ majority-vote result;
+their distinct cell metrics appear in Table~\ref{tab:disease_cell_level}.
+$^\dagger$ One 293-APT median vector per patient.
+$^\ddagger$ Paired-transcriptomic gold labels; $^\S$ patient-disjoint
+\ourmethod{} OOF labels. Composition rows use CLR (pseudocount $10^{-4}$),
+the fixed folds, and prespecified LR $C=0.1$.
 }
 
 \caption{
-\textbf{Patient-level} disease classification ($n=40$ patients), the
-correct statistical unit for a per-patient diagnostic call. All five
-cell-level classifiers agree perfectly once cell-level predictions are
-aggregated to the patient by majority vote (95\% Clopper-Pearson CI on the
-$40/40$ result: $[0.912, 1.000]$). A model trained on purely patient-level
-summary features, with no cell-level pseudo-replication at all, achieves
-comparably strong discrimination, and immune-cell composition alone
-(gold-label, CLR-transformed) is also clearly above chance. Because the
-cohort contains only 40 patients (6--8 per disease) and no
-acquisition-batch metadata (plate, run, or date) exists for this dataset,
-we cannot exclude a disease-correlated technical contribution to this
-performance; see Appendix~\ref{sec:appendix:disease_patient_level} for the
-sensitivity analyses (patient-wise centering, patient-fingerprint
-diagnostic) that motivate this caveat, and \S\ref{sec:discussion} for a
-full discussion. This result should be read as within-cohort feasibility,
-not evidence of clinical generalization.
+\textbf{Patient-level} disease classification ($n=40$). The majority-vote
+accuracy has 95\% Clopper--Pearson CI $[0.912,1.000]$. Replacing gold cell
+labels with patient-disjoint OOF predictions degrades every composition
+endpoint, linking cell-typing error to downstream characterization. All
+disease results are within-cohort estimates, not evidence of clinical
+generalization; see Appendix~\ref{sec:appendix:disease_patient_level}.
 }
 \label{tab:disease}
 

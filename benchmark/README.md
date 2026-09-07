@@ -34,6 +34,24 @@ example-averaged hierarchical F1, and subtype-tree distance. Natural
 coarse--fine consistency is supplementary because constrained decoding can alter
 it without improving correctness.
 
+## Cross-Track Composition Audit
+
+The disease track includes a bridge from cell typing to patient
+characterization. Gold and patient-disjoint OOF-predicted lineage/subtype labels
+are aggregated into patient composition vectors and evaluated with the same
+fixed disease folds. This tests whether cell-typing errors propagate to a
+downstream patient task without using fitted-patient cell predictions. Given a
+pooled OOF file, reproduce the audit with:
+
+```bash
+python analysis/run_composition_bridge.py \
+  --oof path/to/dropcascade/pooled_oof_predictions.csv
+```
+
+The script validates OOF assignments against `splits/patient_folds.json` and
+writes summary metrics plus all 40 downstream OOF disease predictions to
+`analysis/generated/`.
+
 ## Release Status
 
 The paper source, analysis scripts, fixed fold manifest, and selected result
