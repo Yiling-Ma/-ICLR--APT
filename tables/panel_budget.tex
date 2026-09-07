@@ -1,4 +1,4 @@
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \small
 \setlength{\tabcolsep}{6pt}
@@ -19,11 +19,12 @@
 \end{tabular}
 
 \caption{
-Nested patient-level panel selection for disease recognition. In each
+Outer-test-isolated patient-level panel selection for disease recognition. In each
 outer fold, aptamer ranking and budget selection are performed using
-outer-training patients only, and the selected budget is evaluated once on
-the untouched outer-test patients. Under the prespecified tolerance margin
-$\delta=0.02$, all five folds select the same development budget
+outer-development patients only, and the selected budget is evaluated once on
+the untouched outer-test patients. The ranking is fixed across inner validation
+splits; $B$ is selected conditional on that ranking. Under the analysis-specified,
+non-preregistered tolerance margin $\delta=0.02$, all five folds select the same development budget
 $B^*=10$, and the resulting 10-aptamer panels preserve the observed
 full-panel patient macro-F1 for both Logistic Regression and XGBoost.
 This result supports a measurement-efficiency interpretation rather than a

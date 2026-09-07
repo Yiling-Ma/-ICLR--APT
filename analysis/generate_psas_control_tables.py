@@ -28,7 +28,7 @@ def write_random_table() -> None:
         )
     content = "\n".join(
         [
-            "\\begin{table}[t]",
+            "\\begin{table}[H]",
             "\\centering",
             "\\scriptsize",
             "\\setlength{\\tabcolsep}{3pt}",
@@ -39,9 +39,10 @@ def write_random_table() -> None:
             *rows,
             "\\bottomrule",
             "\\end{tabular}",
-            "\\caption{Compact-panel random controls over 100 independently sampled panels. "
-            "Top-$B$ uses a fold-specific LR ranking fitted only on outer-training patients. "
-            "The percentile uses the empirical midrank of Top-$B$ within the random distribution.}",
+            "\\caption{Compact-panel random controls over 100 panel repeats. "
+            "Top-$B$ uses fold-specific outer-development LR rankings. Each repeat draws one "
+            "random panel shared across outer folds; both classifiers are refitted in every fold. "
+            "The percentile is the empirical midrank of Top-$B$ within the random distribution.}",
             "\\label{tab:psas_random}",
             "\\end{table}",
             "",
@@ -64,7 +65,7 @@ def write_cellcount_table() -> None:
         rows.append(f"{budget} & " + " & ".join(values) + " \\\\")
     content = "\n".join(
         [
-            "\\begin{table*}[t]",
+            "\\begin{table}[H]",
             "\\centering",
             "\\scriptsize",
             "\\setlength{\\tabcolsep}{3pt}",
@@ -75,11 +76,12 @@ def write_cellcount_table() -> None:
             *rows,
             "\\bottomrule",
             "\\end{tabular}",
-            "\\caption{LR patient-level macro-F1 under equal-cell subsampling. Entries are mean "
-            "[empirical 95\\% interval] over 50 sampling seeds; predictions are pooled across "
-            "the five outer test folds before scoring the 40 patients.}",
+            "\\caption{LR patient-level macro-F1 under inference-time equal-cell subsampling. "
+            "Entries are mean [empirical 95\\% interval] over 50 seeds; cached outer-test "
+            "predictions are subsampled before aggregation. Models are trained once using all "
+            "outer-development cells, so this is not a training-time cell-budget experiment.}",
             "\\label{tab:psas_cellcount}",
-            "\\end{table*}",
+            "\\end{table}",
             "",
         ]
     )
@@ -102,7 +104,7 @@ def write_shap_table() -> None:
             )
     content = "\n".join(
         [
-            "\\begin{table}[t]",
+            "\\begin{table}[H]",
             "\\centering",
             "\\scriptsize",
             "\\setlength{\\tabcolsep}{3pt}",
@@ -114,8 +116,9 @@ def write_shap_table() -> None:
             "\\bottomrule",
             "\\end{tabular}",
             "\\caption{Cross-model attribution control. Jaccard is mean $\\pm$ SD across five "
-            "outer-fold Top-$B$ sets. Evaluation columns report pooled patient-level macro-F1 "
-            "when the selected panel is used by LR or XGBoost.}",
+            "outer-fold Top-$B$ sets. LR-coefficient and XGBoost-SHAP rows use their own selected "
+            "features; evaluation columns report pooled patient macro-F1 after refitting LR or "
+            "XGBoost. SHAP ranking does not select $B^*$.}",
             "\\label{tab:psas_shap}",
             "\\end{table}",
             "",

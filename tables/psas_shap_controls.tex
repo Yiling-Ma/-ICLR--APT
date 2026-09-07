@@ -1,4 +1,4 @@
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -12,6 +12,6 @@ $B$ & LR--SHAP Jaccard & Ranking & LR eval. & XGB eval. \\
 20 & -- & XGBoost-SHAP & 1.000 & 1.000 \\
 \bottomrule
 \end{tabular}
-\caption{Cross-model attribution control. Jaccard is mean $\pm$ SD across five outer-fold Top-$B$ sets. Evaluation columns report pooled patient-level macro-F1 when the selected panel is used by LR or XGBoost.}
+\caption{Cross-model attribution control. Jaccard is mean $\pm$ SD across five outer-fold Top-$B$ sets. LR-coefficient and XGBoost-SHAP rows use their own selected features; evaluation columns report pooled patient macro-F1 after refitting LR or XGBoost. SHAP ranking does not select $B^*$.}
 \label{tab:psas_shap}
 \end{table}

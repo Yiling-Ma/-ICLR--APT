@@ -1,4 +1,9 @@
-"""Run patient-level PSAS controls requested for the APT-Bench audit."""
+"""Run patient-level PSAS controls requested for the APT-Bench audit.
+
+Random-panel repeats share one sampled feature set across outer folds and refit
+each classifier foldwise. Cell-count controls subsample cached outer-test
+predictions only; all available outer-development cells remain in training.
+"""
 
 import argparse
 import json
@@ -126,6 +131,7 @@ def random_panel_task(task: tuple[int, int]) -> list[dict]:
     else:
         rng = np.random.default_rng(100_000 + budget * 1_000 + repeat)
         feature_idx = np.sort(rng.choice(state["n_features"], size=budget, replace=False))
+    # A repeat represents one candidate assay panel evaluated across all folds.
     panels = [feature_idx] * N_FOLDS
     rows = []
     for model_name in ["LR", "XGBoost"]:
@@ -231,7 +237,7 @@ def run_random_controls(output_dir: Path, repeats: int, jobs: int) -> None:
 
 
 def run_cellcount_controls(output_dir: Path, n_seeds: int) -> None:
-    print("Running cell-count sensitivity...", flush=True)
+    print("Running inference-time cell-count sensitivity...", flush=True)
     rows = []
     for budget in CELLCOUNT_BUDGETS:
         prediction_cache = {"LR": {}}

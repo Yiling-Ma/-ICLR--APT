@@ -11,22 +11,22 @@ Unlike gene-vocabulary scRNA-seq or antibody-derived-tag integration benchmarks,
 our predictive input is a fixed 293-aptamer binding panel. This enables three
 questions: how performance changes from coarse lineage to fine subtype; how
 patient-level disease evaluation handles many correlated cells but only 40
-subjects; and how many aptamers and cells preserve that disease signal.
+subjects; and how many measured aptamers and held-out cells preserve that disease signal at inference.
 
 APT-Bench fixes three patient-disjoint tracks: coarse-to-fine cell typing,
 patient-level disease recognition with statistical-unit audits, and measurement
-efficiency over aptamer and cell budgets. Its reusable contribution is not a
+efficiency over aptamer-measurement and inference-aggregation budgets. Its reusable contribution is not a
 claim that one cohort spans deployment, but a common contract for a new modality:
 immutable patient folds, explicit observational units, leakage-resistant metrics,
-and nested budget controls that can extend to future clinical single-cell cohorts.
+and outer-test-isolated budget controls that can extend to future clinical single-cell cohorts.
 
 To instantiate the hierarchy track, we use \ourmethod{}, a differentiable lineage-subtype cascade. The model combines a shared APT encoder, soft lineage routing, and subtype experts. We compare it with classical models and encoder-matched flat and HCE-trained Transformer controls. It serves as a hierarchy-aware neural reference rather than a claimed universal winner; the matched controls test whether any gain survives control of encoder capacity and training budget.
 
-This perspective leads to three empirical findings. First, coarse lineage recognition is substantially easier than fine subtype recognition across all models. In an exploratory subtype audit, F1 is more strongly associated with cell abundance than patient coverage in this cohort, although coverage has limited variation and neither association establishes causality; most errors also cross the true lineage rather than remaining among biological siblings. Second, cell-typing error propagates to patient characterization: replacing gold subtype labels with OOF predictions reduces composition-based disease macro-F1 from 0.572 to 0.400. Direct disease prediction remains much stronger but depends on patient-specific absolute-expression structure, making overclaiming inappropriate without acquisition-batch metadata. Third, the disease signal is measurement-efficient but distributed: nested selection preserves patient-level performance with 10 aptamers, including in an LR sensitivity analysis over 50 repeated subsamples at 100 cells per patient, while 100-panel random controls and an XGBoost-SHAP attribution control argue against a unique indispensable biomarker set.
+This perspective leads to three empirical findings. First, coarse lineage recognition is substantially easier than fine subtype recognition across all models. In an exploratory subtype audit, F1 is more strongly associated with cell abundance than patient coverage in this cohort, although coverage has limited variation and neither association establishes causality; most errors also cross the true lineage rather than remaining among biological siblings. Second, cell-typing error propagates to patient characterization: replacing gold subtype labels with OOF predictions reduces composition-based disease macro-F1 from 0.572 to 0.400. Direct disease prediction remains much stronger but depends on patient-specific absolute-expression structure, making overclaiming inappropriate without acquisition-batch metadata. Third, the disease signal is measurement-efficient but distributed: development-only selection preserves patient-level performance with 10 aptamers, including over 50 repeated inference subsamples at 100 held-out cells per patient, while 100-panel random controls and an XGBoost-SHAP attribution control argue against a unique indispensable biomarker set.
 
 Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint reference benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
     \item \textbf{A subtype-centered account of the granularity gap.} Beyond aggregate macro-F1, we quantify how cell abundance and patient coverage relate to each subtype's performance, decompose incorrect subtype predictions into sibling and cross-lineage errors, and report the coarse-to-fine gap for every model. We use \ourmethod{} as a hierarchy-aware reference model rather than claiming universal superiority.
-    \item \textbf{A bridge from cell typing to disease characterization.} Gold-versus-OOF-predicted composition isolates downstream error propagation; direct APT, confounding, nested panel-selection, and equal-cell audits then distinguish within-cohort disease signal from clinical evidence.
+    \item \textbf{A bridge from cell typing to disease characterization.} Gold-versus-OOF-predicted composition isolates downstream error propagation; direct APT, confounding, development-only panel-selection, and inference-time equal-cell audits then distinguish within-cohort disease signal from clinical evidence.
 \end{itemize}

@@ -1,4 +1,4 @@
-\begin{table*}[t]
+\begin{table}[H]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -12,6 +12,6 @@ $B$ & 100 cells & 500 cells & 1,000 cells & 5,000 cells & All cells \\
 293 & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
 \bottomrule
 \end{tabular}
-\caption{LR patient-level macro-F1 under equal-cell subsampling. Entries are mean [empirical 95\% interval] over 50 sampling seeds; predictions are pooled across the five outer test folds before scoring the 40 patients.}
+\caption{LR patient-level macro-F1 under inference-time equal-cell subsampling. Entries are mean [empirical 95\% interval] over 50 seeds; cached outer-test predictions are subsampled before aggregation. Models are trained once using all outer-development cells, so this is not a training-time cell-budget experiment.}
 \label{tab:psas_cellcount}
-\end{table*}
+\end{table}

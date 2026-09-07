@@ -11,11 +11,17 @@ cross-site clinical generalization.
    from one APT vector per cell.
 2. Patient-level disease recognition: produce one six-class prediction per
    participant and report patient-level metrics.
-3. Measurement efficiency: repeat patient-level recognition under nested
-   aptamer selection and controlled cell subsampling.
+3. Measurement efficiency: repeat patient-level recognition under
+   outer-test-isolated aptamer selection and inference-time cell subsampling.
 
 Disease novelty detection is exploratory and is not part of the primary
 benchmark contract.
+
+The two efficiency controls have different meanings. An aptamer budget retrains
+the model using only the selected input features. A cell budget subsamples
+already-computed held-out predictions before patient aggregation; it does not
+reduce the cells used to train the model. A training-time cell-budget track has
+not been evaluated.
 
 ## Fixed Splits
 

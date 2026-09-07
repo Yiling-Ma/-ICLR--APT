@@ -50,13 +50,13 @@ Disease is therefore not treated as the root of a three-level hierarchy. It is a
 
 APT-Bench fixes the unit of input, prediction target, split, and metric for each
 track: five-lineage and 27-subtype prediction from one APT vector per cell;
-six-class disease prediction from all cells of one participant; and nested
-aptamer- and cell-budget evaluation of that participant-level task. Novelty is
+six-class disease prediction from all cells of one participant; and outer-test-isolated
+aptamer-measurement plus inference-time cell-budget evaluation of that participant-level task. Novelty is
 not part of the primary contract. The machine-readable manifest at
 \texttt{benchmark/splits/patient\_folds.json} assigns every pseudonymous patient
 to one outer fold; all selection remains inside development patients. Portable
 components include patient-clustered uncertainty, hierarchy diagnostics,
-pseudoreplication and fingerprint audits, and nested budget curves. The full
+pseudoreplication and fingerprint audits, and outer-test-isolated budget curves. The full
 interface and release contract appear in Appendix~\ref{sec:appendix:benchmark_release}.
 This cohort cannot estimate cross-site or cross-platform generalization.
 
