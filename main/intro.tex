@@ -2,10 +2,10 @@
 
 Cancer screening and diagnosis are usually framed at the patient level: does a person have disease, and if so which disease category is most likely? Single-cell liquid biopsy changes this framing. A single blood draw can support both a patient-level diagnostic decision and a cell-level characterization of the circulating immune compartment. These outputs are related, but they do not live at the same observational unit. Disease is a property of the patient, whereas lineage and subtype are properties of the cell.
 
-This mismatch matters for evaluation. Our cohort contains more than 370{,}000 single cells, but only 40 patients. Treating cells as independent disease observations would substantially overstate the effective sample size of the diagnostic task. It would also hide a second asymmetry: lineage and subtype form a genuine cell-level hierarchy, but disease does not sit above that hierarchy. The clinically relevant problem is therefore not a single three-level taxonomy. It is a multi-resolution setting in which different targets require different evaluation protocols, inductive biases, and interpretations.
+This mismatch matters for evaluation. Our benchmark contains 361{,}792 single cells, but only 40 patients. Treating cells as independent disease observations would substantially overstate the effective sample size of the diagnostic task. It would also hide a second asymmetry: lineage and subtype form a genuine cell-level hierarchy, but disease does not sit above that hierarchy. The clinically relevant problem is therefore not a single three-level taxonomy. It is a multi-resolution setting in which different targets require different evaluation protocols, inductive biases, and interpretations.
 
-We study aptamer-based single-cell profiling. Apt-seq uses sequencable
-nucleic-acid affinity reagents to quantify molecules such as surface proteins
+We study aptamer-based single-cell profiling. Apt-seq uses
+sequencing-compatible nucleic-acid affinity reagents to quantify molecules such as surface proteins
 while retaining cell barcodes and paired transcriptomic state \citep{wu2025high}.
 Unlike gene-vocabulary scRNA-seq or antibody-derived-tag integration benchmarks,
 our predictive input is a fixed 293-aptamer binding panel. This enables three
@@ -26,7 +26,7 @@ This perspective leads to three empirical findings. First, coarse lineage recogn
 
 Our contributions are therefore as follows.
 \begin{itemize}
-    \item \textbf{APT-Bench, a patient-disjoint reference benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
+    \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
     \item \textbf{A subtype-centered account of the granularity gap.} Beyond aggregate macro-F1, we quantify how cell abundance and patient coverage relate to each subtype's performance, decompose incorrect subtype predictions into sibling and cross-lineage errors, and report the coarse-to-fine gap for every model. We use \ourmethod{} as a hierarchy-aware reference model rather than claiming universal superiority.
     \item \textbf{A bridge from cell typing to disease characterization.} Gold-versus-OOF-predicted composition isolates downstream error propagation; direct APT, confounding, development-only panel-selection, and inference-time equal-cell audits then distinguish within-cohort disease signal from clinical evidence.
 \end{itemize}

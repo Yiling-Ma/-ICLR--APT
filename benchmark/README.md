@@ -1,6 +1,6 @@
 # APT-Bench Contract
 
-APT-Bench is a reference benchmark for patient-disjoint learning from a fixed
+APT-Bench is a benchmark for patient-disjoint learning from a fixed
 293-feature single-cell aptamer panel. The empirical cohort is single-site and
 contains 40 participants, so the benchmark does not by itself establish
 cross-site clinical generalization.

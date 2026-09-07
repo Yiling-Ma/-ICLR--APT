@@ -76,7 +76,7 @@ def draw_panel(data: pd.DataFrame, aptamers: list[str], signal: str, output: Pat
     import matplotlib.pyplot as plt
 
     subset = data[data["signal"] == signal]
-    fig, axes = plt.subplots(3, 3, figsize=(14.2, 6.8), sharex=False)
+    fig, axes = plt.subplots(3, 3, figsize=(14.2, 7.6), sharex=False)
     rng = np.random.default_rng(42)
 
     for row, lineage in enumerate(LINEAGE_ORDER):
@@ -106,7 +106,7 @@ def draw_panel(data: pd.DataFrame, aptamers: list[str], signal: str, output: Pat
                 ax.scatter(
                     pos + jitter,
                     vals,
-                    s=17,
+                    s=28,
                     color=COLORS[disease],
                     edgecolor="white",
                     linewidth=0.35,
@@ -121,13 +121,14 @@ def draw_panel(data: pd.DataFrame, aptamers: list[str], signal: str, output: Pat
             ax.set_ylim(low - pad, high + pad)
             counts = [len(vals) for vals in values_by_disease]
             labels = [f"{d}\n$n$={n}" for d, n in zip(DISEASE_ORDER, counts)]
-            ax.set_xticks(np.arange(len(DISEASE_ORDER)), labels, fontsize=7)
+            ax.set_xticks(np.arange(len(DISEASE_ORDER)), labels, fontsize=9)
+            ax.tick_params(axis="y", labelsize=9)
             ax.grid(axis="y", color="#D9DEDE", linewidth=0.6, alpha=0.7)
             ax.spines[["top", "right"]].set_visible(False)
             if row == 0:
-                ax.set_title(aptamer, fontsize=11, fontweight="bold")
+                ax.set_title(aptamer, fontsize=13, fontweight="bold")
             if col == 0:
-                ax.set_ylabel(f"{lineage}\npatient-lineage mean", fontsize=9)
+                ax.set_ylabel(f"{lineage}\npatient-lineage mean", fontsize=11)
             else:
                 ax.set_ylabel("")
 
@@ -136,7 +137,7 @@ def draw_panel(data: pd.DataFrame, aptamers: list[str], signal: str, output: Pat
         f"{title}: each point is one patient",
         x=0.5,
         y=0.995,
-        fontsize=13,
+        fontsize=15,
         fontweight="bold",
     )
     fig.tight_layout(rect=[0, 0, 1, 0.97], h_pad=1.0, w_pad=0.8)

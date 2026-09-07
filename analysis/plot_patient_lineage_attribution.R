@@ -42,7 +42,7 @@ make_plot <- function(signal_name, title) {
     ) +
     geom_point(
       position = position_jitter(width = 0.13, height = 0, seed = 42),
-      size = 1.35,
+      size = 2.1,
       alpha = 0.9
     ) +
     facet_grid(rows = vars(lineage), cols = vars(aptamer)) +
@@ -55,17 +55,17 @@ make_plot <- function(signal_name, title) {
       x = NULL,
       y = "Patient-lineage mean APT value"
     ) +
-    theme_bw(base_size = 9) +
+    theme_bw(base_size = 11) +
     theme(
-      plot.title = element_text(face = "bold", size = 12),
+      plot.title = element_text(face = "bold", size = 14),
       strip.background = element_rect(fill = "#EEF1EF", color = "#CBD2D0", linewidth = 0.35),
-      strip.text = element_text(face = "bold", size = 9),
+      strip.text = element_text(face = "bold", size = 11),
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
       panel.grid.major.y = element_line(color = "#E1E5E4", linewidth = 0.3),
-      axis.text.x = element_text(size = 6.4, lineheight = 0.9),
-      axis.text.y = element_text(size = 7),
-      axis.title.y = element_text(size = 8.5),
+      axis.text.x = element_text(size = 8.5, lineheight = 0.9),
+      axis.text.y = element_text(size = 9),
+      axis.title.y = element_text(size = 10.5),
       plot.margin = margin(6, 7, 5, 5)
     )
 }
@@ -77,7 +77,7 @@ ggsave(
   file.path(output_dir, "patient_lineage_attribution_raw.png"),
   raw_plot,
   width = 14.2,
-  height = 6.8,
+  height = 7.6,
   units = "in",
   dpi = 300,
   bg = "white"
@@ -86,7 +86,7 @@ ggsave(
   file.path(output_dir, "patient_lineage_attribution_centered.png"),
   centered_plot,
   width = 14.2,
-  height = 6.8,
+  height = 7.6,
   units = "in",
   dpi = 300,
   bg = "white"

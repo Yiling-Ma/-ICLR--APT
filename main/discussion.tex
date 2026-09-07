@@ -1,20 +1,45 @@
 \section{Discussion}
 \label{sec:discussion}
 
-APT-Bench reveals a coarse--fine gap whose errors propagate to
-composition-based patient characterization; matched controls show no significant
-\ourmethod{} advantage. Disease scores are
-centering-sensitive, and compact panels establish within-cohort measurement
-efficiency rather than causal biomarkers. This single-site, 40-patient cohort
-lacks batch metadata and external validation. The LODO analysis is therefore
-descriptive, and disease-level rejection remains future work.
-Its reusable contribution is the fixed schema, splits, tasks, and evaluator
-\citep{luecken2025open,liu2025multitask}; clinical claims require cross-site
-cohorts.
+APT-Bench is primarily an evaluation contribution rather than a claim of model
+superiority. Across matched neural and classical models, broad lineage is more
+reliably recovered than transcriptome-derived subtype, and no
+\ourmethod{}-specific advantage is statistically supported. The resulting
+granularity gap and the degradation from gold to OOF-predicted subtype
+composition show that additional model complexity alone does not resolve fine
+cell typing or prevent its errors from propagating to patient-level summaries.
+
+The benchmark also makes the statistical unit explicit. Although it contains
+361{,}792 cells, clinical generalization is supported by only 40 independent
+patients. A cell-level split therefore does more than inflate absolute scores:
+in our protocol-sensitivity analysis, it substantially changes the apparent
+relative gains between models. Additional cells can stabilize within-patient
+aggregation, but they cannot substitute for additional patients. Clinical
+single-cell benchmarks should consequently report both patient-independent
+generalization and measurement budgets rather than treating the split or assay
+size as secondary implementation details.
+
+The disease analyses delimit what can be concluded from this cohort. Strong
+centering sensitivity indicates that patient-specific absolute-expression
+structure contributes substantially to within-cohort discrimination, while the
+compact-panel results establish measurement efficiency and redundancy rather
+than causal biomarkers. The cohort is single-site, lacks acquisition-batch
+metadata, and has no external validation; the LODO analysis is descriptive and
+cross-disease generalization remains unresolved. The fixed schema, patient
+splits, tasks, and evaluator are reusable in future APT and clinical single-cell
+cohorts \citep{luecken2025open,liu2025multitask}, but batch-aware, cross-site
+validation is required before clinical claims.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench defines linked patient-disjoint hierarchy typing, disease audit, and
-measurement-efficiency tasks for single-cell APT profiles. External cohorts
+APT-Bench establishes a patient-disjoint evaluation contract for hierarchical
+cell typing, disease audit, and measurement efficiency from single-cell aptamer
+profiles. Across matched neural and classical models, coarse lineage is
+consistently easier than fine transcriptome-derived subtype prediction, and no
+\ourmethod{}-specific advantage is statistically supported. Within-cohort
+disease discrimination saturates under compact aptamer and inference-cell
+budgets, but is strongly associated with patient-specific absolute-expression
+structure. These findings position APT-Bench as a benchmark for evaluating
+statistical-unit, granularity, and measurement effects, while external cohorts
 remain necessary for clinical claims.

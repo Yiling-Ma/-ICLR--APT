@@ -326,7 +326,7 @@ def write_table(
         r"\resizebox{\columnwidth}{!}{",
         r"\begin{tabular}{lrrrrrr}",
         r"\toprule",
-        r"\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Fine Acc.} & \textbf{Exact Path} & \textbf{Root-excluded Hier. F1} & \textbf{Tree Dist.}$\downarrow$ \\",
+        r"\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Fine Acc.} & \textbf{Exact Path} & \textbf{Root-excluded Hier. F1} & \textbf{Subtype Tree Dist.}$\downarrow$ \\",
         r"\midrule",
     ]
     coarse = metrics.loc[metrics["task"] == "coarse"].set_index("model")
@@ -382,7 +382,7 @@ def write_table(
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Patient-disjoint 5-fold hierarchy evaluation on the same pooled out-of-fold predictions from 40 patients. Exact Path and Root-excluded Hier. F1 use the independent coarse and fine predictions. Exact Path requires both predictions to be correct. Root-excluded Hier. F1 is the example-averaged F1 between the two-node true and predicted sets $\{\text{lineage},\text{subtype}\}$; we exclude the always-correct root node to avoid inflating every model through a trivial shared ancestor. Tree Dist. compares the true and predicted subtypes through their mapped parents and does not use the separate coarse prediction: 0 for the correct subtype, 2 for a sibling, and 4 for a cross-lineage prediction (lower is better). No metric uses constrained decoding. The primary comparisons are \ourmethod{} versus HCE and versus XGBoost for coarse and fine macro-F1; their two-sided tests use 2{,}000 paired patient bootstrap resamples with Holm correction across four tests. Other comparisons and the three hierarchy metrics are descriptive. $^{\mathrm{n.s.}}$ denotes no Holm-adjusted significance; coarse--fine consistency remains in Appendix~\ref{sec:appendix:consistency}.}",
+            r"\caption{Patient-disjoint 5-fold hierarchy evaluation on the same pooled out-of-fold predictions from 40 patients. Exact Path and Root-excluded Hier. F1 use the independent coarse and fine predictions. Exact Path requires both predictions to be correct. Root-excluded Hier. F1 is the example-averaged F1 between the two-node true and predicted sets $\{\text{lineage},\text{subtype}\}$; we exclude the always-correct root node to avoid inflating every model through a trivial shared ancestor. Subtype Tree Dist. compares the true and predicted subtypes through their mapped parents and does not use the separate coarse prediction: 0 for the correct subtype, 2 for a sibling, and 4 for a cross-lineage prediction (lower is better). No metric uses constrained decoding. The primary comparisons are \ourmethod{} versus HCE and versus XGBoost for coarse and fine macro-F1; their two-sided tests use 2{,}000 paired patient bootstrap resamples with Holm correction across four tests. Other comparisons and the three hierarchy metrics are descriptive. $^{\mathrm{n.s.}}$ denotes no Holm-adjusted significance; coarse--fine consistency remains in Appendix~\ref{sec:appendix:consistency}.}",
             r"\label{tab:main}",
             r"\end{table}",
         ]

@@ -334,17 +334,25 @@ remains explicitly cell-weighted.
 \subsection{Patient-Level Lineage-Resolved Attribution Audit}
 \label{sec:appendix:apt_markers}
 
-We revisit disease attribution at the patient, rather than cell, level. For patient $p$, lineage $m$, and aptamer $j$, we compute $\bar{x}_{pmj}=n_{pm}^{-1}\sum_{i\in(p,m)}x_{ij}$, so every point in Figure~\ref{fig:apt_markers} represents one patient regardless of cell count. We show the three aptamers with the best mean rank across the five outer-fold PSAS rankings (APT-179, APT-225, and APT-164) in the three major immune compartments. The raw view is paired with a patient-centered view obtained by subtracting each patient's per-aptamer median across all of their cells before lineage aggregation. Disease groups contain only 6--8 patients, and the two views use the same vertical scale.
+We revisit disease attribution at the patient, rather than cell, level. For patient $p$, lineage $m$, and aptamer $j$, we compute $\bar{x}_{pmj}=n_{pm}^{-1}\sum_{i\in(p,m)}x_{ij}$, so every point in Figures~\ref{fig:apt_markers_raw} and~\ref{fig:apt_markers_centered} represents one patient regardless of cell count. We show the three aptamers with the best mean rank across the five outer-fold PSAS rankings (APT-179, APT-225, and APT-164) in the three major immune compartments. The raw view is paired with a patient-centered view obtained by subtracting each patient's per-aptamer median across all of their cells before lineage aggregation. Disease groups contain only 6--8 patients, and the two views use the same vertical scale.
 
 This is an exploratory full-cohort visualization, not an independently validated biomarker analysis. Raw patient means separate several disease groups, but much of that separation contracts toward zero after patient centering, consistent with the centering sensitivity in Appendix~\ref{sec:appendix:disease_patient_level}. The available feature manifest contains only anonymized APT identifiers and no verified protein-target mapping. We therefore make no molecular-plausibility, protein-target, or pathway claim from these panels.
 
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{figures/patient_lineage_attribution_raw.png}
-\includegraphics[width=\textwidth]{figures/patient_lineage_attribution_centered.png}
-\caption{Patient-balanced lineage-resolved distributions for the three highest-ranked stable PSAS aptamers. Top: raw patient-lineage means. Bottom: means after subtracting each patient's per-aptamer median. Each dot is one patient and boxes summarize patients, not cells; group sizes are shown on the horizontal axis. Corresponding raw and centered panels share the same vertical scale. Aptamer selection and visualization use the full cohort and are exploratory.}
-\label{fig:apt_markers}
+\caption{Raw patient-level lineage-resolved distributions for the three highest-ranked stable PSAS aptamers. Each dot is one patient-lineage mean and boxes summarize patients, not cells; disease-group sample sizes are shown on the horizontal axis. Aptamer selection and visualization use the full cohort and are exploratory.}
+\label{fig:apt_markers_raw}
 \end{figure}
+\clearpage
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figures/patient_lineage_attribution_centered.png}
+\caption{Patient-centered counterpart to Figure~\ref{fig:apt_markers_raw}. Before lineage aggregation, each patient's per-aptamer median across all cells is subtracted. Each dot is one patient-lineage mean and boxes summarize patients, not cells. The vertical limits match the corresponding raw panels so that contraction after centering is directly visible. Aptamer selection and visualization use the full cohort and are exploratory.}
+\label{fig:apt_markers_centered}
+\end{figure}
+\clearpage
 
 \subsection{Coarse--Fine Consistency Diagnostic}
 \label{sec:appendix:consistency}
@@ -422,7 +430,7 @@ The fold-overlap LR ranking is also stable. The highest-ranked aptamers by mean 
 \subsection{Balanced Sampling Ablation}
 \label{sec:appendix:sampler}
 
-The final \ourmethod{} configuration does not use class-balanced sampling. We evaluated a class-balanced sampler during development but did not retain it because it underperformed natural sampling after controlling the number of optimization steps. This single-split diagnostic is not used to support any component claim.
+A development-only class-balanced-sampling variant did not outperform natural sampling after matching optimization steps and was not retained.
 
 \subsection{Exploratory Leave-One-Disease-Out Stress Test}
 \label{sec:appendix:novelty}
@@ -431,6 +439,6 @@ We retain only a leave-one-disease-out (LODO) representation stress test. For ea
 
 \input{tables/LOD}
 
-We omit unmatched detector rankings. Disease-level rejection remains future work requiring prespecified ID/OOD patients, matched supervision, patient-clustered uncertainty, and complete prevalence reporting.
+We omit unmatched detector rankings. Cross-disease generalization remains unresolved and requires external cohorts with prespecified distribution shifts and patient-clustered uncertainty.
 
 \end{document}
