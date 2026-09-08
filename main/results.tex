@@ -58,6 +58,45 @@ Cell-level splitting inflates coarse/fine macro-F1 by $+0.090/+0.108$ for
 (Appendix~\ref{sec:appendix:protocol_sensitivity}). APT-Bench therefore fixes
 patient-disjoint evaluation rather than treating the split as a reporting detail.
 
+\subsection{Within-Patient Cell Depth Remains a Strong Scaling Axis}
+\label{sec:results:patient_cell_scaling}
+
+We next tested the stronger hypothesis that adding independent patients improves
+patient-disjoint cell typing more than adding correlated cells from the same
+patients. The 4-by-4 surface does not support this hypothesis
+(Table~\ref{tab:patient_cell_scaling_effects}). Averaged over the opposite axis,
+the $P{=}8\rightarrow32$ patient gains versus the
+$C{=}100\rightarrow\mathrm{all}$ cell gains are $+0.019$ versus $+0.022$ for
+Logistic Regression coarse prediction, $+0.019$ versus $+0.036$ for Logistic
+Regression fine prediction, $+0.030$ versus $+0.051$ for XGBoost coarse
+prediction, and $+0.021$ versus $+0.050$ for XGBoost fine prediction. All gains
+are positive, but the cell gain is equal to or larger in every prespecified
+model--resolution comparison. Empirical seed intervals for patient-minus-cell
+gain remain below zero in three comparisons; the Logistic Regression coarse
+interval includes zero.
+
+\input{tables/patient_cell_scaling_effects}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.96\columnwidth]{figures/patient_cell_scaling_effects.pdf}
+\caption{Mean endpoint gains across nested subset seeds. Patient gain compares
+$P{=}32$ with $P{=}8$ and averages over cell caps; cell gain compares all cells
+with 100 cells per patient and averages over patient budgets. Error bars are
+empirical 2.5th--97.5th seed intervals, not confidence intervals over new
+patients. Full surfaces appear in Appendix~\ref{sec:appendix:patient_cell_scaling}.}
+\label{fig:patient_cell_scaling_effects}
+\end{figure}
+
+This result does not make patient identity an exchangeable substitute for cell
+count. Patients remain the unit required to estimate deployment to unseen
+subjects, whereas cells are correlated training observations within those
+units. It instead shows that, within this 40-patient cohort and the evaluated
+budget range, reducing cell depth can discard substantial information needed to
+learn APT-to-cell-type boundaries. The benchmark implication is therefore to
+report both axes rather than infer sample efficiency from either the raw cell
+count or patient count alone.
+
 \subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
 \label{sec:results:measurement}
 

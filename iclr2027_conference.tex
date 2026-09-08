@@ -72,7 +72,7 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell assays produce hundreds of thousands of cells, but the effective sample size for clinical prediction is determined by independent subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. In this cohort, subtype F1 is more strongly associated with cell abundance than patient coverage, although coverage has limited variation and neither association establishes causality; most errors also cross lineage boundaries, exposing a persistent granularity gap. Cell-typing errors propagate downstream: disease macro-F1 from subtype composition falls from 0.572 to 0.400 when gold labels are replaced by out-of-fold predictions. Stronger direct APT discrimination is accompanied by patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under outer-test-isolated development selection, every fold chooses $B^*=10$; the resulting 10-aptamer panels match the observed within-cohort performance of the full 293-aptamer panel. Random-panel and cross-model attribution controls indicate that this discriminative signal is distributed across alternative feature subsets. APT-Bench provides a statistically explicit setting for multiresolution, measurement-efficient single-cell learning, while limiting its disease conclusions to this cohort pending external validation.
+Single-cell assays produce hundreds of thousands of cells, but patient-independent evaluation is determined by biological subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. A controlled training-scaling surface independently varies 8--32 development patients and 100--all cells per patient. Contrary to a patient-dominant scaling hypothesis, increasing cell depth yields mean macro-F1 gains equal to or larger than increasing patient count for Logistic Regression and XGBoost at both resolutions. Thus patient-disjointness is essential for valid evaluation, but more within-patient cells remain useful for learning cell identity in this cohort. Cell-typing errors propagate downstream: disease macro-F1 from subtype composition falls from 0.572 to 0.400 when gold labels are replaced by out-of-fold predictions. Stronger direct APT discrimination is accompanied by patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under outer-test-isolated development selection, every fold chooses $B^*=10$; the resulting panels match the observed within-cohort performance of the full 293-aptamer panel. APT-Bench provides a statistically explicit setting for multiresolution and measurement-aware single-cell learning while limiting its conclusions to this cohort pending external validation.
 \end{abstract}
 
 
@@ -330,6 +330,49 @@ driven by a few high-cell-count patients, although the headline pooled metric
 remains explicitly cell-weighted.
 
 \input{tables/patient_balanced_cell_sensitivity}
+
+\subsection{Training Patient--Cell Scaling Surface}
+\label{sec:appendix:patient_cell_scaling}
+
+The primary split fixes eight outer-test patients and varies only the training
+set. For each outer fold and each of 20 seeds, we generate one approximately
+proportional disease-stratified ordering of the 32 development patients, giving
+nested sets $S_8\subset S_{16}\subset S_{24}\subset S_{32}$. Each selected
+patient receives one uniform random cell ordering, giving nested prefixes of
+100, 500, and 2{,}000 cells and the complete available set. Patients with fewer
+than a requested cap contribute all available cells. No cell is selected using
+its subtype, and every model is evaluated on all cells from the untouched test
+patients. The full-data endpoint is fitted once per fold rather than duplicated
+across seeds. All 6{,}020 model--task jobs completed, and the deterministic
+endpoint exactly reproduces the frozen pooled OOF baselines within absolute
+tolerance $5\times10^{-4}$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/patient_cell_scaling_heatmaps.pdf}
+\caption{Pooled patient-disjoint Macro-F1 over the complete training-patient
+and per-patient training-cell grid. Values average 20 nested subset seeds except
+for the deterministic full-data endpoint. Color scales are shared across
+models within each task.}
+\label{fig:patient_cell_scaling_heatmaps}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/patient_scaling_curves.pdf}
+\caption{Patient-budget curves at each fixed per-patient cell cap. Intervals
+show subset-resampling variability; they do not represent uncertainty over a
+new patient population. Non-monotonic local changes are retained rather than
+smoothed.}
+\label{fig:patient_scaling_curves}
+\end{figure}
+
+\input{tables/patient_cell_scaling_full}
+
+The patient-balanced confusion-matrix sensitivity yields the same qualitative
+ordering of endpoint effects. The surface is cohort- and range-specific: it
+does not establish a universal cell-dominant scaling law, and it cannot estimate
+the benefit of patients drawn from new sites or acquisition batches.
 
 \subsection{Patient-Level Lineage-Resolved Attribution Audit}
 \label{sec:appendix:apt_markers}

@@ -84,6 +84,19 @@ This is the primary protocol for all headline claims. Patients are partitioned i
 \paragraph{Cell-level split control.}
 As a protocol-sensitivity control, cells are randomly split irrespective of patient identity. Cells from the same patient can therefore appear in both training and evaluation sets. We do not treat this as a realistic deployment protocol. Its only role is to quantify performance inflation caused by leakage.
 
+\paragraph{Training patient--cell scaling surface.}
+We separately vary the number of outer-development patients
+$P\in\{8,16,24,32\}$ and the uniformly sampled training cells per selected
+patient $C\in\{100,500,2000,\mathrm{all}\}$. Within each outer fold and seed,
+disease-stratified patient subsets and uniform within-patient cell subsets are
+nested across budgets. We use 20 subset seeds except for the deterministic
+$P{=}32,C{=}\mathrm{all}$ endpoint, fit preprocessing only on sampled training
+cells, and always evaluate all cells from the same eight untouched outer-test
+patients. Frozen Logistic Regression and XGBoost configurations are refit
+independently for coarse and fine prediction. This experiment changes
+training-time budgets; it is distinct from the inference-time cell budget in
+the compact-panel analysis.
+
 \subsection{Class Distribution}
 \label{sec:data:imbalance}
 

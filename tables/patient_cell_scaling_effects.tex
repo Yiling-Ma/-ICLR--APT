@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\scriptsize
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lllll}
+\toprule
+Model & Task & Mean patient gain & Mean cell gain & Direction / consistency \\
+\midrule
+LR & Coarse & +0.019 [+0.009, +0.027] & +0.022 [+0.018, +0.028] & Cell; patient $>$ cell in 30\% of seeds \\
+LR & Fine & +0.019 [+0.013, +0.025] & +0.036 [+0.033, +0.040] & Cell; patient $>$ cell in 0\% of seeds \\
+XGBoost & Coarse & +0.030 [+0.013, +0.040] & +0.051 [+0.042, +0.062] & Cell; patient $>$ cell in 0\% of seeds \\
+XGBoost & Fine & +0.021 [+0.014, +0.025] & +0.050 [+0.044, +0.054] & Cell; patient $>$ cell in 0\% of seeds \\
+\bottomrule
+\end{tabular}
+}
+\caption{Paired endpoint gains across nested subset seeds. Patient gain is
+$P{=}32-P{=}8$, averaged over cell caps; cell gain is
+$C{=}\mathrm{all}-C{=}100$, averaged over patient budgets. Brackets are
+empirical 2.5th--97.5th seed intervals, not confidence intervals over
+independent patients.}
+\label{tab:patient_cell_scaling_effects}
+\end{table}
