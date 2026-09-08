@@ -1,0 +1,75 @@
+{
+  "calibration_donors": [
+    "G05153",
+    "H00049",
+    "N00012",
+    "N00029",
+    "S00005",
+    "S00058",
+    "S00081",
+    "S00082",
+    "S00106",
+    "U00617"
+  ],
+  "cell_caps": [
+    100,
+    200,
+    400,
+    800,
+    1600
+  ],
+  "cell_sampling": "one uniform within-donor permutation per outer fold and seed",
+  "dataset": "COMBAT CITE-seq ADT channel",
+  "donor_sampling": "nested source-stratified ordering within outer development",
+  "evaluation_cells": 700706,
+  "evaluation_donors": 105,
+  "feature_selection": "all 192 author-released antibody-derived tag features",
+  "features": 192,
+  "fixed_total_budgets": [
+    3200,
+    6400,
+    12800
+  ],
+  "model_random_state": 42,
+  "models": [
+    "logistic_regression"
+  ],
+  "patient_bootstrap_replicates": 2000,
+  "patient_budgets": [
+    8,
+    16,
+    32
+  ],
+  "preprocessing": "feature-wise z-score fit on sampled training cells only",
+  "protocol_hash": "ed0a2400d7e57f7b",
+  "resampling_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "source_sha256": "f628a15f25b9ca2f7cdefeab271fd9d007c8d5e47eb80c4b807d5f65e86ff53d",
+  "source_url": "https://zenodo.org/records/5139561",
+  "tasks": {
+    "coarse": "coarse_subtype",
+    "fine": "cell_subtype"
+  },
+  "test_cells": "all valid cells from untouched outer-test donors",
+  "version": "combat-citeseq-adt-donor-cell-scaling-v1"
+}

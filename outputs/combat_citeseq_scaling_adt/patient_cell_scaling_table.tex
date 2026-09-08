@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Model & Task & $C=100$ & $C=500$ & $C=2000$ & $C=\mathrm{all}$ \\
+\midrule
+Logistic Regression, $P=8$ & Coarse & 0.951 [0.933, 0.966] & 0.963 [0.953, 0.970] & 0.965 [0.952, 0.972] & 0.962 [0.945, 0.970] & 0.961 [0.944, 0.969] \\
+Logistic Regression, $P=16$ & Coarse & 0.968 [0.961, 0.973] & 0.969 [0.961, 0.974] & 0.968 [0.964, 0.973] & 0.970 [0.960, 0.975] & 0.972 [0.963, 0.978] \\
+Logistic Regression, $P=32$ & Coarse & 0.972 [0.968, 0.977] & 0.972 [0.969, 0.976] & 0.974 [0.971, 0.977] & 0.977 [0.974, 0.980] & 0.979 [0.976, 0.982] \\
+Logistic Regression, fine, $P=8$ & Fine & 0.486 [0.470, 0.506] & 0.531 [0.512, 0.551] & 0.563 [0.546, 0.579] & 0.584 [0.565, 0.598] & 0.601 [0.580, 0.611] \\
+Logistic Regression, fine, $P=16$ & Fine & 0.541 [0.529, 0.558] & 0.571 [0.558, 0.589] & 0.591 [0.577, 0.607] & 0.607 [0.591, 0.620] & 0.624 [0.610, 0.630] \\
+Logistic Regression, fine, $P=32$ & Fine & 0.576 [0.564, 0.586] & 0.595 [0.579, 0.607] & 0.611 [0.599, 0.620] & 0.630 [0.623, 0.634] & 0.654 [0.647, 0.658] \\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{Patient--cell training scaling. Entries are pooled OOF Macro-F1 means with empirical 2.5th--97.5th seed intervals; the deterministic $P=32,C=\mathrm{all}$ endpoint instead uses a patient-clustered bootstrap interval. Seed intervals are not patient confidence intervals.}
+\label{tab:patient_cell_scaling}
+\end{table*}

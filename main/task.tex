@@ -98,11 +98,20 @@ and uniform within-patient cell permutations are nested across budgets.
 Preprocessing is fit only on sampled training cells; frozen Logistic Regression
 and XGBoost configurations are refit for coarse and fine prediction; and every
 cell from the same eight untouched outer-test patients is evaluated. We report
-pooled cell-weighted macro-F1 and macro-F1 computed within each test patient and
-then averaged. Empirical subset-seed intervals and paired patient-clustered
+pooled cell-weighted, patient-balanced pooled, and mean within-patient macro-F1.
+Empirical subset-seed intervals and paired patient-clustered
 bootstrap intervals answer different uncertainty questions and are reported
 separately. This training-time design is distinct from inference subsampling in
 the compact-panel analysis.
+
+To test portability beyond a single assay and cohort, we apply the same grid to
+the public COMBAT CITE-seq blood atlas \citep{combat2022blood}. After a frozen
+quality and coverage audit, 105 donors and 700{,}706 cells are assigned to five
+donor-disjoint folds. The primary external replication uses 293 RNA features
+selected only on 10 separate calibration donors; a matched-modality sensitivity
+uses all 192 released antibody-derived tag (ADT) features on exactly the same
+cells, donors, labels, and folds. Full construction and exclusion rules are in
+Appendix~\ref{sec:appendix:combat_scaling}.
 
 \subsection{Class Distribution}
 \label{sec:data:imbalance}

@@ -30,8 +30,10 @@ separates patient diversity from within-patient cell depth. At each fixed total
 training-cell budget, reallocating cells from 8 to 32 patients improves both
 coarse and fine macro-F1 for Logistic Regression and XGBoost; averaged matched
 doublings and descriptive response surfaces also favor the patient axis over
-the evaluated range. Effect magnitude still depends on model, resolution, and
-budget. This separates two claims
+the evaluated range. The direction replicates across all 18 corresponding
+comparisons on 105 donors from the public COMBAT CITE-seq atlas, using RNA and
+matched ADT inputs, although magnitude and subset-seed stability depend on
+dataset, modality, model, resolution, and budget. This separates two claims
 that are often conflated: patient-disjoint splits are necessary for valid
 generalization estimates, while correlated cells can still be useful training
 observations. Third, strictly nested, disease-label-free XGBoost subtype
@@ -46,5 +48,5 @@ Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
     \item \textbf{A multiresolution account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons under a common evaluation protocol. We use \ourmethod{} as a hierarchy-aware reference rather than claiming architectural superiority.
-    \item \textbf{Controlled two-axis scaling and downstream error propagation.} Fixed-total-cell and matched-doubling experiments distinguish patient diversity from within-patient depth, while strict nested cross-fitting converts disease-label-free subtype probabilities into patient compositions without exposing either stage to outer-test patients.
+    \item \textbf{Controlled and externally replicated two-axis scaling.} Fixed-total-cell and matched-doubling experiments distinguish subject diversity from within-subject depth; the fixed-total direction is tested on COMBAT RNA and ADT, while strict nested cross-fitting converts disease-label-free subtype probabilities into patient compositions without exposing either stage to outer-test patients.
 \end{itemize}

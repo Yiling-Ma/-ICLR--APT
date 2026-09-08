@@ -18,7 +18,7 @@ import pandas as pd
 PATIENT_BUDGETS = (8, 16, 32)
 CELL_CAPS = (100, 200, 400, 800, 1600)
 TOTAL_BUDGETS = (3200, 6400, 12800)
-METRICS = ("macro_f1", "mean_patient_macro_f1")
+METRICS = ("macro_f1", "patient_balanced_macro_f1", "mean_patient_macro_f1")
 BOOTSTRAP_REPLICATES = 2000
 BOOTSTRAP_SEED = 20270908
 
@@ -35,6 +35,59 @@ def f1_from_confusion(matrix: np.ndarray) -> float:
         where=denominator > 0,
     )
     return float(values.mean())
+
+
+def score_patient_matrices(values: np.ndarray, metric: str) -> float:
+    if metric == "macro_f1":
+        return f1_from_confusion(values.sum(axis=0))
+    if metric == "patient_balanced_macro_f1":
+        totals = values.sum(axis=(1, 2)).astype(float)
+        normalized = np.divide(
+            values,
+            totals[:, None, None],
+            out=np.zeros_like(values, dtype=float),
+            where=totals[:, None, None] > 0,
+        )
+        return f1_from_confusion(normalized.sum(axis=0))
+    if metric == "mean_patient_macro_f1":
+        return float(np.mean([f1_from_confusion(matrix) for matrix in values]))
+    raise ValueError(f"Unsupported metric: {metric}")
+
+
+def f1_from_confusion_batch(matrices: np.ndarray) -> np.ndarray:
+    true_positive = np.diagonal(matrices, axis1=1, axis2=2)
+    predicted = matrices.sum(axis=1)
+    actual = matrices.sum(axis=2)
+    denominator = actual + predicted
+    values = np.divide(
+        2 * true_positive,
+        denominator,
+        out=np.zeros_like(true_positive, dtype=float),
+        where=denominator > 0,
+    )
+    return values.mean(axis=1)
+
+
+def bootstrap_scores(
+    values: np.ndarray, metric: str, draws: np.ndarray, chunk_size: int = 5
+) -> np.ndarray:
+    if metric == "mean_patient_macro_f1":
+        per_patient = np.asarray([f1_from_confusion(matrix) for matrix in values])
+        return per_patient[draws].mean(axis=1)
+    if metric == "patient_balanced_macro_f1":
+        totals = values.sum(axis=(1, 2)).astype(float)
+        values = np.divide(
+            values,
+            totals[:, None, None],
+            out=np.zeros_like(values, dtype=float),
+            where=totals[:, None, None] > 0,
+        )
+    scores = np.empty(len(draws), dtype=float)
+    for start in range(0, len(draws), chunk_size):
+        stop = min(start + chunk_size, len(draws))
+        matrices = values[draws[start:stop]].sum(axis=1)
+        scores[start:stop] = f1_from_confusion_batch(matrices)
+    return scores
 
 
 def summarize(values: np.ndarray) -> dict[str, float | int]:
@@ -171,7 +224,7 @@ def align_matrices(
 ) -> tuple[list[str], np.ndarray]:
     values = matrices[(model, task, condition[0], str(condition[1]))]
     patients = sorted(values)
-    size = 5 if task == "coarse" else 27
+    size = max(matrix.shape[0] for matrix in values.values())
     stacked = np.zeros((len(patients), size, size), dtype=float)
     for index, patient in enumerate(patients):
         matrix = values[patient]
@@ -185,18 +238,18 @@ def paired_patient_bootstrap(
     task: str,
     low: tuple[int, int],
     high: tuple[int, int],
+    metric: str,
     rng: np.random.Generator,
 ) -> tuple[float, float]:
     low_patients, low_values = align_matrices(matrices, model, task, low)
     high_patients, high_values = align_matrices(matrices, model, task, high)
-    if low_patients != high_patients or len(low_patients) != 40:
-        raise RuntimeError("Patient-clustered bootstrap requires the same 40 OOF patients.")
-    differences = np.empty(BOOTSTRAP_REPLICATES, dtype=float)
-    for index in range(BOOTSTRAP_REPLICATES):
-        draw = rng.integers(0, 40, size=40)
-        differences[index] = f1_from_confusion(high_values[draw].sum(axis=0)) - f1_from_confusion(
-            low_values[draw].sum(axis=0)
-        )
+    if low_patients != high_patients:
+        raise RuntimeError("Patient-clustered bootstrap requires identical OOF patients.")
+    n_patients = len(low_patients)
+    draws = rng.integers(0, n_patients, size=(BOOTSTRAP_REPLICATES, n_patients))
+    differences = bootstrap_scores(high_values, metric, draws) - bootstrap_scores(
+        low_values, metric, draws
+    )
     return tuple(np.quantile(differences, [0.025, 0.975]).astype(float))
 
 
@@ -215,14 +268,10 @@ def add_fixed_patient_intervals(
             str(row["task"]),
             (int(row["patient_budget"]), int(row["cells_per_patient"])),
         )
-        bootstrap = np.empty(BOOTSTRAP_REPLICATES, dtype=float)
-        per_patient_f1 = np.asarray([f1_from_confusion(matrix) for matrix in values])
-        for replicate in range(BOOTSTRAP_REPLICATES):
-            draw = rng.integers(0, len(values), size=len(values))
-            if row["metric"] == "macro_f1":
-                bootstrap[replicate] = f1_from_confusion(values[draw].sum(axis=0))
-            else:
-                bootstrap[replicate] = float(per_patient_f1[draw].mean())
+        draws = rng.integers(
+            0, len(values), size=(BOOTSTRAP_REPLICATES, len(values))
+        )
+        bootstrap = bootstrap_scores(values, str(row["metric"]), draws)
         q025, q975 = np.quantile(bootstrap, [0.025, 0.975])
         fixed.loc[index, "patient_clustered_bootstrap_q025"] = q025
         fixed.loc[index, "patient_clustered_bootstrap_q975"] = q975
@@ -240,10 +289,10 @@ def effect_rows(
             low = spec["low"]
             high = spec["high"]
             assert isinstance(low, tuple) and isinstance(high, tuple)
-            patient_q025, patient_q975 = paired_patient_bootstrap(
-                matrices, model, task, low, high, rng
-            )
             for metric in METRICS:
+                patient_q025, patient_q975 = paired_patient_bootstrap(
+                    matrices, model, task, low, high, metric, rng
+                )
                 values = paired_seed_values(frame, low, high, metric)
                 rows.append(
                     {
@@ -256,8 +305,8 @@ def effect_rows(
                         "high_patient_budget": high[0],
                         "high_cells_per_patient": high[1],
                         **summarize(values),
-                        "patient_clustered_bootstrap_q025": patient_q025 if metric == "macro_f1" else np.nan,
-                        "patient_clustered_bootstrap_q975": patient_q975 if metric == "macro_f1" else np.nan,
+                        "patient_clustered_bootstrap_q025": patient_q025,
+                        "patient_clustered_bootstrap_q975": patient_q975,
                     }
                 )
     return pd.DataFrame(rows)
@@ -337,10 +386,22 @@ def create_figure(fixed: pd.DataFrame, effects: pd.DataFrame, output_dir: Path) 
     import matplotlib.pyplot as plt
 
     primary = fixed[fixed["metric"] == "macro_f1"]
-    fig, axes = plt.subplots(2, 2, figsize=(9.6, 6.8), sharex=True, constrained_layout=True)
+    models = [
+        model
+        for model in ("logistic_regression", "xgboost")
+        if model in set(primary["model"])
+    ]
+    fig, axes = plt.subplots(
+        2,
+        len(models),
+        figsize=(4.8 * len(models), 6.8),
+        sharex=True,
+        constrained_layout=True,
+        squeeze=False,
+    )
     colors = {3200: "#315B7D", 6400: "#C05A3B", 12800: "#4F7A51"}
     for row, task in enumerate(("coarse", "fine")):
-        for column, model in enumerate(("logistic_regression", "xgboost")):
+        for column, model in enumerate(models):
             ax = axes[row, column]
             subset = primary[(primary["task"] == task) & (primary["model"] == model)]
             for total in TOTAL_BUDGETS:
@@ -389,6 +450,8 @@ def write_table(fixed: pd.DataFrame, output_dir: Path) -> None:
         r"\midrule",
     ]
     for model in ("logistic_regression", "xgboost"):
+        if model not in set(primary["model"]):
+            continue
         for task in ("coarse", "fine"):
             for total in TOTAL_BUDGETS:
                 frame = primary[
@@ -418,7 +481,12 @@ def write_table(fixed: pd.DataFrame, output_dir: Path) -> None:
 
 
 def qa(per_seed: pd.DataFrame, fixed: pd.DataFrame, effects: pd.DataFrame) -> dict[str, object]:
-    expected_groups = len(PATIENT_BUDGETS) * len(CELL_CAPS) * 2 * 2
+    expected_groups = (
+        len(PATIENT_BUDGETS)
+        * len(CELL_CAPS)
+        * per_seed["model"].nunique()
+        * per_seed["task"].nunique()
+    )
     checks = {
         "all_grid_groups_present": per_seed.groupby(["patient_budget", "cell_cap", "model", "task"]).ngroups == expected_groups,
         "twenty_subset_seeds_per_group": bool(

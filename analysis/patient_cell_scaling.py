@@ -352,7 +352,9 @@ def bundle_paths(output_dir: Path, bundle: str) -> tuple[Path, Path, Path]:
     )
 
 
-def expected_bundles(models: Iterable[str] = MODEL_NAMES) -> list[dict[str, Any]]:
+def expected_bundles(models: Iterable[str] | None = None) -> list[dict[str, Any]]:
+    if models is None:
+        models = MODEL_NAMES
     rows = []
     for fold in range(N_OUTER_FOLDS):
         for patient_budget in PATIENT_BUDGETS:
@@ -979,6 +981,7 @@ def aggregate(args: argparse.Namespace) -> None:
     merged, _, _ = load_data()
     patients = patient_table(merged)
     folds = load_folds()
+    expected_patient_ids = {patient for fold in folds.values() for patient in fold}
     encoders = fit_label_encoders(merged)
     write_protocol_and_plan(output_dir)
     results = list(iter_successful_results(output_dir))
@@ -1127,7 +1130,7 @@ def aggregate(args: argparse.Namespace) -> None:
         fold_items.sort(key=lambda item: item[0])
         patient_ids = np.concatenate([item[1] for item in fold_items])
         per_patient = np.concatenate([item[2] for item in fold_items], axis=0)
-        if len(patient_ids) != 40 or len(set(patient_ids)) != 40:
+        if len(patient_ids) != len(expected_patient_ids) or set(patient_ids) != expected_patient_ids:
             continue
         pooled = per_patient.sum(axis=0)
         balanced = patient_balanced_matrix(per_patient)

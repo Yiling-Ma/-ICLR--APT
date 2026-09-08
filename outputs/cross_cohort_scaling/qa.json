@@ -1,0 +1,12 @@
+{
+  "all_effects_finite": true,
+  "all_total_budgets_present": true,
+  "datasets_present": [
+    "apt",
+    "combat_adt",
+    "combat_rna"
+  ],
+  "overall_status": "PASS",
+  "primary_metric": "patient_balanced_macro_f1",
+  "rows": 30
+}

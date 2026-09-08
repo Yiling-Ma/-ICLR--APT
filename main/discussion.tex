@@ -19,7 +19,11 @@ total number of training cells, while matched doublings and a response surface
 expose dependence on the evaluated model, resolution, and budget. Broader
 patient coverage improves all fixed-total comparisons, and its mean matched
 doubling effect exceeds the cell-depth effect for both classical models at both
-resolutions. These analyses are descriptive rather than causal or universal scaling laws.
+resolutions. The fixed-total direction also holds in all 18 COMBAT RNA and ADT
+comparisons, but external effects are smaller in some coarse settings and
+usually seed-uncertain. Replication therefore strengthens the subject-coverage
+finding while delimiting it as a variable average association, not a causal or
+universal scaling law.
 Correlated cells cannot create evidence about new patients, even when additional
 cells improve estimation of cell-type decision boundaries. Clinical single-cell
 benchmarks should therefore report patient-disjoint generalization together
@@ -33,9 +37,11 @@ is not statistically resolved. Strong
 centering sensitivity indicates that patient-specific absolute-expression
 structure contributes substantially to within-cohort discrimination, while the
 compact-panel results establish measurement efficiency and redundancy rather
-than causal biomarkers. The cohort is single-site, lacks acquisition-batch
-metadata, and has no external validation; the LODO analysis is descriptive and
-cross-disease generalization remains unresolved. The fixed schema, patient
+than causal biomarkers. The APT disease cohort is single-site, lacks
+acquisition-batch metadata, and has no external disease-validation cohort;
+COMBAT validates only the cell-typing scaling protocol, not cancer recognition.
+The LODO analysis is descriptive and cross-disease generalization remains
+unresolved. The fixed schema, patient
 splits, tasks, and evaluator are reusable in future APT and clinical single-cell
 cohorts \citep{luecken2025open,liu2025multitask}, but batch-aware, cross-site
 validation is required before clinical claims.
@@ -49,8 +55,9 @@ profiles. Across matched neural and classical models, coarse lineage is
 consistently easier than fine transcriptome-derived subtype prediction, and no
 \ourmethod{}-specific advantage is statistically supported. Controlled
 fixed-total and matched-scale experiments show that broader patient coverage is
-the stronger scaling axis over the tested range rather than conflating either
-axis with raw cell count. Strict nested composition analysis further shows that imperfect
+the stronger scaling axis over the tested APT range; all corresponding COMBAT
+RNA and ADT fixed-total comparisons reproduce the direction while revealing
+dataset- and subset-dependent magnitudes. Strict nested composition analysis further shows that imperfect
 cell typing can preserve patient-level disease-associated variation, although
 its incremental value over coarser or technical summaries is unresolved.
 Within-cohort disease discrimination is strongly associated with

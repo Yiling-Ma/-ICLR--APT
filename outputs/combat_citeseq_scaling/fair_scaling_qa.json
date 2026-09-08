@@ -1,0 +1,10 @@
+{
+  "checks": {
+    "all_effects_have_twenty_pairs": true,
+    "all_grid_groups_present": true,
+    "fixed_total_cells_exact": true,
+    "no_nonfinite_primary_values": true,
+    "twenty_subset_seeds_per_group": true
+  },
+  "overall_status": "PASS"
+}

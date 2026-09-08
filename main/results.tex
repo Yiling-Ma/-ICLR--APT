@@ -61,47 +61,53 @@ fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
 \subsection{Patient Diversity and Cell Depth Are Separate Scaling Axes}
 \label{sec:results:patient_cell_scaling}
 
-The fair scaling experiment holds the outer-test patients fixed and varies only
-the development set. It evaluates exact fixed-total-cell reallocations,
-matched doublings of either axis, and a fold-adjusted descriptive response
-surface for Logistic Regression and XGBoost at both resolutions. Every point
-uses 20 matched disease-stratified patient/cell subset seeds; preprocessing and
-model fitting are repeated on the sampled training set, while all cells from
-the eight untouched patients in each outer fold are evaluated.
+The fair scaling experiment holds outer-test subjects fixed and varies only the
+development set. It evaluates fixed-total-cell reallocations, matched doublings,
+and a descriptive response surface for LR and XGBoost at both resolutions. Each
+point uses 20 matched subject/cell subset seeds; preprocessing and fitting are
+repeated, while all cells from untouched test subjects are evaluated. The same
+fixed-total grid is then frozen for the external COMBAT CITE-seq cohort.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.94\columnwidth]{figures/fixed_total_scaling.pdf}
-\caption{Fixed-total training-cell scaling. Each curve holds total sampled
-training cells $T$ constant while reallocating them across $P$ independent
-patients, so cells per patient equal $T/P$. Points are pooled patient-disjoint
-OOF macro-F1 means over 20 matched subset seeds; bars are empirical 95\% seed
-intervals, not confidence intervals over patients. Models evaluate all cells
-from the same untouched outer-test patients. Patient-clustered intervals and
-patient-balanced sensitivities are reported in
-Appendix~\ref{sec:appendix:fair_scaling}.}
-\label{fig:fixed_total_scaling}
+\includegraphics[width=0.96\columnwidth]{figures/cross_cohort_scaling.pdf}
+\caption{Cross-cohort fixed-total scaling. Points are changes in
+subject-balanced, subject-disjoint OOF macro-F1 when a fixed total of $T$
+training cells is reallocated from 8 to 32 independent subjects; positive
+values favor broader subject coverage. Bars are 95\% paired subject-bootstrap
+intervals over fixed outer-test subjects after averaging seed-level sufficient
+statistics. APT uses LR and XGBoost; COMBAT RNA replicates both models, and
+COMBAT ADT is an LR-only modality sensitivity on the same donors and cells.}
+\label{fig:cross_cohort_scaling}
 \end{figure}
 
-At each fixed total of 3{,}200, 6{,}400, or 12{,}800 training cells,
-reallocating cells from 8 to 32 patients improves pooled OOF macro-F1 in all 12
-model--resolution--budget combinations (Figure~\ref{fig:fixed_total_scaling}).
-The gains are 0.012--0.016 for LR coarse, 0.006--0.008 for LR fine,
-0.015--0.019 for XGBoost coarse, and 0.006--0.008 for XGBoost fine. All 12
-paired patient-bootstrap intervals are above zero; empirical subset-seed
-intervals are above zero in 8 of 12 comparisons, reflecting a separate source
-of variation. Mean within-patient macro-F1 gives the same direction except that
-XGBoost fine effects remain seed-uncertain.
+On APT, reallocating cells from 8 to 32 patients improves patient-balanced OOF
+macro-F1 in all 12 model--resolution--budget combinations, by 0.006--0.022
+(Figure~\ref{fig:cross_cohort_scaling}). All paired patient-bootstrap and
+subset-seed intervals are above zero. Pooled-cell and mean within-patient
+sensitivities give the same qualitative direction, with isolated uncertainties
+detailed in Appendix~\ref{sec:appendix:fair_scaling}.
 
-Matched doublings lead to the same descriptive ordering. Averaged across
+The direction transfers to COMBAT despite a different cohort, measurement
+technology, and 39-class fine taxonomy. Across 105 donors and 700{,}706 cells,
+all 12 RNA effects are positive (0.001--0.018) for LR and XGBoost, and all six
+matched ADT LR effects are positive (0.006--0.013). All 18 paired
+donor-bootstrap intervals exclude zero. Only 4 of 18 empirical subset-seed
+intervals exclude zero, however, showing that donor-bootstrap stability of the
+average effect does not eliminate sensitivity to the selected development
+subset. COMBAT therefore replicates the fixed-total direction, not a constant
+effect size or deterministic advantage for every training subset.
+
+Matched doublings on APT lead to the same descriptive ordering. Averaged across
 eligible fixed settings, patient-versus-cell doubling gains are 0.011 versus
 0.005 (LR coarse), 0.007 versus 0.003 (LR fine), 0.016 versus 0.008 (XGBoost
 coarse), and 0.009 versus 0.006 (XGBoost fine). Fold-adjusted response-surface
 coefficients are likewise larger for $\log_2 P$ than $\log_2 C$ in all four
 comparisons, although interactions show that neither effect is constant across
-the grid. Thus, within this cohort and budget range, deeper sampling from fewer
-patients does not compensate for broader patient coverage. This is an
-observational scaling result, not a universal or causal law.
+the grid. Together, the APT and COMBAT results show that, over the evaluated
+grids, deeper sampling from fewer subjects does not recover the average
+performance obtained from broader subject coverage. This remains an
+observational result from two blood studies, not a universal or causal law.
 
 \subsection{Nested Composition Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}

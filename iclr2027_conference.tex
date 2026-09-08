@@ -67,6 +67,7 @@ Address \\
 
 
 \begin{document}
+\raggedbottom
 
 
 \maketitle
@@ -80,11 +81,11 @@ and 27-subtype cell annotation from patient-level characterization and makes
 both patient diversity and within-patient cell depth explicit training axes.
 Cell-level splitting inflates performance, and across neural and classical
 models coarse lineage recognition remains substantially easier than fine
-subtype prediction. At each of three fixed total-cell budgets, reallocating
-training cells from 8 to 32 patients improves macro-F1 for both Logistic
-Regression and XGBoost at both resolutions; matched doublings and a descriptive
-response surface likewise favor broader patient coverage over the evaluated
-range. A strict nested bridge aggregates disease-label-free XGBoost subtype probabilities
+subtype prediction. At three fixed total-cell budgets, reallocating training
+cells from 8 to 32 subjects improves subject-balanced macro-F1 in all 30
+comparisons across APT, an external 105-donor COMBAT CITE-seq RNA replication,
+and a matched COMBAT ADT sensitivity. Effect magnitude and subset-seed stability
+remain dataset-, modality-, task-, and model-dependent. A strict nested bridge aggregates disease-label-free XGBoost subtype probabilities
 without exposing either stage to outer-test patients. Predicted subtype
 composition retains disease-associated variation (patient macro-F1 0.593), but
 its gains over lineage composition and a cell-count-only control have
@@ -93,8 +94,8 @@ is sensitive to patient-specific absolute-expression signatures whose
 biological and technical origins cannot be separated with the available
 metadata. APT-Bench therefore provides a statistically explicit setting for
 studying observational unit, annotation granularity, training scale, and
-cross-task error propagation, while limiting clinical conclusions to this
-cohort pending external validation.
+cross-task error propagation, while limiting disease conclusions to the APT
+cohort.
 \end{abstract}
 
 
@@ -399,6 +400,17 @@ The fixed-total diagonals satisfy $PC\in\{3200,6400,12800\}$ exactly.
 
 \input{tables/fixed_total_scaling}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fixed_total_scaling.pdf}
+\caption{APT-only fixed-total response curves underlying the cross-cohort
+effect summary in Figure~\ref{fig:cross_cohort_scaling}. Points are pooled OOF
+macro-F1 means over 20 matched subset seeds; bars are empirical 95\% seed
+intervals. Patient-balanced and patient-bootstrap results are provided in the
+machine-readable artifacts.}
+\label{fig:apt_fixed_total_scaling}
+\end{figure}
+
 Table~\ref{tab:fixed_total_scaling} reports variability across subset seeds.
 Separately, paired patient-clustered bootstraps over the same 40 pooled OOF
 patients compare $P=8$ with $P=32$ after averaging seed-level sufficient
@@ -415,6 +427,36 @@ surface, the corresponding per-doubling $\beta_P/\beta_C$ coefficients are
 effects, patient intervals, seed intervals, and response-surface uncertainty
 are stored in the machine-readable scaling artifacts. The coefficients are
 associations over this grid, not causal or universal scaling laws.
+
+\subsection{External COMBAT CITE-seq Scaling Replication}
+\label{sec:appendix:combat_scaling}
+
+We downloaded the author-released COMBAT CITE-seq object
+\citep{combat2022blood} (836{,}148 cells and 124 donor identifiers; SHA-256
+\texttt{f628a15f25b9ca2f7cdefeab271fd9d007c8d5e47eb80c4b807d5f65e86ff53d}).
+We removed cells without a resolved major or fine immune annotation and cells
+flagged as GEX-region doublets. Ten donors were frozen as a calibration-only
+set and excluded from every model fit and test fold. Among the remaining
+donors, requiring at least 1{,}600 eligible cells leaves 105 donors and
+700{,}706 cells. We construct five disjoint folds of 21 test donors, stratified
+by the released sample-source field, and freeze these folds across all models,
+budgets, seeds, and modalities.
+
+The RNA replication uses 293 protein-coding genes with highest variance on the
+10 calibration donors after excluding mitochondrial and ribosomal genes. This
+matches the APT input dimension without selecting features on any evaluation
+donor. The ADT sensitivity uses all 192 released antibody features. Both inputs
+use the released five-class major annotation and 39-class fine annotation.
+They share the exact $P$, $C$, and fixed-total grids, 20 nested source-stratified
+donor/cell seeds, training-only standardization, LR configuration, and paired
+donor-bootstrap procedure used in APT-Bench. The RNA analysis additionally
+uses the frozen 400-tree XGBoost baseline. Every fit is evaluated on all cells
+of the 21 untouched test donors; the ADT analysis is an LR-only modality
+sensitivity rather than an additional model-comparison family. Dataset hashes,
+folds, features, sampling manifests, and per-donor sufficient statistics are
+included in the release artifacts.
+
+\input{tables/cross_cohort_scaling}
 
 \subsection{Secondary Descriptive Patient--Cell Scaling Surface}
 \label{sec:appendix:patient_cell_scaling}

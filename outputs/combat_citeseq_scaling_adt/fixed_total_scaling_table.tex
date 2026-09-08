@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llcrrr}
+\toprule
+Model & Task & Total cells & $P=8$ & $P=16$ & $P=32$ \\
+\midrule
+LR & Coarse & 3,200 & 0.965 [0.952, 0.972] & 0.969 [0.961, 0.974] & 0.972 [0.968, 0.977] \\
+LR & Coarse & 6,400 & 0.962 [0.945, 0.970] & 0.968 [0.964, 0.973] & 0.972 [0.969, 0.976] \\
+LR & Coarse & 12,800 & 0.961 [0.944, 0.969] & 0.970 [0.960, 0.975] & 0.974 [0.971, 0.977] \\
+LR & Fine & 3,200 & 0.563 [0.546, 0.579] & 0.571 [0.558, 0.589] & 0.576 [0.564, 0.586] \\
+LR & Fine & 6,400 & 0.584 [0.565, 0.598] & 0.591 [0.577, 0.607] & 0.595 [0.579, 0.607] \\
+LR & Fine & 12,800 & 0.601 [0.580, 0.611] & 0.607 [0.591, 0.620] & 0.611 [0.599, 0.620] \\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{Fixed-total training-cell scaling. Each row holds the total number of sampled training cells constant while reallocating them across independent patients. Entries are pooled patient-disjoint OOF Macro-F1 means with empirical 95\% intervals over 20 matched subset seeds. All outer-test cells are evaluated.}
+\label{tab:fixed_total_scaling}
+\end{table}

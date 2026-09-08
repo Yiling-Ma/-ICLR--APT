@@ -1,0 +1,76 @@
+{
+  "calibration_donors": [
+    "G05153",
+    "H00049",
+    "N00012",
+    "N00029",
+    "S00005",
+    "S00058",
+    "S00081",
+    "S00082",
+    "S00106",
+    "U00617"
+  ],
+  "cell_caps": [
+    100,
+    200,
+    400,
+    800,
+    1600
+  ],
+  "cell_sampling": "one uniform within-donor permutation per outer fold and seed",
+  "dataset": "COMBAT CITE-seq RNA channel",
+  "donor_sampling": "nested source-stratified ordering within outer development",
+  "evaluation_cells": 700706,
+  "evaluation_donors": 105,
+  "feature_selection": "variance on ten disjoint calibration donors",
+  "features": 293,
+  "fixed_total_budgets": [
+    3200,
+    6400,
+    12800
+  ],
+  "model_random_state": 42,
+  "models": [
+    "logistic_regression",
+    "xgboost"
+  ],
+  "patient_bootstrap_replicates": 2000,
+  "patient_budgets": [
+    8,
+    16,
+    32
+  ],
+  "preprocessing": "feature-wise z-score fit on sampled training cells only",
+  "protocol_hash": "5a1eb7afa0f810d6",
+  "resampling_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "source_sha256": "dc4666b48d1aacd5b6e1ce514868e497c5b16d007f312d2f8984d1028734e2b6",
+  "source_url": "https://datasets.cellxgene.cziscience.com/359ed2e3-7f6d-4ec4-9e4a-63113cfbcd84.h5ad",
+  "tasks": {
+    "coarse": "coarse_subtype",
+    "fine": "cell_subtype"
+  },
+  "test_cells": "all valid cells from untouched outer-test donors",
+  "version": "combat-citeseq-rna-donor-cell-scaling-v1"
+}
