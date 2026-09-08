@@ -7,34 +7,39 @@
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.10}
 
-\begin{tabular}{lccc}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
 \toprule
 \textbf{Aggregation / Representation}
-& \textbf{Patient Acc.} & \textbf{Macro-F1} & \textbf{Macro-AUROC} \\
+& \textbf{Patient Acc.} & \textbf{Macro-F1} & \textbf{Macro-AUROC} & \textbf{Perm. $p$} \\
 \midrule
 
 Cell-level classifiers$^{*}$, majority vote
-& \textbf{1.000} & \textbf{1.000} & -- \\
+& \textbf{1.000} & \textbf{1.000} & -- & -- \\
 
 \midrule
 
 Patient-level APT median $+$ LR$^\dagger$
-& 0.950 & 0.948 & 1.000 \\
+& 0.950 & 0.948 & 1.000 & 0.0010 \\
+
+Log cell count $+$ LR$^\ddagger$
+& 0.575 & 0.531 & 0.800 & 0.00010 \\
+
+Nested soft subtype composition $+$ LR$^\S$
+& 0.600 & 0.593 & 0.854 & 0.00010 \\
+
+Nested soft lineage composition $+$ LR$^\S$
+& 0.475 & 0.477 & 0.766 & 0.00020 \\
 
 Gold subtype composition $+$ LR$^\ddagger$
-& 0.575 & 0.572 & 0.842 \\
-
-OOF subtype composition $+$ LR$^\S$
-& 0.400 & 0.400 & 0.749 \\
+& 0.500 & 0.516 & 0.776 & 0.00010 \\
 
 Gold lineage composition $+$ LR$^\ddagger$
-& 0.400 & 0.377 & 0.678 \\
-
-OOF lineage composition $+$ LR$^\S$
-& 0.300 & 0.282 & 0.627 \\
+& 0.325 & 0.301 & 0.743 & 0.0184 \\
 
 \bottomrule
 \end{tabular}
+}
 
 \vspace{3pt}
 
@@ -43,16 +48,18 @@ OOF lineage composition $+$ LR$^\S$
 $^{*}$ Five cell-level classifiers share the $40/40$ majority-vote result;
 their distinct cell metrics appear in Table~\ref{tab:disease_cell_level}.
 $^\dagger$ One 293-APT median vector per patient.
-$^\ddagger$ Paired-transcriptomic gold labels; $^\S$ patient-disjoint
-\ourmethod{} OOF labels. Composition rows use CLR (pseudocount $10^{-4}$),
-the fixed folds, and prespecified LR $C=0.1$.
+$^\ddagger$ Patient-level technical or paired-transcriptomic oracle features.
+$^\S$ Soft probabilities from disease-label-free XGBoost under strict nested
+cross-fitting. Composition rows use raw proportions; LR regularization is tuned
+only within each outer-development set. Composition permutation tests use
+10{,}000 patient-label shuffles.
 }
 
 \caption{
 \textbf{Patient-level} disease classification ($n=40$). The majority-vote
-accuracy has 95\% Clopper--Pearson CI $[0.912,1.000]$. Replacing gold cell
-labels with patient-disjoint OOF predictions degrades every composition
-endpoint, linking cell-typing error to downstream characterization. All
+accuracy has 95\% Clopper--Pearson CI $[0.912,1.000]$. Predicted composition
+retains disease-associated variation, but its gains over lineage composition
+and cell count have bootstrap intervals spanning zero. All
 disease results are within-cohort estimates, not evidence of clinical
 generalization; see Appendix~\ref{sec:appendix:disease_patient_level}.
 }

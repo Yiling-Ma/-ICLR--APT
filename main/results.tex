@@ -7,7 +7,28 @@ Under the fixed patient-level folds, five classical cell-level baselines all yie
 
 \input{tables/disease}
 
-Composition directly connects cell typing to patient characterization. Replacing gold labels with strictly OOF \ourmethod{} predictions reduces subtype-composition macro-F1/AUROC from $0.572/0.842$ to $0.400/0.749$ and lineage-composition macro-F1 from $0.377$ to $0.282$. Typing errors therefore propagate downstream, while all composition variants remain well below median APT, indicating that absolute APT structure carries the stronger within-cohort disease signal.
+Composition directly connects cell typing to patient characterization. Under
+strict nested cross-fitting, disease-label-free XGBoost soft subtype composition
+reaches patient accuracy/macro-F1/AUROC $0.600/0.593/0.854$, compared with
+$0.475/0.477/0.766$ for soft lineage composition. Both exceed their complete
+10{,}000-permutation nulls ($p=0.00010$ and $p=0.00020$, respectively), showing
+that patient-disjoint cell predictions retain disease-associated variation after
+aggregation. Fine granularity is not established as superior: the paired
+subtype-minus-lineage macro-F1 difference is $+0.116$ with patient-bootstrap
+95\% CI $[-0.015,0.262]$. True subtype composition reaches macro-F1 0.516, so
+the predicted representation is not merely a noisier estimate of annotated
+abundance; it may also carry model-confidence or technical structure.
+
+That qualification is material. Log cell count alone reaches macro-F1 0.531
+($p=0.00010$), and predicted subtype composition exceeds it by only $+0.062$
+(95\% CI $[-0.087,0.218]$). Equal-cell sensitivity remains stable: over 50
+within-patient subsamples, subtype-composition macro-F1 averages 0.574, 0.574,
+and 0.581 at 100, 500, and 2{,}000 cells, respectively. A global multinomial
+composition control averages 0.170, close to six-class chance, while fold ID is
+not predictable from global OOF subtype composition (accuracy 0.075; chance
+0.20). We therefore support an interpretable predictive bridge, but not a claim
+that subtype composition adds disease information beyond technical sampling
+structure or that the associations are biological mechanisms.
 
 These results do not justify a claim of solved clinical diagnosis. Sensitivity analyses in Appendix~\ref{sec:appendix:disease_patient_level} show that the disease signal depends strongly on patient-specific absolute-expression structure: patient-wise centering reduces patient-level accuracy from 1.000 to 0.650, and a 40-way patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because acquisition-batch metadata are unavailable, the observed offsets cannot be cleanly decomposed into biological versus technical sources. We therefore use disease recognition primarily to motivate the need for careful statistical-unit accounting in APT-Bench, not as the main architectural success story.
 

@@ -72,7 +72,7 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell assays produce hundreds of thousands of cells, but patient-independent evaluation is determined by biological subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. A controlled training-scaling surface independently varies 8--32 development patients and 100--all cells per patient. Contrary to a patient-dominant scaling hypothesis, increasing cell depth yields mean macro-F1 gains equal to or larger than increasing patient count for Logistic Regression and XGBoost at both resolutions. Thus patient-disjointness is essential for valid evaluation, but more within-patient cells remain useful for learning cell identity in this cohort. Cell-typing errors propagate downstream: disease macro-F1 from subtype composition falls from 0.572 to 0.400 when gold labels are replaced by out-of-fold predictions. Stronger direct APT discrimination is accompanied by patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under outer-test-isolated development selection, every fold chooses $B^*=10$; the resulting panels match the observed within-cohort performance of the full 293-aptamer panel. APT-Bench provides a statistically explicit setting for multiresolution and measurement-aware single-cell learning while limiting its conclusions to this cohort pending external validation.
+Single-cell assays produce hundreds of thousands of cells, but patient-independent evaluation is determined by biological subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. A controlled training-scaling surface independently varies 8--32 development patients and 100--all cells per patient; increasing cell depth yields mean macro-F1 gains equal to or larger than increasing patient count for Logistic Regression and XGBoost at both resolutions. A strict nested bridge then aggregates disease-label-free XGBoost subtype probabilities into patient composition profiles. Predicted subtype composition retains disease-discriminative information (macro-F1 0.593; 10{,}000-permutation $p<10^{-3}$), but its gains over lineage composition and a cell-count-only control have patient-bootstrap intervals spanning zero. Stronger direct APT discrimination is accompanied by patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under outer-test-isolated development selection, every fold chooses $B^*=10$; the resulting panels match the observed within-cohort performance of the full 293-aptamer panel. APT-Bench provides a statistically explicit setting for multiresolution and measurement-aware single-cell learning while limiting its conclusions to this cohort pending external validation.
 \end{abstract}
 
 
@@ -258,8 +258,31 @@ We additionally trained a 40-way classifier to predict patient identity from ind
 \paragraph{Patient-level summary-feature control.}
 Finally, to confirm that the disease signal does not rely only on cell-level pseudo-replication, we trained a genuinely patient-level classifier using each patient's median 293-dimensional APT profile. This summary-feature model reaches patient accuracy $0.950$, patient macro-F1 $0.948$, and macro-AUROC $1.000$. Together with the sensitivity analyses above, this indicates that disease information is present at the patient level but strongly entangled with absolute-expression offsets that cannot be cleanly separated without acquisition-batch metadata.
 
-\paragraph{Cell-typing error propagation to disease characterization.}
-We connect the hierarchy and disease tracks by replacing the gold cell labels in the composition baseline with \ourmethod{} predictions. These are the pooled patient-disjoint OOF predictions used in Table~\ref{tab:main}: every predicted label for patient $p$ comes from a cell-typing model whose training and validation sets exclude $p$. For each patient, we aggregate either the gold or predicted labels into a 27-subtype or five-lineage proportion vector, apply the same CLR transform (pseudocount $10^{-4}$), and fit the same patient-level multinomial LR ($C=0.1$) under the fixed five folds. Predicted subtype composition reduces patient accuracy/macro-F1/AUROC from $0.575/0.572/0.842$ to $0.400/0.400/0.749$; predicted lineage composition reduces them from $0.400/0.377/0.678$ to $0.300/0.282/0.627$. The source cell labels and the downstream disease calls are therefore both out of sample for each test patient. These results quantify error propagation rather than train-set reconstruction: imperfect typing degrades patient characterization, while the stronger median-APT result indicates that composition is not the principal carrier of the observed disease separation.
+\paragraph{Strict nested composition bridge.}
+Ordinary pooled OOF predictions are insufficient for stacking because a base
+model used to create a disease-training feature may have seen the eventual
+disease outer-test patients. We therefore use the nested protocol defined in
+Methods: within each outer fold, four XGBoost models trained on 24 patients
+generate inner-OOF features for the 32 disease-training patients, and a fifth
+model trained on all 32 predicts the eight outer-test patients. XGBoost receives
+subtype labels but no disease labels. Soft subtype composition reaches
+accuracy/macro-F1/AUROC $0.600/0.593/0.854$ and soft lineage composition reaches
+$0.475/0.477/0.766$. The paired macro-F1 difference is $+0.116$ (95\%
+patient-bootstrap CI $[-0.015,0.262]$). Gold subtype and lineage compositions
+reach macro-F1 0.516 and 0.301, respectively. The apparently stronger predicted
+than gold point estimate is not statistically resolved and warns that predicted
+probabilities may encode model-confidence or technical structure beyond true
+cell abundance.
+
+Across 10{,}000 complete patient-label permutations, predicted subtype and
+lineage composition have plus-one $p=0.00010$ and $p=0.00020$. However, log cell
+count alone reaches macro-F1 0.531 ($p=0.00010$), and the predicted-subtype minus
+cell-count difference is $+0.062$ (95\% CI $[-0.087,0.218]$). Equal-cell
+subsampling at 100, 500, and 2{,}000 cells per patient preserves the qualitative
+result over 50 seeds. A 50-repeat global-multinomial composition control averages
+macro-F1 0.170, and fold-ID prediction from global OOF composition is below
+chance. These controls support a predictive and associational bridge, not causal
+mediation or independent biological validation.
 
 \paragraph{Patient-label permutation control.}
 We evaluated the same patient-level median-profile classifier under 1,000 label permutations. Disease labels were permuted across the 40 patients as indivisible units, preserving the disease-group counts $(6,8,7,7,6,6)$; labels were never shuffled across cells. We retained the original five patient folds rather than restratifying after permutation. No permuted dataset reached the observed accuracy of $0.950$ or macro-F1 of $0.948$, giving plus-one permutation $p=(0+1)/(1000+1)=0.000999$ for both statistics. The null accuracy mean was $0.137$, with empirical 95\% interval $[0.025,0.275]$. This rejects a random patient-label explanation under the fixed protocol, but does not distinguish biological signal from patient-associated technical structure.

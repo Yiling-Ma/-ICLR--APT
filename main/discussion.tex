@@ -5,9 +5,10 @@ APT-Bench is primarily an evaluation contribution rather than a claim of model
 superiority. Across matched neural and classical models, broad lineage is more
 reliably recovered than transcriptome-derived subtype, and no
 \ourmethod{}-specific advantage is statistically supported. The resulting
-granularity gap and the degradation from gold to OOF-predicted subtype
-composition show that additional model complexity alone does not resolve fine
-cell typing or prevent its errors from propagating to patient-level summaries.
+granularity gap and the uncertain subtype-versus-lineage gain in the strict
+nested composition bridge show that additional model complexity alone does not
+resolve fine cell typing or establish that finer predictions improve
+patient-level characterization.
 
 The benchmark also separates the evaluation unit from the training-scaling
 axis. Although it contains 361{,}792 cells, performance on unseen subjects must
@@ -23,7 +24,10 @@ generalization together with both patient and training-cell budgets rather than
 using raw cell count as effective sample size or treating cell depth as
 irrelevant.
 
-The disease analyses delimit what can be concluded from this cohort. Strong
+The disease analyses delimit what can be concluded from this cohort. A
+disease-label-free subtype predictor preserves disease-associated variation after
+patient aggregation, but its gain over lineage composition or cell count alone
+is not statistically resolved. Strong
 centering sensitivity indicates that patient-specific absolute-expression
 structure contributes substantially to within-cohort discrimination, while the
 compact-panel results establish measurement efficiency and redundancy rather

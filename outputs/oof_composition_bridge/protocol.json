@@ -1,0 +1,27 @@
+{
+  "base_model": "XGBoost fine-subtype classifier",
+  "base_model_uses_disease_labels": false,
+  "inner_folds": "the four immutable folds remaining after removing the outer-test fold",
+  "lineage_probabilities": "sum fixed subtype probabilities by frozen subtype-to-lineage mapping",
+  "outer_contexts": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "outer_folds": "cell_JEPA/outputs/classical_baselines_kfold5/fold_assignment.json",
+  "preprocessing": "feature z-score fit on base-model training patients only",
+  "protocol_hash": "129c94d3690d9d81",
+  "random_state": 42,
+  "version": "oof-composition-bridge-base-v1",
+  "xgboost": {
+    "colsample_bytree": 0.8,
+    "eval_metric": "mlogloss",
+    "learning_rate": 0.1,
+    "max_depth": 6,
+    "n_estimators": 400,
+    "subsample": 0.8,
+    "tree_method": "hist"
+  }
+}
