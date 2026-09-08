@@ -18,7 +18,7 @@
 \usepackage{makecell}
 
 
-\title{APT-Bench: Patient-Disjoint Evaluation \mbox{Reveals} Granularity and Measurement Gaps in Single-Cell Aptamer Profiling}
+\title{APT-Bench: Patient-Disjoint Evaluation of Granularity and Two-Axis Scaling in Single-Cell Aptamer Profiling}
 % Global paper constants
 
 \definecolor{Brown}{HTML}{6B3A32}
@@ -72,7 +72,29 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell assays produce hundreds of thousands of cells, but patient-independent evaluation is determined by biological subjects. We introduce APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles from 40 patients across six disease groups. It separates five-lineage and 27-subtype cell annotation from patient-level disease recognition and measurement-efficiency analysis. Across neural and classical models, coarse lineage recognition is consistently easier than fine subtype prediction. A controlled training-scaling surface independently varies 8--32 development patients and 100--all cells per patient; increasing cell depth yields mean macro-F1 gains equal to or larger than increasing patient count for Logistic Regression and XGBoost at both resolutions. A strict nested bridge then aggregates disease-label-free XGBoost subtype probabilities into patient composition profiles. Predicted subtype composition retains disease-discriminative information (macro-F1 0.593; 10{,}000-permutation $p<10^{-3}$), but its gains over lineage composition and a cell-count-only control have patient-bootstrap intervals spanning zero. Stronger direct APT discrimination is accompanied by patient-specific absolute-expression signatures that cannot be separated into biological and technical components with the available metadata. Under outer-test-isolated development selection, every fold chooses $B^*=10$; the resulting panels match the observed within-cohort performance of the full 293-aptamer panel. APT-Bench provides a statistically explicit setting for multiresolution and measurement-aware single-cell learning while limiting its conclusions to this cohort pending external validation.
+Single-cell assays produce hundreds of thousands of cells, but evaluation on new
+subjects is determined by the number of independent patients. We introduce
+APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer
+profiles from 40 patients across six disease groups. It separates five-lineage
+and 27-subtype cell annotation from patient-level characterization and makes
+both patient diversity and within-patient cell depth explicit training axes.
+Cell-level splitting inflates performance, and across neural and classical
+models coarse lineage recognition remains substantially easier than fine
+subtype prediction. At each of three fixed total-cell budgets, reallocating
+training cells from 8 to 32 patients improves macro-F1 for both Logistic
+Regression and XGBoost at both resolutions; matched doublings and a descriptive
+response surface likewise favor broader patient coverage over the evaluated
+range. A strict nested bridge aggregates disease-label-free XGBoost subtype probabilities
+without exposing either stage to outer-test patients. Predicted subtype
+composition retains disease-associated variation (patient macro-F1 0.593), but
+its gains over lineage composition and a cell-count-only control have
+patient-bootstrap intervals spanning zero. Stronger direct APT discrimination
+is sensitive to patient-specific absolute-expression signatures whose
+biological and technical origins cannot be separated with the available
+metadata. APT-Bench therefore provides a statistically explicit setting for
+studying observational unit, annotation granularity, training scale, and
+cross-task error propagation, while limiting clinical conclusions to this
+cohort pending external validation.
 \end{abstract}
 
 
@@ -82,7 +104,7 @@ Single-cell assays produce hundreds of thousands of cells, but patient-independe
 
 \input{main/task}
 
-\input{main/method}
+\input{main/method_summary}
 
 \input{main/results}
 
@@ -138,6 +160,10 @@ Single-cell assays produce hundreds of thousands of cells, but patient-independe
 
 \appendix
 \section{Appendix}
+
+\input{main/method}
+
+\section{Dataset and Evaluation Details}
 
 \subsection{Dataset Construction and Documentation Checklist}
 \label{sec:appendix:dataset_documentation}
@@ -241,6 +267,8 @@ If participant-level data require controlled access, release the complete schema
 all labels permitted by consent, the split manifest, evaluator, and access
 procedure.}
 
+\input{tables/benchmark_comparison}
+
 \subsection{Disease Classification: Cell-Level Source Prediction and Patient-Level Sensitivity Analyses}
 \label{sec:appendix:disease_patient_level}
 
@@ -284,6 +312,8 @@ macro-F1 0.170, and fold-ID prediction from global OOF composition is below
 chance. These controls support a predictive and associational bridge, not causal
 mediation or independent biological validation.
 
+\input{outputs/oof_composition_bridge/legacy_vs_nested_audit}
+
 \paragraph{Patient-label permutation control.}
 We evaluated the same patient-level median-profile classifier under 1,000 label permutations. Disease labels were permuted across the 40 patients as indivisible units, preserving the disease-group counts $(6,8,7,7,6,6)$; labels were never shuffled across cells. We retained the original five patient folds rather than restratifying after permutation. No permuted dataset reached the observed accuracy of $0.950$ or macro-F1 of $0.948$, giving plus-one permutation $p=(0+1)/(1000+1)=0.000999$ for both statistics. The null accuracy mean was $0.137$, with empirical 95\% interval $[0.025,0.275]$. This rejects a random patient-label explanation under the fixed protocol, but does not distinguish biological signal from patient-associated technical structure.
 
@@ -305,6 +335,8 @@ same ground-truth support values. Spearman correlations are marginal, and 16 of
 27 subtypes occur in all 40 patients.}
 \label{fig:subtype_support}
 \end{figure}
+
+\input{tables/subtype_diagnostics}
 
 Table~\ref{tab:subtype_per_class} gives all subtype-level quantities and 95\%
 percentile intervals from 2{,}000 patient-clustered bootstrap resamples. Counts
@@ -354,10 +386,40 @@ remains explicitly cell-weighted.
 
 \input{tables/patient_balanced_cell_sensitivity}
 
-\subsection{Training Patient--Cell Scaling Surface}
+\subsection{Fair Fixed-Total and Matched-Scale Analysis}
+\label{sec:appendix:fair_scaling}
+
+The primary scaling design uses $P\in\{8,16,32\}$ and
+$C\in\{100,200,400,800,1600\}$, with 20 nested subset seeds for every outer
+fold. Because every retained patient has at least 1{,}929 cells, all finite caps
+are feasible without replacement. Disease-stratified patient orderings are
+nested across $P$, uniform cell permutations are nested across $C$, no subtype
+label enters sampling, and preprocessing is refit on each sampled training set.
+The fixed-total diagonals satisfy $PC\in\{3200,6400,12800\}$ exactly.
+
+\input{tables/fixed_total_scaling}
+
+Table~\ref{tab:fixed_total_scaling} reports variability across subset seeds.
+Separately, paired patient-clustered bootstraps over the same 40 pooled OOF
+patients compare $P=8$ with $P=32$ after averaging seed-level sufficient
+statistics. All 12 intervals exclude zero; their lower endpoints range from
+0.0002 to 0.0084 and upper endpoints from 0.0090 to 0.0314. These intervals
+quantify uncertainty over patients, whereas the empirical seed intervals
+quantify sensitivity to which development patients and cells are sampled.
+
+Matched doubling effects average patient versus cell gains of
+0.011/0.005 (LR coarse), 0.007/0.003 (LR fine), 0.016/0.008 (XGBoost coarse),
+and 0.009/0.006 (XGBoost fine). In the descriptive fold-fixed-effect response
+surface, the corresponding per-doubling $\beta_P/\beta_C$ coefficients are
+0.017/0.008, 0.008/0.004, 0.016/0.007, and 0.009/0.006. Complete pairwise
+effects, patient intervals, seed intervals, and response-surface uncertainty
+are stored in the machine-readable scaling artifacts. The coefficients are
+associations over this grid, not causal or universal scaling laws.
+
+\subsection{Secondary Descriptive Patient--Cell Scaling Surface}
 \label{sec:appendix:patient_cell_scaling}
 
-The primary split fixes eight outer-test patients and varies only the training
+This historical $4\times4$ surface fixes eight outer-test patients and varies only the training
 set. For each outer fold and each of 20 seeds, we generate one approximately
 proportional disease-stratified ordering of the 32 development patients, giving
 nested sets $S_8\subset S_{16}\subset S_{24}\subset S_{32}$. Each selected
@@ -368,7 +430,10 @@ its subtype, and every model is evaluated on all cells from the untouched test
 patients. The full-data endpoint is fitted once per fold rather than duplicated
 across seeds. All 6{,}020 model--task jobs completed, and the deterministic
 endpoint exactly reproduces the frozen pooled OOF baselines within absolute
-tolerance $5\times10^{-4}$.
+tolerance $5\times10^{-4}$. Because $P{=}8\rightarrow32$ is a fourfold change
+whereas $C{=}100\rightarrow\mathrm{all}$ is a larger and patient-dependent
+change, this surface is descriptive only. All direct comparisons between the
+two axes use the fixed-total and matched-doubling analysis in the main paper.
 
 \begin{figure}[H]
 \centering
@@ -392,10 +457,10 @@ smoothed.}
 
 \input{tables/patient_cell_scaling_full}
 
-The patient-balanced confusion-matrix sensitivity yields the same qualitative
-ordering of endpoint effects. The surface is cohort- and range-specific: it
-does not establish a universal cell-dominant scaling law, and it cannot estimate
-the benefit of patients drawn from new sites or acquisition batches.
+The surface is cohort- and range-specific. We do not compare its unequal
+endpoints or use it to establish a patient- or cell-dominant scaling law, and it
+cannot estimate the benefit of patients drawn from new sites or acquisition
+batches.
 
 \subsection{Patient-Level Lineage-Resolved Attribution Audit}
 \label{sec:appendix:apt_markers}
@@ -430,7 +495,12 @@ Independent coarse and fine classifiers can disagree about the hierarchy even wh
 \subsection{Minimal Aptamer Panel for Disease Classification}
 \label{sec:appendix:minimal_panel}
 
-Because a smaller aptamer panel would be cheaper and simpler to deploy clinically, we asked how many of the 293 aptamers are needed to preserve the observed within-cohort disease result. Patient-Stable Aptamer Selection (PSAS) denotes the fold-specific ranking and development-only budget-selection protocol below; ``stable'' refers to comparison of ranks across outer folds, not to patient-balanced fitting of the LR ranker.
+To characterize assay measurement sensitivity, we asked how many of the 293
+aptamers preserve the observed within-cohort disease result. This is not a
+clinical deployment or biomarker analysis. Patient-Stable Aptamer Selection
+(PSAS) denotes the fold-specific ranking and development-only budget-selection
+protocol below; ``stable'' refers to comparison of ranks across outer folds,
+not to patient-balanced fitting of the LR ranker.
 
 \noindent\fbox{\begin{minipage}{0.96\linewidth}
 \small
@@ -470,6 +540,20 @@ TreeSHAP ranking, and refits both classifiers on SHAP-selected Top-10/20
 features; it does not determine $B^*$ or the main curve.
 
 All five outer folds select $B^*=10$ under this rule.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
+\caption{
+Patient-level disease macro-F1 under compact aptamer-budget controls. Solid
+lines show pooled out-of-fold performance obtained using fold-specific Top-$B$
+panels; dotted lines and ribbons show the mean and empirical 95\% interval over
+100 random-panel repeats. Each repeat shares one panel across outer folds, with
+models refit foldwise. The dashed line is the full 293-aptamer reference; scores
+pool the 40 outer-test patients once each.
+}
+\label{fig:panel_curve_main}
+\end{figure}
 
 \par\vspace{4pt}
 \noindent\textbf{Budget terminology.}

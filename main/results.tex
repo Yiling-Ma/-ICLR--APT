@@ -1,140 +1,147 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Disease Recognition Is Strong Within Cohort, but Requires Caveats}
+\subsection{Patient-Disjoint Hierarchy Prediction Exposes a Granularity Gap}
 
-Under the fixed patient-level folds, five classical cell-level baselines all yield the same majority-vote result: $40/40$ patients are correctly assigned (95\% CI $[0.912,1.000]$; Table~\ref{tab:disease}). A genuinely patient-level median-APT model reaches accuracy 0.950 and macro-AUROC 1.000; none of 1,000 patient-label permutations matches its accuracy (plus-one $p=0.000999$; Appendix~\ref{sec:appendix:disease_patient_level}).
+Coarse lineage recognition is consistently easier than fine subtype recognition
+(Table~\ref{tab:main}). For \ourmethod{}, coarse macro-F1 is 0.326 while fine
+macro-F1 is 0.152; the matched flat FT-style Transformer reaches 0.323 and
+0.147. The corresponding gap appears across model families, indicating that
+APT profiles recover broad immune identity more reliably than the finer
+transcriptome-derived taxonomy.
 
-\input{tables/disease}
-
-Composition directly connects cell typing to patient characterization. Under
-strict nested cross-fitting, disease-label-free XGBoost soft subtype composition
-reaches patient accuracy/macro-F1/AUROC $0.600/0.593/0.854$, compared with
-$0.475/0.477/0.766$ for soft lineage composition. Both exceed their complete
-10{,}000-permutation nulls ($p=0.00010$ and $p=0.00020$, respectively), showing
-that patient-disjoint cell predictions retain disease-associated variation after
-aggregation. Fine granularity is not established as superior: the paired
-subtype-minus-lineage macro-F1 difference is $+0.116$ with patient-bootstrap
-95\% CI $[-0.015,0.262]$. True subtype composition reaches macro-F1 0.516, so
-the predicted representation is not merely a noisier estimate of annotated
-abundance; it may also carry model-confidence or technical structure.
-
-That qualification is material. Log cell count alone reaches macro-F1 0.531
-($p=0.00010$), and predicted subtype composition exceeds it by only $+0.062$
-(95\% CI $[-0.087,0.218]$). Equal-cell sensitivity remains stable: over 50
-within-patient subsamples, subtype-composition macro-F1 averages 0.574, 0.574,
-and 0.581 at 100, 500, and 2{,}000 cells, respectively. A global multinomial
-composition control averages 0.170, close to six-class chance, while fold ID is
-not predictable from global OOF subtype composition (accuracy 0.075; chance
-0.20). We therefore support an interpretable predictive bridge, but not a claim
-that subtype composition adds disease information beyond technical sampling
-structure or that the associations are biological mechanisms.
-
-These results do not justify a claim of solved clinical diagnosis. Sensitivity analyses in Appendix~\ref{sec:appendix:disease_patient_level} show that the disease signal depends strongly on patient-specific absolute-expression structure: patient-wise centering reduces patient-level accuracy from 1.000 to 0.650, and a 40-way patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because acquisition-batch metadata are unavailable, the observed offsets cannot be cleanly decomposed into biological versus technical sources. We therefore use disease recognition primarily to motivate the need for careful statistical-unit accounting in APT-Bench, not as the main architectural success story.
-
-\subsection{Patient-Disjoint Cell-Level Hierarchy Prediction Remains Difficult}
-
-The harder unresolved problem is cell-level hierarchy prediction under patient-disjoint evaluation. Table~\ref{tab:main} shows that coarse lineage recognition is consistently easier than fine subtype recognition. For \ourmethod{}, coarse macro-F1 reaches 0.326 while fine macro-F1 is only 0.152; for the matched flat FT-style Transformer, the corresponding values are 0.323 and 0.147. This granularity gap appears across model families and indicates that APT captures broad immune identity more reliably than fine subtype structure.
-
-The matched comparison changes the architectural conclusion. Relative to the flat Transformer, \ourmethod{} differs by only $+0.0036$ coarse macro-F1 (paired patient-bootstrap 95\% CI $[-0.0078,0.0146]$) and $+0.0055$ fine macro-F1 (95\% CI $[-0.0021,0.0125]$). HCE has the highest coarse point estimate (0.333), but its difference from \ourmethod{} is also unsupported: \ourmethod{}$-$HCE is $-0.0069$ (95\% CI $[-0.0154,0.0026]$) at the coarse level and $+0.0015$ (95\% CI $[-0.0083,0.0047]$) at the fine level. Differences from XGBoost likewise do not exclude zero. Thus the experiment does not isolate a performance gain from the cascade: the defensible result is the persistent coarse-to-fine difficulty under patient-disjoint evaluation, not superiority of a routing mechanism.
-
-Exact-path accuracy is only 0.248--0.259; HCE has the highest value, whereas
-XGBoost has the highest root-excluded hierarchical F1 (0.420) and lowest tree
-distance (2.375).
-Natural consistency remains in Appendix~\ref{sec:appendix:consistency} because
-constrained decoding can alter it without improving predictive quality.
+Encoder-matched comparisons do not establish an architectural advantage.
+Relative to the flat Transformer, \ourmethod{} differs by only $+0.0036$ coarse
+macro-F1 (paired patient-bootstrap 95\% CI $[-0.0078,0.0146]$) and $+0.0055$
+fine macro-F1 (95\% CI $[-0.0021,0.0125]$). HCE has the highest coarse point
+estimate (0.333), but \ourmethod{}$-$HCE is $-0.0069$
+(95\% CI $[-0.0154,0.0026]$) at the coarse level and $+0.0015$
+(95\% CI $[-0.0083,0.0047]$) at the fine level. Differences from XGBoost also
+do not exclude zero. Exact-path accuracy is 0.248--0.259; HCE has the highest
+value, whereas XGBoost has the highest root-excluded hierarchical F1 (0.420)
+and lowest subtype-tree distance (2.375). Natural consistency is reported only
+as an appendix diagnostic because constrained decoding can alter it without
+improving correctness.
 
 \input{tables/main_result}
 
 \subsection{Why 361{,}792 Cells Still Yield Only 0.15 Subtype Macro-F1}
 \label{sec:results:subtype_audit}
 
-\paragraph{Subtype support associations are exploratory.}
-For subtype $k$, marginal $\operatorname{Spearman}(F_{1,k},\log n_k)$ versus
+Per-subtype F1 is more strongly associated with cell abundance than with
+patient coverage in this cohort. Marginal
+$\operatorname{Spearman}(F_{1,k},\log n_k)$ versus
 $\operatorname{Spearman}(F_{1,k},P_k)$ is 0.486/0.288 for \ourmethod{} and
-0.540/0.275 for XGBoost. After rank residualization, $\rho_{c\mid p}$ is
-0.411/0.496 and $\rho_{p\mid c}$ is $-0.051/-0.130$. With only 27 subtypes and
-16 at the 40-patient coverage ceiling, these are exploratory associations: they
-establish neither causality nor a significant difference. Appendix~\ref{sec:appendix:subtype_audit}
-provides plots and patient-clustered F1 intervals for every subtype.
+0.540/0.275 for XGBoost. After rank residualization,
+$\rho_{c\mid p}$ is 0.411/0.496 and $\rho_{p\mid c}$ is $-0.051/-0.130$.
+Because there are only 27 subtypes and 16 lie at the 40-patient coverage
+ceiling, these are exploratory associations rather than causal explanations.
 
-\paragraph{Raw error structure is dominated by cross-lineage predictions.}
 Only 25.0\% of \ourmethod{} errors and 24.6\% of XGBoost errors retain the true
-parent; across models, 70.5--80.9\% cross lineage (Table~\ref{tab:subtype_diagnostics}).
-Because this rate depends on class marginals, it is descriptive rather than
-evidence of hierarchy awareness; Appendix~\ref{sec:appendix:subtype_audit}
-compares it with an error-conditioned marginal null and reports an
-unconditional permutation only as a sensitivity analysis.
+parent. The raw cross-lineage rate depends on the available wrong-class
+distribution: against an error-conditioned marginal null, the observed rates
+are close to expectation and do not independently demonstrate either hierarchy
+preservation or failure. Appendix~\ref{sec:appendix:subtype_audit} reports
+per-subtype patient-clustered intervals, support plots, and the complete error
+analysis. Across models, the descriptive coarse-minus-fine macro-F1 gap ranges
+from 0.099 to 0.200.
 
-\paragraph{The granularity gap is a benchmark finding.}
-For each model, $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$ is positive and ranges from 0.099 to 0.200. We use $G$ only to expose persistent coarse-to-fine difficulty, not as a new metric contribution.
-
-\input{tables/subtype_diagnostics}
-
-\subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
+\subsection{Patient Disjointness Changes the Evaluation, Not Just the Split}
 \label{sec:results:protocol}
 
 Cell-level splitting inflates coarse/fine macro-F1 by $+0.090/+0.108$ for
 \ourmethod{} and $+0.050/+0.069$ for XGBoost
 (Appendix~\ref{sec:appendix:protocol_sensitivity}). APT-Bench therefore fixes
-patient-disjoint evaluation rather than treating the split as a reporting detail.
+patient-disjoint evaluation rather than treating the split as a reporting
+detail. Because a patient-disjoint pooled cell metric can still overweight
+patients with more cells, an equal-cell sensitivity also samples 1{,}900 cells
+per patient over 50 seeds. It changes coarse macro-F1 by at most $+0.005$ and
+fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
 
-\subsection{Within-Patient Cell Depth Remains a Strong Scaling Axis}
+\subsection{Patient Diversity and Cell Depth Are Separate Scaling Axes}
 \label{sec:results:patient_cell_scaling}
 
-We next tested the stronger hypothesis that adding independent patients improves
-patient-disjoint cell typing more than adding correlated cells from the same
-patients. The 4-by-4 surface does not support this hypothesis
-(Table~\ref{tab:patient_cell_scaling_effects}). Averaged over the opposite axis,
-the $P{=}8\rightarrow32$ patient gains versus the
-$C{=}100\rightarrow\mathrm{all}$ cell gains are $+0.019$ versus $+0.022$ for
-Logistic Regression coarse prediction, $+0.019$ versus $+0.036$ for Logistic
-Regression fine prediction, $+0.030$ versus $+0.051$ for XGBoost coarse
-prediction, and $+0.021$ versus $+0.050$ for XGBoost fine prediction. All gains
-are positive, but the cell gain is equal to or larger in every prespecified
-model--resolution comparison. Empirical seed intervals for patient-minus-cell
-gain remain below zero in three comparisons; the Logistic Regression coarse
-interval includes zero.
+The fair scaling experiment holds the outer-test patients fixed and varies only
+the development set. It evaluates exact fixed-total-cell reallocations,
+matched doublings of either axis, and a fold-adjusted descriptive response
+surface for Logistic Regression and XGBoost at both resolutions. Every point
+uses 20 matched disease-stratified patient/cell subset seeds; preprocessing and
+model fitting are repeated on the sampled training set, while all cells from
+the eight untouched patients in each outer fold are evaluated.
 
-\input{tables/patient_cell_scaling_effects}
-
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.96\columnwidth]{figures/patient_cell_scaling_effects.pdf}
-\caption{Mean endpoint gains across nested subset seeds. Patient gain compares
-$P{=}32$ with $P{=}8$ and averages over cell caps; cell gain compares all cells
-with 100 cells per patient and averages over patient budgets. Error bars are
-empirical 2.5th--97.5th seed intervals, not confidence intervals over new
-patients. Full surfaces appear in Appendix~\ref{sec:appendix:patient_cell_scaling}.}
-\label{fig:patient_cell_scaling_effects}
+\includegraphics[width=0.94\columnwidth]{figures/fixed_total_scaling.pdf}
+\caption{Fixed-total training-cell scaling. Each curve holds total sampled
+training cells $T$ constant while reallocating them across $P$ independent
+patients, so cells per patient equal $T/P$. Points are pooled patient-disjoint
+OOF macro-F1 means over 20 matched subset seeds; bars are empirical 95\% seed
+intervals, not confidence intervals over patients. Models evaluate all cells
+from the same untouched outer-test patients. Patient-clustered intervals and
+patient-balanced sensitivities are reported in
+Appendix~\ref{sec:appendix:fair_scaling}.}
+\label{fig:fixed_total_scaling}
 \end{figure}
 
-This result does not make patient identity an exchangeable substitute for cell
-count. Patients remain the unit required to estimate deployment to unseen
-subjects, whereas cells are correlated training observations within those
-units. It instead shows that, within this 40-patient cohort and the evaluated
-budget range, reducing cell depth can discard substantial information needed to
-learn APT-to-cell-type boundaries. The benchmark implication is therefore to
-report both axes rather than infer sample efficiency from either the raw cell
-count or patient count alone.
+At each fixed total of 3{,}200, 6{,}400, or 12{,}800 training cells,
+reallocating cells from 8 to 32 patients improves pooled OOF macro-F1 in all 12
+model--resolution--budget combinations (Figure~\ref{fig:fixed_total_scaling}).
+The gains are 0.012--0.016 for LR coarse, 0.006--0.008 for LR fine,
+0.015--0.019 for XGBoost coarse, and 0.006--0.008 for XGBoost fine. All 12
+paired patient-bootstrap intervals are above zero; empirical subset-seed
+intervals are above zero in 8 of 12 comparisons, reflecting a separate source
+of variation. Mean within-patient macro-F1 gives the same direction except that
+XGBoost fine effects remain seed-uncertain.
 
-\subsection{Disease Signal Is Measurement-Efficient but Predictively Distributed}
-\label{sec:results:measurement}
+Matched doublings lead to the same descriptive ordering. Averaged across
+eligible fixed settings, patient-versus-cell doubling gains are 0.011 versus
+0.005 (LR coarse), 0.007 versus 0.003 (LR fine), 0.016 versus 0.008 (XGBoost
+coarse), and 0.009 versus 0.006 (XGBoost fine). Fold-adjusted response-surface
+coefficients are likewise larger for $\log_2 P$ than $\log_2 C$ in all four
+comparisons, although interactions show that neither effect is constant across
+the grid. Thus, within this cohort and budget range, deeper sampling from fewer
+patients does not compensate for broader patient coverage. This is an
+observational scaling result, not a universal or causal law.
 
-The compact-panel analysis in Appendix~\ref{sec:appendix:minimal_panel} provides a final perspective on what the APT modality supports. Under outer-test-isolated, development-only budget selection, all five folds choose $B^*=10$, and the resulting 10-aptamer panels reproduce the full-panel patient macro-F1 of 1.0 for both Logistic Regression and XGBoost on every outer test fold. An LR inference-time sensitivity obtains the same macro-F1 across 50 subsamples at 100 held-out cells per patient; model training still uses all outer-development cells. Across 100 Random-$B$ panel repeats, performance also rises quickly with $B$; moreover, LR-coefficient and XGBoost-SHAP Top-10 panels overlap only moderately but both retain perfect patient-level performance. The result therefore supports reduced aptamer measurement and inference aggregation budgets, not training with 100 cells or a unique minimal biomarker set.
+\subsection{Nested Composition Preserves Disease-Associated Variation}
+\label{sec:results:composition_bridge}
 
-\begin{figure}[tb]
-\centering
-\includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
-\caption{
-Patient-level disease macro-F1 under compact aptamer-budget controls. Solid
-lines show pooled out-of-fold performance obtained using fold-specific Top-$B$
-panels; dotted lines and ribbons show the mean
-and empirical 95\% interval over 100 random-panel repeats. Each repeat shares
-one panel across outer folds, with models refit foldwise. The dashed line is the
-full 293-aptamer reference; scores pool the 40 outer-test patients once each.
-}
-\label{fig:panel_curve_main}
-\end{figure}
+Composition connects cell typing to patient characterization, but a pooled OOF
+pipeline is insufficient: a cell model generating a downstream training
+patient's features can have seen the current disease outer-test patients. We
+therefore seal each eight-patient outer fold, construct the 32 development
+compositions by four-way inner patient-disjoint cross-fitting, and use one cell
+model fitted on all 32 development patients only for the sealed test patients.
 
-Compact-panel recovery does not resolve whether the disease signal is biological, technical, or mixed. It instead shows a central asymmetry: within-cohort disease recognition is statistically and operationally easier than patient-disjoint cell-level hierarchy prediction.
+Under this strict protocol, disease-label-free XGBoost soft subtype composition
+reaches patient accuracy/macro-F1/AUROC $0.600/0.593/0.854$, compared with
+$0.475/0.477/0.766$ for soft lineage composition. Both exceed their complete
+10{,}000-permutation nulls ($p=0.00010$ and $p=0.00020$). Fine granularity is
+not established as superior: the paired subtype-minus-lineage macro-F1
+difference is $+0.116$ with patient-bootstrap 95\% CI $[-0.015,0.262]$. True
+subtype composition reaches macro-F1 0.516, so the predicted representation is
+not merely a noisier estimate of annotated abundance; it may also retain model
+confidence or technical structure.
+
+Log cell count alone reaches macro-F1 0.531 ($p=0.00010$), and predicted
+subtype composition exceeds it by only $+0.062$ (95\% CI
+$[-0.087,0.218]$). Equal-cell sensitivity, a global-multinomial composition
+null, and a fold-ID prediction control do not reveal a cell-count or fold
+signature sufficient to explain the complete bridge, but they also do not
+establish biological mediation. The defensible finding is that imperfect
+patient-disjoint cell predictions preserve patient-level disease-associated
+variation; incremental value over coarse or technical summaries remains
+unresolved.
+
+\input{tables/disease}
+
+Direct APT discrimination is strong within this cohort but confounding-sensitive.
+Five cell-level baselines yield the same $40/40$ patient majority-vote result,
+and a patient-level median-APT model reaches accuracy 0.950. Patient-wise
+centering reduces majority-vote accuracy from 1.000 to 0.650, while a 40-way
+patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because
+acquisition-batch metadata and an external APT cohort are unavailable, these
+offsets cannot be separated into biological and technical sources. We therefore
+do not interpret this task as clinical validation. Compact-panel and
+inference-cell sensitivities are secondary analyses in
+Appendix~\ref{sec:appendix:minimal_panel}.

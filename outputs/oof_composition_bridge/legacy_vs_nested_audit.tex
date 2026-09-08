@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Representation & Legacy pooled OOF & Strict nested \\
+\midrule
+Gold subtype composition & 0.572 & 0.516 \\
+Predicted subtype composition & 0.400 & 0.593 \\
+Gold lineage composition & 0.377 & 0.301 \\
+Predicted lineage composition & 0.282 & 0.477 \\
+\bottomrule
+\end{tabular}
+\caption{Protocol audit of patient macro-F1. The legacy predicted rows use hard labels from one global pooled-OOF prediction set, CLR features, and fixed LR regularization; the strict rows use nested soft probabilities, raw proportions, and development-only LR selection. Because both feature construction and downstream fitting changed, the numerical differences are not estimates of a leakage effect. Only strict nested results support current claims.}
+\label{tab:composition_protocol_audit}
+\end{table}

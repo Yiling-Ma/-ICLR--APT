@@ -29,13 +29,14 @@ if str(PROJECT_ROOT) not in sys.path:
 if str(CELL_JEPA_ROOT) not in sys.path:
     sys.path.insert(0, str(CELL_JEPA_ROOT))
 
-from apt_jepa.data.preprocessing import apply_standardizer, fit_standardizer  # noqa: E402
 from analysis.patient_cell_scaling import (  # noqa: E402
     BASELINE_CONFIG_PATH,
     FOLD_PATH,
     MAPPING_PATH,
     TASKS,
+    apply_standardizer,
     fit_label_encoders,
+    fit_standardizer,
     load_data,
     load_folds,
     patient_table,

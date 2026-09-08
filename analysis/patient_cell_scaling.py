@@ -28,22 +28,19 @@ from typing import Any, Iterable
 
 import numpy as np
 import pandas as pd
+import yaml
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 from sklearn.preprocessing import LabelEncoder
+from xgboost import XGBClassifier
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CELL_JEPA_ROOT = PROJECT_ROOT / "cell_JEPA"
-if str(CELL_JEPA_ROOT) not in sys.path:
-    sys.path.insert(0, str(CELL_JEPA_ROOT))
-
-from apt_jepa.data.dataset import load_merged_dataframe  # noqa: E402
-from apt_jepa.data.preprocessing import apply_standardizer, fit_standardizer  # noqa: E402
-from apt_jepa.scripts.train_classical_baselines import build_models  # noqa: E402
 
 
-PATIENT_BUDGETS = (8, 16, 24, 32)
-CELL_CAPS = (100, 500, 2000, "all")
+PATIENT_BUDGETS = (8, 16, 32)
+CELL_CAPS = (100, 200, 400, 800, 1600)
 RESAMPLING_SEEDS = tuple(range(20))
 MODEL_NAMES = ("logistic_regression", "xgboost")
 TASKS = {"coarse": "coarse_subtype", "fine": "cell_subtype"}
@@ -51,7 +48,7 @@ MODEL_RANDOM_STATE = 42
 N_OUTER_FOLDS = 5
 REPRODUCTION_TOLERANCE = 5e-4
 PATIENT_BOOTSTRAP_REPLICATES = 2000
-PROTOCOL_VERSION = "patient-cell-scaling-v2"
+PROTOCOL_VERSION = "patient-cell-scaling-fair-v3"
 
 DATA_DIR = PROJECT_ROOT / "data"
 METADATA_PATH = DATA_DIR / "metadata.csv"
@@ -61,7 +58,7 @@ BASELINE_CONFIG_PATH = CELL_JEPA_ROOT / "apt_jepa/configs/classical_baselines.ya
 BASELINE_OUTPUT = CELL_JEPA_ROOT / "outputs/classical_baselines_kfold5"
 FOLD_PATH = BASELINE_OUTPUT / "fold_assignment.json"
 BASELINE_SUMMARY_PATH = BASELINE_OUTPUT / "pooled_summary.csv"
-DEFAULT_OUTPUT = PROJECT_ROOT / "outputs/patient_cell_scaling"
+DEFAULT_OUTPUT = PROJECT_ROOT / "outputs/patient_cell_scaling_fair"
 
 
 def utc_now() -> str:
@@ -79,7 +76,11 @@ def protocol_payload() -> dict[str, Any]:
         "patient_budgets": list(PATIENT_BUDGETS),
         "cell_caps": list(CELL_CAPS),
         "resampling_seeds": list(RESAMPLING_SEEDS),
-        "deterministic_configuration": {"P": 32, "C": "all", "seeds": [0]},
+        "fixed_total_budgets": [3200, 6400, 12800],
+        "matched_doublings": {
+            "patient": "P doubles while C is fixed",
+            "cell": "C doubles while P is fixed",
+        },
         "models": list(MODEL_NAMES),
         "tasks": TASKS,
         "model_random_state": MODEL_RANDOM_STATE,
@@ -111,16 +112,66 @@ def atomic_npz(path: Path, **arrays: Any) -> None:
     os.replace(tmp, path)
 
 
+def fit_standardizer(x_train: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    mean = x_train.mean(axis=0).astype(np.float32)
+    std = x_train.std(axis=0).astype(np.float32)
+    std = np.where(std < 1e-6, 1.0, std).astype(np.float32)
+    return mean, std
+
+
+def apply_standardizer(x: np.ndarray, mean: np.ndarray, std: np.ndarray) -> np.ndarray:
+    return ((x - mean) / std).astype(np.float32)
+
+
+def build_model(model_name: str) -> object:
+    if model_name == "logistic_regression":
+        return LogisticRegression(
+            max_iter=500,
+            solver="lbfgs",
+            class_weight="balanced",
+        )
+    if model_name == "xgboost":
+        return XGBClassifier(
+            n_estimators=400,
+            max_depth=6,
+            learning_rate=0.1,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            tree_method="hist",
+            n_jobs=4,
+            random_state=MODEL_RANDOM_STATE,
+            eval_metric="mlogloss",
+        )
+    raise ValueError(f"Unsupported model: {model_name}")
+
+
 def load_data() -> tuple[pd.DataFrame, np.ndarray, list[str]]:
-    merged, x, feature_names = load_merged_dataframe(
-        data_dir=str(DATA_DIR),
-        metadata_path=str(METADATA_PATH),
-        annotation_path=str(ANNOTATION_PATH),
-        subtype_col_in_annotation="Celltypes_new",
-        drop_missing_subtype=True,
-        drop_unknown=True,
-        coarse_mapping_config=str(MAPPING_PATH),
+    metadata = pd.read_csv(METADATA_PATH)
+    annotation = pd.read_csv(ANNOTATION_PATH).rename(columns={"Sample": "cell_id"})
+    annotation = annotation[["cell_id", "Celltypes_new"]].rename(
+        columns={"Celltypes_new": "cell_subtype"}
     )
+    merged = metadata.merge(annotation, on="cell_id", how="left")
+    merged = merged[merged["cell_subtype"].notna()].copy()
+    merged = merged[~merged["cell_subtype"].astype(str).str.strip().str.lower().eq("unknown")]
+    expression_path = DATA_DIR / "apt_expression.parquet"
+    if expression_path.exists():
+        expression = pd.read_parquet(expression_path)
+    else:
+        expression = pd.read_csv(DATA_DIR / "apt_expression.csv")
+    feature_names = sorted(
+        [column for column in expression.columns if column.upper().startswith("APT-")],
+        key=lambda value: int(value.split("-")[1]),
+    )
+    if len(feature_names) != 293:
+        raise RuntimeError(f"Expected 293 APT features, found {len(feature_names)}")
+    merged = merged.merge(expression[["cell_id", *feature_names]], on="cell_id", how="inner")
+    x = merged[feature_names].to_numpy(np.float32)
+    mapping_payload = yaml.safe_load(MAPPING_PATH.read_text(encoding="utf-8"))
+    mapping = mapping_payload["explicit_mapping"]
+    default = mapping_payload.get("default_coarse_label", "Other")
+    merged["coarse_subtype"] = merged["cell_subtype"].map(mapping).fillna(default)
+    merged = merged[["cell_id", "sample_id", "disease", "cell_subtype", "coarse_subtype"]]
     merged = merged.reset_index(drop=True)
     if len(merged) != len(x):
         raise RuntimeError("Metadata and feature matrix row counts differ.")
@@ -306,7 +357,7 @@ def expected_bundles(models: Iterable[str] = MODEL_NAMES) -> list[dict[str, Any]
     for fold in range(N_OUTER_FOLDS):
         for patient_budget in PATIENT_BUDGETS:
             for cell_cap in CELL_CAPS:
-                seeds = (0,) if (patient_budget == 32 and cell_cap == "all") else RESAMPLING_SEEDS
+                seeds = RESAMPLING_SEEDS
                 for seed in seeds:
                     for model in models:
                         rows.append(
@@ -379,7 +430,7 @@ def fit_one_model(
     y_train_local = np.fromiter(
         (local_lookup[value] for value in y_train_global), dtype=np.int64, count=len(y_train_global)
     )
-    model = build_models(seed=MODEL_RANDOM_STATE, n_jobs=4)[model_name]
+    model = build_model(model_name)
     start = time.perf_counter()
     model.fit(x_train, y_train_local)
     fit_seconds = time.perf_counter() - start
@@ -1082,6 +1133,9 @@ def aggregate(args: argparse.Namespace) -> None:
         balanced = patient_balanced_matrix(per_patient)
         metrics = confusion_metrics(pooled)
         balanced_metrics = confusion_metrics(balanced)
+        mean_patient_macro_f1 = float(
+            np.mean([f1_from_confusion(matrix) for matrix in per_patient])
+        )
         joint_items = pooled_joint[(seed, patient_budget, cell_cap, model)]
         joint = np.concatenate(joint_items, axis=0)
         exact_path = float(joint[:, 0].sum() / joint[:, 3].sum())
@@ -1105,6 +1159,7 @@ def aggregate(args: argparse.Namespace) -> None:
             "patient_balanced_accuracy": balanced_metrics["accuracy"],
             "patient_balanced_macro_f1": balanced_metrics["macro_f1"],
             "patient_balanced_balanced_accuracy": balanced_metrics["balanced_accuracy"],
+            "mean_patient_macro_f1": mean_patient_macro_f1,
             "exact_path_accuracy": exact_path,
             "root_excluded_hierarchical_f1": hierarchy_f1,
             "subtype_tree_distance": tree_distance,
@@ -1125,6 +1180,7 @@ def aggregate(args: argparse.Namespace) -> None:
         "accuracy",
         "balanced_accuracy",
         "patient_balanced_macro_f1",
+        "mean_patient_macro_f1",
         "exact_path_accuracy",
         "root_excluded_hierarchical_f1",
         "subtype_tree_distance",

@@ -22,11 +22,29 @@ and outer-test-isolated budget controls that can extend to future clinical singl
 
 To instantiate the hierarchy track, we use \ourmethod{}, a differentiable lineage-subtype cascade. The model combines a shared APT encoder, soft lineage routing, and subtype experts. We compare it with classical models and encoder-matched flat and HCE-trained Transformer controls. It serves as a hierarchy-aware neural reference rather than a claimed universal winner; the matched controls test whether any gain survives control of encoder capacity and training budget.
 
-This perspective leads to three empirical findings. First, coarse lineage recognition is substantially easier than fine subtype recognition across all models. A controlled training-scaling surface shows that both patient diversity and within-patient cell depth improve performance; contrary to our prespecified patient-dominant hypothesis, the cell-depth gain is at least as large in all four Logistic Regression/XGBoost and coarse/fine comparisons. This separates two claims that are often conflated: patient-disjoint splits are necessary for valid generalization estimates, yet correlated cells remain useful training observations for cell typing. Second, strictly nested, disease-label-free XGBoost subtype probabilities retain disease-associated variation after patient aggregation: soft subtype composition reaches disease macro-F1 0.593 versus 0.477 for lineage composition. The paired difference is uncertain, however, and subtype composition does not significantly exceed a cell-count-only control; the bridge is therefore predictive and associational rather than evidence of causal disease biology. Direct APT prediction remains stronger and depends on patient-specific absolute-expression structure, making overclaiming inappropriate without acquisition-batch metadata. Third, the disease signal is measurement-efficient but distributed: development-only selection preserves patient-level performance with 10 aptamers, including over 50 repeated inference subsamples at 100 held-out cells per patient, while 100-panel random controls and an XGBoost-SHAP attribution control argue against a unique indispensable biomarker set.
+This perspective leads to three empirical findings. First, coarse lineage
+recognition is substantially easier than fine subtype recognition across all
+models, and encoder-matched controls do not support a
+\ourmethod{}-specific advantage. Second, a controlled two-axis scaling study
+separates patient diversity from within-patient cell depth. At each fixed total
+training-cell budget, reallocating cells from 8 to 32 patients improves both
+coarse and fine macro-F1 for Logistic Regression and XGBoost; averaged matched
+doublings and descriptive response surfaces also favor the patient axis over
+the evaluated range. Effect magnitude still depends on model, resolution, and
+budget. This separates two claims
+that are often conflated: patient-disjoint splits are necessary for valid
+generalization estimates, while correlated cells can still be useful training
+observations. Third, strictly nested, disease-label-free XGBoost subtype
+probabilities retain disease-associated variation after patient aggregation:
+soft subtype composition reaches disease macro-F1 0.593 versus 0.477 for
+lineage composition. The paired difference is uncertain, however, and subtype
+composition does not significantly exceed a cell-count-only control. The
+bridge is therefore predictive and associational; direct APT discrimination is
+stronger but sensitive to patient-specific absolute-expression structure.
 
 Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
-    \item \textbf{A subtype-centered account of granularity and training scale.} Beyond aggregate macro-F1, we quantify the coarse-to-fine gap and independently vary training-patient and per-patient cell budgets. The resulting 4-by-4 surface rejects a simple patient-dominant scaling account in this cohort: cell depth remains at least as influential over the evaluated range. We use \ourmethod{} as a hierarchy-aware reference model rather than claiming universal superiority.
-    \item \textbf{A leakage-resistant bridge from cell typing to disease characterization.} Strict nested cross-fitting converts disease-label-free subtype probabilities into patient composition without exposing either stage to outer-test patients. Gold composition, cell-count, label-permutation, equal-cell, and fold-signature controls delimit what this bridge supports.
+    \item \textbf{A multiresolution account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons under a common evaluation protocol. We use \ourmethod{} as a hierarchy-aware reference rather than claiming architectural superiority.
+    \item \textbf{Controlled two-axis scaling and downstream error propagation.} Fixed-total-cell and matched-doubling experiments distinguish patient diversity from within-patient depth, while strict nested cross-fitting converts disease-label-free subtype probabilities into patient compositions without exposing either stage to outer-test patients.
 \end{itemize}

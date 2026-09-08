@@ -1,0 +1,63 @@
+{
+  "cell_caps": [
+    100,
+    200,
+    400,
+    800,
+    1600
+  ],
+  "cell_sampling": "one uniform within-patient permutation per outer fold and seed",
+  "fixed_total_budgets": [
+    3200,
+    6400,
+    12800
+  ],
+  "matched_doublings": {
+    "cell": "C doubles while P is fixed",
+    "patient": "P doubles while C is fixed"
+  },
+  "model_random_state": 42,
+  "models": [
+    "logistic_regression",
+    "xgboost"
+  ],
+  "outer_fold_path": "cell_JEPA/outputs/classical_baselines_kfold5/fold_assignment.json",
+  "patient_bootstrap_replicates": 2000,
+  "patient_budgets": [
+    8,
+    16,
+    32
+  ],
+  "patient_sampling": "nested disease-stratified greedy proportional ordering",
+  "preprocessing": "feature-wise z-score fit on sampled training cells only",
+  "protocol_hash": "9dca5e9e4c81517d",
+  "reproduction_tolerance_absolute": 0.0005,
+  "resampling_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "tasks": {
+    "coarse": "coarse_subtype",
+    "fine": "cell_subtype"
+  },
+  "test_cells": "all cells from untouched outer-test patients",
+  "version": "patient-cell-scaling-fair-v3"
+}

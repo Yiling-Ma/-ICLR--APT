@@ -1,0 +1,26 @@
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Model & Task & $C=100$ & $C=500$ & $C=2000$ & $C=\mathrm{all}$ \\
+\midrule
+Logistic Regression, $P=8$ & Coarse & 0.255 [0.247, 0.265] & 0.263 [0.253, 0.271] & 0.271 [0.259, 0.283] & 0.278 [0.266, 0.291] & 0.282 [0.269, 0.296] \\
+Logistic Regression, $P=16$ & Coarse & 0.266 [0.261, 0.270] & 0.279 [0.272, 0.285] & 0.287 [0.280, 0.294] & 0.293 [0.286, 0.300] & 0.291 [0.285, 0.297] \\
+Logistic Regression, $P=32$ & Coarse & 0.283 [0.278, 0.288] & 0.293 [0.289, 0.297] & 0.299 [0.295, 0.303] & 0.297 [0.295, 0.300] & 0.288 [0.286, 0.291] \\
+Logistic Regression, fine, $P=8$ & Fine & 0.074 [0.068, 0.081] & 0.078 [0.072, 0.082] & 0.082 [0.078, 0.087] & 0.085 [0.082, 0.090] & 0.087 [0.082, 0.092] \\
+Logistic Regression, fine, $P=16$ & Fine & 0.081 [0.078, 0.085] & 0.087 [0.083, 0.089] & 0.090 [0.087, 0.094] & 0.092 [0.089, 0.096] & 0.094 [0.090, 0.098] \\
+Logistic Regression, fine, $P=32$ & Fine & 0.089 [0.086, 0.092] & 0.093 [0.091, 0.095] & 0.095 [0.093, 0.097] & 0.097 [0.094, 0.099] & 0.103 [0.099, 0.105] \\
+\midrule
+XGBoost, $P=8$ & Coarse & 0.246 [0.234, 0.263] & 0.253 [0.243, 0.268] & 0.260 [0.249, 0.275] & 0.267 [0.254, 0.285] & 0.274 [0.260, 0.291] \\
+XGBoost, $P=16$ & Coarse & 0.260 [0.252, 0.272] & 0.268 [0.258, 0.278] & 0.275 [0.265, 0.285] & 0.284 [0.273, 0.295] & 0.292 [0.280, 0.302] \\
+XGBoost, $P=32$ & Coarse & 0.275 [0.270, 0.280] & 0.283 [0.279, 0.287] & 0.293 [0.290, 0.296] & 0.302 [0.300, 0.304] & 0.308 [0.306, 0.310] \\
+XGBoost, fine, $P=8$ & Fine & 0.073 [0.068, 0.079] & 0.078 [0.073, 0.084] & 0.084 [0.080, 0.090] & 0.089 [0.082, 0.098] & 0.094 [0.089, 0.101] \\
+XGBoost, fine, $P=16$ & Fine & 0.082 [0.077, 0.085] & 0.089 [0.084, 0.093] & 0.094 [0.090, 0.099] & 0.100 [0.094, 0.106] & 0.107 [0.101, 0.113] \\
+XGBoost, fine, $P=32$ & Fine & 0.090 [0.087, 0.093] & 0.096 [0.092, 0.099] & 0.100 [0.097, 0.103] & 0.108 [0.106, 0.110] & 0.116 [0.114, 0.117] \\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{Patient--cell training scaling. Entries are pooled OOF Macro-F1 means with empirical 2.5th--97.5th seed intervals; the deterministic $P=32,C=\mathrm{all}$ endpoint instead uses a patient-clustered bootstrap interval. Seed intervals are not patient confidence intervals.}
+\label{tab:patient_cell_scaling}
+\end{table*}

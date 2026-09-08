@@ -59,9 +59,11 @@ lookup, including reviewers, disagreements, and adjudication.}
 
 APT-Bench fixes the unit of input, prediction target, split, and metric for each
 track: five-lineage and 27-subtype prediction from one APT vector per cell;
-six-class disease prediction from all cells of one participant; and outer-test-isolated
-aptamer-measurement plus inference-time cell-budget evaluation of that participant-level task. Novelty is
-not part of the primary contract. The machine-readable manifest at
+two-axis scaling over training patients and cells per patient; and strict
+cross-fitted aggregation from cell predictions to six-class patient-level
+characterization with gold-composition and technical controls. Novelty is not
+part of the primary contract. Outer-test-isolated aptamer measurement and
+inference-cell budgets are secondary sensitivities. The machine-readable manifest at
 \texttt{benchmark/splits/patient\_folds.json} assigns every pseudonymous patient
 to one outer fold; all selection remains inside development patients. Portable
 components include patient-clustered uncertainty, hierarchy diagnostics,
@@ -84,17 +86,22 @@ This is the primary protocol for all headline claims. Patients are partitioned i
 \paragraph{Cell-level split control.}
 As a protocol-sensitivity control, cells are randomly split irrespective of patient identity. Cells from the same patient can therefore appear in both training and evaluation sets. We do not treat this as a realistic deployment protocol. Its only role is to quantify performance inflation caused by leakage.
 
-\paragraph{Training patient--cell scaling surface.}
-We separately vary the number of outer-development patients
-$P\in\{8,16,24,32\}$ and the uniformly sampled training cells per selected
-patient $C\in\{100,500,2000,\mathrm{all}\}$. Within each outer fold and seed,
-disease-stratified patient subsets and uniform within-patient cell subsets are
-nested across budgets. We use 20 subset seeds except for the deterministic
-$P{=}32,C{=}\mathrm{all}$ endpoint, fit preprocessing only on sampled training
-cells, and always evaluate all cells from the same eight untouched outer-test
-patients. Frozen Logistic Regression and XGBoost configurations are refit
-independently for coarse and fine prediction. This experiment changes
-training-time budgets; it is distinct from the inference-time cell budget in
+\paragraph{Training patient--cell scaling.}
+The original $4\times4$ surface is retained as a descriptive sensitivity, but
+its unequal endpoints do not compare patient and cell effects. The primary fair
+design uses $P\in\{8,16,32\}$ outer-development patients and
+$C\in\{100,200,400,800,1600\}$ uniformly sampled cells per patient. Its
+fixed-total diagonals hold $T=PC\in\{3200,6400,12800\}$ exactly constant, and
+the full grid also supports matched doublings of one axis while holding the
+other fixed. Within every outer fold, 20 disease-stratified patient orderings
+and uniform within-patient cell permutations are nested across budgets.
+Preprocessing is fit only on sampled training cells; frozen Logistic Regression
+and XGBoost configurations are refit for coarse and fine prediction; and every
+cell from the same eight untouched outer-test patients is evaluated. We report
+pooled cell-weighted macro-F1 and macro-F1 computed within each test patient and
+then averaged. Empirical subset-seed intervals and paired patient-clustered
+bootstrap intervals answer different uncertainty questions and are reported
+separately. This training-time design is distinct from inference subsampling in
 the compact-panel analysis.
 
 \subsection{Class Distribution}

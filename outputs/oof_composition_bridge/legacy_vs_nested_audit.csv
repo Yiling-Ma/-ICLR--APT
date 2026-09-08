@@ -1,0 +1,5 @@
+representation,legacy_pooled_oof_macro_f1,strict_nested_macro_f1,legacy_feature_construction,strict_feature_construction,direct_effect_interpretation_valid
+Gold subtype composition,0.5718595130359837,0.5160353535353536,gold composition,gold composition,False
+OOF predicted subtype composition,0.3999497234791352,0.592940392940393,hard labels from global pooled OOF predictions,soft probabilities from inner/outer nested cross-fitting,False
+Gold lineage composition,0.3772727272727272,0.3006535947712418,gold composition,gold composition,False
+OOF predicted lineage composition,0.2823271413828689,0.4765567765567766,hard labels from global pooled OOF predictions,soft probabilities from inner/outer nested cross-fitting,False

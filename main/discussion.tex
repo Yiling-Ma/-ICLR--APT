@@ -11,18 +11,20 @@ resolve fine cell typing or establish that finer predictions improve
 patient-level characterization.
 
 The benchmark also separates the evaluation unit from the training-scaling
-axis. Although it contains 361{,}792 cells, performance on unseen subjects must
+axes. Although it contains 361{,}792 cells, performance on unseen subjects must
 still be estimated from only 40 independent patients; cell-level splitting
-inflates scores and changes apparent model differences. However, the controlled
-scaling surface rejects the stronger claim that patient count dominates cell
-depth over the evaluated range. For both Logistic Regression and XGBoost,
-within-patient cell gain is at least as large as patient gain at coarse and fine
-resolution. Correlated cells therefore cannot create evidence about new
-patients, but they can materially improve estimation of cell-type decision
-boundaries. Clinical single-cell benchmarks should report patient-disjoint
-generalization together with both patient and training-cell budgets rather than
-using raw cell count as effective sample size or treating cell depth as
-irrelevant.
+inflates scores and changes apparent model differences. The fixed-total design
+compares broader patient coverage with deeper sampling without changing the
+total number of training cells, while matched doublings and a response surface
+expose dependence on the evaluated model, resolution, and budget. Broader
+patient coverage improves all fixed-total comparisons, and its mean matched
+doubling effect exceeds the cell-depth effect for both classical models at both
+resolutions. These analyses are descriptive rather than causal or universal scaling laws.
+Correlated cells cannot create evidence about new patients, even when additional
+cells improve estimation of cell-type decision boundaries. Clinical single-cell
+benchmarks should therefore report patient-disjoint generalization together
+with both patient and training-cell budgets rather than using raw cell count as
+effective sample size.
 
 The disease analyses delimit what can be concluded from this cohort. A
 disease-label-free subtype predictor preserves disease-associated variation after
@@ -42,15 +44,17 @@ validation is required before clinical claims.
 \label{sec:conclusion}
 
 APT-Bench establishes a patient-disjoint evaluation contract for hierarchical
-cell typing, disease audit, and measurement efficiency from single-cell aptamer
+cell typing and patient-level characterization from single-cell aptamer
 profiles. Across matched neural and classical models, coarse lineage is
 consistently easier than fine transcriptome-derived subtype prediction, and no
-\ourmethod{}-specific advantage is statistically supported. A controlled
-training-scaling surface further shows that patient-disjoint evaluation does not
-imply patient-dominant learning: within-patient cell depth provides equal or
-larger gains across the tested classical models and resolutions. Within-cohort
-disease discrimination saturates under compact aptamer and inference-cell
-budgets, but is strongly associated with patient-specific absolute-expression
-structure. These findings position APT-Bench as a benchmark for evaluating
-statistical-unit, granularity, and measurement effects, while external cohorts
-remain necessary for clinical claims.
+\ourmethod{}-specific advantage is statistically supported. Controlled
+fixed-total and matched-scale experiments show that broader patient coverage is
+the stronger scaling axis over the tested range rather than conflating either
+axis with raw cell count. Strict nested composition analysis further shows that imperfect
+cell typing can preserve patient-level disease-associated variation, although
+its incremental value over coarser or technical summaries is unresolved.
+Within-cohort disease discrimination is strongly associated with
+patient-specific absolute-expression structure. These findings position
+APT-Bench as a benchmark for statistical-unit, granularity, scaling, and error
+propagation effects, while external cohorts remain necessary for clinical
+claims.

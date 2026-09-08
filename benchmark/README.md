@@ -9,20 +9,23 @@ cross-site clinical generalization.
 
 1. Hierarchical cell typing: predict five coarse lineages and 27 fine subtypes
    from one APT vector per cell.
-2. Patient-level disease recognition: produce one six-class prediction per
-   participant and report patient-level metrics.
-3. Measurement efficiency: repeat patient-level recognition under
-   outer-test-isolated aptamer selection and inference-time cell subsampling.
+2. Two-axis training scale: vary independent training patients and uniformly
+   sampled cells per patient under fixed patient-disjoint outer evaluation.
+3. Cross-track error propagation and disease audit: aggregate strictly nested
+   cell-typing predictions into one six-class prediction per participant, report
+   patient-level metrics, and compare against gold-composition and technical
+   controls.
 
 Leave-one-disease-out generalization is an exploratory stress test. Disease
 novelty detection is not evaluated and is not part of the primary benchmark
-contract.
+contract. Compact-panel selection and inference-time cell subsampling are
+secondary measurement-sensitivity analyses reported in the appendix.
 
-The two efficiency controls have different meanings. An aptamer budget retrains
+The budget controls have different meanings. A training-scale cell budget
+subsamples cells before fitting preprocessing and the classifier. An aptamer budget retrains
 the model using only the selected input features. A cell budget subsamples
 already-computed held-out predictions before patient aggregation; it does not
-reduce the cells used to train the model. A training-time cell-budget track has
-not been evaluated.
+reduce the cells used to train the model.
 
 ## Fixed Splits
 
@@ -37,27 +40,43 @@ Cell-typing submissions must provide pseudonymous `cell_id`, `sample_id`, true
 and predicted lineage, and true and predicted subtype. Disease submissions must
 provide one row per `sample_id` with the true disease and six class scores.
 The hierarchy evaluator reports coarse and fine Macro-F1, exact-path accuracy,
-example-averaged hierarchical F1, and subtype-tree distance. Natural
+root-excluded example-averaged hierarchical F1, and subtype-tree distance. Natural
 coarse--fine consistency is supplementary because constrained decoding can alter
 it without improving correctness.
 
 ## Cross-Track Composition Audit
 
 The disease track includes a bridge from cell typing to patient
-characterization. Gold and patient-disjoint OOF-predicted lineage/subtype labels
-are aggregated into patient composition vectors and evaluated with the same
-fixed disease folds. This tests whether cell-typing errors propagate to a
-downstream patient task without using fitted-patient cell predictions. Given a
-pooled OOF file, reproduce the audit with:
+characterization. Gold and strictly nested OOF-predicted lineage/subtype
+probabilities are aggregated into patient composition vectors and evaluated
+with the same fixed disease folds. For each outer fold, downstream training
+compositions are made by inner patient-disjoint cross-fitting confined to the 32
+development patients; one final cell model trained on those 32 patients
+constructs compositions for the eight sealed patients. Reproduce or audit the
+pipeline with:
 
 ```bash
-python analysis/run_composition_bridge.py \
-  --oof path/to/dropcascade/pooled_oof_predictions.csv
+python analysis/oof_composition_bridge.py audit
+python analysis/oof_composition_bridge.py plan
+python analysis/oof_composition_bridge.py aggregate
+python analysis/oof_composition_bridge_downstream.py
 ```
 
-The script validates OOF assignments against `splits/patient_folds.json` and
-writes summary metrics plus all 40 downstream OOF disease predictions to
-`analysis/generated/`.
+The scripts validate every inner and outer assignment against the immutable fold
+manifest and write predictions, metrics, permutations, bootstrap results, and QA
+records to `outputs/oof_composition_bridge/`. The legacy
+`analysis/run_composition_bridge.py` pooled-OOF implementation is retained only
+for contamination auditing and must not supply headline values.
+
+## Fair Training-Scale Analysis
+
+`analysis/patient_cell_scaling.py` runs the frozen Logistic Regression and
+XGBoost models on `P={8,16,32}` and `C={100,200,400,800,1600}` with 20 matched
+subset seeds. `analysis/summarize_fair_patient_cell_scaling.py` extracts exact
+fixed-total designs at 3,200, 6,400, and 12,800 cells, matched doublings,
+patient-clustered uncertainty, and fold-adjusted descriptive response surfaces.
+Run `make fair-scaling-run` for the fits and `make revision` to aggregate the
+headline artifacts and rebuild the paper.
 
 ## Release Status
 
