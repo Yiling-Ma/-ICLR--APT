@@ -48,10 +48,13 @@ are $+0.0078/+0.0083$ for APT coarse but $-0.0050/-0.0058$ for APT fine.
 COMBAT effects are approximately zero for coarse and $-0.0028/-0.0027$ for
 fine. OneK1K effects are small and change sign across models. All 12 joint
 intervals include zero. The APT and COMBAT fine reversals are therefore not
-specific to a linear classifier, but no corrected effect is resolved. We refer
-to the removed component as a \emph{label-distribution effect}: class matching
-controls observed labels, class counts, and proportions simultaneously and does
-not attribute the change only to unseen rare classes.
+specific to a linear classifier, but no corrected effect is resolved. This is a
+joint sampling-protocol contrast: the implementation fixes observed labels,
+class counts, and proportions and also uses within-class donor round robin.
+The attenuation cannot therefore be assigned solely to label distribution.
+An independently controlled synthetic check separates quota matching from donor
+allocation (Appendix~\ref{sec:appendix:sequential_simulation}); it does not
+replace this separation on the real cohorts.
 
 The result persists beyond the common 32-subject grid. Class-matched LR
 frontiers through 64 COMBAT and 128 OneK1K training donors yield adjacent

@@ -72,7 +72,7 @@ allocated to more subjects or more cells per subject. Holding the total number o
 cells fixed does not isolate this tradeoff: changing subjects can also change
 the observed labels, per-class counts, and class proportions. We expose this
 failure mode and introduce a class-matched fixed-total protocol that freezes the
-training label distribution, together with joint uncertainty that resamples
+training label distribution with within-class donor balancing, together with joint uncertainty that resamples
 both training subsets and held-out subjects. In label-agnostic experiments, 37
 of 38 comparisons across APT, COMBAT, and OneK1K favor 32 rather than 8 training
 subjects. After class matching, LR and XGBoost effects become small,
@@ -306,6 +306,49 @@ recover that decision. In particular, filtering to predictions that already
 match the true lineage would select easier cases rather than provide this
 control. Thus the present diagnostic cannot attribute fine errors uniquely to
 lineage identification versus within-lineage discrimination.
+
+\subsection{Sequential Controls: Synthetic Mechanism Check}
+\label{sec:appendix:sequential_simulation}
+
+The real-data class-matched sampler fixes class quotas and spreads cells across
+donors within each class. To distinguish these operations, we implement four
+conditions with common random cell priorities and nested development subject
+sets: (A) uniform pooled-cell sampling; (B) restriction to the eight-subject
+reference class set, reserving one cell per class before uniform filling;
+(C) exact reference class quotas with uniform within-class sampling; and
+(D) the same quotas with capacity-constrained donor round robin in randomized
+donor order. At fixed total, exact class proportions and exact counts are
+equivalent constraints, not separate ablations. This A condition is not the
+legacy equal-cell-per-subject sampler. Sequential contrasts are order-dependent
+descriptions, not causal mediation estimates.
+
+We evaluate this implementation on synthetic data, not a semi-synthetic clinical
+cohort. Each of 20 seeds generates six class centers $\mu_k\sim
+\mathcal{N}(0,s^2I_{12})$ and 48 subjects with 400 cells each. Subject label
+probabilities are $\operatorname{softmax}(\eta_p)$, where
+$\eta_p\sim\mathcal{N}(0,m^2I_6)$, and features are
+$x_{pi}=\mu_{y_{pi}}+b_p+\epsilon_{pi}$, with
+$b_p\sim\mathcal{N}(0,a^2I_{12})$ and
+$\epsilon_{pi}\sim\mathcal{N}(0,I_{12})$ independently. We vary
+$a,m\in\{0,1.5\}$ and $s\in\{0.5,1.5\}$. The first 32 subjects form the
+development pool; the remaining 16 are untouched test subjects. An unweighted
+LR probe is refit with training-only standardization for each condition and
+$P\in\{8,32\}$ at total 1,600 training cells. All conditions reuse the same
+realization and test subjects within a seed.
+
+\input{tables/sequential_simulation}
+
+With exchangeable subjects ($a=m=0$), mean effects are near zero. With label
+mixture variation alone and $s=0.5$, the unmatched mean effect is $+0.0245$,
+compared with $-0.0011$ after quota matching. Conversely, with subject offsets
+alone and $s=0.5$, quota matching retains a mean effect of $+0.0280$, compared
+with unmatched $+0.0281$. Thus matching does not invariably eliminate a breadth
+benefit in this generator. Seed variability is substantial; these results do
+not establish interval coverage, a universal correction, or the mechanism in
+APT, COMBAT, or OneK1K. Support is complete in these simulations, so they do not
+test missing-class recovery. Separate real-cohort A--D results are not included
+in this version; the existing class-matched tables must not be interpreted as
+that decomposition.
 
 \subsection{Benchmark Interface and Release Contract}
 \label{sec:appendix:benchmark_release}

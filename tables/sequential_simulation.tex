@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{rrrccc}
+\toprule
+Offset & Mixture & Separation & A: Unmatched & C: Quota & D: Quota + donor \\
+\midrule
+0.0 & 0.0 & 0.5 & \shortstack{+0.001\\{}[-0.007,+0.007]} & \shortstack{+0.001\\{}[-0.007,+0.008]} & \shortstack{+0.001\\{}[-0.006,+0.007]} \\
+0.0 & 0.0 & 1.5 & \shortstack{-0.000\\{}[-0.003,+0.001]} & \shortstack{-0.000\\{}[-0.003,+0.002]} & \shortstack{-0.000\\{}[-0.003,+0.001]} \\
+0.0 & 1.5 & 0.5 & \shortstack{+0.024\\{}[-0.005,+0.075]} & \shortstack{-0.001\\{}[-0.012,+0.010]} & \shortstack{-0.002\\{}[-0.012,+0.007]} \\
+0.0 & 1.5 & 1.5 & \shortstack{+0.002\\{}[-0.005,+0.009]} & \shortstack{+0.000\\{}[-0.005,+0.003]} & \shortstack{-0.000\\{}[-0.003,+0.005]} \\
+1.5 & 0.0 & 0.5 & \shortstack{+0.028\\{}[-0.028,+0.103]} & \shortstack{+0.028\\{}[-0.023,+0.103]} & \shortstack{+0.031\\{}[-0.015,+0.104]} \\
+1.5 & 0.0 & 1.5 & \shortstack{+0.043\\{}[-0.005,+0.114]} & \shortstack{+0.042\\{}[-0.006,+0.113]} & \shortstack{+0.042\\{}[-0.009,+0.115]} \\
+1.5 & 1.5 & 0.5 & \shortstack{+0.027\\{}[-0.051,+0.133]} & \shortstack{+0.016\\{}[-0.059,+0.115]} & \shortstack{+0.025\\{}[-0.039,+0.103]} \\
+1.5 & 1.5 & 1.5 & \shortstack{+0.040\\{}[-0.029,+0.130]} & \shortstack{+0.029\\{}[-0.054,+0.114]} & \shortstack{+0.048\\{}[-0.008,+0.136]} \\
+\bottomrule
+\end{tabular}
+\caption{Synthetic mechanism check: subject-balanced Macro-F1 difference between 32 and 8 training subjects at fixed total 1,600 cells. Entries are means across 20 independent seeds with empirical 2.5th--97.5th seed percentiles, not confidence intervals of the mean. Condition B equals A in every run because support is already complete and the support floor does not alter selection. All eight parameter settings are reported.}
+\label{tab:sequential_simulation}
+\end{table}

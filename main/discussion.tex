@@ -4,7 +4,7 @@
 The central finding is not that more subjects are unimportant, but that a
 standard fixed-total experiment does not estimate their isolated value. Across
 three datasets, the label-agnostic design produces an apparently general
-subject-breadth advantage. Freezing the marginal training label distribution
+subject-breadth advantage. Freezing class quotas with within-class donor balancing
 removes that conclusion: corrected effects are small, model- and
 cohort-dependent, and unresolved once training-subset and test-subject
 uncertainty are propagated jointly. Patient-disjoint splitting is necessary,
@@ -16,9 +16,12 @@ changing how many subjects contribute those cells. It does not fix
 disease--subtype composition, within-class subject heterogeneity, or unrecorded
 pool and batch structure. The remaining effect is therefore still
 associational, and a near-zero estimate under the tested budgets is not a
-universal saturation law. Nevertheless, the protocol identifies the source of
-an otherwise misleading empirical regularity and provides a reproducible way
-to test it in future multi-subject single-cell cohorts.
+universal saturation law. In particular, the existing real-data contrast changes
+both label quotas and within-class allocation, so it does not identify their
+separate contributions. The synthetic check shows that quota matching need not
+mechanically erase a breadth benefit, but does not establish real-data mediation.
+The protocol provides a reproducible sensitivity analysis rather than a unique
+causal explanation of the observed regularity.
 
 The APT case studies clarify the scope rather than add parallel stories.
 Hierarchy prediction demonstrates that leakage and granularity alter the
