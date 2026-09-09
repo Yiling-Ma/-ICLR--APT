@@ -48,9 +48,11 @@ Appendix~\ref{sec:appendix:benchmark_release}.
 
 For cell typing, coarse and fine macro-F1 are primary; exact-path accuracy and
 subtype-tree distance assess the joint hierarchy. Point estimates use pooled OOF
-cells, while uncertainty uses 2{,}000 paired patient bootstraps. The prespecified
+cells, while uncertainty uses 2{,}000 paired patient bootstraps. The designated
 comparison family contrasts the soft-cascade recipe with HCE and XGBoost at both
-resolutions, with Holm correction over four tests. Subject-balanced sensitivities
+resolutions, with Holm correction over four tests. Flat and the remaining
+classical references are descriptive and are not used to claim inferential
+superiority outside that family. Subject-balanced sensitivities
 first normalize each held-out subject's confusion matrix to unit mass before
 pooling; this differs from both cell-weighted pooling and averaging within-subject
 macro-F1. Full definitions are in Appendix~\ref{sec:appendix:protocol_sensitivity}.

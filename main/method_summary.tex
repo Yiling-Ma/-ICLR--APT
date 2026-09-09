@@ -17,6 +17,26 @@ Appendix~\ref{sec:method} records the implementation
 and component matrix; no routing, HCE, or contrastive effect is claimed in
 isolation.
 
+Baseline coverage is intentionally distinguished from input compatibility.
+LR and XGBoost are the completed scaling probes; the APT hierarchy summary
+also reports Linear SVM, Random Forest, and reference correlation alongside
+the three Transformer recipes. These are not an exhaustive model leaderboard.
+Plain MLP/ResNet and additional modern tabular learners are applicable to the
+APT matrix but lack completed full hierarchy evaluations in this release;
+we do not classify their absence as incompatibility or underperformance.
+HCE supplies a hierarchy-loss reference, not comprehensive coverage of
+single-cell annotation systems.
+
+Pretrained transcriptomic encoders such as scGPT and Geneformer use gene-based
+inputs \citep{cui2024scgpt,theodoris2023transfer}. The anonymous APT feature IDs
+have no verified public gene-token mapping, so direct use of those checkpoints
+is not defined for the APT-only task. Learning an APT adapter would introduce
+an additional training protocol, while supplying paired RNA would change the
+input modality. On the external RNA cohorts, transcriptomic encoders are
+applicable but unevaluated here, rather than intrinsically incompatible.
+We make no claim that computational expense alone excludes them, nor that
+unrun models underperform the reported references.
+
 For the composition bridge, each disease outer fold seals eight patients. A
 final disease-label-free XGBoost subtype model trained on the other 32 patients
 constructs outer-test compositions. Downstream training compositions for those

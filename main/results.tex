@@ -93,8 +93,9 @@ therefore the consequential control.
 
 Under patient-disjoint evaluation, all models have lower raw fine than coarse F1
 (Appendix Table~\ref{tab:main}). The soft-cascade recipe reaches coarse/fine macro-F1
-0.326/0.152 and the flat Transformer 0.323/0.147; no soft-cascade comparison
-with Flat, HCE, or XGBoost excludes zero. Because only the soft cascade uses
+0.326/0.152 and the flat Transformer 0.323/0.147; the Flat comparison is
+descriptive, with no inferential claim. The four coarse/fine comparisons with
+HCE and XGBoost do not reach Holm-adjusted significance. Because only the soft cascade uses
 cross-disease contrastive regularization, these are complete-recipe comparisons,
 not evidence for an individual hierarchy component.
 
