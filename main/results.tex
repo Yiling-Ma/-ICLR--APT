@@ -32,13 +32,18 @@ propagating both uncertainty sources.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.80\columnwidth]{figures/class_matched_scaling.pdf}
-\caption{Class-matched fixed-total scaling across three cohorts. Each comparison
-freezes observed classes and exact per-class quotas before reallocating
-$T=6{,}400$ training cells from 8 to 32 subjects. Points are changes in
-subject-balanced pooled OOF macro-F1; 95\% joint intervals resample both the
-training-subset seed and paired held-out subjects. All 12 intervals include
-zero.}
+\includegraphics[width=\columnwidth]{figures/scaling_protocol_contrast.pdf}
+\caption{The apparent breadth advantage changes under the matched protocol.
+Both panels show the change in subject-balanced pooled OOF macro-F1 from 8 to
+32 training subjects at $T=6{,}400$, on identical axes. The right panel fixes
+class support and exact quotas and additionally uses within-class donor round
+robin; this is not a label-only intervention. Points are seed means; bars in
+both panels are empirical 2.5th--97.5th seed percentiles, not confidence
+intervals of the mean. Unmatched runs and matched LR use 20 seeds; matched
+XGBoost uses 10. APT and COMBAT fine point estimates change sign for both models.
+Cross-panel changes are descriptive, not paired attenuation tests. The matched
+joint intervals, which additionally resample held-out subjects, all span zero
+(Appendix Figure~\ref{fig:class_matched_joint}).}
 \label{fig:class_matched_scaling}
 \end{figure}
 

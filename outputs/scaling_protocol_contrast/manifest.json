@@ -1,0 +1,47 @@
+{
+  "rows": 12,
+  "total": 6400,
+  "subject_budgets": [
+    8,
+    32
+  ],
+  "interval": "Empirical 2.5th--97.5th percentiles over training-subset seeds; not mean CIs",
+  "interpretation": "Descriptive cross-protocol comparison, not a paired attenuation test; matched includes donor round robin",
+  "pending_stage": "Real-data support-only results not complete; excluded rather than imputed",
+  "hashes": {
+    "outputs/cross_cohort_scaling/cross_cohort_fixed_total_effects.csv": "7f976274b6af053c3f18373904cec9a0d026560b7ec0c01f4d496f23328eac86",
+    "outputs/class_matched_scaling/class_matched_effects_all.csv": "74c6a711518780ef2ad9ae051a57c13a12b1894cfd3d7e9f80ec97d8485c3398"
+  },
+  "sign_changes": [
+    {
+      "dataset": "apt",
+      "task": "fine",
+      "model": "logistic_regression"
+    },
+    {
+      "dataset": "apt",
+      "task": "fine",
+      "model": "xgboost"
+    },
+    {
+      "dataset": "combat_rna",
+      "task": "fine",
+      "model": "logistic_regression"
+    },
+    {
+      "dataset": "combat_rna",
+      "task": "fine",
+      "model": "xgboost"
+    },
+    {
+      "dataset": "onek1k",
+      "task": "coarse",
+      "model": "xgboost"
+    },
+    {
+      "dataset": "onek1k",
+      "task": "fine",
+      "model": "xgboost"
+    }
+  ]
+}

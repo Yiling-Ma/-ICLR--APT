@@ -763,6 +763,18 @@ these remain bundled with the subject-breadth intervention.
 
 \input{tables/class_matched_scaling}
 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.80\columnwidth]{figures/class_matched_scaling.pdf}
+\caption{Joint uncertainty for the completed class-matched protocol at
+$T=6{,}400$. Points are mean changes in subject-balanced pooled OOF macro-F1
+from 8 to 32 subjects. The 95\% joint intervals select a training-subset seed
+and bootstrap paired held-out subjects; all 12 span zero. Unlike the seed-only
+bars in Figure~\ref{fig:class_matched_scaling}, these intervals include test-subject
+variability. Zero inclusion does not establish equivalence.}
+\label{fig:class_matched_joint}
+\end{figure}
+
 The primary interval propagates both uncertainty sources. In each of 2{,}000
 replicates, we sample one completed training-subset seed uniformly, resample
 outer-test subjects with replacement, use the same subject draw for $P=8$ and
