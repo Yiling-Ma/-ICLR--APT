@@ -8,10 +8,13 @@ Transformer, the same model trained with a two-level adaptation of HCE
 \citep{cultrera2026improving}, and a soft-cascade Transformer. These references
 share the APT tokenizer, encoder dimensions, optimizer, training budget,
 patient folds, training-only preprocessing, and validation fine-macro-F1
-checkpoint rule. The ladder therefore controls backbone capacity before asking
-whether hierarchy-specific complexity helps. Appendix~\ref{sec:method} records
-the complete implementation for reproducibility; none of its individual
-cascade components is claimed as an algorithmic contribution.
+checkpoint rule. The ladder therefore holds backbone capacity fixed while
+comparing complete reference recipes. Their objectives are not matched: only
+the soft-cascade model uses disease labels for cross-disease contrastive pairing,
+whereas Flat and HCE use classification losses alone. The ladder is therefore
+not a component ablation. Appendix~\ref{sec:method} records the implementation
+and component matrix; no routing, HCE, or contrastive effect is claimed in
+isolation.
 
 For the composition bridge, each disease outer fold seals eight patients. A
 final disease-label-free XGBoost subtype model trained on the other 32 patients

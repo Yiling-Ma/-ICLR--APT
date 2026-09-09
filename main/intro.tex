@@ -26,14 +26,15 @@ The hierarchy track uses a matched reference ladder rather than centering the
 paper on a new architecture: XGBoost, a flat Transformer, the same Transformer
 with hierarchical cross-entropy (HCE), and a soft-cascade Transformer. The
 three neural references share the tokenizer, encoder dimensions, optimization
-budget, patient folds, and checkpoint rule. This design asks whether hierarchy
-mechanisms add value after controlling encoder capacity; it does not designate
-the cascade as a proposed method.
+budget, patient folds, and checkpoint rule, but their objectives differ because
+only the soft cascade uses cross-disease contrastive regularization. The ladder
+therefore compares complete recipes rather than isolating individual hierarchy
+mechanisms; it does not designate the cascade as a proposed method.
 
 This perspective leads to three empirical findings. First, coarse lineage
 recognition is substantially easier than fine subtype recognition across all
-models, and encoder-matched controls do not support an advantage for the
-soft cascade over the simpler neural references. Second, a two-axis scaling
+models, and backbone-matched references do not support superiority for the
+complete soft-cascade recipe. Second, a two-axis scaling
 study identifies label-distribution confounding in fixed-total evaluations. When
 each paired setting uses exactly the same observed classes and per-class cell
 quotas, LR and XGBoost yield small, model- and cohort-dependent coarse effects
@@ -55,6 +56,6 @@ stronger but sensitive to patient-specific absolute-expression structure.
 Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, two-axis scaling, and confounding-aware patient characterization.
-    \item \textbf{A controlled account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. An encoder-matched reference ladder separates hierarchy mechanisms from backbone capacity and finds no supported gain from additional cascade complexity.
+    \item \textbf{An audited account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. A backbone- and budget-matched reference ladder finds no supported superiority for the complete soft-cascade recipe; because its contrastive objective is unmatched, we explicitly avoid component-level attribution.
     \item \textbf{A label-distribution audit for two-axis scaling.} Across APT, COMBAT, and OneK1K, we show that standard fixed-total comparisons conflate subject breadth with the marginal training label distribution, then introduce a class-matched control that freezes observed classes and per-class cell quotas. Joint uncertainty over training subsets and held-out subjects leaves no corrected LR or XGBoost effect resolved; external LR frontiers remain unresolved through 64 COMBAT and 128 OneK1K training subjects, ruling out a universal scaling law in these experiments. A separate strict nested audit tests cross-task transfer from disease-label-free cell-model outputs without exposing either stage to outer-test patients.
 \end{itemize}

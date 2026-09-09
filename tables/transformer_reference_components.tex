@@ -1,0 +1,29 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Component & Flat FT-style Transformer & FT-style Transformer $+$ HCE & Soft-cascade Transformer \\
+\midrule
+APT tokenizer and Transformer dimensions & Same & Same & Same \\
+Patient folds, optimizer, budget, checkpoint rule & Same & Same & Same \\
+Fine-label supervision & Independent CE & Leaf HCE NLL & CE \\
+Coarse-label supervision & Independent CE & Ancestor HCE NLL & CE \\
+Cross-disease supervised contrastive term & No & No & Yes ($w\leq0.2$) \\
+Disease labels used by cell model & No & No & Contrastive pairing only \\
+Global subtype path and lineage experts & No & No & Yes \\
+Soft lineage routing & No & No & Yes \\
+\bottomrule
+\end{tabular}
+}
+\caption{Components of the three neural references. ``Same'' denotes an
+identical specification, not shared fitted weights. The models match the
+tokenizer, encoder dimensions, data folds, optimizer, maximum epochs, early
+stopping rule, and checkpoint criterion, but they do not match the complete
+training objective. In particular, disease labels enter only the soft-cascade
+contrastive pairing rule. Consequently, comparisons among these rows evaluate
+complete recipes and are not component ablations.}
+\label{tab:transformer_components}
+\end{table}

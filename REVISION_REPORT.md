@@ -194,12 +194,13 @@ composition, log cell count, and recorded RNA-QC proxies are unresolved. It is
 not presented as evidence that typing errors propagate to disease performance.
 
 The historically named DropCascade implementation is now presented as the
-soft-cascade member of an encoder-matched reference ladder rather than as a
-proposed method. The main text and tables no longer use branded styling or
+soft-cascade member of a backbone- and budget-matched reference ladder rather
+than as a proposed method. The main text and tables no longer use branded styling or
 claim an algorithmic contribution. The prespecified patient-bootstrap tests
 are framed as an architecture audit, and their null result is reported as a
-benchmark finding: additional cascade complexity is not supported after
-controlling the backbone and training budget.
+benchmark finding: the complete soft-cascade recipe has no supported advantage
+over the backbone- and budget-matched references. Because only that recipe uses
+cross-disease contrastive regularization, this is not a component-level effect.
 
 Direct APT disease classifiers, compact panels, and attribution are no longer
 primary disease results. The main table instead reports composition and

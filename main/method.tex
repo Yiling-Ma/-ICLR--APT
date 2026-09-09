@@ -1,7 +1,7 @@
 \section{Hierarchy-Aware Reference Ladder}
 \label{sec:method}
 
-APT-Bench evaluates progressively structured, encoder-matched neural references:
+APT-Bench evaluates progressively structured, backbone- and budget-matched neural references:
 a flat Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses
 on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves
 disease-association auditing to separate tabular baselines and patient-level aggregation.
@@ -80,10 +80,10 @@ where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-en
 
 We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling because it underperformed natural sampling after matching the number of optimization steps; the single-split development diagnostic is provided in Appendix~\ref{sec:appendix:sampler}.
 
-\paragraph{Matched Transformer controls.}
+\paragraph{Backbone-matched Transformer references.}
 \label{sec:method:baselines}
-To isolate encoder capacity from hierarchical modeling, a flat FT-style Transformer
-control \citep{gorishniy2021revisiting} removes the cascade while retaining the
+The flat FT-style Transformer
+reference \citep{gorishniy2021revisiting} removes the cascade while retaining the
 identical APT tokenizer, Transformer dimensions, optimizer, early stopping, and
 training budget above. We call it FT-style because its tokenizer is exactly the APT
 feature tokenizer used by \ourmethod{}, rather than the original numerical/categorical
@@ -99,7 +99,15 @@ observed parent label makes this a stated two-level adaptation rather than an
 unqualified reproduction of the mixed-granularity setting in the original work.
 All three Transformer models are evaluated from the checkpoint selected by
 patient-validation fine macro-F1, without an additional post-selection calibration
-stage.
+stage. Table~\ref{tab:transformer_components} makes the remaining objective
+differences explicit. In particular, only the soft-cascade reference uses disease
+labels to construct cross-disease contrastive pairs; Flat and HCE use no disease
+labels and no contrastive term. The ladder therefore holds backbone capacity,
+optimization budget, folds, and checkpoint selection, but it is not an
+objective-matched component ablation. We do not attribute any score difference to
+soft routing, hierarchical loss, or contrastive regularization in isolation.
+
+\input{tables/transformer_reference_components}
 
 Disease recognition is not handled by a dedicated head inside \ourmethod{}. This is a deliberate modeling decision rather than a claim that disease is solved in a strong external sense: within-cohort disease prediction is already nearly saturated by simple classical baselines, while the architectural challenge addressed by \ourmethod{} is the unresolved cell-level hierarchy problem.
 

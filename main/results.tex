@@ -26,10 +26,11 @@ weaker alone. Because the labels and the oracle representation originate from
 the same RNA pipeline, this is an internal reconstructability diagnostic rather
 than independent validation of label correctness.
 
-Encoder-matched comparisons do not establish an architectural advantage. This
-is a benchmark result rather than a failed method claim: after controlling the
-backbone, additional hierarchy-specific cascade complexity is not supported on
-this cohort.
+Backbone- and budget-matched comparisons do not establish superiority for the
+complete soft-cascade recipe. They are not objective-matched ablations because
+only that recipe includes cross-disease contrastive regularization. Consequently,
+the observed differences cannot be assigned to cascade routing, disease-aware
+pair construction, or their interaction.
 Relative to the flat Transformer, \ourmethod{} differs by only $+0.0036$ coarse
 macro-F1 (paired patient-bootstrap 95\% CI $[-0.0078,0.0146]$) and $+0.0055$
 fine macro-F1 (95\% CI $[-0.0021,0.0125]$). HCE has the highest coarse point
@@ -87,7 +88,7 @@ point uses 20 matched subject/cell subset seeds; preprocessing and fitting are
 repeated, while all cells from untouched test subjects are evaluated. The
 design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.82\columnwidth]{figures/class_matched_scaling.pdf}
 \caption{Primary class-matched fixed-total scaling control. Each comparison
