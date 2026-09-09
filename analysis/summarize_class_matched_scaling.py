@@ -76,7 +76,7 @@ def matched_effects() -> pd.DataFrame:
 def format_effect(row: pd.Series) -> str:
     return (
         f"{row.delta_p32_minus_p8_mean:+.4f} "
-        f"[{row.patient_bootstrap_ci_low:+.4f}, {row.patient_bootstrap_ci_high:+.4f}]"
+        f"[{row.joint_resampling_ci_low:+.4f}, {row.joint_resampling_ci_high:+.4f}]"
     )
 
 
@@ -87,9 +87,9 @@ def write_table(effects: pd.DataFrame) -> None:
         r"\small",
         r"\setlength{\tabcolsep}{4pt}",
         r"\resizebox{\textwidth}{!}{%",
-        r"\begin{tabular}{lllrrcc}",
+        r"\begin{tabular}{lllrrccc}",
         r"\toprule",
-        "Dataset & Model & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\\rightarrow$32) & $\\Delta$ subject-balanced M-F1 \\\\",
+        "Dataset & Model & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\\rightarrow$32) & $\\Delta$ subject-balanced M-F1 & $\\Pr(\\Delta>0)$ \\\\",
         r"\midrule",
     ]
     for _, row in effects.sort_values(["dataset_key", "model", "task", "total"]).iterrows():
@@ -97,13 +97,14 @@ def write_table(effects: pd.DataFrame) -> None:
         model_text = "LR" if row.model == "logistic_regression" else "XGBoost"
         lines.append(
             f"{row.dataset} & {model_text} & {str(row.task).capitalize()} & {int(row.total):,} & "
-            f"{row.matched_class_count:.1f}/{int(row.total_class_count)} & {donor_text} & {format_effect(row)} \\\\"
+            f"{row.matched_class_count:.1f}/{int(row.total_class_count)} & {donor_text} & "
+            f"{format_effect(row)} & {row.joint_probability_positive:.3f} \\\\"
         )
     lines += [
         r"\bottomrule",
         r"\end{tabular}",
         r"}",
-        r"\caption{Class-matched fixed-total control. LR uses 20 seeds at both totals; the matched XGBoost robustness check uses 10 seeds at $T=6{,}400$. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are 95\% paired subject-bootstrap intervals after averaging seed-level sufficient statistics; empirical seed intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}",
+        r"\caption{Class-matched fixed-total control. LR uses 20 seeds at both totals; the matched XGBoost robustness check uses 10 seeds at $T=6{,}400$. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are joint 95\% intervals obtained by resampling a training-subset seed and then paired outer-test subjects; the final column is the empirical fraction of joint replicates with a positive effect. Seed-only and subject-only intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}",
         r"\label{tab:class_matched_scaling}",
         r"\end{table}",
     ]
@@ -129,8 +130,8 @@ def write_figure(effects: pd.DataFrame) -> None:
         if not all(key in subset.index for key in order):
             continue
         means = [subset.loc[key, "delta_p32_minus_p8_mean"] for key in order]
-        lows = [subset.loc[key, "patient_bootstrap_ci_low"] for key in order]
-        highs = [subset.loc[key, "patient_bootstrap_ci_high"] for key in order]
+        lows = [subset.loc[key, "joint_resampling_ci_low"] for key in order]
+        highs = [subset.loc[key, "joint_resampling_ci_high"] for key in order]
         y = [index + offsets[model] for index in range(len(order))]
         ax.errorbar(
             means,

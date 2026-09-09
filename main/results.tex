@@ -78,10 +78,10 @@ design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
 freezes the observed classes and exact per-class cell quotas before reallocating
 the same $T$ training cells from 8 to 32 subjects. Points are changes in
 subject-balanced, subject-disjoint OOF macro-F1 at $T=6{,}400$; bars are 95\%
-paired subject-bootstrap intervals over fixed outer-test subjects after
-averaging 20 LR or 10 XGBoost subset seeds. Ten of 12 empirical seed intervals
-include zero; the exceptions are the negative APT fine effects for both models.
-The corrected effects are small and model- or cohort-dependent.}
+joint intervals from 2{,}000 replicates that first sample one of the 20 LR or
+10 XGBoost training-subset seeds and then resample paired outer-test subjects.
+All 12 joint intervals include zero. Corrected point estimates are small and
+model- or cohort-dependent.}
 \label{fig:class_matched_scaling}
 \end{figure}
 
@@ -144,16 +144,18 @@ $-0.0050/-0.0058$ for APT fine. COMBAT coarse effects are
 $+0.0000/+0.0011$, while fine effects are $-0.0028/-0.0027$.
 OneK1K is less stable across models: coarse changes from $+0.0033$ under LR to
 $-0.0011$ under XGBoost, and fine changes from $+0.0013$ to $-0.0006$.
-Ten of 12 empirical seed intervals at this common total include zero; only the
-two APT fine intervals exclude zero, both in the negative direction. Paired
-subject-bootstrap intervals for seed-averaged sufficient statistics are shown
-in Appendix~\ref{sec:appendix:class_matched_scaling}. Thus class matching
-changes the scientific conclusion: the apparent fine-subtype advantage in the
-naive analysis is not an LR artifact, but neither its magnitude nor the coarse
-effect supports a universal subject-breadth benefit. Instead, unmatched gains
-are partly mediated by changes in label support and class composition, and the
-residual class-matched effects remain model- and cohort-dependent. This control
-does not attribute the change to unseen classes alone.
+All 12 joint intervals include zero. The corresponding probabilities of a
+positive effect are 0.836/0.817 (APT coarse), 0.043/0.110 (APT fine),
+0.548/0.522 (COMBAT coarse), 0.272/0.264 (COMBAT fine), 0.728/0.210
+(OneK1K coarse), and 0.598/0.550 (OneK1K fine) for LR/XGBoost.
+Seed-only and subject-only decompositions are shown in
+Appendix~\ref{sec:appendix:class_matched_scaling}. Thus class matching changes
+the scientific conclusion: negative APT and COMBAT fine point estimates are
+not an LR artifact, but no corrected effect is resolved after jointly
+propagating training-subset and held-out-subject uncertainty. Unmatched gains
+are partly mediated by changes in label support and class composition, while
+the residual class-matched estimates remain model- and cohort-dependent. This
+control does not attribute the change to unseen classes alone.
 
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}

@@ -20,11 +20,13 @@ training label distribution.
 Its 37/38 direction is therefore a naive joint effect, not a pure
 subject-diversity estimate or a headline scaling law. The class-matched control
 changes the interpretation: after identical per-class quotas are enforced,
-APT retains a small coarse gain under both LR and XGBoost, but the OneK1K
-coarse effect changes sign across models. Fine effects reverse in both APT and
-COMBAT under both classifiers and remain near zero in OneK1K. The unmatched
-fine-label gains are therefore partly mediated by changes in label support and
-class composition, not an LR-specific artifact and not demonstrably caused by
+APT has a small positive coarse point estimate under both LR and XGBoost, but
+the OneK1K coarse point estimate changes sign across models. Fine point
+estimates are negative in both APT and COMBAT under both classifiers and remain
+near zero in OneK1K. Every joint interval over training subsets and held-out
+subjects includes zero. The unmatched fine-label gains are therefore partly
+mediated by changes in label support and class composition, but the remaining
+direction is not statistically resolved and is not demonstrably caused by
 unseen-class coverage alone. Disease--subtype composition,
 within-class allocation across subjects, pool, source, and unrecorded batch
 coverage can still change with subject breadth, so even the matched result is
@@ -61,8 +63,8 @@ Coarse lineage is consistently easier than fine subtype prediction, with no
 supported cascade advantage over matched references. Its scaling audit shows
 that unmatched fixed-total comparisons can mistake a label-distribution effect
 for a subject-breadth benefit; after class matching, coarse effects are small
-and model-dependent, while fine effects are negative or near zero across LR and
-XGBoost. Nested transfer
+and model-dependent, while fine point estimates are negative or near zero
+across LR and XGBoost, with no joint interval excluding zero. Nested transfer
 has no resolved subtype increment, and direct disease association remains
 confounded by patient-specific absolute-expression structure; clinical claims
 require external validation.

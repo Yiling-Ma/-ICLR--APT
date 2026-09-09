@@ -1,0 +1,17 @@
+{
+  "decompositions_retained": [
+    "empirical interval over training-subset seeds with test subjects fixed",
+    "paired subject bootstrap after averaging over training-subset seeds"
+  ],
+  "joint_resampling_replicates": 2000,
+  "procedure": [
+    "sample one training-subset seed uniformly from the completed matched seeds",
+    "sample outer-test subjects with replacement using the same draw for P=8 and P=32",
+    "compute the paired subject-balanced macro-F1 difference"
+  ],
+  "random_seed": 20270909,
+  "reported": [
+    "empirical 2.5--97.5 percentile interval",
+    "Pr(delta > 0)"
+  ]
+}

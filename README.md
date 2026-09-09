@@ -16,6 +16,11 @@ summarizer, protocols, QA files, and sufficient statistics are under
 This is the primary scaling audit: unmatched breadth comparisons are retained
 as a naive diagnostic because they also change the marginal training label
 distribution.
+The class-matched summary uses a joint uncertainty procedure: each of 2,000
+replicates samples one completed training-subset seed and then resamples paired
+outer-test subjects. The released tables report its central 95% interval and
+the probability of a positive effect; seed-only and subject-only intervals
+remain in the CSV files as uncertainty decompositions.
 The nonlinear robustness protocol uses the same frozen class quotas with
 XGBoost at `T=6,400` for 10 matched seeds. Runs are resumable and can be
 sharded with:

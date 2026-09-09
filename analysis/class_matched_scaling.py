@@ -37,6 +37,8 @@ TASKS = core.TASKS
 VERSION = "class-matched-fixed-total-v2"
 INDEX_CACHE: dict[tuple[int, str], dict[tuple[int, str], np.ndarray]] = {}
 TEST_MATRIX_CACHE: dict[tuple[int, int], np.ndarray] = {}
+JOINT_RESAMPLING_REPLICATES = 2000
+JOINT_RESAMPLING_SEED = 20270909
 
 
 def configure_dataset(name: str) -> tuple[Any, tuple[str, ...]]:
@@ -400,6 +402,24 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
                 core.f1_from_confusion(core.patient_balanced_matrix(p32_matrices[draw]))
                 - core.f1_from_confusion(core.patient_balanced_matrix(p8_matrices[draw]))
             )
+        seed_values = np.asarray(wide.index, dtype=int)
+        joint_rng = np.random.default_rng(
+            np.random.SeedSequence([
+                JOINT_RESAMPLING_SEED,
+                int(total),
+                zlib.crc32(f"{args.output.name}:{model}:{task}".encode()),
+            ])
+        )
+        joint_resampling = np.empty(JOINT_RESAMPLING_REPLICATES, dtype=float)
+        for replicate in range(JOINT_RESAMPLING_REPLICATES):
+            sampled_seed = int(joint_rng.choice(seed_values))
+            p8_seed = patient_matrices[(sampled_seed, total, 8, model, task)]
+            p32_seed = patient_matrices[(sampled_seed, total, 32, model, task)]
+            draw = joint_rng.integers(0, len(p8_seed), size=len(p8_seed))
+            joint_resampling[replicate] = (
+                core.f1_from_confusion(core.patient_balanced_matrix(p32_seed[draw]))
+                - core.f1_from_confusion(core.patient_balanced_matrix(p8_seed[draw]))
+            )
         effects.append({
             "total": total, "model": model, "task": task, "n_seeds": len(delta),
             "p8_mean": float(wide[8].mean()), "p32_mean": float(wide[32].mean()),
@@ -407,6 +427,9 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
             "delta_ci_low": float(np.quantile(delta, 0.025)), "delta_ci_high": float(np.quantile(delta, 0.975)),
             "patient_bootstrap_ci_low": float(np.quantile(patient_bootstrap, 0.025)),
             "patient_bootstrap_ci_high": float(np.quantile(patient_bootstrap, 0.975)),
+            "joint_resampling_ci_low": float(np.quantile(joint_resampling, 0.025)),
+            "joint_resampling_ci_high": float(np.quantile(joint_resampling, 0.975)),
+            "joint_probability_positive": float(np.mean(joint_resampling > 0)),
             "positive_seed_fraction": float(np.mean(delta > 0)),
             "mean_class_donor_coverage_p8": float(coverage[8].mean()),
             "mean_class_donor_coverage_p32": float(coverage[32].mean()),
@@ -428,6 +451,20 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
         "all_nominal_patients_contribute": bool(len(run_frame) and run_frame.actual_contributing_patients.eq(run_frame.patient_budget).all()),
     }
     atomic_json(args.output / "qa.json", qa)
+    atomic_json(args.output / "uncertainty_protocol.json", {
+        "joint_resampling_replicates": JOINT_RESAMPLING_REPLICATES,
+        "random_seed": JOINT_RESAMPLING_SEED,
+        "procedure": [
+            "sample one training-subset seed uniformly from the completed matched seeds",
+            "sample outer-test subjects with replacement using the same draw for P=8 and P=32",
+            "compute the paired subject-balanced macro-F1 difference",
+        ],
+        "reported": ["empirical 2.5--97.5 percentile interval", "Pr(delta > 0)"],
+        "decompositions_retained": [
+            "empirical interval over training-subset seeds with test subjects fixed",
+            "paired subject bootstrap after averaging over training-subset seeds",
+        ],
+    })
     print(json.dumps(qa, indent=2))
 
 

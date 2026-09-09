@@ -142,6 +142,11 @@ clinical, causal, cross-batch, or external-generalization claims.
   and COMBAT fine are negative under both LR and XGBoost, while OneK1K fine is
   near zero and changes sign across models. Coarse effects are also model- and
   cohort-dependent: only APT remains positive under both classifiers.
+  A two-stage joint resampling procedure samples one completed training-subset
+  seed and then paired outer-test subjects in each of 2,000 replicates. All
+  18 joint 95% intervals include zero; Table 15 reports these intervals and
+  the probability of a positive effect as the primary uncertainty analysis.
+  Seed-only and subject-only intervals are retained only as decompositions.
   Consequently, class matching is the primary scaling result. The 37/38 count
   is retained only as the naive joint effect that motivates the label-distribution
   audit, not as a universal law or headline finding.
@@ -172,8 +177,9 @@ patient count was removed because it compared unequal endpoint changes. The
 primary scaling finding is instead methodological: unmatched fixed-total
 comparisons confound subject breadth with the marginal training label distribution.
 The naive analysis favors broader subject coverage in 37 of 38 comparisons,
-but after class matching fine effects are negative or near zero across LR and
-XGBoost, while coarse effects remain model- and cohort-dependent. The paper therefore
+but after class matching fine point estimates are negative or near zero across
+LR and XGBoost, while coarse estimates remain model- and cohort-dependent. All
+joint intervals include zero. The paper therefore
 identifies and corrects label-distribution confounding rather than claiming a
 patient-dominant scaling law.
 

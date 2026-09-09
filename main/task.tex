@@ -117,8 +117,13 @@ to spread each class over as many selected subjects as possible. This makes
 class support, counts, and proportions identical within each paired comparison;
 only the subjects contributing those cells change. We refit class-weighted
 multinomial Logistic Regression at both totals and report subject-balanced OOF
-macro-F1, empirical intervals over 20 subset seeds, and paired
-subject-bootstrap intervals. We additionally repeat the same control with the
+macro-F1. The primary uncertainty analysis jointly samples one completed
+training-subset seed and then resamples outer-test subjects with replacement,
+using the same subject draw for $P=8$ and $P=32$. We report the central 95\%
+interval and $\Pr(\Delta>0)$ over 2{,}000 joint replicates. Empirical
+seed-only intervals with test subjects fixed and paired subject-only intervals
+after averaging seeds are retained as uncertainty decompositions. We
+additionally repeat the same control with the
 frozen XGBoost configuration at $T=6{,}400$ over 10 matched seeds. This
 nonlinear robustness check uses the same folds, frozen quotas, training cells,
 and test cells as its LR counterpart; it tests whether the corrected direction
