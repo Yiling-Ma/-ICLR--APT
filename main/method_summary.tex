@@ -1,16 +1,17 @@
 \section{Models and Nested Evaluation}
 \label{sec:method_summary}
 
-APT-Bench is an evaluation contribution rather than a claim of architectural
+APT-Bench is an evaluation contribution, not a claim of architectural
 superiority. Classical controls include class-weighted multinomial Logistic
-Regression and XGBoost. The neural reference, \ourmethod{}, uses a shared
-four-layer APT Transformer, an auxiliary five-lineage head, a global subtype
-path, soft-routed lineage experts, and a cross-disease supervised contrastive
-term. Encoder-matched controls remove the cascade and use either independent
-lineage/subtype cross-entropy or HCE \citep{cultrera2026improving}. All models use
-the same patient folds and training-only preprocessing; neural checkpoints are
-selected by validation fine macro-F1. Complete architectures, objectives, and
-optimization settings are given in Appendix~\ref{sec:method}.
+Regression and XGBoost. Its neural reference ladder contains a flat
+Transformer, the same model trained with a two-level adaptation of HCE
+\citep{cultrera2026improving}, and a soft-cascade Transformer. These references
+share the APT tokenizer, encoder dimensions, optimizer, training budget,
+patient folds, training-only preprocessing, and validation fine-macro-F1
+checkpoint rule. The ladder therefore controls backbone capacity before asking
+whether hierarchy-specific complexity helps. Appendix~\ref{sec:method} records
+the complete implementation for reproducibility; none of its individual
+cascade components is claimed as an algorithmic contribution.
 
 For the composition bridge, each disease outer fold seals eight patients. A
 final disease-label-free XGBoost subtype model trained on the other 32 patients

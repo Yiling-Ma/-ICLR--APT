@@ -1,7 +1,15 @@
-\section{Hierarchy-Aware Reference Model}
+\section{Hierarchy-Aware Reference Ladder}
 \label{sec:method}
 
-APT-Bench is intentionally broader than any single model. We nevertheless need a hierarchy-aware reference architecture that can operate directly on APT profiles under the benchmark protocols. \ourmethod{} plays this role. It focuses on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves disease recognition to separate tabular baselines and patient-level aggregation. We do not present the architecture as a primary contribution: without full five-fold component ablations, its global path, coarse auxiliary objective, soft routing, and contrastive construction should be read as implementation choices rather than independently validated sources of performance.
+APT-Bench evaluates progressively structured, encoder-matched neural references:
+a flat Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses
+on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves
+disease recognition to separate tabular baselines and patient-level aggregation.
+Its released code retains the historical identifier \texttt{DropCascade} for
+artifact compatibility. That identifier denotes a reproducible benchmark
+baseline, not a proposed algorithm or a claim that its global path, auxiliary
+coarse objective, soft routing, or contrastive construction independently
+improves performance.
 
 \subsection{Cell Encoder}
 \label{sec:method:backbone}
@@ -16,7 +24,7 @@ z = \mathrm{Encode}(x) \in \mathbb{R}^{256}
 \end{equation}
 serves as the shared cell representation for downstream tasks.
 
-\subsection{Soft-Routed Hierarchical Cascade}
+\subsection{Soft-Cascade Reference}
 \label{sec:method:cascade}
 
 Let $M=5$ be the number of coarse lineages and $K=\numsubtypes$ the number of fine subtypes. Each subtype $k$ belongs to exactly one parent lineage $m(k)$. A coarse head produces lineage logits

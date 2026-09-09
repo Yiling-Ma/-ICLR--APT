@@ -20,12 +20,18 @@ claim that one cohort spans deployment, but a common contract for a new modality
 immutable patient folds, explicit observational units, leakage-resistant metrics,
 and outer-test-isolated budget controls that can extend to future clinical single-cell cohorts.
 
-To instantiate the hierarchy track, we use \ourmethod{}, a differentiable lineage-subtype cascade. The model combines a shared APT encoder, soft lineage routing, and subtype experts. We compare it with classical models and encoder-matched flat and HCE-trained Transformer controls. It serves as a hierarchy-aware neural reference rather than a claimed universal winner; the matched controls test whether any gain survives control of encoder capacity and training budget.
+The hierarchy track uses a matched reference ladder rather than centering the
+paper on a new architecture: XGBoost, a flat Transformer, the same Transformer
+with hierarchical cross-entropy (HCE), and a soft-cascade Transformer. The
+three neural references share the tokenizer, encoder dimensions, optimization
+budget, patient folds, and checkpoint rule. This design asks whether hierarchy
+mechanisms add value after controlling encoder capacity; it does not designate
+the cascade as a proposed method.
 
 This perspective leads to three empirical findings. First, coarse lineage
 recognition is substantially easier than fine subtype recognition across all
-models, and encoder-matched controls do not support a
-\ourmethod{}-specific advantage. Second, a controlled two-axis scaling study
+models, and encoder-matched controls do not support an advantage for the
+soft cascade over the simpler neural references. Second, a controlled two-axis scaling study
 separates patient diversity from within-patient cell depth. At each fixed total
 training-cell budget, reallocating cells from 8 to 32 patients improves both
 coarse and fine macro-F1 for Logistic Regression and XGBoost; averaged matched
@@ -47,6 +53,6 @@ stronger but sensitive to patient-specific absolute-expression structure.
 Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
-    \item \textbf{A multiresolution account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons under a common evaluation protocol. We use \ourmethod{} as a hierarchy-aware reference rather than claiming architectural superiority.
+    \item \textbf{A controlled account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. An encoder-matched reference ladder separates hierarchy mechanisms from backbone capacity and finds no supported gain from additional cascade complexity.
     \item \textbf{Controlled and externally replicated two-axis scaling.} Fixed-total-cell and matched-doubling experiments distinguish subject diversity from within-subject depth; the fixed-total direction is tested on COMBAT RNA and ADT, while strict nested cross-fitting converts disease-label-free subtype probabilities into patient compositions without exposing either stage to outer-test patients.
 \end{itemize}

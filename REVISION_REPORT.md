@@ -120,7 +120,13 @@ regularization selection; `legacy_vs_nested_audit.csv` records the comparison.
 The composition bridge remains predictive and associational because its
 increment over lineage composition and log cell count is unresolved.
 
-DropCascade is now a hierarchy-aware reference rather than a supported method
+The historically named DropCascade implementation is now presented as the
+soft-cascade member of an encoder-matched reference ladder rather than as a
+proposed method. The main text and tables no longer use branded styling or
+claim an algorithmic contribution. The prespecified patient-bootstrap tests
+are framed as an architecture audit, and their null result is reported as a
+benchmark finding: additional cascade complexity is not supported after
+controlling the backbone and training budget.
 winner. Compact panels are secondary appendix sensitivities supporting
 conditional within-cohort redundancy, not clinical performance, a uniquely
 minimal panel, or validated biomarkers. Disease prediction is consistently

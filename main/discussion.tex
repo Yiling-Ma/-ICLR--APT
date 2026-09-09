@@ -3,8 +3,8 @@
 
 APT-Bench is primarily an evaluation contribution rather than a claim of model
 superiority. Across matched neural and classical models, broad lineage is more
-reliably recovered than transcriptome-derived subtype, and no
-\ourmethod{}-specific advantage is statistically supported. The resulting
+reliably recovered than transcriptome-derived subtype, and no advantage for the
+soft cascade over simpler matched references is statistically supported. The resulting
 granularity gap and the uncertain subtype-versus-lineage gain in the strict
 nested composition bridge show that additional model complexity alone does not
 resolve fine cell typing or establish that finer predictions improve
@@ -52,8 +52,9 @@ validation is required before clinical claims.
 APT-Bench establishes a patient-disjoint evaluation contract for hierarchical
 cell typing and patient-level characterization from single-cell aptamer
 profiles. Across matched neural and classical models, coarse lineage is
-consistently easier than fine transcriptome-derived subtype prediction, and no
-\ourmethod{}-specific advantage is statistically supported. Controlled
+consistently easier than fine transcriptome-derived subtype prediction, and
+additional cascade complexity provides no statistically supported advantage
+over matched Transformer references. Controlled
 fixed-total and matched-scale experiments show that broader patient coverage is
 the stronger scaling axis over the tested APT range; all corresponding COMBAT
 RNA and ADT fixed-total comparisons reproduce the direction while revealing
