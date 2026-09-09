@@ -1,0 +1,9 @@
+{
+  "all_nominal_patients_contribute": true,
+  "class_quota_vectors_exactly_matched_across_p": true,
+  "completed_jobs": 300,
+  "effect_rows": 2,
+  "expected_jobs": 300,
+  "status": "PASS",
+  "total_cell_budget_exact": true
+}

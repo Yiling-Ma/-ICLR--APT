@@ -133,11 +133,15 @@ clinical, causal, cross-batch, or external-generalization claims.
   Within each fold/seed/task, exact per-class quotas are frozen from the nested
   P=8 subset and reused at P=16 and P=32. All nominal subjects contribute and
   every paired condition has identical class counts and proportions.
-- The matched result revises the headline interpretation. Coarse P=32-minus-P=8
-  effects remain positive in APT (+0.006/+0.008) and OneK1K
-  (+0.003/+0.003), and are small in COMBAT (+0.001/+0.000). Fine effects are
-  negative in APT (-0.002/-0.005), near-zero or negative in COMBAT
-  (-0.001/-0.003), and slightly positive in OneK1K (+0.002/+0.001).
+- XGBoost class-matched robustness: complete at T=6,400 with 10 matched seeds.
+  Each dataset completed 300/300 jobs and every QA file is `PASS`. The final
+  production artifacts use the CPU histogram backend throughout. APT
+  coarse/fine effects are +0.0083/-0.0058; COMBAT RNA effects are
+  +0.0011/-0.0027; and OneK1K effects are -0.0011/-0.0006.
+- The matched result revises the headline interpretation. At T=6,400, APT fine
+  and COMBAT fine are negative under both LR and XGBoost, while OneK1K fine is
+  near zero and changes sign across models. Coarse effects are also model- and
+  cohort-dependent: only APT remains positive under both classifiers.
   Consequently, class matching is the primary scaling result. The 37/38 count
   is retained only as the naive joint effect that motivates the label-distribution
   audit, not as a universal law or headline finding.
@@ -168,8 +172,8 @@ patient count was removed because it compared unequal endpoint changes. The
 primary scaling finding is instead methodological: unmatched fixed-total
 comparisons confound subject breadth with the marginal training label distribution.
 The naive analysis favors broader subject coverage in 37 of 38 comparisons,
-but after class matching only a small coarse effect transfers to APT and
-OneK1K, while fine effects change sign across cohorts. The paper therefore
+but after class matching fine effects are negative or near zero across LR and
+XGBoost, while coarse effects remain model- and cohort-dependent. The paper therefore
 identifies and corrects label-distribution confounding rather than claiming a
 patient-dominant scaling law.
 

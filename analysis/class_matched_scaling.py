@@ -432,20 +432,36 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
 
 
 def main() -> None:
+    global TOTAL_BUDGETS, SEEDS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", choices=("apt", "onek1k", "combat_rna", "combat_adt"), required=True)
     parser.add_argument("--output", type=Path)
     subparsers = parser.add_subparsers(dest="command", required=True)
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("--models")
+    run_parser.add_argument("--totals", default=",".join(map(str, TOTAL_BUDGETS)))
+    run_parser.add_argument("--seeds", type=int, default=len(SEEDS))
     run_parser.add_argument("--fold", type=int, choices=range(core.N_OUTER_FOLDS))
     run_parser.add_argument("--num-shards", type=int, default=1)
     run_parser.add_argument("--shard-index", type=int, default=0)
     run_parser.add_argument("--max-jobs", type=int)
     run_parser.add_argument("--force", action="store_true")
-    subparsers.add_parser("aggregate")
+    aggregate_parser = subparsers.add_parser("aggregate")
+    aggregate_parser.add_argument("--models")
+    aggregate_parser.add_argument("--totals", default=",".join(map(str, TOTAL_BUDGETS)))
+    aggregate_parser.add_argument("--seeds", type=int, default=len(SEEDS))
     args = parser.parse_args()
-    adapter, models = configure_dataset(args.dataset)
+    adapter, default_models = configure_dataset(args.dataset)
+    models = tuple(args.models.split(",")) if args.models else default_models
+    unsupported = set(models) - set(core.MODEL_NAMES)
+    if unsupported:
+        raise ValueError(f"Unsupported model(s) for {args.dataset}: {sorted(unsupported)}")
+    TOTAL_BUDGETS = tuple(int(value) for value in args.totals.split(","))
+    SEEDS = tuple(range(args.seeds))
+    if not TOTAL_BUDGETS or any(total <= 0 for total in TOTAL_BUDGETS):
+        raise ValueError("At least one positive total-cell budget is required.")
+    if not SEEDS:
+        raise ValueError("At least one seed is required.")
     args.output = (args.output or PROJECT_ROOT / "outputs" / "class_matched_scaling" / args.dataset).resolve()
     args.output.mkdir(parents=True, exist_ok=True)
     atomic_json(args.output / "protocol.json", protocol(args.dataset, models) | {"protocol_hash": protocol_hash(args.dataset, models)})

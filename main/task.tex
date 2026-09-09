@@ -116,10 +116,13 @@ replacement at $P=8,16,32$, using capacity-constrained round-robin allocation
 to spread each class over as many selected subjects as possible. This makes
 class support, counts, and proportions identical within each paired comparison;
 only the subjects contributing those cells change. We refit class-weighted
-multinomial Logistic Regression and report subject-balanced OOF macro-F1,
-empirical intervals over 20 subset seeds, and paired subject-bootstrap
-intervals. Logistic Regression is used as a focused sampling control rather
-than as another model-comparison family.
+multinomial Logistic Regression at both totals and report subject-balanced OOF
+macro-F1, empirical intervals over 20 subset seeds, and paired
+subject-bootstrap intervals. We additionally repeat the same control with the
+frozen XGBoost configuration at $T=6{,}400$ over 10 matched seeds. This
+nonlinear robustness check uses the same folds, frozen quotas, training cells,
+and test cells as its LR counterpart; it tests whether the corrected direction
+is classifier-specific rather than expanding the benchmark model ladder.
 This control fixes the marginal training label distribution, but it does not
 separately fix disease--subtype composition, the allocation of each class
 across subjects, or within-class subject heterogeneity.

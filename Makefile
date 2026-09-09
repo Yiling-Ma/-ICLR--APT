@@ -2,7 +2,7 @@ PYTHON ?= python3
 SCALING_DIR ?= outputs/patient_cell_scaling_fair
 PDF_TMP ?= tmp/pdfs
 
-.PHONY: composition-audit fair-scaling-run fair-scaling-aggregate fair-scaling-summarize cross-cohort-summary class-matched-summary paper revision
+.PHONY: composition-audit fair-scaling-run fair-scaling-aggregate fair-scaling-summarize cross-cohort-summary class-matched-summary class-matched-xgb-summary paper revision
 
 composition-audit:
 	$(PYTHON) analysis/generate_composition_protocol_audit.py
@@ -26,6 +26,9 @@ cross-cohort-summary:
 	cp outputs/cross_cohort_scaling/cross_cohort_scaling.pdf figures/cross_cohort_scaling.pdf
 
 class-matched-summary:
+	$(PYTHON) analysis/summarize_class_matched_scaling.py
+
+class-matched-xgb-summary:
 	$(PYTHON) analysis/summarize_class_matched_scaling.py
 
 paper:

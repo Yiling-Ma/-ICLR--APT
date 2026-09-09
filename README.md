@@ -16,6 +16,17 @@ summarizer, protocols, QA files, and sufficient statistics are under
 This is the primary scaling audit: unmatched breadth comparisons are retained
 as a naive diagnostic because they also change the marginal training label
 distribution.
+The nonlinear robustness protocol uses the same frozen class quotas with
+XGBoost at `T=6,400` for 10 matched seeds. Runs are resumable and can be
+sharded with:
+
+```bash
+python analysis/class_matched_scaling.py \
+  --dataset DATASET \
+  --output outputs/class_matched_scaling_xgb/DATASET \
+  run --models xgboost --totals 6400 --seeds 10 \
+  --num-shards N --shard-index I
+```
 
 The formal task and split contract is documented in
 [`benchmark/README.md`](benchmark/README.md). The current repository is not yet a

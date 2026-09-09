@@ -138,6 +138,7 @@ def build_model(model_name: str) -> object:
             subsample=0.8,
             colsample_bytree=0.8,
             tree_method="hist",
+            device=os.environ.get("APT_XGB_DEVICE", "cpu"),
             n_jobs=4,
             random_state=MODEL_RANDOM_STATE,
             eval_metric="mlogloss",

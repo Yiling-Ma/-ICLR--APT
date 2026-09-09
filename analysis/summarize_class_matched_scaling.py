@@ -12,6 +12,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "outputs/class_matched_scaling"
+XGB_OUTPUT = ROOT / "outputs/class_matched_scaling_xgb"
 DATASETS = {
     "apt": ("APT", ROOT / "outputs/patient_cell_scaling_fair"),
     "combat_rna": ("COMBAT RNA", ROOT / "outputs/combat_citeseq_scaling"),
@@ -58,13 +59,15 @@ def original_coverage() -> pd.DataFrame:
 def matched_effects() -> pd.DataFrame:
     rows = []
     for key, (label, _) in DATASETS.items():
-        path = OUTPUT / key / "class_matched_effects.csv"
-        if not path.exists():
-            continue
-        frame = pd.read_csv(path)
-        frame.insert(0, "dataset", label)
-        frame.insert(0, "dataset_key", key)
-        rows.append(frame)
+        for root in (OUTPUT, XGB_OUTPUT):
+            path = root / key / "class_matched_effects.csv"
+            if not path.exists():
+                continue
+            frame = pd.read_csv(path)
+            frame.insert(0, "artifact_root", root.name)
+            frame.insert(0, "dataset", label)
+            frame.insert(0, "dataset_key", key)
+            rows.append(frame)
     result = pd.concat(rows, ignore_index=True)
     result.to_csv(OUTPUT / "class_matched_effects_all.csv", index=False)
     return result
@@ -84,22 +87,23 @@ def write_table(effects: pd.DataFrame) -> None:
         r"\small",
         r"\setlength{\tabcolsep}{4pt}",
         r"\resizebox{\textwidth}{!}{%",
-        r"\begin{tabular}{llrrcc}",
+        r"\begin{tabular}{lllrrcc}",
         r"\toprule",
-        "Dataset & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\\rightarrow$32) & $\\Delta$ subject-balanced M-F1 \\\\",
+        "Dataset & Model & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\\rightarrow$32) & $\\Delta$ subject-balanced M-F1 \\\\",
         r"\midrule",
     ]
-    for _, row in effects.sort_values(["dataset_key", "task", "total"]).iterrows():
+    for _, row in effects.sort_values(["dataset_key", "model", "task", "total"]).iterrows():
         donor_text = f"{row.mean_class_donor_coverage_p8:.1f}$\\rightarrow${row.mean_class_donor_coverage_p32:.1f}"
+        model_text = "LR" if row.model == "logistic_regression" else "XGBoost"
         lines.append(
-            f"{row.dataset} & {str(row.task).capitalize()} & {int(row.total):,} & "
+            f"{row.dataset} & {model_text} & {str(row.task).capitalize()} & {int(row.total):,} & "
             f"{row.matched_class_count:.1f}/{int(row.total_class_count)} & {donor_text} & {format_effect(row)} \\\\"
         )
     lines += [
         r"\bottomrule",
         r"\end{tabular}",
         r"}",
-        r"\caption{Class-matched fixed-total control using class-weighted multinomial Logistic Regression. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are 95\% paired subject-bootstrap intervals after averaging the 20 seed-level sufficient statistics; empirical seed intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}",
+        r"\caption{Class-matched fixed-total control. LR uses 20 seeds at both totals; the matched XGBoost robustness check uses 10 seeds at $T=6{,}400$. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are 95\% paired subject-bootstrap intervals after averaging seed-level sufficient statistics; empirical seed intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}",
         r"\label{tab:class_matched_scaling}",
         r"\end{table}",
     ]
@@ -116,27 +120,29 @@ def write_figure(effects: pd.DataFrame) -> None:
         ("OneK1K RNA", "fine"),
     ]
     labels = [f"{dataset} / {task.capitalize()}" for dataset, task in order]
-    colors = {3200: "#176B87", 6400: "#D95F3D"}
-    offsets = {3200: -0.12, 6400: 0.12}
+    colors = {"logistic_regression": "#176B87", "xgboost": "#D95F3D"}
+    offsets = {"logistic_regression": -0.12, "xgboost": 0.12}
 
     fig, ax = plt.subplots(figsize=(6.6, 3.55))
-    for total in sorted(colors):
-        subset = effects[effects.total == total].set_index(["dataset", "task"])
+    for model in colors:
+        subset = effects[(effects.total == 6400) & (effects.model == model)].set_index(["dataset", "task"])
+        if not all(key in subset.index for key in order):
+            continue
         means = [subset.loc[key, "delta_p32_minus_p8_mean"] for key in order]
         lows = [subset.loc[key, "patient_bootstrap_ci_low"] for key in order]
         highs = [subset.loc[key, "patient_bootstrap_ci_high"] for key in order]
-        y = [index + offsets[total] for index in range(len(order))]
+        y = [index + offsets[model] for index in range(len(order))]
         ax.errorbar(
             means,
             y,
             xerr=[[mean - low for mean, low in zip(means, lows)],
                   [high - mean for mean, high in zip(means, highs)]],
             fmt="o",
-            color=colors[total],
+            color=colors[model],
             markersize=4.5,
             capsize=2.5,
             linewidth=1.15,
-            label=f"T={total:,}",
+            label="LR" if model == "logistic_regression" else "XGBoost",
         )
 
     ax.axvline(0, color="#2C2C2C", linewidth=0.8)
@@ -156,21 +162,31 @@ def write_figure(effects: pd.DataFrame) -> None:
 
 def add_matched_class_counts(effects: pd.DataFrame) -> pd.DataFrame:
     rows = []
-    for key in DATASETS:
-        registry = pd.read_csv(OUTPUT / key / "run_registry.csv")
-        counts = registry.groupby(["total", "task"]).agg(
-            matched_class_count=("observed_class_count", "mean"),
-            total_class_count=("n_classes", "first"),
-        ).reset_index()
-        counts.insert(0, "dataset_key", key)
-        rows.append(counts)
-    return effects.merge(pd.concat(rows), on=["dataset_key", "total", "task"], validate="many_to_one")
+    for root in (OUTPUT, XGB_OUTPUT):
+        for key in DATASETS:
+            path = root / key / "run_registry.csv"
+            if not path.exists():
+                continue
+            registry = pd.read_csv(path)
+            counts = registry.groupby(["total", "model", "task"]).agg(
+                matched_class_count=("observed_class_count", "mean"),
+                total_class_count=("n_classes", "first"),
+            ).reset_index()
+            counts.insert(0, "artifact_root", root.name)
+            counts.insert(0, "dataset_key", key)
+            rows.append(counts)
+    return effects.merge(
+        pd.concat(rows),
+        on=["dataset_key", "artifact_root", "total", "model", "task"],
+        validate="many_to_one",
+    )
 
 
 def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     original_coverage()
     effects = add_matched_class_counts(matched_effects())
+    effects = effects.drop(columns="artifact_root")
     effects.to_csv(OUTPUT / "class_matched_effects_all.csv", index=False)
     write_table(effects)
     write_figure(effects)

@@ -76,8 +76,10 @@ matched neural and classical models, coarse lineage recognition remains
 substantially easier than fine subtype prediction. Unmatched fixed-total
 reallocations confound subject breadth with the training label distribution:
 although 37 of 38 comparisons favor 32 rather than 8 subjects, a class-matched
-control reduces this apparent advantage to modest coarse gains in APT and
-OneK1K, while fine effects are small and change sign across cohorts. Thus the
+control reduces this apparent advantage to small, model- and cohort-dependent
+coarse effects and negative or near-zero fine effects. The fine-effect reversal
+in APT and COMBAT is reproduced by both Logistic Regression and XGBoost, whereas
+OneK1K remains near zero. Thus the
 unmatched result is an audit target, not evidence for a universal
 subject-dominant scaling law. Here, the label-distribution effect includes
 changes in observed classes, per-class counts, and class proportions.
@@ -543,6 +545,12 @@ standardization is refit on each training subset, and all immutable outer-test
 cells are retained. All three runs complete 1{,}200/1{,}200 jobs and pass checks
 for exact total cells, identical paired class counts, non-overlapping test
 subjects, and contribution by every nominal training subject.
+These primary Logistic Regression runs use 20 matched subset seeds at both
+$T=3{,}200$ and $T=6{,}400$. To test whether the corrected direction is specific
+to a linear classifier, we repeat the identical control with the frozen XGBoost
+configuration at $T=6{,}400$ using 10 matched seeds. Each dataset completes
+300/300 additional jobs and passes the same checks; final production fits use
+the CPU histogram backend throughout to avoid mixing computational backends.
 It does not separately identify changes in disease--subtype composition,
 within-class allocation across subjects, or within-class subject heterogeneity;
 these remain bundled with the subject-breadth intervention.
@@ -550,9 +558,10 @@ these remain bundled with the subject-breadth intervention.
 \input{tables/class_matched_scaling}
 
 The table reports paired subject-bootstrap intervals for the seed-averaged
-effect. Empirical 95\% subset-seed intervals include zero in 11 of 12 rows; the
-exception is APT fine at $T=6{,}400$, which is negative
-($[-0.0084,-0.0022]$). The bootstrap and seed intervals answer different
+effect. Empirical 95\% subset-seed intervals include zero in 16 of 18 rows. The
+two exceptions are the LR and XGBoost APT fine results at $T=6{,}400$, both of
+which are negative ($[-0.0084,-0.0022]$ and
+$[-0.0101,-0.0017]$, respectively). The bootstrap and seed intervals answer different
 questions: the former varies held-out subjects after averaging training-subset
 seeds, whereas the latter varies selected development subsets with the test
 subjects fixed. We therefore interpret sign and magnitude descriptively rather

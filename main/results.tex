@@ -77,10 +77,11 @@ design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
 \caption{Primary class-matched fixed-total scaling control. Each comparison
 freezes the observed classes and exact per-class cell quotas before reallocating
 the same $T$ training cells from 8 to 32 subjects. Points are changes in
-subject-balanced, subject-disjoint OOF macro-F1 for LR; bars are 95\% paired
-subject-bootstrap intervals over fixed outer-test subjects after averaging 20
-subset seeds. Eleven of 12 empirical seed intervals include zero. The corrected
-effects are modest for coarse lineage and heterogeneous for fine subtype.}
+subject-balanced, subject-disjoint OOF macro-F1 at $T=6{,}400$; bars are 95\%
+paired subject-bootstrap intervals over fixed outer-test subjects after
+averaging 20 LR or 10 XGBoost subset seeds. Ten of 12 empirical seed intervals
+include zero; the exceptions are the negative APT fine effects for both models.
+The corrected effects are small and model- or cohort-dependent.}
 \label{fig:class_matched_scaling}
 \end{figure}
 
@@ -133,22 +134,26 @@ only one component of the label-distribution effect: per-class counts and
 proportions also change in the unmatched analysis.
 
 We therefore repeat LR after freezing the $P=8$ observed classes and exact
-per-class quotas within every fold/seed/task comparison
+per-class quotas within every fold/seed/task comparison, then repeat the common
+$T=6{,}400$ setting with XGBoost as a nonlinear robustness check
 (Figure~\ref{fig:class_matched_scaling};
 Table~\ref{tab:class_matched_scaling}). Mean donor coverage per observed class
-increases substantially while class counts remain identical. Coarse effects
-remain positive for APT ($+0.006/+0.008$) and OneK1K
-($+0.003/+0.003$), and are small for COMBAT ($+0.001/+0.000$).
-Fine effects are negative for APT ($-0.002/-0.005$), near zero to negative
-for COMBAT ($-0.001/-0.003$), and only slightly positive for OneK1K
-($+0.002/+0.001$). Most empirical seed intervals include zero; paired
+increases substantially while class counts remain identical. At $T=6{,}400$,
+the LR/XGBoost effects are $+0.0078/+0.0083$ for APT coarse and
+$-0.0050/-0.0058$ for APT fine. COMBAT coarse effects are
+$+0.0000/+0.0011$, while fine effects are $-0.0028/-0.0027$.
+OneK1K is less stable across models: coarse changes from $+0.0033$ under LR to
+$-0.0011$ under XGBoost, and fine changes from $+0.0013$ to $-0.0006$.
+Ten of 12 empirical seed intervals at this common total include zero; only the
+two APT fine intervals exclude zero, both in the negative direction. Paired
 subject-bootstrap intervals for seed-averaged sufficient statistics are shown
 in Appendix~\ref{sec:appendix:class_matched_scaling}. Thus class matching
-changes the scientific conclusion: the transferable signal is at most a modest
-coarse-lineage association, whereas the apparently consistent fine-subtype
-advantage in the naive analysis is partly mediated by changes in label support
-and class composition and does not survive as a general breadth effect. This
-control does not attribute the change to unseen classes alone.
+changes the scientific conclusion: the apparent fine-subtype advantage in the
+naive analysis is not an LR artifact, but neither its magnitude nor the coarse
+effect supports a universal subject-breadth benefit. Instead, unmatched gains
+are partly mediated by changes in label support and class composition, and the
+residual class-matched effects remain model- and cohort-dependent. This control
+does not attribute the change to unseen classes alone.
 
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}

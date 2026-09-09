@@ -20,10 +20,12 @@ training label distribution.
 Its 37/38 direction is therefore a naive joint effect, not a pure
 subject-diversity estimate or a headline scaling law. The class-matched control
 changes the interpretation: after identical per-class quotas are enforced,
-small coarse gains persist in APT and OneK1K, whereas fine effects are
-heterogeneous and reverse in APT and COMBAT. The unmatched fine-label gains are
-therefore partly mediated by changes in label support and class composition,
-not demonstrably by unseen-class coverage alone. Disease--subtype composition,
+APT retains a small coarse gain under both LR and XGBoost, but the OneK1K
+coarse effect changes sign across models. Fine effects reverse in both APT and
+COMBAT under both classifiers and remain near zero in OneK1K. The unmatched
+fine-label gains are therefore partly mediated by changes in label support and
+class composition, not an LR-specific artifact and not demonstrably caused by
+unseen-class coverage alone. Disease--subtype composition,
 within-class allocation across subjects, pool, source, and unrecorded batch
 coverage can still change with subject breadth, so even the matched result is
 associational.
@@ -58,8 +60,9 @@ two-axis scaling, and patient characterization from single-cell aptamer profiles
 Coarse lineage is consistently easier than fine subtype prediction, with no
 supported cascade advantage over matched references. Its scaling audit shows
 that unmatched fixed-total comparisons can mistake a label-distribution effect
-for a subject-breadth benefit; after class matching, only modest coarse effects
-remain and fine effects vary across cohorts. Nested transfer
+for a subject-breadth benefit; after class matching, coarse effects are small
+and model-dependent, while fine effects are negative or near zero across LR and
+XGBoost. Nested transfer
 has no resolved subtype increment, and direct disease association remains
 confounded by patient-specific absolute-expression structure; clinical claims
 require external validation.

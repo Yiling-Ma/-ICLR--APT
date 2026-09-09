@@ -100,6 +100,7 @@ def build_model(model_name: str) -> object:
             subsample=0.8,
             colsample_bytree=0.8,
             tree_method="hist",
+            device=os.environ.get("ONEK1K_XGB_DEVICE", "cpu"),
             n_jobs=int(os.environ.get("ONEK1K_XGB_N_JOBS", "1")),
             random_state=core.MODEL_RANDOM_STATE,
             eval_metric="mlogloss",
