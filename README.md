@@ -1,5 +1,10 @@
 # APT-Bench
 
+Current release evidence and limitations are documented in
+[`REPRODUCIBILITY.md`](REPRODUCIBILITY.md). The author/data-owner TODO handoff is
+[`TODO_HANDOFF_ZH.md`](TODO_HANDOFF_ZH.md). Artifact checks do not certify ethics,
+data-sharing rights, independent annotation validity, or end-to-end reproducibility.
+
 This repository contains the APT-Bench ICLR 2027 manuscript, analysis code, and
 selected result artifacts. APT-Bench studies patient-disjoint hierarchical cell
 typing, two-axis patient/cell training scale, and strict cross-fitted transfer

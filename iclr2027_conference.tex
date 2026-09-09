@@ -103,7 +103,15 @@ cannot justify conclusions about subject--cell scaling.
 \subsection*{AI use statement}
 
 % (This section is \textbf{required} and does not count toward the page limit.)
-\noindent\todo{\textbf{Required for ICLR 2027.} Disclose every generative-AI tool and model used for writing, editing, coding, analysis, literature review, or figure preparation; identify the tasks for which each tool was used, describe human verification of AI-assisted outputs, and state that the authors take responsibility for the final text, claims, code, and artifacts.}
+Generative-AI assistance through ChatGPT and Codex was used in the revision
+workflow for research-design suggestions, literature search, manuscript editing,
+analysis-code development, debugging, experiment orchestration, and scientific
+figure preparation. AI-generated suggestions were not themselves experimental
+evidence; reported computational results are tied to saved run artifacts.
+\todo{Authors: confirm the complete tool/model inventory and versions, describe
+the human checks actually performed on code, citations, figures, and statistical
+claims, and affirm responsibility for the final submission. Automated checks
+do not substitute for this author verification.}
 
 % In this work, we used generative AI tools for [tasks with required disclosure].
 % We have not used generative AI tools for [other tasks with required disclosure],
@@ -121,7 +129,16 @@ cannot justify conclusions about subject--cell scaling.
 \subsection*{Ethics statement}
 
 % (This section is \textbf{recommended} and does not count toward the page limit.)
-\noindent\todo{State the human-subjects approval or exemption and informed-consent status; describe data de-identification, access restrictions, privacy protections, intended clinical/research use, foreseeable misuse or bias risks, and any conflicts of interest. Do not include identifying institutional details if they would break anonymity.}
+APT-Bench is intended for research evaluation, not clinical decision-making.
+The small single-cohort sample and unresolved acquisition effects preclude
+claims of clinical validity or demographic fairness. Strong patient-specific
+signals also create a privacy concern: removing direct identifiers alone does
+not establish that cell profiles cannot be linked to their source individuals.
+Any data release must respect participant consent and applicable access terms.
+\todo{Data owners: supply the actual ethics approval or exemption and consent
+terms; confirm de-identification procedures, permitted sharing/access controls,
+and conflicts of interest. These facts have not been verified from the available
+analysis artifacts; preserve reviewer anonymity when providing documentation.}
 
 % If authors feel that their paper submission raises questions regarding the Code
 % of Ethics, they are encouraged to include a paragraph of Ethics Statement (at
@@ -135,7 +152,18 @@ cannot justify conclusions about subject--cell scaling.
 
 \subsection*{Reproducibility statement}
 
-\noindent\todo{Provide the anonymous code and data-access locations, exact patient-split manifest, preprocessing and evaluation commands, software environment, random seeds, model hyperparameters, compute requirements, and paths for the prediction artifacts and tables used in every reported result.}
+The repository records the fixed five-fold partition in
+\path{benchmark/splits/patient_folds.json}, selected artifact checksums and
+structural audits in \texttt{benchmark/release\_audit/}, and artifact-level
+reproduction commands in \texttt{REPRODUCIBILITY.md}. The latter distinguishes
+rebuilding figures/PDFs from rerunning models. Per-experiment protocol files
+record sampling settings and seeds; the controlled simulation includes
+per-replicate results and source hashes. A snapshot of the local analysis
+environment is provided, but is not a lockfile for all historical training runs.
+\todo{Finalize anonymous reviewer access, data permissions and licenses,
+archival versioning, original training environments, and a portable
+raw-data-to-results evaluator. The present repository is not yet a complete
+independently reproducible benchmark release.}
 
 \subsubsection*{Author Contributions}
 
@@ -202,6 +230,11 @@ groups; no subtype was renamed or redefined for a particular disease. This gives
 the labels a consistent operational meaning, but it does not prove that marker
 expression or biological state is invariant across diseases. Each subtype is
 assigned to one of five parent lineages by a manually curated lookup.
+The exported lookup and structural audit are available under
+\texttt{benchmark/release\_audit/}: the existing subtype summary has 27 unique
+subtypes, five parents, and 361{,}792 cells, and the fold manifest has five
+disjoint groups of eight patients. These checks establish internal bookkeeping
+consistency, not independent biological validity.
 \todo{Document independent validation of the subtype-to-lineage mapping, including
 reviewers, disagreements, adjudication, and any marker-based checks.}
 
@@ -258,10 +291,13 @@ patient-disjoint taxonomy; it does not estimate annotation accuracy.
     \item \todo{Report barcode-matching rates, APT normalization and filtering,
     all remaining software versions and parameters, and whether annotation was
     performed before investigators examined APT profiles or disease labels.}
-    \item \todo{Add a cohort-flow diagram with participant and cell counts after every
-    exclusion step, and provide the ethics approval/consent, de-identification,
-    data-access, license, and intended-use terms referenced in the Ethics and
-    Reproducibility Statements.}
+    \item The documented final cell-flow accounting is
+    $374{,}854\ \text{linked post-QC cells}
+    -13{,}062\ \text{Unknown cells}=361{,}792\ \text{benchmark cells}$.
+    \todo{Data owners: provide participant and cell counts at all earlier
+    collection/QC exclusions before a complete cohort-flow diagram can be
+    drawn. Supply the approval, consent, access, and licensing evidence listed
+    in the Ethics and Reproducibility Statements.}
 \end{itemize}
 
 \subsection{Chance-Adjusted Resolution Diagnostic}
@@ -441,8 +477,12 @@ A complete release must contain the processed APT matrix; pseudonymous cell and
 patient identifiers; disease and cell labels; hierarchy and feature metadata;
 the immutable fold manifest; metric implementations; baseline configurations;
 and a single command that regenerates the headline tables from model predictions.
-\todo{Before submission, add data and code URLs, explicit licenses, file
-checksums, an environment lockfile, an archival DOI, and the end-to-end command.
+The fold manifest, exported hierarchy, selected checksums, and artifact-rebuild
+instructions are now recorded in \texttt{benchmark/release\_audit/} and
+\texttt{REPRODUCIBILITY.md}; these cover selected results, not the complete
+dataset or training pipeline.
+\todo{Before submission, finalize anonymous data/code access, explicit licenses,
+original training environment locks, an archival DOI, and the end-to-end command.
 If participant-level data require controlled access, release the complete schema,
 all labels permitted by consent, the split manifest, evaluator, and access
 procedure.}

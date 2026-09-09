@@ -11,7 +11,7 @@ cross-site clinical generalization.
    from one APT vector per cell.
 2. Two-axis training scale: vary independent training patients and uniformly
    sampled cells per patient under fixed patient-disjoint outer evaluation.
-3. Cross-track error propagation and disease audit: aggregate strictly nested
+3. Exploratory representation-transfer and disease audit: aggregate strictly nested
    cell-typing predictions into one six-class prediction per participant, report
    patient-level metrics, and compare against gold-composition and technical
    controls.
@@ -19,7 +19,7 @@ cross-site clinical generalization.
 Leave-one-disease-out generalization is an exploratory stress test. Open-set
 subtype discovery is outside the current contract; all primary hierarchy tasks
 use the fixed 5-lineage/27-subtype ontology. Compact-panel selection and inference-time cell subsampling are
-secondary measurement-sensitivity analyses reported in the appendix.
+archived feature-redundancy diagnostics, not assay-efficiency contributions.
 
 The budget controls have different meanings. A training-scale cell budget
 subsamples cells before fitting preprocessing and the classifier. An aptamer budget retrains
@@ -30,8 +30,10 @@ reduce the cells used to train the model.
 ## Fixed Splits
 
 `splits/patient_folds.json` records the immutable five-fold outer partition. For
-outer fold `i`, fold `i` is test, fold `(i + 1) % 5` is validation, and the
-remaining folds are training. Preprocessing, model selection, feature ranking,
+outer fold `i`, fold `i` is test. The Transformer validation convention uses
+fold `(i + 1) % 5`, with the remaining three folds for training. Other protocols
+use their documented development-only sampling and inner validation; this rule
+must not be imposed on every classical or nested disease run. Preprocessing, model selection, feature ranking,
 and budget selection must use development patients only.
 
 ## Required Prediction Interface
@@ -90,6 +92,8 @@ The paper source, analysis scripts, fixed fold manifest, and selected result
 artifacts are currently versioned in this repository. A complete benchmark
 release still requires the processed APT matrix and labels, feature and hierarchy
 metadata, an end-to-end evaluator, an environment lockfile, checksums, an
-archival DOI, and explicit code/data licenses. These items are submission
+archival DOI, and explicit code/data licenses. A structural hierarchy export,
+selected checksums, and local audit environment snapshot are now provided in
+`release_audit/`, but do not complete those release requirements. These items are submission
 blockers: until they are available, third parties cannot reproduce the full
 benchmark from this repository alone.

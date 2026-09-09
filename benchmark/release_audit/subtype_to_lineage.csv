@@ -1,0 +1,28 @@
+subtype,lineage
+Erythrocyte,Other
+Atypical Memory B,B
+CD4 Monocyte-4,Myeloid
+platelet,Other
+Tcm,T
+Memory B-2,B
+Plasma,B
+pDC,Myeloid
+CD14 Monocyte-3,Myeloid
+CD8 + CTL-3,T
+GCB,B
+Cycling T,T
+CD14 Monocyte-2,Myeloid
+CD8 + CTL-2,T
+CD16 Monocyte-2,Myeloid
+CD8 + CTL-1,T
+cDC2,Myeloid
+CD8 Tem-2,T
+CD16 Monocyte-1,Myeloid
+CD4 + Tcm-2,T
+Naive T,T
+Memory B-1,B
+CD8 Tem-1,T
+CD14 Monocyte-1,Myeloid
+CD56 NK,NK
+CD16 NK,NK
+CD4 + Tcm-1,T

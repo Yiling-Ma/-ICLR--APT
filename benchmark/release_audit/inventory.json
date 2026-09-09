@@ -1,0 +1,9 @@
+{
+  "folds": 5,
+  "patients": 40,
+  "unique_subtypes": 27,
+  "lineages": 5,
+  "cells": 361792,
+  "mapping_check": "Structural lookup consistency only; no independent biological validation",
+  "scope": "Selected committed artifacts, not a complete dataset release"
+}
