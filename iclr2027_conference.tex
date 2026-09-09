@@ -208,6 +208,43 @@ assigned to one of five parent lineages by a manually curated lookup.
 \todo{Document independent validation of the subtype-to-lineage mapping, including
 reviewers, disagreements, adjudication, and any marker-based checks.}
 
+\subsection{Paired-RNA Internal Reconstructability Oracle}
+\label{sec:appendix:paired_rna_oracle}
+
+We use the paired transcriptome as a diagnostic oracle to distinguish an APT
+information limitation from complete non-reconstructability of the operational
+labels. This analysis is deliberately outside the primary APT-only benchmark.
+The RNA representation contains 2{,}000 log-normalized highly variable genes
+selected by Seurat-style dispersion during data development. All 361{,}792
+benchmark cells match uniquely to this matrix by cell barcode. Because this
+feature representation and the manual labels arise from the same transcriptomic
+pipeline, the oracle is circular with respect to label construction and cannot
+serve as independent validation or a leakage-free model comparison.
+
+Within each of the five fixed patient-disjoint folds, we compare APT only,
+paired RNA only, and their feature concatenation. The three inputs use the
+identical deterministic sample of up to 2{,}000 training cells per development
+patient and all cells from the eight untouched test patients. Features are
+standardized using training-fold statistics. We fit the same 30-epoch
+patient- and class-weighted linear SGD probe at both resolutions; the fixed
+optimization budget avoids modality-specific tuning. Scores use
+subject-normalized OOF confusion matrices, and 2{,}000 paired patient-bootstrap
+replicates quantify modality contrasts. This matched-budget probe is not
+directly comparable to the full-training model ladder in
+Table~\ref{tab:main}.
+
+\input{tables/paired_rna_oracle}
+
+Paired RNA improves coarse/fine macro-F1 over APT by $+0.502$
+($95\%$ CI $[0.478,0.527]$) and $+0.338$ ($[0.300,0.365]$). The concatenated
+representation improves fine macro-F1 over RNA alone by $+0.031$
+($[0.016,0.046]$), whereas its coarse change of $+0.004$
+($[-0.001,0.009]$) is unresolved. RNA therefore reconstructs the operational
+taxonomy far better than APT, but its own coarse--fine gap remains 0.348 and
+the complementary APT fine signal is nonzero. The experiment supports a mixed
+interpretation involving modality resolution and the difficulty of the
+patient-disjoint taxonomy; it does not estimate annotation accuracy.
+
 \begin{itemize}
     \item \todo{Report recruiting site(s) and dates, prospective versus retrospective
     collection, exact patient count per group, inclusion/exclusion and diagnostic
@@ -417,9 +454,9 @@ Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint proto
 
 \input{tables/protocol_sensitivity}
 
-\paragraph{Patient-balanced cell-count sensitivity.}
-Patient-disjoint evaluation prevents leakage but does not make a pooled
-cell-level point estimate patient-balanced: patient cell counts range from
+\paragraph{Equal-cell evaluation sensitivity.}
+Patient-disjoint evaluation prevents leakage but does not make a cell-weighted
+pooled point estimate subject-balanced; patient cell counts range from
 1{,}929 to 22{,}627. Table~\ref{tab:patient_balanced_cell_sensitivity} therefore
 recomputes both hierarchy endpoints after sampling 1{,}900 cells without
 replacement from every patient for each of 50 seeds. Coarse macro-F1 changes by
@@ -511,7 +548,7 @@ variance on ten calibration-pool donors only, and use the released 30-class
 Azimuth-derived fine labels with a deterministic five-lineage mapping.
 
 OneK1K uses the same models, 20 nested subset seeds, training-only
-standardization, untouched-test-donor evaluation, subject-balanced metric, and
+standardization, untouched-test-donor evaluation, subject-balanced pooled metric, and
 2{,}000 paired donor bootstraps. Its grid is
 $P\in\{8,16,32\}$ and $C\in\{100,200,400,800\}$, yielding the two common exact
 budgets $T\in\{3200,6400\}$. We prespecified the lower depth ceiling because
@@ -588,7 +625,7 @@ optimal.
 \centering
 \includegraphics[width=0.86\textwidth]{figures/extended_subject_frontier.pdf}
 \caption{Class-matched LR frontier beyond 32 training subjects. Points are
-mean subject-balanced OOF macro-F1 over 10 matched training-subset seeds; bars
+mean subject-balanced pooled OOF macro-F1 over 10 matched training-subset seeds; bars
 are empirical 95\% seed intervals and therefore visualize subset sensitivity,
 not the primary joint uncertainty. The paired joint effect intervals are
 reported in Table~\ref{tab:extended_subject_frontier}.}
@@ -629,7 +666,7 @@ two axes use the fixed-total and matched-doubling analysis in the main paper.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/patient_cell_scaling_heatmaps.pdf}
-\caption{Pooled patient-disjoint Macro-F1 over the complete training-patient
+\caption{Cell-weighted pooled patient-disjoint Macro-F1 over the complete training-patient
 and per-patient training-cell grid. Values average 20 nested subset seeds except
 for the deterministic full-data endpoint. Color scales are shared across
 models within each task.}
@@ -668,7 +705,7 @@ it does not validate a reduced assay, clinical deployment, or biomarker panel.
 Patient-Stable Aptamer Selection
 (PSAS) denotes the fold-specific ranking and development-only budget-selection
 protocol below; ``stable'' refers to comparison of ranks across outer folds,
-not to patient-balanced fitting of the LR ranker.
+not to equal-patient-weight fitting of the LR ranker.
 
 \noindent\fbox{\begin{minipage}{0.96\linewidth}
 \small
@@ -690,7 +727,7 @@ not to patient-balanced fitting of the LR ranker.
 \noindent\textbf{Implementation scope and controls.}
 The LR ranker is a cell-level disease model: cells are not first aggregated to
 patient medians and receive equal weight, so its coefficients are cell-count
-weighted rather than patient-balanced. The full-panel reference $\bar F_{293}$
+weighted rather than equal-patient-weighted. The full-panel reference $\bar F_{293}$
 is the mean inner-validation score, not a resubstitution estimate on all of
 $D_o$. The absolute margin $\delta=0.02$ was fixed in code before outer-test
 scoring but was not prospectively preregistered. Because the ranking is computed
@@ -703,7 +740,7 @@ The feature set for one repeat is shared across the five outer folds, but LR and
 XGBoost are trained from scratch within every fold. XGBoost in
 Table~\ref{tab:panel_budget} and Figure~\ref{fig:panel_curve_main} uses the
 LR-selected panel. The separate SHAP control instead fits full-panel XGBoost in
-each outer-development set, constructs a patient-balanced mean absolute
+each outer-development set, constructs an equal-patient-weight mean absolute
 TreeSHAP ranking, and refits both classifiers on SHAP-selected Top-10/20
 features; it does not determine $B^*$ or the main curve.
 

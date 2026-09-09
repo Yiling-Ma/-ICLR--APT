@@ -48,7 +48,7 @@ def render_figure(metrics: pd.DataFrame) -> None:
             ax.spines[["top", "right"]].set_visible(False)
             ax.tick_params(labelsize=7.5)
             if column == 0:
-                ax.set_ylabel("Subject-balanced Macro-F1", fontsize=8)
+                ax.set_ylabel("Subject-balanced pooled Macro-F1", fontsize=8)
             if row == 1:
                 ax.set_xlabel("Training subjects", fontsize=8)
             ax.set_xticks(sorted(subset.patient_budget.unique()))
@@ -78,7 +78,7 @@ def render_table(effects: pd.DataFrame) -> None:
         r"\setlength{\tabcolsep}{5pt}",
         r"\begin{tabular}{llrrcc}",
         r"\toprule",
-        r"Dataset & Task & $T$ & Subjects & $\Delta$ subject-balanced M-F1 & $\Pr(\Delta>0)$ \\",
+        r"Dataset & Task & $T$ & Subjects & $\Delta$ SB-pooled M-F1 & $\Pr(\Delta>0)$ \\",
         r"\midrule",
     ]
     previous = None

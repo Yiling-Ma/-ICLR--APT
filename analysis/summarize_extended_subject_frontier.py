@@ -207,7 +207,7 @@ def main() -> None:
         "procedure": [
             "sample one matched training-subset seed uniformly",
             "bootstrap held-out subjects with one paired draw for both subject budgets",
-            "compute the subject-balanced macro-F1 difference",
+            "compute the subject-balanced pooled macro-F1 difference",
         ],
     })
     print(json.dumps(qa, indent=2))

@@ -100,7 +100,7 @@ def write_table(frame: pd.DataFrame, output_dir: Path) -> None:
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Change in subject-balanced, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage. COMBAT ADT is a prespecified modality sensitivity using LR only. OneK1K uses the two common exact budgets supported by at least 800 cells from nearly all donors.}",
+            r"\caption{Unmatched diagnostic: change in subject-balanced pooled, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects without freezing the marginal training label distribution. Each held-out subject confusion matrix is normalized to unit mass before pooling. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage but can also reflect changes in observed classes, per-class counts, and class proportions. COMBAT ADT is a prespecified modality sensitivity using LR only. OneK1K uses the two common exact budgets supported by at least 800 cells from nearly all donors.}",
             r"\label{tab:cross_cohort_scaling}",
             r"\end{table}",
         ]
@@ -143,7 +143,7 @@ def create_figure(frame: pd.DataFrame, output_dir: Path) -> None:
     ax.axvline(0, color="#222222", linewidth=0.9)
     ax.set_yticks(y, labels)
     ax.invert_yaxis()
-    ax.set_xlabel(r"$\Delta$ subject-balanced Macro-F1: 32 vs. 8 training subjects", fontsize=10)
+    ax.set_xlabel(r"$\Delta$ subject-balanced pooled Macro-F1: 32 vs. 8 training subjects", fontsize=10)
     ax.tick_params(axis="both", labelsize=9)
     ax.grid(axis="x", alpha=0.2)
     ax.legend(

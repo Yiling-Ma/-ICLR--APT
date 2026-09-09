@@ -1,27 +1,27 @@
 \begin{table}[H]
 \centering
-\normalsize
-\setlength{\tabcolsep}{2.5pt}
+\small
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{llcrrr}
 \toprule
 Model & Task & Total cells & $P=8$ & $P=16$ & $P=32$ \\
 \midrule
-LR & Coarse & 3,200 & 0.271 [0.259, 0.283] & 0.279 [0.272, 0.285] & 0.283 [0.278, 0.288] \\
-LR & Coarse & 6,400 & 0.278 [0.266, 0.291] & 0.287 [0.280, 0.294] & 0.293 [0.289, 0.297] \\
-LR & Coarse & 12,800 & 0.282 [0.269, 0.296] & 0.293 [0.286, 0.300] & 0.299 [0.295, 0.303] \\
-LR & Fine & 3,200 & 0.082 [0.078, 0.087] & 0.087 [0.083, 0.089] & 0.089 [0.086, 0.092] \\
-LR & Fine & 6,400 & 0.085 [0.082, 0.090] & 0.090 [0.087, 0.094] & 0.093 [0.091, 0.095] \\
-LR & Fine & 12,800 & 0.087 [0.082, 0.092] & 0.092 [0.089, 0.096] & 0.095 [0.093, 0.097] \\
+LR & Coarse & 3,200 & 0.270 [0.259, 0.280] & 0.277 [0.270, 0.285] & 0.282 [0.279, 0.286] \\
+LR & Coarse & 6,400 & 0.277 [0.266, 0.290] & 0.286 [0.278, 0.293] & 0.292 [0.290, 0.295] \\
+LR & Coarse & 12,800 & 0.281 [0.270, 0.294] & 0.291 [0.284, 0.300] & 0.298 [0.296, 0.301] \\
+LR & Fine & 3,200 & 0.078 [0.073, 0.084] & 0.082 [0.079, 0.087] & 0.085 [0.083, 0.089] \\
+LR & Fine & 6,400 & 0.080 [0.077, 0.087] & 0.085 [0.081, 0.089] & 0.089 [0.087, 0.091] \\
+LR & Fine & 12,800 & 0.081 [0.076, 0.087] & 0.087 [0.083, 0.090] & 0.091 [0.089, 0.094] \\
 \midrule
-XGBoost & Coarse & 3,200 & 0.260 [0.249, 0.275] & 0.268 [0.258, 0.278] & 0.275 [0.270, 0.280] \\
-XGBoost & Coarse & 6,400 & 0.267 [0.254, 0.285] & 0.275 [0.265, 0.285] & 0.283 [0.279, 0.287] \\
-XGBoost & Coarse & 12,800 & 0.274 [0.260, 0.291] & 0.284 [0.273, 0.295] & 0.293 [0.290, 0.296] \\
-XGBoost & Fine & 3,200 & 0.084 [0.080, 0.090] & 0.089 [0.084, 0.093] & 0.090 [0.087, 0.093] \\
-XGBoost & Fine & 6,400 & 0.089 [0.082, 0.098] & 0.094 [0.090, 0.099] & 0.096 [0.092, 0.099] \\
-XGBoost & Fine & 12,800 & 0.094 [0.089, 0.101] & 0.100 [0.094, 0.106] & 0.100 [0.097, 0.103] \\
+XGBoost & Coarse & 3,200 & 0.262 [0.250, 0.276] & 0.272 [0.260, 0.284] & 0.279 [0.274, 0.284] \\
+XGBoost & Coarse & 6,400 & 0.269 [0.258, 0.284] & 0.279 [0.267, 0.289] & 0.288 [0.285, 0.292] \\
+XGBoost & Coarse & 12,800 & 0.276 [0.267, 0.290] & 0.289 [0.277, 0.298] & 0.298 [0.296, 0.300] \\
+XGBoost & Fine & 3,200 & 0.082 [0.078, 0.088] & 0.087 [0.081, 0.092] & 0.089 [0.086, 0.092] \\
+XGBoost & Fine & 6,400 & 0.086 [0.081, 0.094] & 0.091 [0.086, 0.097] & 0.095 [0.090, 0.098] \\
+XGBoost & Fine & 12,800 & 0.092 [0.087, 0.098] & 0.097 [0.092, 0.102] & 0.098 [0.096, 0.101] \\
 \midrule
 \bottomrule
 \end{tabular}
-\caption{Fixed-total training-cell scaling. Each row holds the total number of sampled training cells constant while reallocating them across independent patients. Entries are pooled patient-disjoint OOF Macro-F1 means with empirical 95\% intervals over 20 matched subset seeds. All outer-test cells are evaluated.}
+\caption{Fixed-total training-cell scaling. Each row holds the total number of sampled training cells constant while reallocating them across independent patients. Entries are subject-balanced pooled, patient-disjoint OOF Macro-F1 means with empirical 95\% intervals over 20 matched subset seeds. For each score, every held-out subject's confusion matrix is normalized to unit mass before pooling; this is distinct from both cell-weighted pooling and mean within-subject Macro-F1. All outer-test cells are evaluated.}
 \label{tab:fixed_total_scaling}
 \end{table}

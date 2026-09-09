@@ -169,7 +169,7 @@ def write_table(results: pd.DataFrame, path: Path) -> None:
         r"\resizebox{\columnwidth}{!}{",
         r"\begin{tabular}{llrrr}",
         r"\toprule",
-        r"\textbf{Task} & \textbf{Model} & \textbf{Pooled M-F1} & \textbf{Equal-cell M-F1 [95\% interval]} & $\boldsymbol{\Delta}$ \\",
+            r"\textbf{Task} & \textbf{Model} & \textbf{CW-pooled M-F1} & \textbf{Equal-cell M-F1 [95\% interval]} & $\boldsymbol{\Delta}$ \\",
         r"\midrule",
     ]
     for task_index, (task, label) in enumerate(
@@ -191,7 +191,7 @@ def write_table(results: pd.DataFrame, path: Path) -> None:
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Patient-balanced cell-count sensitivity. For each of 50 seeds, 1{,}900 cells are sampled without replacement from every patient, and pooled macro-F1 is recomputed on the resulting 76{,}000 cells. All models use identical sampled row indices. The interval is the empirical 2.5th--97.5th percentile across seeds; $\Delta$ is the equal-cell mean minus the original pooled metric. This diagnostic changes evaluation weights only and does not retrain or reselect models.}",
+            r"\caption{Equal-cell evaluation sensitivity. For each of 50 seeds, 1{,}900 cells are sampled without replacement from every subject, and cell-weighted pooled Macro-F1 is recomputed on the resulting 76{,}000 cells. All models use identical sampled row indices. The interval is the empirical 2.5th--97.5th percentile across seeds; $\Delta$ is the equal-cell mean minus the original cell-weighted pooled metric. This resampling diagnostic is not the subject-balanced pooled metric, and it does not retrain or reselect models.}",
             r"\label{tab:patient_balanced_cell_sensitivity}",
             r"\end{table}",
         ]

@@ -1,0 +1,78 @@
+{
+  "fold": 0,
+  "runs": [
+    {
+      "fit_seconds": 14.003882392309606,
+      "fold": 0,
+      "iterations": 30,
+      "modality": "apt",
+      "n_features": 293,
+      "n_test_cells": 66980,
+      "n_train_cells": 63929,
+      "task": "coarse"
+    },
+    {
+      "fit_seconds": 3.440362843684852,
+      "fold": 0,
+      "iterations": 30,
+      "modality": "rna",
+      "n_features": 2000,
+      "n_test_cells": 66980,
+      "n_train_cells": 63929,
+      "task": "coarse"
+    },
+    {
+      "fit_seconds": 13.600261273793876,
+      "fold": 0,
+      "iterations": 30,
+      "modality": "apt_rna",
+      "n_features": 2293,
+      "n_test_cells": 66980,
+      "n_train_cells": 63929,
+      "task": "coarse"
+    },
+    {
+      "fit_seconds": 58.50360309612006,
+      "fold": 0,
+      "iterations": 30,
+      "modality": "apt",
+      "n_features": 293,
+      "n_test_cells": 66980,
+      "n_train_cells": 63929,
+      "task": "fine"
+    },
+    {
+      "fit_seconds": 16.855324728414416,
+      "fold": 0,
+      "iterations": 30,
+      "modality": "rna",
+      "n_features": 2000,
+      "n_test_cells": 66980,
+      "n_train_cells": 63929,
+      "task": "fine"
+    },
+    {
+      "fit_seconds": 65.86407865583897,
+      "fold": 0,
+      "iterations": 30,
+      "modality": "apt_rna",
+      "n_features": 2293,
+      "n_test_cells": 66980,
+      "n_train_cells": 63929,
+      "task": "fine"
+    }
+  ],
+  "status": "success",
+  "test_patients": [
+    "CRC11",
+    "CRC16",
+    "GC29_P_cDNA",
+    "GC30_P_cDNA",
+    "HCC-2-2",
+    "PBMC-6",
+    "PC-3",
+    "PRZ2"
+  ],
+  "train_test_patient_overlap": 0,
+  "version": "paired-rna-oracle-v2"
+}

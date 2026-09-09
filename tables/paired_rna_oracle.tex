@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{lccc}
+\toprule
+Input & Coarse Macro-F1 & Fine Macro-F1 & Granularity gap \\
+\midrule
+APT only & 0.288 [0.267, 0.308] & 0.104 [0.086, 0.115] & 0.184 \\
+Paired RNA only & 0.790 [0.775, 0.801] & 0.442 [0.399, 0.467] & 0.348 \\
+APT + paired RNA & 0.794 [0.777, 0.807] & 0.473 [0.428, 0.499] & 0.321 \\
+\bottomrule
+\end{tabular}
+\caption{Paired-RNA internal reconstructability oracle under the five fixed patient-disjoint folds. All inputs use the same patient- and class-weighted linear probe, up to 2{,}000 identically sampled training cells per development patient, training-fold standardization, and all held-out cells. Scores are subject-balanced pooled Macro-F1; brackets are patient-bootstrap 95\% intervals, and the granularity gap is coarse minus fine Macro-F1. This diagnostic uses the transcriptomic modality from which the annotations were constructed and a fixed 2{,}000-HVG representation selected during data development, so it is neither independent label validation nor a leakage-free benchmark baseline.}
+\label{tab:paired_rna_oracle}
+\end{table}

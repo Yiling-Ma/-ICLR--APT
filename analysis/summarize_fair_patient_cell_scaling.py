@@ -385,7 +385,7 @@ def response_surface(per_seed: pd.DataFrame, per_run: pd.DataFrame) -> pd.DataFr
 def create_figure(fixed: pd.DataFrame, effects: pd.DataFrame, output_dir: Path) -> None:
     import matplotlib.pyplot as plt
 
-    primary = fixed[fixed["metric"] == "macro_f1"]
+    primary = fixed[fixed["metric"] == "patient_balanced_macro_f1"]
     models = [
         model
         for model in ("logistic_regression", "xgboost")
@@ -417,7 +417,7 @@ def create_figure(fixed: pd.DataFrame, effects: pd.DataFrame, output_dir: Path) 
                 )
             ax.set_title(f"{'LR' if model == 'logistic_regression' else 'XGBoost'} / {task}")
             ax.set_xlabel("Training patients (fixed total cells)")
-            ax.set_ylabel("Pooled OOF Macro-F1")
+            ax.set_ylabel("Subject-balanced pooled OOF Macro-F1")
             ax.set_xticks(PATIENT_BUDGETS)
             ax.grid(alpha=0.2)
     axes[0, 0].legend(frameon=False, fontsize=8)
@@ -438,7 +438,7 @@ def create_figure(fixed: pd.DataFrame, effects: pd.DataFrame, output_dir: Path) 
 
 
 def write_table(fixed: pd.DataFrame, output_dir: Path) -> None:
-    primary = fixed[fixed["metric"] == "macro_f1"]
+    primary = fixed[fixed["metric"] == "patient_balanced_macro_f1"]
     lines = [
         r"\begin{table}[H]",
         r"\centering",
@@ -472,7 +472,7 @@ def write_table(fixed: pd.DataFrame, output_dir: Path) -> None:
         [
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption{Fixed-total training-cell scaling. Each row holds the total number of sampled training cells constant while reallocating them across independent patients. Entries are pooled patient-disjoint OOF Macro-F1 means with empirical 95\% intervals over 20 matched subset seeds. All outer-test cells are evaluated.}",
+            r"\caption{Fixed-total training-cell scaling. Each row holds the total number of sampled training cells constant while reallocating them across independent patients. Entries are subject-balanced pooled, patient-disjoint OOF Macro-F1 means with empirical 95\% intervals over 20 matched subset seeds. For each score, every held-out subject's confusion matrix is normalized to unit mass before pooling; this is distinct from both cell-weighted pooling and mean within-subject Macro-F1. All outer-test cells are evaluated.}",
             r"\label{tab:fixed_total_scaling}",
             r"\end{table}",
         ]

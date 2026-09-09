@@ -24,6 +24,6 @@ OneK1K & RNA & XGBoost/Fine & +0.006 [+0.005, +0.007] & +0.009 [+0.007, +0.009] 
 \bottomrule
 \end{tabular}
 }
-\caption{Change in subject-balanced, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage. COMBAT ADT is a prespecified modality sensitivity using LR only. OneK1K uses the two common exact budgets supported by at least 800 cells from nearly all donors.}
+\caption{Unmatched diagnostic: change in subject-balanced pooled, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects without freezing the marginal training label distribution. Each held-out subject confusion matrix is normalized to unit mass before pooling. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage but can also reflect changes in observed classes, per-class counts, and class proportions. COMBAT ADT is a prespecified modality sensitivity using LR only. OneK1K uses the two common exact budgets supported by at least 800 cells from nearly all donors.}
 \label{tab:cross_cohort_scaling}
 \end{table}

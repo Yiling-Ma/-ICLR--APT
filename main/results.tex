@@ -10,6 +10,22 @@ macro-F1 is 0.152; the matched flat FT-style Transformer reaches 0.323 and
 APT profiles recover broad immune identity more reliably than the finer
 transcriptome-derived taxonomy.
 
+A matched paired-RNA oracle localizes, but does not eliminate, this ambiguity
+(Appendix~\ref{sec:appendix:paired_rna_oracle}). Under the same patient folds,
+training cells, linear probe, and subject-balanced pooled evaluation, APT-only
+coarse/fine macro-F1 is 0.288/0.104, compared with 0.790/0.442 for paired RNA.
+The RNA-minus-APT changes are $+0.502$ (paired patient-bootstrap 95\% CI
+$[0.478,0.527]$) and $+0.338$ ($[0.300,0.365]$), respectively. Thus the
+transcriptomic modality contains substantially more information for recovering
+its own annotation taxonomy. Yet RNA fine performance remains far below RNA
+coarse performance, so the gap cannot be attributed to APT resolution alone.
+Combining both modalities reaches 0.794/0.473; its fine improvement over RNA is
+$+0.031$ ($[0.016,0.046]$), while its coarse improvement is unresolved. APT
+therefore retains complementary fine-resolution signal, even though it is much
+weaker alone. Because the labels and the oracle representation originate from
+the same RNA pipeline, this is an internal reconstructability diagnostic rather
+than independent validation of label correctness.
+
 Encoder-matched comparisons do not establish an architectural advantage. This
 is a benchmark result rather than a failed method claim: after controlling the
 backbone, additional hierarchy-specific cascade complexity is not supported on
@@ -56,7 +72,7 @@ Cell-level splitting inflates coarse/fine macro-F1 by $+0.090/+0.108$ for
 \ourmethod{} and $+0.050/+0.069$ for XGBoost
 (Appendix~\ref{sec:appendix:protocol_sensitivity}). APT-Bench therefore fixes
 patient-disjoint evaluation rather than treating the split as a reporting
-detail. Because a patient-disjoint pooled cell metric can still overweight
+detail. Because the cell-weighted pooled metric can still overweight
 patients with more cells, an equal-cell sensitivity also samples 1{,}900 cells
 per patient over 50 seeds. It changes coarse macro-F1 by at most $+0.005$ and
 fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
@@ -77,7 +93,7 @@ design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
 \caption{Primary class-matched fixed-total scaling control. Each comparison
 freezes the observed classes and exact per-class cell quotas before reallocating
 the same $T$ training cells from 8 to 32 subjects. Points are changes in
-subject-balanced, subject-disjoint OOF macro-F1 at $T=6{,}400$; bars are 95\%
+subject-balanced pooled, subject-disjoint OOF macro-F1 at $T=6{,}400$; bars are 95\%
 joint intervals from 2{,}000 replicates that first sample one of the 20 LR or
 10 XGBoost training-subset seeds and then resample paired outer-test subjects.
 All 12 joint intervals include zero. Corrected point estimates are small and
@@ -86,10 +102,10 @@ model- or cohort-dependent.}
 \end{figure}
 
 As a deliberately naive starting point, the original label-agnostic design
-reallocates cells without matching the training label distribution. Moving from 8 to 32 patients improves patient-balanced OOF
+reallocates cells without matching the training label distribution. Moving from 8 to 32 patients improves subject-balanced pooled OOF
 macro-F1 in all 12 model--resolution--budget combinations, by 0.006--0.022
 (Appendix~\ref{sec:appendix:fair_scaling}). All paired patient-bootstrap and
-subset-seed intervals are above zero. Pooled-cell and mean within-patient
+subset-seed intervals are above zero. Cell-weighted pooled and mean within-subject
 sensitivities give the same qualitative direction, with isolated uncertainties
 detailed in Appendix~\ref{sec:appendix:fair_scaling}. These are unmatched
 associations to be audited below, not estimates of a pure subject-breadth effect.

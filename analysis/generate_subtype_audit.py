@@ -301,7 +301,7 @@ def write_diagnostics_table(summary: pd.DataFrame, path: Path) -> None:
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Exploratory subtype diagnostics on pooled patient-disjoint predictions. $\rho_c$ and $\rho_p$ are marginal Spearman associations of subtype F1 with log cell count and patient coverage; $\rho_{c\mid p}$ and $\rho_{p\mid c}$ are partial Spearman correlations computed by residualizing rank-transformed variables. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among errors, $R_{\mathrm{sibling}}$ retains the true parent lineage and Cross-lineage is its complement. With only 27 subtypes and limited variation in patient coverage, these associations are descriptive and do not establish causality.}",
+            r"\caption{Exploratory subtype diagnostics on cell-weighted pooled patient-disjoint predictions. $\rho_c$ and $\rho_p$ are marginal Spearman associations of subtype F1 with log cell count and patient coverage; $\rho_{c\mid p}$ and $\rho_{p\mid c}$ are partial Spearman correlations computed by residualizing rank-transformed variables. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among errors, $R_{\mathrm{sibling}}$ retains the true parent lineage and Cross-lineage is its complement. With only 27 subtypes and limited variation in patient coverage, these associations are descriptive and do not establish causality.}",
             r"\label{tab:subtype_diagnostics}",
             r"\end{table}",
         ]
@@ -361,7 +361,7 @@ def write_tail_table(summary: pd.DataFrame, path: Path) -> None:
         [
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption{Fine-subtype macro-F1 on the seven least and seven most abundant subtypes under pooled patient-disjoint evaluation. This aggregate is reported as a descriptive complement to the complete per-subtype audit in Table~\ref{tab:subtype_per_class}.}",
+            r"\caption{Fine-subtype macro-F1 on the seven least and seven most abundant subtypes under cell-weighted pooled patient-disjoint evaluation. This aggregate is reported as a descriptive complement to the complete per-subtype audit in Table~\ref{tab:subtype_per_class}.}",
             r"\label{tab:tail_head}",
             r"\end{table}",
         ]

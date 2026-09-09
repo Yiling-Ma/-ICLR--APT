@@ -72,7 +72,7 @@ def protocol(dataset: str, models: tuple[str, ...]) -> dict[str, Any]:
         "class_matching": "identical integer per-class cell quota across requested subject budgets",
         "within_class_sampling": "capacity-constrained round robin across eligible selected subjects",
         "test_data": "all cells from immutable untouched outer-test subjects",
-        "primary_metric": "subject-balanced macro-F1 from pooled OOF subject-normalized confusions",
+        "primary_metric": "subject-balanced pooled macro-F1 from OOF subject-normalized confusions",
     }
 
 
@@ -476,7 +476,7 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
         "procedure": [
             "sample one training-subset seed uniformly from the completed matched seeds",
             "sample outer-test subjects with replacement using the same draw for P=8 and P=32",
-            "compute the paired subject-balanced macro-F1 difference",
+            "compute the paired subject-balanced pooled macro-F1 difference",
         ],
         "reported": ["empirical 2.5--97.5 percentile interval", "Pr(delta > 0)"],
         "decompositions_retained": [

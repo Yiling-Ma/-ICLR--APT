@@ -9,6 +9,16 @@ granularity gap and the uncertain subtype-versus-lineage gain in the strict
 nested transfer audit show that additional model complexity alone does not
 resolve fine cell typing or establish that finer predictions improve
 patient-level characterization.
+The paired-RNA oracle narrows the interpretation: the label-generating
+transcriptome reconstructs both resolutions substantially better than APT under
+a matched probe, which implicates limited APT resolution, but RNA itself retains
+a large coarse--fine gap. The resolved fine gain from combining APT with RNA
+also shows that APT is complementary rather than uninformative. Because the
+oracle shares its modality and feature-development pipeline with the labels,
+these results cannot quantify annotation error or establish an independent
+biological ground truth. The observed granularity gap therefore reflects an
+inseparable combination of modality resolution, patient shift, and the
+operational transcriptome-derived taxonomy.
 
 The benchmark also separates the evaluation unit from the training-scaling
 axes. Although it contains 361{,}792 cells, performance on unseen subjects must
@@ -66,7 +76,10 @@ validation is required before clinical claims.
 APT-Bench establishes a patient-disjoint contract for hierarchical cell typing,
 two-axis scaling, and patient characterization from single-cell aptamer profiles.
 Coarse lineage is consistently easier than fine subtype prediction, with no
-supported cascade advantage over matched references. Its scaling audit shows
+supported cascade advantage over matched references. A paired-RNA diagnostic
+shows that paired RNA substantially improves reconstruction of the annotation
+taxonomy while retaining a coarse--fine gap, so limited APT resolution is one
+contributor rather than a complete explanation. The scaling audit further shows
 that unmatched fixed-total comparisons can mistake a label-distribution effect
 for a subject-breadth benefit; after class matching, coarse effects are small
 and model-dependent, while fine point estimates are negative or near zero

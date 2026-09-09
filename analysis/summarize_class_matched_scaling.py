@@ -89,7 +89,7 @@ def write_table(effects: pd.DataFrame) -> None:
         r"\resizebox{\textwidth}{!}{%",
         r"\begin{tabular}{lllrrccc}",
         r"\toprule",
-        "Dataset & Model & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\\rightarrow$32) & $\\Delta$ subject-balanced M-F1 & $\\Pr(\\Delta>0)$ \\\\",
+        "Dataset & Model & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\\rightarrow$32) & $\\Delta$ SB-pooled M-F1 & $\\Pr(\\Delta>0)$ \\\\",
         r"\midrule",
     ]
     for _, row in effects.sort_values(["dataset_key", "model", "task", "total"]).iterrows():
@@ -104,7 +104,7 @@ def write_table(effects: pd.DataFrame) -> None:
         r"\bottomrule",
         r"\end{tabular}",
         r"}",
-        r"\caption{Class-matched fixed-total control. LR uses 20 seeds at both totals; the matched XGBoost robustness check uses 10 seeds at $T=6{,}400$. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are joint 95\% intervals obtained by resampling a training-subset seed and then paired outer-test subjects; the final column is the empirical fraction of joint replicates with a positive effect. Seed-only and subject-only intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}",
+        r"\caption{Class-matched fixed-total control. The outcome is subject-balanced pooled Macro-F1, computed by normalizing each held-out subject confusion matrix to unit mass before pooling. LR uses 20 seeds at both totals; the matched XGBoost robustness check uses 10 seeds at $T=6{,}400$. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are joint 95\% intervals obtained by resampling a training-subset seed and then paired outer-test subjects; the final column is the empirical fraction of joint replicates with a positive effect. Seed-only and subject-only intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}",
         r"\label{tab:class_matched_scaling}",
         r"\end{table}",
     ]
@@ -149,7 +149,7 @@ def write_figure(effects: pd.DataFrame) -> None:
     ax.axvline(0, color="#2C2C2C", linewidth=0.8)
     ax.set_yticks(range(len(order)), labels)
     ax.invert_yaxis()
-    ax.set_xlabel(r"$\Delta$ subject-balanced Macro-F1: 32 vs. 8 subjects")
+    ax.set_xlabel(r"$\Delta$ subject-balanced pooled Macro-F1: 32 vs. 8 subjects")
     ax.grid(axis="x", color="#D9D9D9", linewidth=0.55)
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.tick_params(axis="y", length=0, labelsize=8)

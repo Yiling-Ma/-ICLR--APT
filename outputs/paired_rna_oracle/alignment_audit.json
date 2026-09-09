@@ -1,0 +1,10 @@
+{
+  "aligned_cells": 361792,
+  "apt_cells": 361792,
+  "cell_ids_exactly_aligned": true,
+  "rna_features": 2000,
+  "rna_gene_file_entries": 2000,
+  "rna_source_cells": 374854,
+  "status": "PASS",
+  "version": "paired-rna-oracle-v2"
+}

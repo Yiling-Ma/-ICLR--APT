@@ -1,0 +1,18 @@
+{
+  "completed_folds": 5,
+  "modalities": [
+    "apt",
+    "rna",
+    "apt_rna"
+  ],
+  "patient_bootstrap_replicates": 2000,
+  "scope": "paired-RNA internal reconstructability oracle, not independent label validation",
+  "status": "PASS",
+  "tasks": [
+    "coarse",
+    "fine"
+  ],
+  "training_cell_budget": "up to 2000 identically sampled cells per development patient",
+  "unique_oof_patients": 40,
+  "version": "paired-rna-oracle-v2"
+}
