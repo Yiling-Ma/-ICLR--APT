@@ -1,41 +1,41 @@
 \section{Discussion}
 \label{sec:discussion}
 
-APT-Bench is an evaluation contribution rather than a claim of model
-superiority. Broad lineage is more reliably recovered than
-transcriptome-derived subtype, and no soft-cascade advantage is statistically
-supported. The paired-RNA probe shows that limited APT resolution contributes
-to this gap, while the residual RNA gap and resolved APT+RNA improvement rule
-out a single explanation. Annotation uncertainty, modality resolution, and
-patient shift remain inseparable without independent reference labels.
+The central finding is not that more subjects are unimportant, but that a
+standard fixed-total experiment does not estimate their isolated value. Across
+three datasets, the label-agnostic design produces an apparently general
+subject-breadth advantage. Freezing the marginal training label distribution
+removes that conclusion: corrected effects are small, model- and
+cohort-dependent, and unresolved once training-subset and test-subject
+uncertainty are propagated jointly. Patient-disjoint splitting is necessary,
+but it is not sufficient for interpreting subject--cell scaling.
 
-The scaling audit illustrates why many cells cannot be equated with many
-independent subjects. Patient-disjoint evaluation prevents direct identity
-leakage, but an unmatched subject/cell reallocation still changes the training
-label distribution. Once class support and quotas are fixed, effects are small,
-model- and cohort-dependent, and unresolved under joint training-subset and
-test-subject uncertainty. External frontiers plateau over the tested range, but
-do not identify a universal allocation rule. Clinical single-cell benchmarks
-should therefore report both subject and cell budgets, make class-distribution
-changes explicit, and propagate uncertainty from both sampled units.
+The class-matched protocol deliberately targets a narrower estimand. It holds
+observed labels, per-class cell counts, and class proportions fixed while
+changing how many subjects contribute those cells. It does not fix
+disease--subtype composition, within-class subject heterogeneity, or unrecorded
+pool and batch structure. The remaining effect is therefore still
+associational, and a near-zero estimate under the tested budgets is not a
+universal saturation law. Nevertheless, the protocol identifies the source of
+an otherwise misleading empirical regularity and provides a reproducible way
+to test it in future multi-subject single-cell cohorts.
 
-Patient characterization has a separate identifiability boundary. Nested cell
-outputs retain disease-associated variation, but fine composition has no
-resolved increment over lineage or recorded nuisance summaries. Strong
-centering sensitivity and missing acquisition metadata prevent separation of
-biological disease signal from patient-specific or technical structure. COMBAT
-and OneK1K validate portability of the scaling protocol, not cancer recognition;
-batch-aware external APT cohorts are required for clinical claims.
+The APT case studies clarify the scope rather than add parallel stories.
+Hierarchy prediction demonstrates that leakage and granularity alter the
+apparent learning problem, while the nested patient audit shows that correct
+splitting cannot resolve unmeasured acquisition confounding. Neither a complex
+hierarchy model nor a compact feature panel repairs an ill-specified estimand.
+For clinical single-cell evaluation, subject and cell budgets, label support,
+split units, and both uncertainty sources should therefore be reported as part
+of the benchmark contract.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench establishes a patient-disjoint contract for hierarchical typing,
-two-axis scaling, and confounding-aware patient characterization. It reveals a
-robust coarse--fine granularity gap and shows that naive fixed-total scaling can
-mistake label-distribution changes for subject-breadth benefits. After class
-matching, no LR or XGBoost effect is resolved across APT, COMBAT, and OneK1K,
-and nested transfer establishes association rather than subtype mediation.
-These results position statistical unit, label distribution, and measurement
-budget as explicit benchmark dimensions while leaving clinical validity to
-batch-aware external evaluation.
+Fixed cell totals can confound subject breadth with the training label
+distribution. A class-matched, jointly resampled evaluation reverses or removes
+the apparent subject advantage across APT, COMBAT, and OneK1K, while APT
+hierarchy and patient-characterization case studies expose the practical
+consequences of statistical-unit and nuisance mismatches. APT-Bench therefore
+contributes an evaluation protocol for asking subject--cell scaling questions,
+not a universal scaling law or a claim of model superiority.

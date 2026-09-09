@@ -18,7 +18,7 @@
 \usepackage{makecell}
 
 
-\title{APT-Bench: Patient-Disjoint Evaluation of Granularity and Two-Axis Scaling in Single-Cell Aptamer Profiling}
+\title{APT-Bench: Class-Matched Subject--Cell Scaling for Single-Cell Evaluation}
 % Global paper constants
 
 \newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
@@ -67,29 +67,25 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell clinical assays can contain many cells but few independent subjects,
-making the split unit and sampling budget central to evaluation. We introduce
-APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles
-from 40 patients, with a fixed five-lineage/27-subtype ontology, patient-level
-characterization audit, and explicit patient and cell training axes. Across
-neural and classical references, coarse lineage recognition remains
-substantially easier than fine subtype prediction. Unmatched fixed-total
-reallocations confound subject breadth with the training label distribution:
-although 37 of 38 comparisons favor 32 rather than 8 subjects, a class-matched
-control reduces this apparent advantage to small, model- and cohort-dependent
-coarse point estimates and negative or near-zero fine point estimates. After
-jointly resampling training subsets and held-out subjects, all corrected
-intervals include zero. Thus the
-unmatched result is an audit target, not evidence for a universal
-subject-dominant scaling law. Here, the label-distribution effect includes
-changes in observed classes, per-class counts, and class proportions.
-Strict nested
-aggregation shows that cell-model outputs retain disease-associated variation,
-but subtype composition has no resolved increment over lineage, cell count, or
-recorded RNA-QC controls. Direct APT discrimination is also sensitive to
-patient-specific absolute-expression structure whose biological and technical
-origins are not identifiable here. APT-Bench makes statistical unit,
-granularity, and training scale explicit for evaluation on unseen subjects.
+Single-cell studies often ask whether a fixed training-cell budget is better
+allocated to more subjects or more cells per subject. Holding the total number of
+cells fixed does not isolate this tradeoff: changing subjects can also change
+the observed labels, per-class counts, and class proportions. We expose this
+failure mode and introduce a class-matched fixed-total protocol that freezes the
+training label distribution, together with joint uncertainty that resamples
+both training subsets and held-out subjects. In label-agnostic experiments, 37
+of 38 comparisons across APT, COMBAT, and OneK1K favor 32 rather than 8 training
+subjects. After class matching, LR and XGBoost effects become small,
+model- and cohort-dependent, or negative, and all 12 joint intervals include
+zero; class-matched LR extensions to 64 COMBAT and 128 OneK1K subjects reveal
+no delayed resolved benefit. APT-Bench supplies the primary patient-disjoint testbed with 361{,}792
+single-cell aptamer profiles from 40 patients. Its hierarchy and patient-
+characterization tracks serve as case studies: coarse lineage is much easier
+than fine subtype prediction, while disease-associated variation is entangled
+with patient-specific absolute-expression structure. The central result is
+therefore methodological: fixed cell totals are insufficient for subject--cell
+scaling unless label distribution and both sources of sampling uncertainty are
+made explicit.
 \end{abstract}
 
 
@@ -157,6 +153,8 @@ granularity, and training scale explicit for evaluation on unseen subjects.
 \section{Appendix}
 
 \input{main/method}
+
+\input{tables/main_result}
 
 \section{Dataset and Evaluation Details}
 

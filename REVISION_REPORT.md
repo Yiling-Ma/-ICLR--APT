@@ -197,17 +197,26 @@ The historically named DropCascade implementation is now presented as the
 soft-cascade member of a backbone- and budget-matched reference ladder rather
 than as a proposed method. The main text and tables no longer use branded styling or
 claim an algorithmic contribution. The prespecified patient-bootstrap tests
-are framed as an architecture audit, and their null result is reported as a
-benchmark finding: the complete soft-cascade recipe has no supported advantage
+are framed as a secondary complete-recipe audit, and their null result is
+reported as a case-study finding: the complete soft-cascade recipe has no supported advantage
 over the backbone- and budget-matched references. Because only that recipe uses
 cross-disease contrastive regularization, this is not a component-level effect.
 
 The main paper has also been reflowed to remain below the nine-page ICLR main-text
 limit without reducing the template font size. Detailed scaling allocation,
 metric formulas, subtype support tables, composition results, and disease-signal
-sensitivities are retained in the appendix. The main text keeps one hierarchy
-table and one class-matched scaling figure; forced composition-table placement
-and repeated appendix-level numerical narration were removed.
+sensitivities are retained in the appendix. The main text keeps only the
+class-matched scaling figure; the hierarchy and composition tables, forced
+float placement, and repeated appendix-level numerical narration were removed.
+
+The paper is now organized around one primary contribution: label-distribution
+confounding in subject--cell scaling and its class-matched, jointly resampled
+correction. The title, abstract, introduction, contribution list, Results order,
+Discussion, and Conclusion all follow the sequence ``fixed-total failure mode,
+corrected protocol, cross-cohort evidence.'' The APT hierarchy and nested patient
+characterization analyses are explicitly scoped as case studies; the
+soft-cascade recipe, compact panels, and inference-cell budgets are not presented
+as parallel contributions.
 
 Direct APT disease classifiers, compact panels, and attribution are no longer
 primary disease results. The main table instead reports composition and

@@ -1,61 +1,57 @@
 \section{Introduction}
 
-Cancer screening and diagnosis are usually framed at the patient level: does a person have disease, and if so which disease category is most likely? Single-cell liquid biopsy changes this framing. A single blood draw can support both a patient-level diagnostic decision and a cell-level characterization of the circulating immune compartment. These outputs are related, but they do not live at the same observational unit. Disease is a property of the patient, whereas lineage and subtype are properties of the cell.
+Single-cell datasets can contain millions of observations while representing
+far fewer independent biological subjects. This creates a practical design
+question: under a fixed training-cell budget, should a study
+sample more subjects or profile more cells from each subject? A common two-axis
+analysis varies subject breadth and within-subject depth while holding their
+product fixed. Such a comparison appears controlled because the total number of
+training cells is unchanged.
 
-This mismatch matters for evaluation. Our benchmark contains 361{,}792 single cells, but only 40 patients. Treating cells as independent disease observations would substantially overstate the effective sample size of the diagnostic task. It would also hide a second asymmetry: lineage and subtype form a genuine cell-level hierarchy, but disease does not sit above that hierarchy. The clinically relevant problem is therefore not a single three-level taxonomy. It is a multi-resolution setting in which different targets require different evaluation protocols, inductive biases, and interpretations.
+Fixed total cells are not sufficient. Replacing cells from existing subjects
+with cells from new subjects can also introduce previously absent classes,
+alter per-class cell counts and proportions, and redistribute each class across
+subjects. A performance difference then combines subject breadth with a change
+in the training label distribution. Moreover, uncertainty over held-out
+subjects does not capture sensitivity to which training subjects and cells were
+sampled. Without controlling both problems, a smooth scaling curve can support
+the wrong conclusion about the value of additional subjects.
 
-We study aptamer-based single-cell profiling. Apt-seq uses
-sequencing-compatible nucleic-acid affinity reagents to quantify molecules such as surface proteins
-while retaining cell barcodes and paired transcriptomic state \citep{wu2025high}.
-Unlike gene-vocabulary scRNA-seq or antibody-derived-tag integration benchmarks,
-our predictive input is a fixed 293-aptamer binding panel. This enables three
-questions: how performance changes from coarse lineage to fine subtype; how
-patient-level disease evaluation handles many correlated cells but only 40
-subjects; and whether cell-level predictions retain patient-associated
-variation under strict nested aggregation.
+We make this failure mode the central target of APT-Bench. The primary dataset
+contains 361{,}792 single-cell aptamer profiles from 40 patients, measured with
+a fixed 293-feature panel and annotated into five immune lineages and 27
+transcriptome-derived subtypes. We first run a conventional label-agnostic
+fixed-total experiment over subject and cell budgets. We then introduce a
+class-matched comparison that freezes the observed class set and exact
+per-class cell quotas before changing the number of contributing subjects. Its
+primary interval jointly samples a completed training-subset seed and
+resamples paired held-out subjects, thereby propagating uncertainty from both
+the development and evaluation populations.
 
-APT-Bench fixes three patient-disjoint tracks: coarse-to-fine cell typing,
-two-axis training-scale evaluation, and cross-fitted patient characterization
-with explicit technical controls. Aptamer-panel and inference-cell budgets are
-reported only as secondary sensitivities of the observed within-cohort signal. Its reusable contribution is not a
-claim that one cohort spans deployment, but a common contract for a new modality:
-immutable patient folds, explicit observational units, leakage-resistant metrics,
-and outer-test-isolated budget controls that can extend to future clinical single-cell cohorts.
+The audit changes the empirical conclusion. Across APT, COMBAT CITE-seq, and
+OneK1K, 37 of 38 label-agnostic comparisons favor reallocating a fixed cell
+budget from 8 to 32 subjects. Once the label distribution is matched, effects
+become small and model- or cohort-dependent: APT and COMBAT fine-resolution
+point estimates reverse under both LR and XGBoost, and all 12 joint intervals
+include zero. Class-matched LR frontiers through 64 COMBAT and 128 OneK1K
+training subjects show no delayed resolved gain. These results do not imply
+that subject breadth is unimportant; they show that its effect cannot be read
+from a fixed-total curve that also changes the prediction problem.
 
-The hierarchy track uses a matched reference ladder rather than centering the
-paper on a new architecture: XGBoost, a flat Transformer, the same Transformer
-with hierarchical cross-entropy (HCE), and a soft-cascade Transformer. The
-three neural references share the tokenizer, encoder dimensions, optimization
-budget, patient folds, and checkpoint rule, but their objectives differ because
-only the soft cascade uses cross-disease contrastive regularization. The ladder
-therefore compares complete recipes rather than isolating individual hierarchy
-mechanisms; it does not designate the cascade as a proposed method.
+Two APT analyses illustrate why the protocol matters. First, patient-disjoint
+coarse-to-fine typing exposes a large granularity gap and prevents cell-level
+identity leakage; a soft-cascade Transformer is only one reference recipe, not
+the paper's method contribution. Second, strict nested aggregation tests whether
+cell outputs transfer to patient characterization. The transferred signal is
+associational and has no resolved subtype increment over lineage or recorded
+nuisance summaries, while direct disease prediction is sensitive to
+patient-specific absolute-expression structure. Compact panels and
+inference-cell budgets are therefore confined to secondary appendix
+sensitivities.
 
-This perspective leads to three empirical findings. First, coarse lineage
-recognition is substantially easier than fine subtype recognition across all
-models, and backbone-matched references do not support superiority for the
-complete soft-cascade recipe. Second, a two-axis scaling
-study identifies label-distribution confounding in fixed-total evaluations. When
-each paired setting uses exactly the same observed classes and per-class cell
-quotas, LR and XGBoost yield small, model- and cohort-dependent coarse effects
-and negative or near-zero fine point estimates; every joint interval over
-training subsets and held-out subjects includes zero. By contrast, 37 of 38 unmatched comparisons
-favor reallocating cells from 8 to 32 subjects because that intervention also
-changes the training label distribution. Subject breadth is therefore a
-separate design axis, but an unmatched scaling curve cannot isolate its effect
-from task granularity and the marginal class distribution during training.
-Third, strictly nested, disease-label-free XGBoost subtype
-probabilities retain disease-associated variation after patient aggregation:
-soft subtype composition reaches disease macro-F1 0.593 versus 0.477 for
-lineage composition. The paired difference is uncertain, however, and subtype
-composition does not significantly exceed cell count or a six-feature recorded
-RNA-QC baseline. The
-bridge is therefore predictive and associational; direct APT discrimination is
-stronger but sensitive to patient-specific absolute-expression structure.
-
-Our contributions are therefore as follows.
+Our contributions are:
 \begin{itemize}
-    \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, two-axis scaling, and confounding-aware patient characterization.
-    \item \textbf{An audited account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. A backbone- and budget-matched reference ladder finds no supported superiority for the complete soft-cascade recipe; because its contrastive objective is unmatched, we explicitly avoid component-level attribution.
-    \item \textbf{A label-distribution audit for two-axis scaling.} Across APT, COMBAT, and OneK1K, we show that standard fixed-total comparisons conflate subject breadth with the marginal training label distribution, then introduce a class-matched control that freezes observed classes and per-class cell quotas. Joint uncertainty over training subsets and held-out subjects leaves no corrected LR or XGBoost effect resolved; external LR frontiers remain unresolved through 64 COMBAT and 128 OneK1K training subjects, ruling out a universal scaling law in these experiments. A separate strict nested audit tests cross-task transfer from disease-label-free cell-model outputs without exposing either stage to outer-test patients.
+    \item \textbf{A failure mode in subject--cell scaling.} We show that fixed-total, patient-disjoint experiments can still confound subject breadth with observed labels, class counts, and class proportions.
+    \item \textbf{A class-matched protocol with joint uncertainty.} The comparison freezes the marginal training label distribution and propagates variation from both sampled training subsets and held-out subjects.
+    \item \textbf{Cross-cohort evidence and scoped case studies.} APT, COMBAT, and OneK1K show that the correction materially changes the scaling conclusion; hierarchy and patient-characterization analyses demonstrate the consequences for a new single-cell aptamer modality without expanding the primary claim.
 \end{itemize}

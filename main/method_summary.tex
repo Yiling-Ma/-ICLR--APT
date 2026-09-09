@@ -1,9 +1,9 @@
-\section{Models and Nested Evaluation}
+\section{Evaluation Instantiations}
 \label{sec:method_summary}
 
-APT-Bench is an evaluation contribution, not a claim of architectural
-superiority. Classical controls include class-weighted multinomial Logistic
-Regression and XGBoost. Its neural reference ladder contains a flat
+The primary scaling audit uses class-weighted multinomial Logistic Regression
+and XGBoost to test whether the correction is model-specific. The secondary
+APT hierarchy case study additionally contains a flat
 Transformer, the same model trained with a two-level adaptation of HCE
 \citep{cultrera2026improving}, and a soft-cascade Transformer. These references
 share the APT tokenizer, encoder dimensions, optimizer, training budget,
@@ -12,7 +12,8 @@ checkpoint rule. The ladder therefore holds backbone capacity fixed while
 comparing complete reference recipes. Their objectives are not matched: only
 the soft-cascade model uses disease labels for cross-disease contrastive pairing,
 whereas Flat and HCE use classification losses alone. The ladder is therefore
-not a component ablation. Appendix~\ref{sec:method} records the implementation
+not a component ablation and is secondary to the scaling protocol.
+Appendix~\ref{sec:method} records the implementation
 and component matrix; no routing, HCE, or contrastive effect is claimed in
 isolation.
 

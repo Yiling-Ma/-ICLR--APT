@@ -1,33 +1,32 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Clinical and single-cell evaluation.}
+\paragraph{Evaluation across cells and subjects.}
+Reusable single-cell benchmarks increasingly separate datasets, models, and
+metrics and adopt sample- or study-disjoint evaluation
+\citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}.
+These practices prevent direct leakage, but do not by themselves isolate the
+effect of subject breadth when a fixed-total subsample changes the training
+label distribution. Our contribution complements patient-disjoint splitting
+with class-matched allocation and joint development/test uncertainty.
+
+\paragraph{Single-cell representations and hierarchy.}
+Geneformer, scGPT, and scFoundation motivate large transcriptomic
+representations, while controlled studies show that simple baselines can remain
+competitive \citep{theodoris2023transfer,cui2024scgpt,hao2024large,kedzierska2025zero}.
+Cell annotation also motivates hierarchical losses and architectures
+\citep{jia2025schdeepinsight,cultrera2026improving}. We use flat, HCE, and
+soft-cascade Transformers plus XGBoost as an APT case study. Because their
+complete objectives are not matched, this ladder illustrates the evaluation
+setting rather than constituting the primary method or a component ablation.
+
+\paragraph{Clinical assays and measurement budgets.}
 Multi-cancer detection commonly uses circulating DNA, methylation,
-fragmentomics, or bulk proteins \citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
-APT profiling instead observes many correlated cells from each blood draw, so
-patient characterization and cell typing require different statistical units.
-Public single-cell benchmarks increasingly separate datasets, representations,
-and evaluators and use study- or patient-separated partitions
-\citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}; none
-combines a fixed aptamer panel, coarse-to-fine typing, two-axis training scale,
-and a confounding-aware patient audit.
-
-\paragraph{Representation and hierarchy.}
-Transcriptome foundation models such as Geneformer, scGPT, and scFoundation are
-not directly matched to a fixed 293-dimensional protein-oriented panel, and
-recent evaluations show that simple baselines can remain competitive when the
-protocol is controlled \citep{theodoris2023transfer,cui2024scgpt,hao2024large,kedzierska2025zero}.
-Cell identity is hierarchical, motivating structured losses and models
-\citep{jia2025schdeepinsight,cultrera2026improving}. We therefore compare
-XGBoost with flat, HCE, and soft-cascade Transformer recipes. The neural models
-match backbone and budget but not complete objectives, so they do not constitute
-a component ablation.
-
-\paragraph{Measurement budgets and tabular baselines.}
-Clinical high-plex assays must distinguish feature-measurement cost from the
-number of cells used at training or inference. We treat compact-panel and
-inference-cell analyses only as redundancy sensitivities of a mixed
-disease-associated signal. Gradient-boosted trees are strong medium-dimensional
-tabular baselines \citep{grinsztajn2022tree,erickson2026tabarena}, and remain
-competitive here; the benchmark consequently emphasizes evaluation rather than
-architectural superiority.
+fragmentomics, or bulk proteins
+\citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
+Single-cell APT instead observes many correlated cells from each blood draw,
+making subject, training-cell, feature, and inference-cell budgets distinct.
+Gradient-boosted trees are strong tabular baselines
+\citep{grinsztajn2022tree,erickson2026tabarena}; compact-panel analyses are kept
+secondary because feature redundancy cannot resolve biological versus technical
+confounding.

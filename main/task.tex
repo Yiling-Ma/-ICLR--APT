@@ -1,4 +1,4 @@
-\section{Problem Setup}
+\section{Evaluation Setting}
 \label{sec:data}
 
 \subsection{Dataset and Prediction Targets}
@@ -30,15 +30,16 @@ association, not biological attribution or clinical validity.
 fields listed in Appendix~\ref{sec:appendix:dataset_documentation}, including
 independent review of the subtype-to-lineage lookup.}
 
-\subsection{Benchmark Contract and Evaluation}
+\subsection{Primary Scaling Protocol}
 \label{sec:data:contract}
 \label{sec:data:protocols}
 
-APT-Bench fixes patient folds, training-only preprocessing, targets, and metrics
-for three tracks: hierarchical cell typing, two-axis training-scale evaluation,
-and nested transfer from cell predictions to patient characterization. Open-set
-subtype discovery is outside the current contract; the hierarchy uses the fixed
-five-lineage/27-subtype ontology. The release manifest assigns each pseudonymous
+The primary contract estimates subject--cell scaling without changing the
+marginal training label distribution. APT-Bench also fixes patient folds,
+training-only preprocessing, targets, and metrics for hierarchy and nested
+patient-characterization case studies. Open-set subtype discovery is outside
+the contract; the hierarchy uses the fixed five-lineage/27-subtype ontology.
+The release manifest assigns each pseudonymous
 patient to one of five disease-stratified folds with eight test patients; all
 selection remains within development patients. We pool the five out-of-fold
 (OOF) test partitions. A cell-random split is retained only to quantify leakage.
@@ -83,7 +84,7 @@ not imply reduced training-cell requirements.
 \noindent\todo{Deposit the versioned data, split manifest, and executable
 evaluator specified in Appendix~\ref{sec:appendix:benchmark_release}.}
 
-\subsection{Class Distribution}
+\subsection{Case-Study Metrics}
 \label{sec:data:imbalance}
 
 All hierarchy models use the same training patients and ontology. Macro-F1 gives
