@@ -1,0 +1,9 @@
+{
+  "procedure": [
+    "sample one matched training-subset seed uniformly",
+    "bootstrap held-out subjects with one paired draw for both subject budgets",
+    "compute the subject-balanced macro-F1 difference"
+  ],
+  "random_seed": 20270909,
+  "replicates": 2000
+}

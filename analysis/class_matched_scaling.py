@@ -2,7 +2,7 @@
 
 For every dataset, outer fold, resampling seed, task, and total-cell budget,
 the P=8 development subset defines an integer per-class quota.  The identical
-quota is then sampled from nested P=8, 16, and 32 subject sets.  This freezes
+quota is then sampled from nested subject sets at the requested budgets.  This freezes
 training label support and class proportions while varying the number of
 subjects contributing cells to each class.
 """
@@ -37,6 +37,9 @@ TASKS = core.TASKS
 VERSION = "class-matched-fixed-total-v2"
 INDEX_CACHE: dict[tuple[int, str], dict[tuple[int, str], np.ndarray]] = {}
 TEST_MATRIX_CACHE: dict[tuple[int, int], np.ndarray] = {}
+TEST_INDEX_CACHE: dict[tuple[int, int], np.ndarray] = {}
+LABEL_CACHE: dict[tuple[int, str], np.ndarray] = {}
+SAMPLE_ID_CACHE: dict[int, np.ndarray] = {}
 JOINT_RESAMPLING_REPLICATES = 2000
 JOINT_RESAMPLING_SEED = 20270909
 
@@ -66,7 +69,7 @@ def protocol(dataset: str, models: tuple[str, ...]) -> dict[str, Any]:
         "models": list(models),
         "tasks": TASKS,
         "quota_reference": "P=8 nested development subset, separately by fold/seed/task/T",
-        "class_matching": "identical integer per-class cell quota at P=8,16,32",
+        "class_matching": "identical integer per-class cell quota across requested subject budgets",
         "within_class_sampling": "capacity-constrained round robin across eligible selected subjects",
         "test_data": "all cells from immutable untouched outer-test subjects",
         "primary_metric": "subject-balanced macro-F1 from pooled OOF subject-normalized confusions",
@@ -245,16 +248,27 @@ def run_one(
     order = core.nested_patient_order(development, fold, seed)
     selected = order[:patient_budget]
     reference = order[:8]
-    labels = encoders[task].transform(metadata[TASKS[task]].astype(str))
-    sample_ids = metadata["sample_id"].astype(str).to_numpy()
-    reference_idx = np.flatnonzero(np.isin(sample_ids, reference))
+    label_cache_key = (id(metadata), task)
+    labels = LABEL_CACHE.get(label_cache_key)
+    if labels is None:
+        labels = encoders[task].transform(metadata[TASKS[task]].astype(str))
+        LABEL_CACHE[label_cache_key] = labels
+    sample_ids = SAMPLE_ID_CACHE.get(id(metadata))
+    if sample_ids is None:
+        sample_ids = metadata["sample_id"].astype(str).to_numpy()
+        SAMPLE_ID_CACHE[id(metadata)] = sample_ids
+    reference_idx = np.flatnonzero(metadata["sample_id"].astype(str).isin(reference).to_numpy())
     reference_counts = np.bincount(labels[reference_idx], minlength=len(encoders[task].classes_))
     quotas = allocate_quotas(reference_counts, total)
     train_idx, donor_counts = sample_matched(metadata, labels, selected, quotas, fold, seed, task)
     realized_counts = np.bincount(labels[train_idx], minlength=len(quotas))
     if not np.array_equal(realized_counts, quotas):
         raise RuntimeError("Realized class counts differ from frozen quotas.")
-    test_idx = np.flatnonzero(np.isin(sample_ids, test_patients))
+    test_index_key = (id(metadata), fold)
+    test_idx = TEST_INDEX_CACHE.get(test_index_key)
+    if test_idx is None:
+        test_idx = np.flatnonzero(metadata["sample_id"].astype(str).isin(test_patients).to_numpy())
+        TEST_INDEX_CACHE[test_index_key] = test_idx
     mean, std = core.fit_standardizer(matrix[train_idx])
     x_train = core.apply_standardizer(matrix[train_idx], mean, std)
     test_cache_key = (id(matrix), fold)
@@ -441,8 +455,13 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
         set(group) == set(PATIENT_BUDGETS) and len(set(group.values())) == 1
         for group in quota_groups.values()
     )
+    expected_effect_rows = (
+        len(TOTAL_BUDGETS) * len(models) * len(TASKS)
+        if {8, 32}.issubset(PATIENT_BUDGETS)
+        else 0
+    )
     qa = {
-        "status": "PASS" if len(run_frame) == expected and len(effect_frame) == len(TOTAL_BUDGETS) * len(models) * len(TASKS) and quotas_exact else "INCOMPLETE",
+        "status": "PASS" if len(run_frame) == expected and len(effect_frame) == expected_effect_rows and quotas_exact else "INCOMPLETE",
         "expected_jobs": expected,
         "completed_jobs": len(run_frame),
         "effect_rows": len(effect_frame),
@@ -469,13 +488,14 @@ def aggregate(args: argparse.Namespace, models: tuple[str, ...]) -> None:
 
 
 def main() -> None:
-    global TOTAL_BUDGETS, SEEDS
+    global PATIENT_BUDGETS, TOTAL_BUDGETS, SEEDS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", choices=("apt", "onek1k", "combat_rna", "combat_adt"), required=True)
     parser.add_argument("--output", type=Path)
     subparsers = parser.add_subparsers(dest="command", required=True)
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("--models")
+    run_parser.add_argument("--patient-budgets", default=",".join(map(str, PATIENT_BUDGETS)))
     run_parser.add_argument("--totals", default=",".join(map(str, TOTAL_BUDGETS)))
     run_parser.add_argument("--seeds", type=int, default=len(SEEDS))
     run_parser.add_argument("--fold", type=int, choices=range(core.N_OUTER_FOLDS))
@@ -485,6 +505,7 @@ def main() -> None:
     run_parser.add_argument("--force", action="store_true")
     aggregate_parser = subparsers.add_parser("aggregate")
     aggregate_parser.add_argument("--models")
+    aggregate_parser.add_argument("--patient-budgets", default=",".join(map(str, PATIENT_BUDGETS)))
     aggregate_parser.add_argument("--totals", default=",".join(map(str, TOTAL_BUDGETS)))
     aggregate_parser.add_argument("--seeds", type=int, default=len(SEEDS))
     args = parser.parse_args()
@@ -494,9 +515,12 @@ def main() -> None:
     if unsupported:
         raise ValueError(f"Unsupported model(s) for {args.dataset}: {sorted(unsupported)}")
     TOTAL_BUDGETS = tuple(int(value) for value in args.totals.split(","))
+    PATIENT_BUDGETS = tuple(int(value) for value in args.patient_budgets.split(","))
     SEEDS = tuple(range(args.seeds))
     if not TOTAL_BUDGETS or any(total <= 0 for total in TOTAL_BUDGETS):
         raise ValueError("At least one positive total-cell budget is required.")
+    if not PATIENT_BUDGETS or any(budget < 8 for budget in PATIENT_BUDGETS):
+        raise ValueError("Subject budgets must be at least eight because P=8 freezes class quotas.")
     if not SEEDS:
         raise ValueError("At least one seed is required.")
     args.output = (args.output or PROJECT_ROOT / "outputs" / "class_matched_scaling" / args.dataset).resolve()

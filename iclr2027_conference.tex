@@ -569,6 +569,42 @@ exclude zero even when the joint interval does not. We therefore treat the
 joint interval as primary and interpret the conditional intervals only as
 diagnostics of the two uncertainty sources.
 
+\subsection{Extended External Subject Frontier}
+\label{sec:appendix:extended_subject_frontier}
+
+The common $P\leq32$ grid is imposed by the 40-patient APT cohort, not by the
+capacity of the external datasets. We therefore extend the class-matched LR
+control to $P=64$ for COMBAT and to $P\in\{64,128\}$ for OneK1K at
+$T\in\{3{,}200,6{,}400\}$. The original $P=8$ subset freezes the class set and
+integer per-class quotas for every fold, seed, task, and total; only the number
+of selected subjects allowed to contribute those cells changes. Each new point
+uses 10 nested subset seeds, all immutable outer-test subjects, and the same
+joint resampling of training-subset seed and held-out subjects used in the
+primary matched control. This extension is an external-cohort saturation
+sensitivity rather than a claim that its largest tested $P$ is globally
+optimal.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\textwidth]{figures/extended_subject_frontier.pdf}
+\caption{Class-matched LR frontier beyond 32 training subjects. Points are
+mean subject-balanced OOF macro-F1 over 10 matched training-subset seeds; bars
+are empirical 95\% seed intervals and therefore visualize subset sensitivity,
+not the primary joint uncertainty. The paired joint effect intervals are
+reported in Table~\ref{tab:extended_subject_frontier}.}
+\label{fig:extended_subject_frontier}
+\end{figure}
+
+\input{tables/extended_subject_frontier}
+
+All 12 adjacent frontier effects are small: their means range from $-0.00065$
+to $+0.00123$, and every joint interval includes zero. The four direct OneK1K
+$32\rightarrow128$ contrasts are likewise unresolved. The external curves are
+therefore consistent with a plateau over this tested fixed-total range rather
+than a continued subject-breadth gain. Because the intervention remains tied
+to these tasks, budgets, features, and LR configuration, it does not locate a
+universal saturation point or optimal allocation.
+
 \subsection{Secondary Descriptive Patient--Cell Scaling Surface}
 \label{sec:appendix:patient_cell_scaling}
 

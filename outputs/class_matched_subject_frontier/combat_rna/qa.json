@@ -1,0 +1,12 @@
+{
+  "completed_seed_metrics": 80,
+  "dataset": "combat_rna",
+  "effect_rows": 4,
+  "expected_seed_metrics": 80,
+  "joint_resampling_replicates": 2000,
+  "patient_budgets": [
+    32,
+    64
+  ],
+  "status": "PASS"
+}

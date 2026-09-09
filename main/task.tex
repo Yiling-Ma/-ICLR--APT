@@ -131,6 +131,16 @@ is classifier-specific rather than expanding the benchmark model ladder.
 This control fixes the marginal training label distribution, but it does not
 separately fix disease--subtype composition, the allocation of each class
 across subjects, or within-class subject heterogeneity.
+Because the external cohorts contain substantially more than 32 eligible
+subjects, we additionally extend the class-matched LR frontier beyond the
+common APT range. At both fixed totals, COMBAT adds $P=64$, while OneK1K adds
+$P\in\{64,128\}$. The $P=8$ reference continues to determine the observed
+class set and exact per-class quotas, so every frontier point has the same
+training label distribution as its $P=32$ counterpart. We use 10 nested
+training-subset seeds and the same joint uncertainty procedure for the paired
+$32\rightarrow64$ and $64\rightarrow128$ contrasts. This sensitivity tests
+whether residual subject effects continue or saturate in donor-rich cohorts;
+it is not an optimization of a universal subject/cell allocation rule.
 
 To test portability beyond a single assay and cohort, we apply the same grid to
 the public COMBAT CITE-seq blood atlas \citep{combat2022blood}. After a frozen

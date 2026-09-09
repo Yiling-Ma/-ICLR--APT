@@ -31,6 +31,12 @@ unseen-class coverage alone. Disease--subtype composition,
 within-class allocation across subjects, pool, source, and unrecorded batch
 coverage can still change with subject breadth, so even the matched result is
 associational.
+Extending the external class-matched LR frontier beyond the APT-imposed limit
+does not reveal a delayed benefit: all adjacent 32--64 and 64--128 joint
+intervals include zero, and their point estimates are at most 0.0013 in
+absolute magnitude. This tested-range plateau makes truncation at 32 an
+unlikely explanation for the corrected external result, but it neither
+identifies a universal saturation point nor establishes an optimal allocation.
 Correlated cells cannot create evidence about new patients, even when additional
 cells improve estimation of cell-type decision boundaries. Clinical single-cell
 benchmarks should therefore report patient-disjoint generalization together
@@ -64,7 +70,10 @@ supported cascade advantage over matched references. Its scaling audit shows
 that unmatched fixed-total comparisons can mistake a label-distribution effect
 for a subject-breadth benefit; after class matching, coarse effects are small
 and model-dependent, while fine point estimates are negative or near zero
-across LR and XGBoost, with no joint interval excluding zero. Nested transfer
+across LR and XGBoost, with no joint interval excluding zero. External LR
+frontiers remain unresolved through 64 COMBAT and 128 OneK1K
+training subjects, consistent with a plateau over the tested fixed-total range
+rather than a universal optimum. Nested transfer
 has no resolved subtype increment, and direct disease association remains
 confounded by patient-specific absolute-expression structure; clinical claims
 require external validation.

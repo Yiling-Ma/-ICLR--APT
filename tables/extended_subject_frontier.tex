@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llrrcc}
+\toprule
+Dataset & Task & $T$ & Subjects & $\Delta$ subject-balanced M-F1 & $\Pr(\Delta>0)$ \\
+\midrule
+COMBAT RNA & Coarse & 3,200 & 32$\rightarrow$64 & +0.0001 [-0.0020, +0.0025] & 0.535 \\
+COMBAT RNA & Coarse & 6,400 & 32$\rightarrow$64 & +0.0002 [-0.0014, +0.0016] & 0.618 \\
+COMBAT RNA & Fine & 3,200 & 32$\rightarrow$64 & -0.0005 [-0.0060, +0.0026] & 0.498 \\
+COMBAT RNA & Fine & 6,400 & 32$\rightarrow$64 & -0.0006 [-0.0060, +0.0040] & 0.450 \\
+\midrule
+OneK1K RNA & Coarse & 3,200 & 32$\rightarrow$64 & -0.0005 [-0.0111, +0.0052] & 0.553 \\
+OneK1K RNA & Coarse & 6,400 & 32$\rightarrow$64 & +0.0012 [-0.0046, +0.0046] & 0.766 \\
+OneK1K RNA & Fine & 3,200 & 32$\rightarrow$64 & -0.0005 [-0.0060, +0.0053] & 0.418 \\
+OneK1K RNA & Fine & 6,400 & 32$\rightarrow$64 & +0.0002 [-0.0096, +0.0063] & 0.595 \\
+OneK1K RNA & Coarse & 3,200 & 64$\rightarrow$128 & +0.0012 [-0.0023, +0.0068] & 0.642 \\
+OneK1K RNA & Coarse & 6,400 & 64$\rightarrow$128 & +0.0007 [-0.0042, +0.0043] & 0.657 \\
+OneK1K RNA & Fine & 3,200 & 64$\rightarrow$128 & +0.0004 [-0.0039, +0.0050] & 0.542 \\
+OneK1K RNA & Fine & 6,400 & 64$\rightarrow$128 & +0.0012 [-0.0066, +0.0068] & 0.617 \\
+\bottomrule
+\end{tabular}
+\caption{Extended class-matched subject frontier for Logistic Regression. Each comparison holds the total training-cell budget, observed class set, and exact per-class cell quotas fixed while increasing the number of contributing training subjects. Values are paired mean changes; brackets are joint 95\% intervals from 2{,}000 replicates that sample a matched training-subset seed and then bootstrap held-out subjects. The final column is the empirical joint probability of a positive change.}
+\label{tab:extended_subject_frontier}
+\end{table}

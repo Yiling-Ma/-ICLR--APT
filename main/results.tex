@@ -157,6 +157,21 @@ are partly mediated by changes in label support and class composition, while
 the residual class-matched estimates remain model- and cohort-dependent. This
 control does not attribute the change to unseen classes alone.
 
+The shared $P\leq32$ grid could still truncate a rising subject frontier in the
+donor-rich external cohorts. We therefore extend the same class-matched LR
+design to 64 COMBAT donors and to 64 and 128 OneK1K donors, retaining 10 nested
+subset seeds at both fixed totals. Across the 12 adjacent contrasts
+($32\rightarrow64$, plus $64\rightarrow128$ for OneK1K), mean changes range
+from $-0.00065$ to $+0.00123$, and every joint interval includes zero
+(Appendix~\ref{sec:appendix:extended_subject_frontier}). Direct OneK1K
+$32\rightarrow128$ changes are also small ($-0.0001$ to $+0.0019$) with all
+joint intervals crossing zero. Thus the corrected external curves are already
+empirically flat over the tested range: we find no resolved benefit from
+extending 32 to 64 or 128 training subjects at fixed $T$ and label
+distribution. This is evidence of saturation under these cohorts, budgets,
+features, and LR specification, not evidence that 32 subjects is a universal
+optimum.
+
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}
 

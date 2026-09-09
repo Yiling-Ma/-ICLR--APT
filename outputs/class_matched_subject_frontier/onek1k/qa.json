@@ -1,0 +1,13 @@
+{
+  "completed_seed_metrics": 120,
+  "dataset": "onek1k",
+  "effect_rows": 12,
+  "expected_seed_metrics": 120,
+  "joint_resampling_replicates": 2000,
+  "patient_budgets": [
+    32,
+    64,
+    128
+  ],
+  "status": "PASS"
+}
