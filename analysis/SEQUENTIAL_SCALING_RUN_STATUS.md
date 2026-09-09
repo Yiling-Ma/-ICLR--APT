@@ -1,23 +1,36 @@
-# Launch handoff (2026-09-09)
+# Restart handoff (2026-09-09)
 
-- Host: `mayiling@vllab7.ucmerced.edu`, CPU only. GPU NVML reports a driver mismatch.
+At the user's explicit request, the old vllab7 sequential experiment was stopped
+and its `outputs/sequential_scaling` directory deleted. Nine scoped scheduler,
+shell and worker processes were terminated and checked. Raw data, other
+experiments and the completed local synthetic validation were preserved.
+
+- Host: `mayiling@vllab13.ucmerced.edu`, reached through vllab7.
 - Isolated run root: `/home/mayiling/projs/apt_agent/sequential_audit_20260909`.
 - Python: `/home/mayiling/opt/apt-ft-baselines/bin/python`.
+- Physical GPU 4 (RTX 6000 Ada), exposed as `cuda:0`; two concurrent shards.
+- XGBoost uses GPU. Sklearn LR/MLP run on CPU, also on vllab13.
+- GPU smoke test passed: booster reported `cuda:0`; a synthetic 6,400 x 293,
+  27-class, 10-tree fit including initialization took 15.6 seconds. This is not
+  a measured full-job speedup. Other users are actively using the GPUs.
 - COMBAT: `/home/mayiling/data/combat/prepared`.
 - OneK1K: `/home/mayiling/data/onek1k/prepared`.
-- Batch: `analysis/run_sequential_batch.sh`; four shards; APT then COMBAT RNA
+- Batch: `analysis/run_sequential_batch.sh`; two shards; APT then COMBAT RNA
   then OneK1K. Full design is 2,400 fits per cohort (7,200 total).
 - Batch log: `outputs/sequential_scaling/batch.log` under the isolated root.
-- Shard logs: `outputs/sequential_scaling/logs/{dataset}_{0,1,2,3}.log`.
+- Launcher PID: 4154611; also recorded in `outputs/sequential_scaling/launcher.pid`.
+- Shard logs: `outputs/sequential_scaling/logs/{dataset}_{0,1}.log`.
 - Results: `outputs/sequential_scaling/{dataset}/runs/`.
 - Automatic aggregation follows completion of all shards for each dataset.
   Any failed shard stops the batch; incomplete results cannot produce inference.
-- APT completed first coarse LR jobs at launch. Full real-cohort results are
+- The fresh batch was launched on vllab13. Full real-cohort results are
   pending, not present in the paper. Check logs rather than treating this
   launch-time note as a live status report.
-- LR convergence warnings were observed at the frozen 500-iteration budget;
+- LR convergence warnings were observed in the old run at the frozen 500-iteration budget;
   retain and audit them before interpreting completed results. Do not silently
   retune individual conditions after viewing scores.
+- Every result records hostname, visible GPU and backend configuration. CPU
+  results from the deleted run are not reused or mixed into the fresh run.
 
 The local synthetic experiment is complete (1,280 fits); Appendix C.4 reports
 all settings. Local tests cover sampling invariants and paired aggregation.

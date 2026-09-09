@@ -66,6 +66,13 @@ python analysis/simulate_sequential_controls.py --seeds 20 --output outputs/sequ
 
 ## Mechanism check
 
+The batch launcher accepts `SHARDS` (default 2) and `XGB_DEVICE` (default CPU).
+For the fresh vllab13 run, `CUDA_VISIBLE_DEVICES=4 XGB_DEVICE=cuda:0 SHARDS=2`:
+all XGBoost fits use the same GPU backend, while sklearn LR/MLP remain on CPU
+on that host. The device is part of the protocol fingerprint; every XGBoost
+fit validates its booster device and aborts rather than silently falling back.
+GPU work shares the card with existing users; acceleration is not guaranteed.
+
 The separate simulation is synthetic, not semi-synthetic: six Gaussian class
 centers, 48 donors, 400 cells per donor, 12 features. Vary donor-wide additive
 offset (0/1.5), donor label-mixture heterogeneity (0/1.5), and class separation

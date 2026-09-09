@@ -11,6 +11,8 @@ import argparse
 import hashlib
 import itertools
 import json
+import os
+import socket
 import time
 from pathlib import Path
 
@@ -66,6 +68,7 @@ def sample(labels, subjects, selected, quotas, priority, donor_priority, conditi
 
 def configuration(args):
     return dict(version=VERSION, dataset=args.dataset, seeds=args.seeds,
+                xgboost_device=os.environ.get("APT_XGB_DEVICE", "cpu"),
                 total=args.total, budgets=[8, 32], conditions=list(CONDITIONS),
                 models=args.models.split(","), folds=5, tasks=["coarse", "fine"],
                 quota_reference="P8 development capacity, largest remainder with support floor",
@@ -90,6 +93,18 @@ def name(j):
 
 
 def predict(model_name, task, train, y, test):
+    if model_name == "xgboost":
+        observed, local = np.unique(y, return_inverse=True)
+        if len(observed) == 1:
+            return np.full(len(test), observed[0], dtype=int)
+        model = core.build_model(model_name)
+        model.fit(train, local)
+        device = json.loads(model.get_booster().save_config())["learner"]["generic_param"]["device"]
+        if os.environ.get("APT_XGB_DEVICE", "cpu").startswith("cuda") and not device.startswith("cuda"):
+            raise RuntimeError("Requested GPU but XGBoost fell back to CPU")
+        print("XGBOOST_DEVICE", device, "HOST", socket.gethostname(), flush=True)
+        return np.concatenate([observed[model.predict(test[i:i + 8192]).astype(int)]
+                               for i in range(0, len(test), 8192)])
     if model_name != "mlp":
         return core.fit_one_model(model_name, task, train, y, test)[0]
     if len(np.unique(y)) == 1:
@@ -150,6 +165,7 @@ def run(args, output, config):
                         confusions=cm, train_cell_ids=cell_ids[train_idx], train_subject_ids=subjects[train_idx],
                         class_names=encoders[j["task"]].classes_.astype(str))
         legacy.atomic_json(stem.with_suffix(".json"), dict(j, config=config, seconds=time.time()-start,
+            hostname=socket.gethostname(), cuda_visible_devices=os.environ.get("CUDA_VISIBLE_DEVICES"),
             actual_subjects=len(set(subjects[train_idx])), class_counts=counts.tolist(),
             class_donor_coverage=coverage, reference_quotas=quotas.tolist(),
             train_manifest_sha256=hashlib.sha256("\n".join(cell_ids[train_idx]).encode()).hexdigest()))
