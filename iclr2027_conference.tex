@@ -304,6 +304,8 @@ procedure.}
 \subsection{Confounding Audit of Within-Cohort Disease Association}
 \label{sec:appendix:disease_patient_level}
 
+\input{tables/disease}
+
 \paragraph{Cell-level prediction of the disease source of a held-out patient.}
 Table~\ref{tab:disease} reports the main associational patient-characterization
 audit. For completeness, Table~\ref{tab:disease_cell_level} reports the pooled
@@ -451,6 +453,24 @@ space, is retained only as a sensitivity analysis.
 \label{sec:appendix:protocol_sensitivity}
 
 Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint protocol with a leakage-prone cell-level split control. It is placed in the appendix because the central result uses patient-disjoint evaluation throughout; the control quantifies how much the easier protocol would inflate both absolute performance and the apparent advantage of a model family.
+
+\paragraph{Metric definitions.}
+Let $C^{(p)}\in\mathbb{R}^{K\times K}$ be the confusion matrix for held-out
+subject $p$ and $n_p=\sum_{ij}C^{(p)}_{ij}$. We distinguish
+\begin{align}
+C^{\mathrm{CW}} &= \sum_p C^{(p)},
+&F_1^{\mathrm{CW}} &= \operatorname{MacroF1}(C^{\mathrm{CW}}),\\
+C^{\mathrm{SB}} &= \frac{1}{P}\sum_p\frac{C^{(p)}}{n_p},
+&F_1^{\mathrm{SB}} &= \operatorname{MacroF1}(C^{\mathrm{SB}}),\\
+F_1^{\mathrm{within}} &= \frac{1}{P}\sum_p
+\operatorname{MacroF1}(C^{(p)}). &&
+\end{align}
+We call these \emph{cell-weighted pooled Macro-F1}, \emph{subject-balanced
+pooled Macro-F1}, and \emph{mean within-subject Macro-F1}. Subject balancing
+normalizes each subject confusion matrix to unit mass before pooling; it is
+neither equal-cell subsampling nor averaging per-subject Macro-F1. Released
+files retain the legacy column name \texttt{patient\_balanced\_macro\_f1} for
+$F_1^{\mathrm{SB}}$, but no different patient-balanced statistic is used.
 
 \input{tables/protocol_sensitivity}
 

@@ -202,6 +202,13 @@ benchmark finding: the complete soft-cascade recipe has no supported advantage
 over the backbone- and budget-matched references. Because only that recipe uses
 cross-disease contrastive regularization, this is not a component-level effect.
 
+The main paper has also been reflowed to remain below the nine-page ICLR main-text
+limit without reducing the template font size. Detailed scaling allocation,
+metric formulas, subtype support tables, composition results, and disease-signal
+sensitivities are retained in the appendix. The main text keeps one hierarchy
+table and one class-matched scaling figure; forced composition-table placement
+and repeated appendix-level numerical narration were removed.
+
 Direct APT disease classifiers, compact panels, and attribution are no longer
 primary disease results. The main table instead reports composition and
 recorded-nuisance controls, while direct 40/40 majority vote and the 0.950

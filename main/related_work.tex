@@ -1,28 +1,33 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Liquid biopsy and multi-cancer detection.}
-Blood-based multi-cancer early detection has focused primarily on circulating tumor DNA, methylation, fragmentomics, and bulk protein assays \citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}. These approaches target a patient-level diagnostic decision. Our setting differs because APT profiling observes individual circulating cells, which introduces a second prediction problem at cell resolution: identifying lineage and fine subtype structure within the same blood draw. The resulting task is not simply ``more labels,'' but a change in statistical unit and hierarchy structure.
+\paragraph{Clinical and single-cell evaluation.}
+Multi-cancer detection commonly uses circulating DNA, methylation,
+fragmentomics, or bulk proteins \citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
+APT profiling instead observes many correlated cells from each blood draw, so
+patient characterization and cell typing require different statistical units.
+Public single-cell benchmarks increasingly separate datasets, representations,
+and evaluators and use study- or patient-separated partitions
+\citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}; none
+combines a fixed aptamer panel, coarse-to-fine typing, two-axis training scale,
+and a confounding-aware patient audit.
 
-\paragraph{Single-cell foundation models and modality mismatch.}
-Large pretrained models such as Geneformer, scGPT, and scFoundation learn representations from transcriptomic data and are widely used as reference points for single-cell representation learning \citep{theodoris2023transfer,cui2024scgpt,hao2024large}. Their success does not transfer automatically to our setting. The input modality is different, since APT consists of a fixed 293-dimensional protein-oriented panel rather than a gene-vocabulary sequence. More importantly, recent evaluation work shows that frozen or zero-shot single-cell foundation-model embeddings are often matched by simpler baselines once the downstream task and evaluation protocol are made explicit \citep{kedzierska2025zero}. This motivates training directly on APT profiles and treating evaluation design itself as a first-class contribution.
+\paragraph{Representation and hierarchy.}
+Transcriptome foundation models such as Geneformer, scGPT, and scFoundation are
+not directly matched to a fixed 293-dimensional protein-oriented panel, and
+recent evaluations show that simple baselines can remain competitive when the
+protocol is controlled \citep{theodoris2023transfer,cui2024scgpt,hao2024large,kedzierska2025zero}.
+Cell identity is hierarchical, motivating structured losses and models
+\citep{jia2025schdeepinsight,cultrera2026improving}. We therefore compare
+XGBoost with flat, HCE, and soft-cascade Transformer recipes. The neural models
+match backbone and budget but not complete objectives, so they do not constitute
+a component ablation.
 
-\paragraph{Reusable single-cell benchmarks.}
-Open Problems separates datasets, methods, and metrics behind public loaders and
-evaluation code \citep{luecken2025open}; a 2025 multimodal benchmark similarly
-releases processed RNA/ADT/ATAC inputs and task-specific pipelines
-\citep{liu2025multitask}. SPARE standardizes sample-representation interfaces
-\citep{shitov2025spare}, and PaSCient evaluates patient representations with
-study-separated partitions \citep{liu2026pascient}. None combines a fixed
-aptamer-binding panel, coarse-to-fine cell typing, patient-level disease audit,
-and aptamer-measurement/inference-aggregation budgets. APT-Bench targets this narrower gap rather than
-replacing broad RNA or integration benchmarks.
-
-\paragraph{Hierarchical cell-type classification.}
-Cell identity naturally admits coarse-to-fine structure, and recent work has explored losses or architectures that exploit this structure for annotation and out-of-distribution robustness \citep{jia2025schdeepinsight,cultrera2026improving}. Our use of hierarchy is narrower and more explicit: disease is kept outside the hierarchy, while lineage and subtype form the only genuine taxonomy. We compare \ourmethod{} with a backbone- and budget-matched flat FT-style Transformer reference \citep{gorishniy2021revisiting} and an HCE counterpart using a two-level adaptation of hierarchical cross-entropy \citep{cultrera2026improving}. Their objectives are not fully matched, so this ladder compares complete recipes rather than isolating individual components.
-
-\paragraph{Measurement-budget sensitivity.}
-Clinical translation of high-plex assays depends not only on accuracy but also on measurement cost. As a secondary sensitivity, APT-Bench asks how the observed within-cohort disease-associated signal changes under outer-test-isolated panel selection and held-out-cell subsampling. The latter is an inference sensitivity, not reduced-cell training. Because biological and technical sources are not identifiable here, these analyses quantify feature and aggregation redundancy of a mixed signal; they do not validate a reduced assay or biomarker panel.
-
-\paragraph{Tabular deep learning versus classical machine learning.}
-APT expression is a medium-dimensional tabular signal. In that regime, gradient-boosted trees remain strong defaults and often rival or outperform deep tabular models \citep{grinsztajn2022tree,erickson2026tabarena}. This literature is directly reflected in our results: XGBoost and backbone-matched Transformer references remain competitive at both resolutions, so \ourmethod{} cannot be justified by a blanket accuracy claim. We instead use it as a structured reference for the hierarchy diagnostics, while disease association is audited with simple, strong tabular baselines.
+\paragraph{Measurement budgets and tabular baselines.}
+Clinical high-plex assays must distinguish feature-measurement cost from the
+number of cells used at training or inference. We treat compact-panel and
+inference-cell analyses only as redundancy sensitivities of a mixed
+disease-associated signal. Gradient-boosted trees are strong medium-dimensional
+tabular baselines \citep{grinsztajn2022tree,erickson2026tabarena}, and remain
+competitive here; the benchmark consequently emphasizes evaluation rather than
+architectural superiority.

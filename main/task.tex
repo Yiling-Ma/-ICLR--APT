@@ -4,194 +4,91 @@
 \subsection{Dataset and Prediction Targets}
 \label{sec:data:description}
 
-\paragraph{Cohort construction and specimen source.}
-APT-Bench is derived from peripheral-blood clinical specimens collected from 40
-participants: patients with colorectal cancer (CRC), gastric cancer (GC),
-hepatocellular carcinoma (HCC), pancreatic cancer (PC), or biliary tract cancer
-(BTC), and healthy controls (Normal). The six groups contain 6--8 participants
-each. Clinical specimens were processed into single-cell suspensions before
-assay preparation. The study workflow documents quality control using the
-forward/side-scatter cell profile and viable-cell proportion before library
-construction.
+APT-Bench is derived from peripheral-blood specimens from 40 participants in
+five cancer groups (CRC, GC, HCC, PC, and BTC) and healthy controls, with 6--8
+participants per group. The paired assay measures transcriptomic state and 293
+target-specific nucleic-acid aptamers on the same cells. Transcriptomic counts
+were processed with Seurat \citep{hao2021integrated}; predicted doublets and
+low-quality cells were removed, and clusters were manually annotated using
+canonical markers from prior PBMC and pan-cancer studies
+\citep{mcginnis2019doubletfinder,zhang2024pan,yang2024pan}. These annotations
+define the five-lineage and \numsubtypes{}-subtype targets. Primary models receive
+only the 293 APT measurements; the label-generating RNA modality is used only in
+an internal reconstructability diagnostic. Appendix~\ref{sec:appendix:dataset_documentation}
+gives the complete construction checklist and unresolved provenance fields.
 
-\paragraph{Paired single-cell assay and label construction.}
-The assay jointly measures transcriptomic state and binding of 293
-target-specific nucleic-acid aptamers on the same cells. Transcriptome and
-aptamer-barcode libraries are constructed separately and linked at the cell
-level by their shared barcodes. Transcriptomic counts were processed and
-clustered with the standard Seurat workflow \citep{hao2021integrated}; predicted
-doublets were removed with DoubletFinder \citep{mcginnis2019doubletfinder}, and
-low-quality cells were filtered using per-cell UMI count, detected-gene count,
-and mitochondrial-transcript fraction. Investigators then manually annotated
-clusters from canonical subtype marker expression reported in prior PBMC and
-pan-cancer studies \citep{zhang2024pan,yang2024pan}. These transcriptome-derived
-annotations define the lineage and subtype targets, while disease labels come
-from participant-level cohort assignment. The benchmark input contains only
-the 293 APT measurements; transcriptomic measurements construct the reference
-labels but are never exposed to a primary benchmark model. A separate paired-RNA
-oracle diagnostic uses the label-generating modality only to assess internal
-reconstructability and is excluded from the benchmark ranking. Exact parameters and label
-limitations are documented in Appendix~\ref{sec:appendix:dataset_documentation}.
+The linked post-QC cohort contains 374{,}854 cells. Excluding the uncertain
+\emph{Unknown} subtype leaves 361{,}792 benchmark cells. Feature transforms are
+estimated on training patients only. Disease is a six-class patient-level label,
+whereas lineage and subtype are cell-level labels with one fixed parent lineage
+per subtype. Disease is therefore audited separately rather than treated as the
+root of the cell hierarchy. Because each participant contributes one acquisition
+and acquisition metadata are incomplete, disease analyses estimate within-cohort
+association, not biological attribution or clinical validity.
 
-\noindent\todo{Complete the remaining cohort, specimen-processing, assay, and
-annotation parameters listed in Appendix~\ref{sec:appendix:dataset_documentation};
-report unavailable metadata explicitly rather than leaving them implicit.}
+\noindent\todo{Complete the remaining acquisition, processing, and annotation
+fields listed in Appendix~\ref{sec:appendix:dataset_documentation}, including
+independent review of the subtype-to-lineage lookup.}
 
-\paragraph{Benchmark cohort.}
-The linked post-QC cohort contains 374{,}854 cells. After excluding the
-transcriptome-derived \emph{Unknown} subtype label, which denotes uncertain
-annotation rather than a validated biological state, the main benchmark contains
-361{,}792 cells. Each cell is represented by a 293-dimensional APT expression
-vector. Expression values are log-transformed and standardized feature-wise
-using statistics estimated from the training partition only. The 293 aptamers
-are designed probes rather than an arbitrary learned basis.
-
-APT-Bench contains two kinds of targets at different observational units.
-\begin{itemize}
-    \item \textbf{Patient-level disease-association audit.} Each patient is assigned to one of six disease groups. Because every participant contributes a single acquisition and batch metadata are unavailable, this target supports within-cohort association and confounding analyses, not biological attribution or clinical validation.
-    \item \textbf{Cell-level hierarchy prediction.} Each cell is assigned to one of five coarse immune lineages and one of \numsubtypes{} fine subtypes. Every subtype maps to exactly one parent lineage through a manually curated lookup table. The same subtype names and operational definitions are used across all six disease groups rather than being redefined by disease.
-\end{itemize}
-Disease is therefore not treated as the root of a three-level hierarchy. It is a separate patient-level label observed on the same blood draw.
-
-\noindent\todo{Document independent biological review of the subtype-to-lineage
-lookup, including reviewers, disagreements, and adjudication.}
-
-\subsection{Benchmark Contract and Extensibility}
+\subsection{Benchmark Contract and Evaluation}
 \label{sec:data:contract}
-
-APT-Bench fixes the unit of input, prediction target, split, and metric for each
-track: five-lineage and 27-subtype prediction from one APT vector per cell;
-two-axis scaling over training patients and cells per patient; and strict
-cross-fitted aggregation from cell predictions to six-class patient-level
-characterization with gold-composition and technical controls. Open-set subtype
-discovery is outside the current contract; all primary hierarchy tasks use the
-fixed 5-lineage/27-subtype ontology. Outer-test-isolated aptamer measurement and
-inference-cell budgets are secondary sensitivities. The machine-readable manifest at
-\texttt{benchmark/splits/patient\_folds.json} assigns every pseudonymous patient
-to one outer fold; all selection remains inside development patients. Portable
-components include patient-clustered uncertainty, hierarchy diagnostics,
-pseudoreplication and fingerprint audits, and outer-test-isolated budget curves. The full
-interface and release contract appear in Appendix~\ref{sec:appendix:benchmark_release}.
-This cohort cannot estimate cross-site or cross-platform generalization.
-
-\noindent\todo{Deposit the versioned data and executable evaluation release
-specified in Appendix~\ref{sec:appendix:benchmark_release}; otherwise describe
-the work as a dataset case study rather than a reusable benchmark.}
-
-\subsection{Evaluation Protocols}
 \label{sec:data:protocols}
 
-We evaluate models under two main protocols with different purposes.
+APT-Bench fixes patient folds, training-only preprocessing, targets, and metrics
+for three tracks: hierarchical cell typing, two-axis training-scale evaluation,
+and nested transfer from cell predictions to patient characterization. Open-set
+subtype discovery is outside the current contract; the hierarchy uses the fixed
+five-lineage/27-subtype ontology. The release manifest assigns each pseudonymous
+patient to one of five disease-stratified folds with eight test patients; all
+selection remains within development patients. We pool the five out-of-fold
+(OOF) test partitions. A cell-random split is retained only to quantify leakage.
+The interface and release requirements are specified in
+Appendix~\ref{sec:appendix:benchmark_release}.
 
-\paragraph{Patient-level 5-fold cross-validation.}
-This is the primary protocol for all headline claims. Patients are partitioned into five disease-stratified folds, each containing eight held-out test patients. At every fold, preprocessing statistics, model fitting, and hyperparameter selection use only the training and validation patients from the remaining folds. We pool out-of-fold predictions across all five test folds, yielding a patient-disjoint evaluation spanning all 40 patients.
+For cell typing, coarse and fine macro-F1 are primary; exact-path accuracy and
+subtype-tree distance assess the joint hierarchy. Point estimates use pooled OOF
+cells, while uncertainty uses 2{,}000 paired patient bootstraps. The prespecified
+comparison family contrasts the soft-cascade recipe with HCE and XGBoost at both
+resolutions, with Holm correction over four tests. Subject-balanced sensitivities
+first normalize each held-out subject's confusion matrix to unit mass before
+pooling; this differs from both cell-weighted pooling and averaging within-subject
+macro-F1. Full definitions are in Appendix~\ref{sec:appendix:protocol_sensitivity}.
 
-\paragraph{Cell-level split control.}
-As a protocol-sensitivity control, cells are randomly split irrespective of patient identity. Cells from the same patient can therefore appear in both training and evaluation sets. We do not treat this as a realistic deployment protocol. Its only role is to quantify performance inflation caused by leakage.
+The scaling track varies training subjects $P\in\{8,16,32\}$ and cells per
+subject $C\in\{100,200,400,800,1600\}$ while keeping outer-test subjects fixed.
+Fixed-total diagonals hold $T=PC\in\{3200,6400,12800\}$ constant, with 20 nested
+subject/cell subset seeds. The primary metric is subject-balanced pooled OOF
+macro-F1. Because these reallocations can also change observed classes, per-class
+counts, and class proportions, a class-matched control freezes the $P=8$ class
+set and exact per-class quotas before comparing $P=8$ with $P=32$. LR is evaluated
+at $T\in\{3200,6400\}$ and XGBoost at $T=6400$; joint intervals first resample a
+training-subset seed and then paired test subjects. Appendix
+Sections~\ref{sec:appendix:fair_scaling}--\ref{sec:appendix:class_matched_scaling}
+give allocation, metric, and uncertainty formulas.
 
-\paragraph{Training patient--cell scaling.}
-The original $4\times4$ surface is retained as a descriptive sensitivity, but
-its unequal endpoints do not compare patient and cell effects. The primary fair
-design uses $P\in\{8,16,32\}$ outer-development patients and
-$C\in\{100,200,400,800,1600\}$ uniformly sampled cells per patient. Its
-fixed-total diagonals hold $T=PC\in\{3200,6400,12800\}$ exactly constant, and
-the full grid also supports matched doublings of one axis while holding the
-other fixed. Within every outer fold, 20 disease-stratified patient orderings
-and uniform within-patient cell permutations are nested across budgets.
-Preprocessing is fit only on sampled training cells; frozen Logistic Regression
-and XGBoost configurations are refit for coarse and fine prediction; and every
-cell from the same eight untouched outer-test patients is evaluated. To keep
-evaluation weighting explicit, let $C^{(p)}\in\mathbb{R}^{K\times K}$ be the
-confusion matrix for held-out subject $p$ and let
-$n_p=\sum_{ij}C^{(p)}_{ij}$. We distinguish
-\begin{align}
-C^{\mathrm{CW}} &= \sum_{p=1}^{P} C^{(p)},
-&F_1^{\mathrm{CW}} &= \operatorname{MacroF1}(C^{\mathrm{CW}}),\\
-C^{\mathrm{SB}} &= \frac{1}{P}\sum_{p=1}^{P}\frac{C^{(p)}}{n_p},
-&F_1^{\mathrm{SB}} &= \frac{1}{K}\sum_{k=1}^{K}
-\frac{2C^{\mathrm{SB}}_{kk}}
-{\sum_j C^{\mathrm{SB}}_{kj}+\sum_i C^{\mathrm{SB}}_{ik}},\\
-F_1^{\mathrm{within}} &= \frac{1}{P}\sum_{p=1}^{P}
-\operatorname{MacroF1}(C^{(p)}). &&
-\end{align}
-We call these \emph{cell-weighted pooled Macro-F1}, \emph{subject-balanced
-pooled Macro-F1}, and \emph{mean within-subject Macro-F1}, respectively. They
-are not interchangeable. Subject balancing means normalizing each subject's
-confusion matrix to unit mass before pooling; it is neither equal-cell
-subsampling nor averaging per-subject Macro-F1. Subject-balanced pooled
-Macro-F1 is the primary scaling metric; the other two are sensitivities.
-For backward compatibility, released scaling files retain the machine-readable
-column name \texttt{patient\_balanced\_macro\_f1} for
-$F_1^{\mathrm{SB}}$; no different ``patient-balanced'' statistic is used.
-Empirical subset-seed intervals and paired patient-clustered
-bootstrap intervals answer different uncertainty questions and are reported
-separately. This training-time design is distinct from inference subsampling in
-the compact-panel analysis.
-
-The fixed-total grid does not by itself isolate subject breadth: adding subjects
-can change observed classes, per-class counts, and class proportions. We refer
-to their joint influence as the \emph{label-distribution effect} and run a separate
-class-matched control at the two cross-cohort totals,
-$T\in\{3200,6400\}$. For each outer-fold, seed, task, and $T$, the nested
-$P=8$ development subset freezes the observed class set and an integer
-per-class quota $T_k$. The identical $T_k$ values are then sampled without
-replacement at $P=8,16,32$, using capacity-constrained round-robin allocation
-to spread each class over as many selected subjects as possible. This makes
-class support, counts, and proportions identical within each paired comparison;
-only the subjects contributing those cells change. We refit class-weighted
-multinomial Logistic Regression at both totals and report subject-balanced
-pooled OOF macro-F1. The primary uncertainty analysis jointly samples one completed
-training-subset seed and then resamples outer-test subjects with replacement,
-using the same subject draw for $P=8$ and $P=32$. We report the central 95\%
-interval and $\Pr(\Delta>0)$ over 2{,}000 joint replicates. Empirical
-seed-only intervals with test subjects fixed and paired subject-only intervals
-after averaging seeds are retained as uncertainty decompositions. We
-additionally repeat the same control with the
-frozen XGBoost configuration at $T=6{,}400$ over 10 matched seeds. This
-nonlinear robustness check uses the same folds, frozen quotas, training cells,
-and test cells as its LR counterpart; it tests whether the corrected direction
-is classifier-specific rather than expanding the benchmark model ladder.
-This control fixes the marginal training label distribution, but it does not
-separately fix disease--subtype composition, the allocation of each class
-across subjects, or within-class subject heterogeneity.
-Because the external cohorts contain substantially more than 32 eligible
-subjects, we additionally extend the class-matched LR frontier beyond the
-common APT range. At both fixed totals, COMBAT adds $P=64$, while OneK1K adds
-$P\in\{64,128\}$. The $P=8$ reference continues to determine the observed
-class set and exact per-class quotas, so every frontier point has the same
-training label distribution as its $P=32$ counterpart. We use 10 nested
-training-subset seeds and the same joint uncertainty procedure for the paired
-$32\rightarrow64$ and $64\rightarrow128$ contrasts. This sensitivity tests
-whether residual subject effects continue or saturate in donor-rich cohorts;
-it is not an optimization of a universal subject/cell allocation rule.
-
-To test portability beyond a single assay and cohort, we apply the same grid to
-the public COMBAT CITE-seq blood atlas \citep{combat2022blood}. After a frozen
-quality and coverage audit, 105 donors and 700{,}706 cells are assigned to five
-donor-disjoint folds. The primary external replication uses 293 RNA features
-selected only on 10 separate calibration donors; a matched-modality sensitivity
-uses all 192 released antibody-derived tag (ADT) features on exactly the same
-cells, donors, labels, and folds. Full construction and exclusion rules are in
+We transport the frozen protocol to COMBAT CITE-seq (105 evaluation donors,
+700{,}706 cells; RNA and matched ADT) and OneK1K (925 evaluation donors,
+1{,}199{,}468 cells; RNA) \citep{combat2022blood,yazar2022onek1k}. Feature
+selection uses separate calibration donors. Class-matched LR frontiers extend to
+64 COMBAT and 128 OneK1K training donors to test whether the common $P\leq32$
+grid truncates continued improvement. Construction and coverage audits are in
 Appendix~\ref{sec:appendix:combat_scaling}.
 
-A second external replication uses 925 evaluation donors and 1{,}199{,}468
-cells from the healthy OneK1K PBMC atlas \citep{yazar2022onek1k}. It uses
-pool- and donor-disjoint folds, calibration-only selection of 293 RNA features,
-and the same LR/XGBoost protocol. A coverage audit limits $C$ to 800 and the
-common fixed totals to 3{,}200 and 6{,}400; Appendix~\ref{sec:appendix:combat_scaling}
-gives the construction and released-label limitations.
+The subtype distribution is long-tailed, motivating macro-F1 and patient-clustered
+uncertainty. Disease association is evaluated at the patient level; cell-level
+source prediction appears only as a confounding diagnostic. Aptamer and
+inference-cell budgets are secondary, outer-test-isolated sensitivities and do
+not imply reduced training-cell requirements.
+
+\noindent\todo{Deposit the versioned data, split manifest, and executable
+evaluator specified in Appendix~\ref{sec:appendix:benchmark_release}.}
 
 \subsection{Class Distribution}
 \label{sec:data:imbalance}
 
-Because the subtype distribution is long-tailed, we use macro-F1 as the primary metric for coarse-lineage and fine-subtype prediction. Accuracy is secondary. Primary point estimates pool cells and are therefore cell-weighted despite patient-disjoint splits; Appendix~\ref{sec:appendix:protocol_sensitivity} reports equal-cell-per-patient sensitivity results. For uncertainty, we compute 95\% confidence intervals from 2{,}000 paired patient-level bootstrap resamples over the 40 pooled test patients. The prespecified recipe-comparison family asks whether the most structured neural reference, \ourmethod{}, outperforms HCE or XGBoost at the coarse and fine endpoints. Two-sided bootstrap $p$-values use twice the smaller tail probability with a plus-one correction and are Holm-adjusted across these four tests; comparisons outside this family are exploratory. All four tested advantages fail to exclude zero. Because only the soft-cascade recipe includes cross-disease contrastive regularization, these are complete-recipe comparisons rather than component ablations and do not isolate a routing or contrastive effect.
-
-From the same pooled predictions, joint hierarchy metrics are exact-path
-accuracy, root-excluded example-averaged lineage/subtype F1, and subtype-tree distance;
-support correlations, sibling errors, and the coarse--fine gap are exploratory
-difficulty diagnostics.
-
-We audit disease association at the patient level because disease labels belong
-to patients rather than cells. Cell-level source-prediction accuracies are
-included only as supplementary confounding diagnostics and are not interpreted
-as though hundreds of thousands of cells were independent disease observations.
+All hierarchy models use the same training patients and ontology. Macro-F1 gives
+each class equal weight despite the long tail; accuracy and root-excluded
+hierarchical F1 are secondary. Per-subtype support, equal-cell-per-patient
+sensitivity, and error-conditioned hierarchy diagnostics are reported in
+Appendix~\ref{sec:appendix:subtype_audit} rather than used as additional primary
+hypotheses.

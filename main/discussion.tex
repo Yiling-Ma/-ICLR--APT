@@ -1,92 +1,41 @@
 \section{Discussion}
 \label{sec:discussion}
 
-APT-Bench is primarily an evaluation contribution rather than a claim of model
-superiority. Across neural and classical references, broad lineage is more
-reliably recovered than transcriptome-derived subtype, and no advantage for the
-soft cascade over simpler matched references is statistically supported. The resulting
-granularity gap and the uncertain subtype-versus-lineage gain in the strict
-nested transfer audit show that additional model complexity alone does not
-resolve fine cell typing or establish that finer predictions improve
-patient-level characterization.
-The paired-RNA oracle narrows the interpretation: the label-generating
-transcriptome reconstructs both resolutions substantially better than APT under
-a matched probe, which implicates limited APT resolution, but RNA itself retains
-a large coarse--fine gap. The resolved fine gain from combining APT with RNA
-also shows that APT is complementary rather than uninformative. Because the
-oracle shares its modality and feature-development pipeline with the labels,
-these results cannot quantify annotation error or establish an independent
-biological ground truth. The observed granularity gap therefore reflects an
-inseparable combination of modality resolution, patient shift, and the
-operational transcriptome-derived taxonomy.
+APT-Bench is an evaluation contribution rather than a claim of model
+superiority. Broad lineage is more reliably recovered than
+transcriptome-derived subtype, and no soft-cascade advantage is statistically
+supported. The paired-RNA probe shows that limited APT resolution contributes
+to this gap, while the residual RNA gap and resolved APT+RNA improvement rule
+out a single explanation. Annotation uncertainty, modality resolution, and
+patient shift remain inseparable without independent reference labels.
 
-The benchmark also separates the evaluation unit from the training-scaling
-axes. Although it contains 361{,}792 cells, performance on unseen subjects must
-still be estimated from only 40 independent patients; cell-level splitting
-inflates scores and changes apparent model differences. The label-agnostic
-fixed-total design compares broader patient coverage with deeper sampling
-without changing total training cells, but it also changes the marginal
-training label distribution.
-Its 37/38 direction is therefore a naive joint effect, not a pure
-subject-diversity estimate or a headline scaling law. The class-matched control
-changes the interpretation: after identical per-class quotas are enforced,
-APT has a small positive coarse point estimate under both LR and XGBoost, but
-the OneK1K coarse point estimate changes sign across models. Fine point
-estimates are negative in both APT and COMBAT under both classifiers and remain
-near zero in OneK1K. Every joint interval over training subsets and held-out
-subjects includes zero. The unmatched fine-label gains are therefore partly
-mediated by changes in label support and class composition, but the remaining
-direction is not statistically resolved and is not demonstrably caused by
-unseen-class coverage alone. Disease--subtype composition,
-within-class allocation across subjects, pool, source, and unrecorded batch
-coverage can still change with subject breadth, so even the matched result is
-associational.
-Extending the external class-matched LR frontier beyond the APT-imposed limit
-does not reveal a delayed benefit: all adjacent 32--64 and 64--128 joint
-intervals include zero, and their point estimates are at most 0.0013 in
-absolute magnitude. This tested-range plateau makes truncation at 32 an
-unlikely explanation for the corrected external result, but it neither
-identifies a universal saturation point nor establishes an optimal allocation.
-Correlated cells cannot create evidence about new patients, even when additional
-cells improve estimation of cell-type decision boundaries. Clinical single-cell
-benchmarks should therefore report patient-disjoint generalization together
-with both patient and training-cell budgets rather than using raw cell count as
-effective sample size.
+The scaling audit illustrates why many cells cannot be equated with many
+independent subjects. Patient-disjoint evaluation prevents direct identity
+leakage, but an unmatched subject/cell reallocation still changes the training
+label distribution. Once class support and quotas are fixed, effects are small,
+model- and cohort-dependent, and unresolved under joint training-subset and
+test-subject uncertainty. External frontiers plateau over the tested range, but
+do not identify a universal allocation rule. Clinical single-cell benchmarks
+should therefore report both subject and cell budgets, make class-distribution
+changes explicit, and propagate uncertainty from both sampled units.
 
-The disease analyses delimit what can be concluded from this cohort. A
-disease-label-free subtype predictor preserves disease-associated variation after
-patient aggregation, but its gain over lineage composition, cell count, or a
-six-feature recorded RNA-QC baseline is not statistically resolved. Strong
-centering sensitivity indicates that patient-specific absolute-expression
-structure contributes substantially to within-cohort discrimination. The
-compact-panel result therefore establishes only that this inseparable mixed
-signal is feature-redundant; it does not establish assay reduction, biological
-specificity, or causal biomarkers. The APT disease cohort is single-site, lacks
-acquisition-batch metadata, and has no external disease-validation cohort;
-COMBAT and OneK1K validate only the cell-typing scaling protocol, not cancer recognition.
-The LODO analysis is descriptive and cross-disease generalization remains
-unresolved. The fixed schema, patient
-splits, tasks, and evaluator are reusable in future APT and clinical single-cell
-cohorts \citep{luecken2025open,liu2025multitask}, but batch-aware, cross-site
-validation is required before clinical claims.
+Patient characterization has a separate identifiability boundary. Nested cell
+outputs retain disease-associated variation, but fine composition has no
+resolved increment over lineage or recorded nuisance summaries. Strong
+centering sensitivity and missing acquisition metadata prevent separation of
+biological disease signal from patient-specific or technical structure. COMBAT
+and OneK1K validate portability of the scaling protocol, not cancer recognition;
+batch-aware external APT cohorts are required for clinical claims.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench establishes a patient-disjoint contract for hierarchical cell typing,
-two-axis scaling, and patient characterization from single-cell aptamer profiles.
-Coarse lineage is consistently easier than fine subtype prediction, with no
-supported cascade advantage over matched references. A paired-RNA diagnostic
-shows that paired RNA substantially improves reconstruction of the annotation
-taxonomy while retaining a coarse--fine gap, so limited APT resolution is one
-contributor rather than a complete explanation. The scaling audit further shows
-that unmatched fixed-total comparisons can mistake a label-distribution effect
-for a subject-breadth benefit; after class matching, coarse effects are small
-and model-dependent, while fine point estimates are negative or near zero
-across LR and XGBoost, with no joint interval excluding zero. External LR
-frontiers remain unresolved through 64 COMBAT and 128 OneK1K
-training subjects, consistent with a plateau over the tested fixed-total range
-rather than a universal optimum. Nested transfer
-has no resolved subtype increment, and direct disease association remains
-confounded by patient-specific absolute-expression structure; clinical claims
-require external validation.
+APT-Bench establishes a patient-disjoint contract for hierarchical typing,
+two-axis scaling, and confounding-aware patient characterization. It reveals a
+robust coarse--fine granularity gap and shows that naive fixed-total scaling can
+mistake label-distribution changes for subject-breadth benefits. After class
+matching, no LR or XGBoost effect is resolved across APT, COMBAT, and OneK1K,
+and nested transfer establishes association rather than subtype mediation.
+These results position statistical unit, label distribution, and measurement
+budget as explicit benchmark dimensions while leaving clinical validity to
+batch-aware external evaluation.

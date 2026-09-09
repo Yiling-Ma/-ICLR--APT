@@ -1,245 +1,117 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Patient-Disjoint Hierarchy Prediction Exposes a Granularity Gap}
+\subsection{Patient-Disjoint Typing Exposes a Granularity Gap}
 
 Coarse lineage recognition is consistently easier than fine subtype recognition
-(Table~\ref{tab:main}). For \ourmethod{}, coarse macro-F1 is 0.326 while fine
-macro-F1 is 0.152; the matched flat FT-style Transformer reaches 0.323 and
-0.147. The corresponding gap appears across model families, indicating that
-APT profiles recover broad immune identity more reliably than the finer
-transcriptome-derived taxonomy.
-
-A matched paired-RNA oracle localizes, but does not eliminate, this ambiguity
-(Appendix~\ref{sec:appendix:paired_rna_oracle}). Under the same patient folds,
-training cells, linear probe, and subject-balanced pooled evaluation, APT-only
-coarse/fine macro-F1 is 0.288/0.104, compared with 0.790/0.442 for paired RNA.
-The RNA-minus-APT changes are $+0.502$ (paired patient-bootstrap 95\% CI
-$[0.478,0.527]$) and $+0.338$ ($[0.300,0.365]$), respectively. Thus the
-transcriptomic modality contains substantially more information for recovering
-its own annotation taxonomy. Yet RNA fine performance remains far below RNA
-coarse performance, so the gap cannot be attributed to APT resolution alone.
-Combining both modalities reaches 0.794/0.473; its fine improvement over RNA is
-$+0.031$ ($[0.016,0.046]$), while its coarse improvement is unresolved. APT
-therefore retains complementary fine-resolution signal, even though it is much
-weaker alone. Because the labels and the oracle representation originate from
-the same RNA pipeline, this is an internal reconstructability diagnostic rather
-than independent validation of label correctness.
+(Table~\ref{tab:main}). The soft-cascade recipe reaches coarse/fine macro-F1
+0.326/0.152, compared with 0.323/0.147 for the flat Transformer. A paired-RNA
+linear probe localizes this gap: under the same folds and cells, APT reaches
+0.288/0.104 and RNA reaches 0.790/0.442. Combining APT with RNA further raises
+fine macro-F1 to 0.473 (RNA-only difference $+0.031$, 95\% CI
+$[0.016,0.046]$). Thus APT has complementary fine-resolution information, but
+the label-generating RNA modality reconstructs the taxonomy much better and
+still retains a large coarse--fine gap. This is an internal reconstructability
+diagnostic, not independent validation of transcriptome-derived labels
+(Appendix~\ref{sec:appendix:paired_rna_oracle}).
 
 Backbone- and budget-matched comparisons do not establish superiority for the
-complete soft-cascade recipe. They are not objective-matched ablations because
-only that recipe includes cross-disease contrastive regularization. Consequently,
-the observed differences cannot be assigned to cascade routing, disease-aware
-pair construction, or their interaction.
-Relative to the flat Transformer, \ourmethod{} differs by only $+0.0036$ coarse
-macro-F1 (paired patient-bootstrap 95\% CI $[-0.0078,0.0146]$) and $+0.0055$
-fine macro-F1 (95\% CI $[-0.0021,0.0125]$). HCE has the highest coarse point
-estimate (0.333), but \ourmethod{}$-$HCE is $-0.0069$
-(95\% CI $[-0.0154,0.0026]$) at the coarse level and $+0.0015$
-(95\% CI $[-0.0083,0.0047]$) at the fine level. Differences from XGBoost also
-do not exclude zero. Exact-path accuracy is 0.248--0.259; HCE has the highest
-value, whereas XGBoost has the highest root-excluded hierarchical F1 (0.420)
-and lowest subtype-tree distance (2.375). Natural consistency is reported only
-as an appendix diagnostic because constrained decoding can alter it without
-improving correctness.
+complete soft-cascade recipe. Its coarse/fine differences from the flat model
+are $+0.0036/+0.0055$, with paired patient-bootstrap intervals spanning zero;
+comparisons with HCE and XGBoost are likewise unresolved. Because only the
+soft-cascade recipe includes cross-disease contrastive regularization, these are
+recipe comparisons rather than component ablations. Exact-path accuracy is
+0.248--0.259, and XGBoost has the lowest subtype-tree distance.
 
 \input{tables/main_result}
 
-\subsection{Why 361{,}792 Cells Still Yield Only 0.15 Subtype Macro-F1}
+\subsection{Subtype Difficulty Is Not Explained by Cell Count Alone}
 \label{sec:results:subtype_audit}
 
-Per-subtype F1 is more strongly associated with cell abundance than with
-patient coverage in this cohort. Marginal
-$\operatorname{Spearman}(F_{1,k},\log n_k)$ versus
-$\operatorname{Spearman}(F_{1,k},P_k)$ is 0.486/0.288 for \ourmethod{} and
-0.540/0.275 for XGBoost. After rank residualization,
-$\rho_{c\mid p}$ is 0.411/0.496 and $\rho_{p\mid c}$ is $-0.051/-0.130$.
-Because there are only 27 subtypes and 16 lie at the 40-patient coverage
-ceiling, these are exploratory associations rather than causal explanations.
+Per-subtype F1 is more strongly associated with cell abundance than patient
+coverage, but 16 of 27 subtypes occur in all 40 patients, limiting the latter's
+variation. After rank residualization, cell-support associations remain positive
+(0.411 for the soft cascade; 0.496 for XGBoost), whereas patient-coverage
+associations are near zero. Only about one quarter of errors retain the true
+parent; however, the observed cross-lineage rates are close to an
+error-conditioned marginal null and do not independently demonstrate hierarchy
+preservation or failure. These exploratory support and error analyses, including
+clustered intervals and full per-subtype results, are in
+Appendix~\ref{sec:appendix:subtype_audit}.
 
-Only 25.0\% of \ourmethod{} errors and 24.6\% of XGBoost errors retain the true
-parent. The raw cross-lineage rate depends on the available wrong-class
-distribution: against an error-conditioned marginal null, the observed rates
-are close to expectation and do not independently demonstrate either hierarchy
-preservation or failure. Appendix~\ref{sec:appendix:subtype_audit} reports
-per-subtype patient-clustered intervals, support plots, and the complete error
-analysis. Across models, the descriptive coarse-minus-fine macro-F1 gap ranges
-from 0.099 to 0.200.
-
-\subsection{Patient Disjointness Changes the Evaluation, Not Just the Split}
+\subsection{Patient Disjointness Changes the Evaluation}
 \label{sec:results:protocol}
 
-Cell-level splitting inflates coarse/fine macro-F1 by $+0.090/+0.108$ for
-\ourmethod{} and $+0.050/+0.069$ for XGBoost
-(Appendix~\ref{sec:appendix:protocol_sensitivity}). APT-Bench therefore fixes
-patient-disjoint evaluation rather than treating the split as a reporting
-detail. Because the cell-weighted pooled metric can still overweight
-patients with more cells, an equal-cell sensitivity also samples 1{,}900 cells
-per patient over 50 seeds. It changes coarse macro-F1 by at most $+0.005$ and
-fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
+Cell-random splitting inflates coarse/fine macro-F1 by $+0.090/+0.108$ for the
+soft cascade and $+0.050/+0.069$ for XGBoost. Equal-cell-per-patient evaluation
+changes patient-disjoint macro-F1 by at most 0.009, so the conclusion is not
+driven by a few high-cell-count patients
+(Appendix~\ref{sec:appendix:protocol_sensitivity}).
 
-\subsection{The Label Distribution Confounds Naive Two-Axis Scaling}
+\subsection{Label Distribution Confounds Naive Two-Axis Scaling}
 \label{sec:results:patient_cell_scaling}
 
-The fair scaling experiment holds outer-test subjects fixed and varies only the
-development set. It evaluates fixed-total-cell reallocations, matched doublings,
-and a descriptive response surface for LR and XGBoost at both resolutions. Each
-point uses 20 matched subject/cell subset seeds; preprocessing and fitting are
-repeated, while all cells from untouched test subjects are evaluated. The
-design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
+We first reallocate a fixed number of training cells from 8 to 32 subjects
+without matching the class distribution. Across APT, COMBAT, and OneK1K, 37 of
+38 model--resolution--budget comparisons favor greater subject breadth. Yet
+these comparisons simultaneously change observed labels, per-class counts, and
+class proportions. Training-subset intervals are also substantially less stable
+than test-subject bootstrap intervals. The 37/38 direction is therefore an audit
+target, not a pure subject-breadth effect.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.82\columnwidth]{figures/class_matched_scaling.pdf}
-\caption{Primary class-matched fixed-total scaling control. Each comparison
-freezes the observed classes and exact per-class cell quotas before reallocating
-the same $T$ training cells from 8 to 32 subjects. Points are changes in
-subject-balanced pooled, subject-disjoint OOF macro-F1 at $T=6{,}400$; bars are 95\%
-joint intervals from 2{,}000 replicates that first sample one of the 20 LR or
-10 XGBoost training-subset seeds and then resample paired outer-test subjects.
-All 12 joint intervals include zero. Corrected point estimates are small and
-model- or cohort-dependent.}
+\includegraphics[width=0.78\columnwidth]{figures/class_matched_scaling.pdf}
+\caption{Class-matched fixed-total scaling. Each paired comparison freezes the
+observed classes and exact per-class quotas before reallocating $T=6{,}400$
+training cells from 8 to 32 subjects. Points are changes in subject-balanced
+pooled OOF macro-F1; 95\% joint intervals resample both the training-subset seed
+and paired held-out subjects. All 12 intervals include zero.}
 \label{fig:class_matched_scaling}
 \end{figure}
 
-As a deliberately naive starting point, the original label-agnostic design
-reallocates cells without matching the training label distribution. Moving from 8 to 32 patients improves subject-balanced pooled OOF
-macro-F1 in all 12 model--resolution--budget combinations, by 0.006--0.022
-(Appendix~\ref{sec:appendix:fair_scaling}). All paired patient-bootstrap and
-subset-seed intervals are above zero. Cell-weighted pooled and mean within-subject
-sensitivities give the same qualitative direction, with isolated uncertainties
-detailed in Appendix~\ref{sec:appendix:fair_scaling}. These are unmatched
-associations to be audited below, not estimates of a pure subject-breadth effect.
+Class matching changes the conclusion (Figure~\ref{fig:class_matched_scaling}).
+At $T=6{,}400$, LR/XGBoost effects are $+0.0078/+0.0083$ for APT coarse but
+$-0.0050/-0.0058$ for APT fine. COMBAT effects are approximately zero for
+coarse and $-0.0028/-0.0027$ for fine; OneK1K effects are small and change sign
+across models. All 12 joint intervals include zero. Thus negative APT and COMBAT
+fine point estimates are not LR-specific, but no corrected effect is resolved
+after propagating both training-subset and held-out-subject uncertainty. The
+unmatched gain is partly mediated by the broader label-distribution change, not
+only whether a rare class is observed.
 
-The direction transfers to COMBAT despite a different cohort, measurement
-technology, and 39-class fine taxonomy. Across 105 donors and 700{,}706 cells,
-all 12 RNA effects are positive (0.001--0.018) for LR and XGBoost, and all six
-matched ADT LR effects are positive (0.006--0.013). All 18 paired
-donor-bootstrap intervals exclude zero. Only 4 of 18 empirical subset-seed
-intervals exclude zero, however, showing that donor-bootstrap stability of the
-average effect does not eliminate sensitivity to the selected development
-subset. COMBAT therefore replicates the fixed-total direction, not a constant
-effect size or deterministic advantage for every training subset.
+The donor-rich cohorts do not reveal a delayed LR benefit. Extending the same
+class-matched design to 64 COMBAT and 128 OneK1K training donors yields adjacent
+effects between $-0.00065$ and $+0.00123$, with every joint interval spanning
+zero. This supports a tested-range plateau under fixed totals and label quotas,
+not a universal optimal number of subjects. Complete grids, matched doublings,
+class-support audits, metric sensitivities, and uncertainty decompositions are
+reported in Appendix~\ref{sec:appendix:fair_scaling}--
+\ref{sec:appendix:extended_subject_frontier}.
 
-Across 925 healthy OneK1K evaluation donors, seven of eight effects are positive
-(0.004--0.009). XGBoost coarse prediction reverses at $T=3{,}200$
-($-0.0028$; donor-bootstrap 95\% CI $[-0.0036,-0.0017]$), but is positive at
-$T=6{,}400$ ($+0.0056$). No OneK1K subset-seed interval excludes zero, exposing
-substantial dependence on the selected training donors.
-
-Matched doublings on APT lead to the same descriptive ordering. Averaged across
-eligible fixed settings, patient-versus-cell doubling gains are 0.011 versus
-0.005 (LR coarse), 0.007 versus 0.003 (LR fine), 0.016 versus 0.008 (XGBoost
-coarse), and 0.009 versus 0.006 (XGBoost fine). Fold-adjusted response-surface
-coefficients are likewise larger for $\log_2 P$ than $\log_2 C$ in all four
-comparisons, although interactions show that neither effect is constant across
-the grid. OneK1K matched doublings and response surfaces also favor the donor
-axis, but only narrowly for XGBoost coarse prediction. Across APT, COMBAT, and
-OneK1K, this naive analysis yields 37 of 38 unmatched fixed-total comparisons
-in favor of broader subject coverage. The numerical consistency is misleading
-if read as an isolated breadth effect because the sampled subjects and marginal
-training label distribution change simultaneously.
-
-The class audit confirms that this distinction matters. At the common
-$T=3{,}200$ diagonal, moving from $P=8$ to $P=32$ changes the mean number of
-observed fine classes from 26.12 to 26.33 of 27 for APT, 36.97 to 37.34 of 39
-for COMBAT, and 27.10 to 27.26 of 30 for OneK1K. At $T=6{,}400$, the
-corresponding changes are 26.34 to 26.53, 37.81 to 38.10, and 28.31 to 28.47.
-These fractional averages represent fold/seed settings in which a test class
-changes from unseen to seen, which can directly affect macro-F1. They measure
-only one component of the label-distribution effect: per-class counts and
-proportions also change in the unmatched analysis.
-
-We therefore repeat LR after freezing the $P=8$ observed classes and exact
-per-class quotas within every fold/seed/task comparison, then repeat the common
-$T=6{,}400$ setting with XGBoost as a nonlinear robustness check
-(Figure~\ref{fig:class_matched_scaling};
-Table~\ref{tab:class_matched_scaling}). Mean donor coverage per observed class
-increases substantially while class counts remain identical. At $T=6{,}400$,
-the LR/XGBoost effects are $+0.0078/+0.0083$ for APT coarse and
-$-0.0050/-0.0058$ for APT fine. COMBAT coarse effects are
-$+0.0000/+0.0011$, while fine effects are $-0.0028/-0.0027$.
-OneK1K is less stable across models: coarse changes from $+0.0033$ under LR to
-$-0.0011$ under XGBoost, and fine changes from $+0.0013$ to $-0.0006$.
-All 12 joint intervals include zero. The corresponding probabilities of a
-positive effect are 0.836/0.817 (APT coarse), 0.043/0.110 (APT fine),
-0.548/0.522 (COMBAT coarse), 0.272/0.264 (COMBAT fine), 0.728/0.210
-(OneK1K coarse), and 0.598/0.550 (OneK1K fine) for LR/XGBoost.
-Seed-only and subject-only decompositions are shown in
-Appendix~\ref{sec:appendix:class_matched_scaling}. Thus class matching changes
-the scientific conclusion: negative APT and COMBAT fine point estimates are
-not an LR artifact, but no corrected effect is resolved after jointly
-propagating training-subset and held-out-subject uncertainty. Unmatched gains
-are partly mediated by changes in label support and class composition, while
-the residual class-matched estimates remain model- and cohort-dependent. This
-control does not attribute the change to unseen classes alone.
-
-The shared $P\leq32$ grid could still truncate a rising subject frontier in the
-donor-rich external cohorts. We therefore extend the same class-matched LR
-design to 64 COMBAT donors and to 64 and 128 OneK1K donors, retaining 10 nested
-subset seeds at both fixed totals. Across the 12 adjacent contrasts
-($32\rightarrow64$, plus $64\rightarrow128$ for OneK1K), mean changes range
-from $-0.00065$ to $+0.00123$, and every joint interval includes zero
-(Appendix~\ref{sec:appendix:extended_subject_frontier}). Direct OneK1K
-$32\rightarrow128$ changes are also small ($-0.0001$ to $+0.0019$) with all
-joint intervals crossing zero. Thus the corrected external curves are already
-empirically flat over the tested range: we find no resolved benefit from
-extending 32 to 64 or 128 training subjects at fixed $T$ and label
-distribution. This is evidence of saturation under these cohorts, budgets,
-features, and LR specification, not evidence that 32 subjects is a universal
-optimum.
-
-\subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
+\subsection{Nested Cell Outputs Retain Disease-Associated Variation}
 \label{sec:results:composition_bridge}
 
-Composition connects cell typing to patient characterization, but a pooled OOF
-pipeline is insufficient: a cell model generating a downstream training
-patient's features can have seen the current disease outer-test patients. We
-therefore seal each eight-patient outer fold, construct the 32 development
-compositions by four-way inner patient-disjoint cross-fitting, and use one cell
-model fitted on all 32 development patients only for the sealed test patients.
+We connect cell typing to patient characterization using strict nested
+cross-fitting: each eight-patient outer fold remains sealed while compositions
+for the 32 development patients are generated by inner patient-disjoint models.
+Disease-label-free XGBoost subtype probabilities reach patient macro-F1 0.593,
+versus 0.477 for lineage probabilities, but the subtype-minus-lineage difference
+is unresolved ($+0.116$, 95\% CI $[-0.015,0.262]$). Gold subtype composition
+reaches 0.516, indicating that predicted probabilities may also carry confidence
+or technical structure rather than serving only as abundance estimates.
 
-Under this strict protocol, disease-label-free XGBoost soft subtype composition
-reaches patient accuracy/macro-F1/AUROC $0.600/0.593/0.854$, compared with
-$0.475/0.477/0.766$ for soft lineage composition. Both exceed their complete
-10{,}000-permutation nulls ($p=0.00010$ and $p=0.00020$). Fine granularity is
-not established as superior: the paired subtype-minus-lineage macro-F1
-difference is $+0.116$ with patient-bootstrap 95\% CI $[-0.015,0.262]$. True
-subtype composition reaches macro-F1 0.516, so the predicted representation is
-not merely a noisier estimate of annotated abundance; it may also retain model
-confidence or technical structure.
+Log cell count and recorded RNA-QC summaries reach macro-F1 0.531 and 0.566.
+Subtype composition exceeds them by only $+0.062$ and $+0.027$, respectively,
+with both intervals spanning zero; a conditional QC-plus-lineage comparison is
+also unresolved. The defensible result is representation transfer, not subtype
+mediation, fine-over-coarse utility, or error propagation. The full table and
+controls are in Appendix~\ref{sec:appendix:composition_bridge}.
 
-This is a representation-transfer audit, not evidence of error propagation: it
-does not establish a subtype-abundance source, fine-over-coarse utility, or that
-better typing improves patient characterization. Hard/soft and predicted/gold
-sensitivities are reported in Appendix~\ref{sec:appendix:composition_bridge}.
-
-\input{tables/disease}
-
-Log cell count alone reaches macro-F1 0.531 ($p=0.00010$). A six-feature
-nuisance-only model using recovered cell count and patient summaries of the
-recorded transcriptomic UMI and detected-gene QC fields reaches macro-F1 0.566
-and AUROC 0.859. Predicted subtype composition exceeds the cell-count model by
-only $+0.062$ (95\% CI $[-0.087,0.218]$) and the full recorded-QC model by
-$+0.027$ (95\% CI $[-0.157,0.215]$). Equal-cell sensitivity, a
-global-multinomial composition null, and a fold-ID prediction control do not
-establish biological mediation. The defensible finding is therefore narrower:
-cell predictions preserve disease-associated variation, but they do not show
-incremental value beyond available nuisance summaries.
-
-A stricter conditional audit likewise finds no resolved subtype increment over
-recorded QC plus lineage: $\Delta$ macro-F1 $=+0.016$ (95\% paired
-patient-bootstrap CI $[-0.120,0.169]$; Appendix~\ref{sec:appendix:disease_patient_level}).
-
-\paragraph{Identifiability boundary.}
-Direct APT discrimination is strong but confounding-sensitive. Patient-wise
-centering produces a 35-point drop in majority-vote accuracy, and individual
-cells readily identify their source patient. Each participant contributes one
-acquisition, while plate, run, date, library, and site covariates and an external
-APT cohort are unavailable. Disease, patient, and unrecorded acquisition effects
-are therefore not statistically identifiable from this cohort: resampling,
-permutation testing, or additional models cannot separate them. We consequently
-treat direct APT prediction, compact panels, and attribution only as diagnostics
-of a mixed within-cohort signal; full values and controls are confined to
-Appendix~\ref{sec:appendix:disease_patient_level} and
-Appendix~\ref{sec:appendix:minimal_panel}.
+Direct APT discrimination is stronger but confounding-sensitive: patient-wise
+centering reduces majority-vote accuracy by 35 points, and cells readily predict
+their source patient. Because disease, patient, and unrecorded acquisition are
+not identifiable in this single-acquisition cohort, direct prediction, compact
+panels, and attribution remain diagnostics of a mixed within-cohort signal
+(Appendix~\ref{sec:appendix:disease_patient_level} and
+Appendix~\ref{sec:appendix:minimal_panel}).
