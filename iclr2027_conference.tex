@@ -73,10 +73,11 @@ APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profile
 from 40 patients, with a fixed five-lineage/27-subtype ontology, patient-level
 characterization audit, and explicit patient and cell training axes. Across
 matched neural and classical models, coarse lineage recognition remains
-substantially easier than fine subtype prediction. At three fixed total-cell
-budgets, reallocating cells from 8 to 32 subjects improves subject-balanced
-macro-F1 in all 30 comparisons across APT and external COMBAT CITE-seq RNA and
-ADT evaluations, although effect magnitude is context-dependent. Strict nested
+substantially easier than fine subtype prediction. At fixed total-cell budgets,
+reallocating cells from 8 to 32 subjects improves subject-balanced macro-F1 in
+37 of 38 comparisons across APT, external COMBAT CITE-seq RNA/ADT, and external
+OneK1K RNA evaluations; one low-budget XGBoost coarse setting reverses, and
+effect magnitude is context-dependent. Strict nested
 aggregation shows that cell-model outputs retain disease-associated variation,
 but subtype composition has no resolved increment over lineage, cell count, or
 recorded RNA-QC controls. Direct APT discrimination is also sensitive to
@@ -464,7 +465,7 @@ effects, patient intervals, seed intervals, and response-surface uncertainty
 are stored in the machine-readable scaling artifacts. The coefficients are
 associations over this grid, not causal or universal scaling laws.
 
-\subsection{External COMBAT CITE-seq Scaling Replication}
+\subsection{External COMBAT and OneK1K Scaling Replications}
 \label{sec:appendix:combat_scaling}
 
 We downloaded the author-released COMBAT CITE-seq object
@@ -491,6 +492,28 @@ of the 21 untouched test donors; the ADT analysis is an LR-only modality
 sensitivity rather than an additional model-comparison family. Dataset hashes,
 folds, features, sampling manifests, and per-donor sufficient statistics are
 included in the release artifacts.
+
+OneK1K provides a second independent scRNA-seq replication in a much larger
+healthy PBMC cohort \citep{yazar2022onek1k}. We use the current author-deposited
+CELLxGENE object (1{,}248{,}980 cells and 981 donor identifiers; SHA-256
+\texttt{14c5e9e70007a5e7dc047f7b29405773305e1a7b9791d0789af70649cf6f46ec}),
+remove released doublet calls, and reserve one complete multiplexing pool for
+calibration. Requiring at least 800 eligible cells leaves 925 evaluation donors
+and 1{,}199{,}468 cells. Five folds are disjoint in both donor and multiplexing
+pool. We select 293 protein-coding, non-mitochondrial, non-ribosomal genes by
+variance on ten calibration-pool donors only, and use the released 30-class
+Azimuth-derived fine labels with a deterministic five-lineage mapping.
+
+OneK1K uses the same models, 20 nested subset seeds, training-only
+standardization, untouched-test-donor evaluation, subject-balanced metric, and
+2{,}000 paired donor bootstraps. Its grid is
+$P\in\{8,16,32\}$ and $C\in\{100,200,400,800\}$, yielding the two common exact
+budgets $T\in\{3200,6400\}$. We prespecified the lower depth ceiling because
+only 116 of the 981 raw donors have at least 1{,}600 eligible cells; enforcing
+the full APT grid would discard most donors and condition the replication on
+high cell recovery. OneK1K tests scaling portability in a healthy cohort, not
+disease generalization or absolute accuracy across different feature spaces
+and label-generation procedures.
 
 \input{tables/cross_cohort_scaling}
 

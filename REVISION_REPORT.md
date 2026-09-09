@@ -44,6 +44,17 @@ matched doublings along each axis, pooled cell-weighted Macro-F1, mean
 within-patient Macro-F1, separate subset-seed intervals, paired patient bootstrap
 intervals, and a descriptive response surface with outer-fold fixed effects.
 
+### External scaling replication
+
+The fixed-total protocol is now evaluated in two independent public resources.
+COMBAT supplies RNA and matched ADT views from 105 donors. OneK1K supplies a
+second RNA cohort with 925 evaluation donors and 1,199,468 cells after excluding
+doublets, one calibration pool, and donors below 800 eligible cells. OneK1K
+folds are disjoint in both donor and multiplexing pool; 293 genes are selected
+only on ten donors from the excluded calibration pool. Its depth audit supports
+`C={100,200,400,800}` and exact totals 3,200 and 6,400 without conditioning on
+the 116 unusually deep donors that reach 1,600 cells.
+
 ### Technical-confounding audit
 
 The disease track now includes a matched nuisance-only baseline built from the
@@ -104,6 +115,16 @@ clinical, causal, cross-batch, or external-generalization claims.
   coarse), 0.007/0.003 (LR fine), 0.016/0.008 (XGBoost coarse), and 0.009/0.006
   (XGBoost fine). Fold-adjusted response surfaces give the same ordering but
   are reported as descriptive, not causal.
+- OneK1K scaling: complete. LR and XGBoost each completed 1,200 bundles (five
+  folds x 20 subset seeds x three donor budgets x four cell caps), and
+  `fair_scaling_qa.json` is `PASS`. Seven of eight fixed-total effects favor 32
+  over 8 donors (+0.004 to +0.009). XGBoost coarse at 3,200 cells reverses
+  (-0.0028; paired donor-bootstrap 95% CI [-0.0036, -0.0017]) and returns
+  positive at 6,400 cells (+0.0056). No OneK1K empirical subset-seed interval
+  excludes zero.
+- Across APT, COMBAT RNA/ADT, and OneK1K RNA, 37 of 38 fixed-total comparisons
+  favor broader subject coverage. This is reported as a replicated average
+  tendency with a documented counterexample, not a universal scaling law.
 
 ## Not completed
 
@@ -115,8 +136,9 @@ clinical, causal, cross-batch, or external-generalization claims.
   Transformer baselines: deferred. With 40 patients these are secondary to the
   leakage and fair-scaling corrections, and available GPUs were occupied by
   unrelated jobs during the priority run.
-- External validation: blocked by the absence of a compatible external APT
-  cohort in the repository.
+- External cell-typing scaling replication is complete. External APT disease
+  validation remains unavailable because no compatible external APT cohort is
+  present.
 - Formal annotation agreement: blocked because independent blinded relabeling
   has not yet been performed. The paper retains an explicit TODO rather than
   inventing annotators or agreement values.
@@ -127,11 +149,11 @@ clinical, causal, cross-batch, or external-generalization claims.
 
 The previous claim that within-patient cell depth is at least as influential as
 patient count was removed because it compared unequal endpoint changes. The
-replacement claim is narrower and directly supported: under three exact
-fixed-total-cell budgets, broader patient coverage outperforms deeper sampling
-from fewer patients for both frozen classical models and both resolutions. The
-matched-doubling and response-surface analyses agree over the evaluated range,
-but no causal or universal scaling-law claim is made.
+replacement claim is narrower and directly supported: broader subject coverage
+is favored in 37 of 38 exact fixed-total comparisons across three blood cohorts
+and RNA, ADT, and aptamer inputs. One low-budget OneK1K XGBoost coarse setting
+reverses, and external subset-seed intervals are broad. The paper therefore
+claims a replicated average tendency, not a causal or universal law.
 
 The previous pooled-OOF composition value (predicted subtype Macro-F1 0.400) is
 not used as a headline result. The strict nested value is 0.593. This numerical
@@ -179,6 +201,11 @@ described as within-cohort and confounding-sensitive.
 - New fair-scaling artifacts: `outputs/patient_cell_scaling_fair/`; raw resumable
   run bundles remain at
   `/home/mayiling/projs/apt_agent/outputs/patient_cell_scaling_fair/runs/`.
+- OneK1K protocol, adapter, and outputs: `ONEK1K_SCALING_PROTOCOL.md`,
+  `analysis/prepare_onek1k.py`, `analysis/onek1k_scaling.py`,
+  `analysis/run_onek1k_xgb_shards.sh`, and `outputs/onek1k_scaling/`. The 101 MB
+  per-donor confusion artifact and raw resumable bundles remain on the experiment
+  host; committed summaries and audit manifests support every reported number.
 - New confounding-audit artifacts:
   `outputs/technical_covariate_disease_audit/`.
 
@@ -236,6 +263,18 @@ python analysis/generate_composition_protocol_audit.py
 make revision
 ```
 
+The OneK1K replication is reproduced with the commands in
+`ONEK1K_SCALING_PROTOCOL.md`; the production run used 32 CPU shards for each
+model family and 2,000 paired donor-bootstrap replicates. Cross-cohort outputs
+are regenerated with:
+
+```bash
+python analysis/summarize_cross_cohort_scaling.py
+cp outputs/cross_cohort_scaling/cross_cohort_scaling.pdf figures/
+cp outputs/cross_cohort_scaling/cross_cohort_scaling_table.tex tables/cross_cohort_scaling.tex
+make paper
+```
+
 ## Remaining risks before submission
 
 - The processed benchmark matrix, labels, feature metadata, licenses, archival
@@ -265,8 +304,8 @@ make revision
 - Final research main-text page count: **10 pages**. Non-counted statements and
   References begin on page 11; the complete PDF has 31 pages.
 - Final PDF path: `output/pdf/APT-Bench_ICLR2027_revised.pdf`.
-- Numerical artifact-to-paper audit: **PASS**; scaling, transfer, and conditional
-  subtype-increment claims
+- Numerical artifact-to-paper audit: **PASS**; APT/COMBAT/OneK1K scaling,
+  transfer, and conditional subtype-increment claims
   were checked against the CSV/JSON files listed in `CLAIM_ARTIFACT_MAP.md`.
 - Code syntax and LaTeX build: **PASS**.
 - Rendered-page visual inspection: **PASS** for the main scaling figure,

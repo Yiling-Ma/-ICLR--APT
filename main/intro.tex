@@ -40,8 +40,10 @@ coarse and fine macro-F1 for Logistic Regression and XGBoost; averaged matched
 doublings and descriptive response surfaces also favor the patient axis over
 the evaluated range. The direction replicates across all 18 corresponding
 comparisons on 105 donors from the public COMBAT CITE-seq atlas, using RNA and
-matched ADT inputs, although magnitude and subset-seed stability depend on
-dataset, modality, model, resolution, and budget. This separates two claims
+matched ADT inputs, and in 7 of 8 comparisons on 925 evaluation donors from
+OneK1K RNA. Across the three cohorts, 37 of 38 fixed-total comparisons favor
+broader subject coverage, although magnitude and subset-seed stability depend
+on dataset, modality, model, resolution, and budget. This separates two claims
 that are often conflated: patient-disjoint splits are necessary for valid
 generalization estimates, while correlated cells can still be useful training
 observations. Third, strictly nested, disease-label-free XGBoost subtype
@@ -57,5 +59,5 @@ Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, two-axis scaling, and confounding-aware patient characterization.
     \item \textbf{A controlled account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. An encoder-matched reference ladder separates hierarchy mechanisms from backbone capacity and finds no supported gain from additional cascade complexity.
-    \item \textbf{Controlled and externally replicated two-axis scaling.} Fixed-total-cell and matched-doubling experiments distinguish subject diversity from within-subject depth; the fixed-total direction is tested on COMBAT RNA and ADT. A separate strict nested audit tests cross-task transfer from disease-label-free cell-model outputs without exposing either stage to outer-test patients, while making no claim that subtype information adds value over coarser or technical controls.
+    \item \textbf{Controlled and externally replicated two-axis scaling.} Fixed-total-cell and matched-doubling experiments distinguish subject diversity from within-subject depth; the fixed-total direction is tested on COMBAT RNA/ADT and OneK1K RNA. A separate strict nested audit tests cross-task transfer from disease-label-free cell-model outputs without exposing either stage to outer-test patients, while making no claim that subtype information adds value over coarser or technical controls.
 \end{itemize}

@@ -1,0 +1,23 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llcrrr}
+\toprule
+Model & Task & Total cells & $P=8$ & $P=16$ & $P=32$ \\
+\midrule
+LR & Coarse & 3,200 & 0.914 [0.903, 0.927] & 0.917 [0.903, 0.927] & 0.919 [0.908, 0.929] \\
+LR & Coarse & 6,400 & 0.929 [0.918, 0.936] & 0.932 [0.926, 0.938] & 0.934 [0.930, 0.939] \\
+LR & Fine & 3,200 & 0.500 [0.482, 0.517] & 0.505 [0.492, 0.519] & 0.507 [0.494, 0.524] \\
+LR & Fine & 6,400 & 0.546 [0.527, 0.561] & 0.548 [0.534, 0.560] & 0.554 [0.540, 0.565] \\
+\midrule
+XGBoost & Coarse & 3,200 & 0.864 [0.843, 0.888] & 0.865 [0.842, 0.882] & 0.861 [0.832, 0.883] \\
+XGBoost & Coarse & 6,400 & 0.891 [0.878, 0.906] & 0.898 [0.890, 0.910] & 0.897 [0.885, 0.911] \\
+XGBoost & Fine & 3,200 & 0.442 [0.424, 0.464] & 0.447 [0.426, 0.465] & 0.448 [0.433, 0.462] \\
+XGBoost & Fine & 6,400 & 0.499 [0.484, 0.520] & 0.504 [0.491, 0.516] & 0.508 [0.501, 0.521] \\
+\midrule
+\bottomrule
+\end{tabular}
+\caption{Fixed-total training-cell scaling. Each row holds the total number of sampled training cells constant while reallocating them across independent patients. Entries are pooled patient-disjoint OOF Macro-F1 means with empirical 95\% intervals over 20 matched subset seeds. All outer-test cells are evaluated.}
+\label{tab:fixed_total_scaling}
+\end{table}

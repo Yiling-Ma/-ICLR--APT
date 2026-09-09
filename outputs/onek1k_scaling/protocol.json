@@ -1,0 +1,76 @@
+{
+  "calibration_donors": [
+    "873_874",
+    "874_875",
+    "876_877",
+    "878_879",
+    "879_880",
+    "880_881",
+    "882_883",
+    "883_884",
+    "884_885",
+    "918_919"
+  ],
+  "calibration_pool": "20",
+  "cell_caps": [
+    100,
+    200,
+    400,
+    800
+  ],
+  "cell_sampling": "one uniform within-donor permutation per outer fold and seed",
+  "dataset": "OneK1K healthy PBMC scRNA-seq",
+  "donor_sampling": "nested sex-stratified ordering within outer development",
+  "evaluation_cells": 1199468,
+  "evaluation_donors": 925,
+  "feature_selection": "variance on ten donors from one excluded calibration pool",
+  "features": 293,
+  "fixed_total_budgets": [
+    3200,
+    6400
+  ],
+  "model_random_state": 42,
+  "models": [
+    "logistic_regression",
+    "xgboost"
+  ],
+  "outer_splits": "five pool- and donor-disjoint folds",
+  "patient_bootstrap_replicates": 2000,
+  "patient_budgets": [
+    8,
+    16,
+    32
+  ],
+  "preprocessing": "feature-wise z-score fit on sampled training cells only",
+  "protocol_hash": "93a8890ca62f8fe0",
+  "resampling_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "source_sha256": "14c5e9e70007a5e7dc047f7b29405773305e1a7b9791d0789af70649cf6f46ec",
+  "source_url": "https://datasets.cellxgene.cziscience.com/1e44db10-b572-46cc-adae-dcc7acd44ca6.h5ad",
+  "tasks": {
+    "coarse": "coarse_subtype",
+    "fine": "cell_subtype"
+  },
+  "test_cells": "all valid cells from untouched outer-test donors and pools",
+  "version": "onek1k-rna-pool-donor-scaling-v1"
+}

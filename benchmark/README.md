@@ -78,6 +78,12 @@ patient-clustered uncertainty, and fold-adjusted descriptive response surfaces.
 Run `make fair-scaling-run` for the fits and `make revision` to aggregate the
 headline artifacts and rebuild the paper.
 
+External replications reuse this contract on COMBAT RNA/ADT and OneK1K RNA.
+OneK1K uses 925 evaluation donors, pool- and donor-disjoint folds,
+`C={100,200,400,800}`, and the common 3,200/6,400-cell fixed totals; see
+`ONEK1K_SCALING_PROTOCOL.md`. `analysis/summarize_cross_cohort_scaling.py`
+combines only completed, QA-passing summaries.
+
 ## Release Status
 
 The paper source, analysis scripts, fixed fold manifest, and selected result

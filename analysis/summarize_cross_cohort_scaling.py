@@ -17,6 +17,15 @@ DATASETS = {
     "apt": ("APT", "Aptamer", Path("outputs/patient_cell_scaling_fair")),
     "combat_rna": ("COMBAT", "RNA", Path("outputs/combat_citeseq_scaling")),
     "combat_adt": ("COMBAT", "ADT", Path("outputs/combat_citeseq_scaling_adt")),
+    "onek1k": ("OneK1K", "RNA", Path("outputs/onek1k_scaling")),
+}
+DATASET_ORDER = {key: index for index, key in enumerate(DATASETS)}
+
+EXPECTED_TOTALS = {
+    "apt": TOTAL_BUDGETS,
+    "combat_rna": TOTAL_BUDGETS,
+    "combat_adt": TOTAL_BUDGETS,
+    "onek1k": (3200, 6400),
 }
 
 
@@ -46,14 +55,15 @@ def select_fixed_total(effects: pd.DataFrame) -> pd.DataFrame:
     )
     selected["task_label"] = selected["task"].str.title()
     selected = selected.rename(columns={"fixed_value": "total_training_cells"})
+    selected["dataset_order"] = selected["dataset_key"].map(DATASET_ORDER)
     return selected.sort_values(
-        ["dataset_key", "model", "task", "total_training_cells"]
-    )
+        ["dataset_order", "model", "task", "total_training_cells"]
+    ).drop(columns="dataset_order")
 
 
 def write_table(frame: pd.DataFrame, output_dir: Path) -> None:
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table}[H]",
         r"\centering",
         r"\small",
         r"\setlength{\tabcolsep}{3.5pt}",
@@ -71,6 +81,9 @@ def write_table(frame: pd.DataFrame, output_dir: Path) -> None:
         values = values.set_index("total_training_cells")
         cells = []
         for total in TOTAL_BUDGETS:
+            if total not in values.index:
+                cells.append(r"--")
+                continue
             row = values.loc[total]
             cells.append(
                 f"{row['mean']:+.3f} "
@@ -87,7 +100,7 @@ def write_table(frame: pd.DataFrame, output_dir: Path) -> None:
             r"\bottomrule",
             r"\end{tabular}",
             r"}",
-            r"\caption{Change in subject-balanced, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage. COMBAT ADT is a prespecified modality sensitivity using LR only.}",
+            r"\caption{Change in subject-balanced, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage. COMBAT ADT is a prespecified modality sensitivity using LR only. OneK1K uses the two common exact budgets supported by at least 800 cells from nearly all donors.}",
             r"\label{tab:cross_cohort_scaling}",
             r"\end{table}",
         ]
@@ -108,18 +121,16 @@ def create_figure(frame: pd.DataFrame, output_dir: Path) -> None:
     offsets = np.linspace(-0.22, 0.22, len(TOTAL_BUDGETS))
     colors = ("#315B7D", "#C05A3B", "#4F7A51")
     y = np.arange(len(groups))
-    fig, ax = plt.subplots(figsize=(7.6, max(3.6, 0.60 * len(groups) + 1.5)))
+    fig, ax = plt.subplots(figsize=(7.6, max(3.6, 0.47 * len(groups) + 1.5)))
     for offset, color, total in zip(offsets, colors, TOTAL_BUDGETS):
-        means = np.array([group.loc[total, "mean"] for group in groups])
-        lows = np.array(
-            [group.loc[total, "patient_clustered_bootstrap_q025"] for group in groups]
-        )
-        highs = np.array(
-            [group.loc[total, "patient_clustered_bootstrap_q975"] for group in groups]
-        )
+        available = np.array([total in group.index for group in groups])
+        available_groups = [group for group in groups if total in group.index]
+        means = np.array([group.loc[total, "mean"] for group in available_groups])
+        lows = np.array([group.loc[total, "patient_clustered_bootstrap_q025"] for group in available_groups])
+        highs = np.array([group.loc[total, "patient_clustered_bootstrap_q975"] for group in available_groups])
         ax.errorbar(
             means,
-            y + offset,
+            y[available] + offset,
             xerr=np.vstack((means - lows, highs - means)),
             fmt="o",
             color=color,
@@ -169,14 +180,12 @@ def main() -> None:
         "datasets_present": sorted(frame["dataset_key"].unique().tolist()),
         "rows": len(frame),
         "all_effects_finite": bool(np.isfinite(frame["mean"]).all()),
-        "all_total_budgets_present": bool(
-            frame.groupby(["dataset_key", "model", "task"])["total_training_cells"]
-            .nunique()
-            .eq(len(TOTAL_BUDGETS))
-            .all()
+        "all_expected_total_budgets_present": all(
+            set(values["total_training_cells"]) == set(EXPECTED_TOTALS[key])
+            for (key, _, _), values in frame.groupby(["dataset_key", "model", "task"])
         ),
     }
-    if not qa["all_effects_finite"] or not qa["all_total_budgets_present"]:
+    if not qa["all_effects_finite"] or not qa["all_expected_total_budgets_present"]:
         qa["overall_status"] = "FAIL"
     (output_dir / "qa.json").write_text(
         json.dumps(qa, indent=2, sort_keys=True) + "\n", encoding="utf-8"

@@ -114,6 +114,13 @@ uses all 192 released antibody-derived tag (ADT) features on exactly the same
 cells, donors, labels, and folds. Full construction and exclusion rules are in
 Appendix~\ref{sec:appendix:combat_scaling}.
 
+A second external replication uses 925 evaluation donors and 1{,}199{,}468
+cells from the healthy OneK1K PBMC atlas \citep{yazar2022onek1k}. It uses
+pool- and donor-disjoint folds, calibration-only selection of 293 RNA features,
+and the same LR/XGBoost protocol. A coverage audit limits $C$ to 800 and the
+common fixed totals to 3{,}200 and 6{,}400; Appendix~\ref{sec:appendix:combat_scaling}
+gives the construction and released-label limitations.
+
 \subsection{Class Distribution}
 \label{sec:data:imbalance}
 

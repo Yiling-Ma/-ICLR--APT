@@ -1,4 +1,4 @@
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \small
 \setlength{\tabcolsep}{3.5pt}
@@ -11,15 +11,19 @@ APT & Aptamer & LR/Coarse & +0.012 [+0.005, +0.021] & +0.015 [+0.007, +0.024] & 
 APT & Aptamer & LR/Fine & +0.008 [+0.004, +0.011] & +0.009 [+0.005, +0.012] & +0.010 [+0.005, +0.013] \\
 APT & Aptamer & XGBoost/Coarse & +0.017 [+0.008, +0.027] & +0.018 [+0.007, +0.030] & +0.022 [+0.009, +0.035] \\
 APT & Aptamer & XGBoost/Fine & +0.007 [+0.002, +0.011] & +0.008 [+0.002, +0.013] & +0.006 [+0.000, +0.011] \\
-COMBAT & ADT & LR/Coarse & +0.006 [+0.004, +0.008] & +0.009 [+0.006, +0.012] & +0.012 [+0.010, +0.016] \\
-COMBAT & ADT & LR/Fine & +0.013 [+0.010, +0.014] & +0.011 [+0.010, +0.013] & +0.011 [+0.009, +0.013] \\
 COMBAT & RNA & LR/Coarse & +0.003 [+0.002, +0.004] & +0.002 [+0.001, +0.003] & +0.001 [+0.001, +0.002] \\
 COMBAT & RNA & LR/Fine & +0.012 [+0.009, +0.013] & +0.012 [+0.010, +0.012] & +0.007 [+0.005, +0.009] \\
 COMBAT & RNA & XGBoost/Coarse & +0.006 [+0.005, +0.007] & +0.005 [+0.004, +0.006] & +0.004 [+0.003, +0.005] \\
 COMBAT & RNA & XGBoost/Fine & +0.016 [+0.013, +0.017] & +0.018 [+0.016, +0.019] & +0.017 [+0.014, +0.018] \\
+COMBAT & ADT & LR/Coarse & +0.006 [+0.004, +0.008] & +0.009 [+0.006, +0.012] & +0.012 [+0.010, +0.016] \\
+COMBAT & ADT & LR/Fine & +0.013 [+0.010, +0.014] & +0.011 [+0.010, +0.013] & +0.011 [+0.009, +0.013] \\
+OneK1K & RNA & LR/Coarse & +0.004 [+0.004, +0.005] & +0.005 [+0.005, +0.006] & -- \\
+OneK1K & RNA & LR/Fine & +0.007 [+0.007, +0.009] & +0.008 [+0.007, +0.009] & -- \\
+OneK1K & RNA & XGBoost/Coarse & -0.003 [-0.004, -0.002] & +0.006 [+0.005, +0.006] & -- \\
+OneK1K & RNA & XGBoost/Fine & +0.006 [+0.005, +0.007] & +0.009 [+0.007, +0.009] & -- \\
 \bottomrule
 \end{tabular}
 }
-\caption{Change in subject-balanced, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage. COMBAT ADT is a prespecified modality sensitivity using LR only.}
+\caption{Change in subject-balanced, subject-disjoint OOF Macro-F1 when the same total training-cell budget is reallocated from 8 to 32 independent subjects. Brackets are 95\% paired subject-bootstrap intervals over the fixed outer-test subjects. Positive values favor broader subject coverage. COMBAT ADT is a prespecified modality sensitivity using LR only. OneK1K uses the two common exact budgets supported by at least 800 cells from nearly all donors.}
 \label{tab:cross_cohort_scaling}
 \end{table}

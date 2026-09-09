@@ -504,10 +504,18 @@ def qa(per_seed: pd.DataFrame, fixed: pd.DataFrame, effects: pd.DataFrame) -> di
 
 
 def main() -> None:
+    global PATIENT_BUDGETS, CELL_CAPS, TOTAL_BUDGETS, BOOTSTRAP_REPLICATES
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=Path("outputs/patient_cell_scaling_fair"))
     args = parser.parse_args()
     output_dir = args.output_dir.resolve()
+    protocol_path = output_dir / "protocol.json"
+    if protocol_path.exists():
+        protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+        PATIENT_BUDGETS = tuple(int(value) for value in protocol["patient_budgets"])
+        CELL_CAPS = tuple(int(value) for value in protocol["cell_caps"])
+        TOTAL_BUDGETS = tuple(int(value) for value in protocol["fixed_total_budgets"])
+        BOOTSTRAP_REPLICATES = int(protocol.get("patient_bootstrap_replicates", BOOTSTRAP_REPLICATES))
     per_seed = pd.read_csv(output_dir / "per_seed_oof_metrics.csv", dtype={"cell_cap": str})
     per_run = pd.read_csv(output_dir / "per_run_metrics.csv", dtype={"cell_cap": str})
     matrices = load_patient_matrices(output_dir / "per_patient_confusions.parquet")

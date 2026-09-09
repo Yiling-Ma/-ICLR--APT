@@ -68,19 +68,19 @@ The fair scaling experiment holds outer-test subjects fixed and varies only the
 development set. It evaluates fixed-total-cell reallocations, matched doublings,
 and a descriptive response surface for LR and XGBoost at both resolutions. Each
 point uses 20 matched subject/cell subset seeds; preprocessing and fitting are
-repeated, while all cells from untouched test subjects are evaluated. The same
-fixed-total grid is then frozen for the external COMBAT CITE-seq cohort.
+repeated, while all cells from untouched test subjects are evaluated. The
+design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{figures/cross_cohort_scaling.pdf}
+\includegraphics[width=0.78\columnwidth]{figures/cross_cohort_scaling.pdf}
 \caption{Cross-cohort fixed-total scaling. Points are changes in
 subject-balanced, subject-disjoint OOF macro-F1 when a fixed total of $T$
 training cells is reallocated from 8 to 32 independent subjects; positive
 values favor broader subject coverage. Bars are 95\% paired subject-bootstrap
-intervals over fixed outer-test subjects after averaging seed-level sufficient
-statistics. APT uses LR and XGBoost; COMBAT RNA replicates both models, and
-COMBAT ADT is an LR-only modality sensitivity on the same donors and cells.}
+intervals over fixed outer-test subjects after averaging seeds. APT, COMBAT
+RNA, and OneK1K RNA use LR/XGBoost; COMBAT ADT is an LR-only sensitivity.
+OneK1K supports two totals under its 800-cell donor threshold.}
 \label{fig:cross_cohort_scaling}
 \end{figure}
 
@@ -101,16 +101,23 @@ average effect does not eliminate sensitivity to the selected development
 subset. COMBAT therefore replicates the fixed-total direction, not a constant
 effect size or deterministic advantage for every training subset.
 
+Across 925 healthy OneK1K evaluation donors, seven of eight effects are positive
+(0.004--0.009). XGBoost coarse prediction reverses at $T=3{,}200$
+($-0.0028$; donor-bootstrap 95\% CI $[-0.0036,-0.0017]$), but is positive at
+$T=6{,}400$ ($+0.0056$). No OneK1K subset-seed interval excludes zero, exposing
+substantial dependence on the selected training donors.
+
 Matched doublings on APT lead to the same descriptive ordering. Averaged across
 eligible fixed settings, patient-versus-cell doubling gains are 0.011 versus
 0.005 (LR coarse), 0.007 versus 0.003 (LR fine), 0.016 versus 0.008 (XGBoost
 coarse), and 0.009 versus 0.006 (XGBoost fine). Fold-adjusted response-surface
 coefficients are likewise larger for $\log_2 P$ than $\log_2 C$ in all four
 comparisons, although interactions show that neither effect is constant across
-the grid. Together, the APT and COMBAT results show that, over the evaluated
-grids, deeper sampling from fewer subjects does not recover the average
-performance obtained from broader subject coverage. This remains an
-observational result from two blood studies, not a universal or causal law.
+the grid. OneK1K matched doublings and response surfaces also favor the donor
+axis, but only narrowly for XGBoost coarse prediction. Across APT, COMBAT, and
+OneK1K, 37 of 38 fixed-total comparisons favor broader subject coverage. The
+single reversal and broad external seed intervals show that this is a replicated
+average tendency across three blood cohorts, not a universal or causal law.
 
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}
@@ -137,6 +144,8 @@ does not establish a subtype-abundance source, fine-over-coarse utility, or that
 better typing improves patient characterization. Hard/soft and predicted/gold
 sensitivities are reported in Appendix~\ref{sec:appendix:composition_bridge}.
 
+\input{tables/disease}
+
 Log cell count alone reaches macro-F1 0.531 ($p=0.00010$). A six-feature
 nuisance-only model using recovered cell count and patient summaries of the
 recorded transcriptomic UMI and detected-gene QC fields reaches macro-F1 0.566
@@ -151,8 +160,6 @@ incremental value beyond available nuisance summaries.
 A stricter conditional audit likewise finds no resolved subtype increment over
 recorded QC plus lineage: $\Delta$ macro-F1 $=+0.016$ (95\% paired
 patient-bootstrap CI $[-0.120,0.169]$; Appendix~\ref{sec:appendix:disease_patient_level}).
-
-\input{tables/disease}
 
 \paragraph{Identifiability boundary.}
 Direct APT discrimination is strong but confounding-sensitive. Patient-wise
