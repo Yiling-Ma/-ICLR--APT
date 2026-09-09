@@ -34,8 +34,8 @@ Appendix~\ref{sec:appendix:dataset_documentation}.
 \label{sec:data:contract}
 \label{sec:data:protocols}
 
-The primary contract estimates subject--cell scaling without changing the
-marginal training label distribution. APT-Bench also fixes patient folds,
+The primary contract distinguishes natural fixed-total allocation from an
+allocation with a standardized training-label distribution. APT-Bench also fixes patient folds,
 training-only preprocessing, targets, and metrics for hierarchy and nested
 patient-characterization case studies. Open-set subtype discovery is outside
 the contract; the hierarchy uses the fixed five-lineage/27-subtype ontology.
@@ -64,10 +64,33 @@ subject/cell subset seeds. The primary metric is subject-balanced pooled OOF
 macro-F1. Because these reallocations can also change observed classes, per-class
 counts, and class proportions, a class-matched control freezes the $P=8$ class
 set and exact per-class quotas before comparing $P=8$ with $P=32$. LR is evaluated
-at $T\in\{3200,6400\}$ and XGBoost at $T=6400$; joint intervals first resample a
-training-subset seed and then paired test subjects. Appendix
+at $T\in\{3200,6400\}$ and XGBoost at $T=6400$. Appendix
 Sections~\ref{sec:appendix:fair_scaling}--\ref{sec:appendix:class_matched_scaling}
 give allocation, metric, and uncertainty formulas.
+
+\paragraph{Two allocation estimands.}
+For a specified sampling policy $\pi$ and learning procedure $f$, define
+\begin{equation}
+\Delta_{\pi}(T)=\mathbb{E}\!\left[S(f_{\pi,32,T})-S(f_{\pi,8,T})\right],
+\label{eq:allocation_estimand}
+\end{equation}
+where $S$ is subject-balanced pooled macro-F1 and the expectation averages
+training-subset randomization under the fixed cohort and evaluation protocol.
+Natural sampling estimates a \emph{total allocation effect}, including label
+distribution changes. The matched policy estimates a \emph{label-standardized
+allocation effect} relative to the sampled $P=8$ quota vector, averaged over
+these reference draws. It also imposes within-class donor round robin. These
+are different policy targets, not competing estimators of a uniquely true
+patient effect; neither isolates biological diversity from batch structure.
+
+\paragraph{Stability is not uncertainty of the mean.}
+The released joint stability interval is the central 95\% range obtained by
+selecting one completed subset seed and bootstrapping paired test subjects.
+It retains between-subset variability rather than averaging resampled seeds.
+Its zero inclusion does not test $\Delta_{\pi}(T)=0$, and its positive-replicate
+fraction is neither a posterior probability nor a significance test. Inference
+for the seed-averaged effect requires a separately constructed interval;
+the present main comparisons report stability, not that inferential claim.
 
 We transport the frozen protocol to COMBAT CITE-seq (105 evaluation donors,
 700{,}706 cells; RNA and matched ADT) and OneK1K (925 evaluation donors,

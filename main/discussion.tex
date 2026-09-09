@@ -4,13 +4,12 @@
 The central finding is not that more subjects are unimportant, but that a
 standard fixed-total experiment does not estimate their isolated value. Across
 three datasets, the label-agnostic design produces an apparently general
-subject-breadth advantage. Freezing class quotas with within-class donor balancing
-removes that conclusion: corrected effects are small, model- and
-cohort-dependent, and unresolved once training-subset and test-subject
-uncertainty are propagated jointly. Patient-disjoint splitting is necessary,
-but it is not sufficient for interpreting subject--cell scaling.
-Zero inclusion does not establish practical equivalence: at a post-hoc
-$\pm0.01$ tolerance none of the main APT intervals is fully contained.
+subject-breadth advantage. Under fixed class quotas and within-class donor
+balancing, mean effects are small and model- and cohort-dependent. This does
+not invalidate natural sampling: its gains can include practically valuable
+label coverage. It does invalidate treating that gain as an isolated diversity
+effect. Patient-disjoint splitting prevents subject overlap; specifying the
+allocation policy determines which scientific question the scaling curve answers.
 
 The class-matched protocol deliberately targets a narrower estimand. It holds
 observed labels, per-class cell counts, and class proportions fixed while
@@ -23,7 +22,20 @@ both label quotas and within-class allocation, so it does not identify their
 separate contributions. The synthetic check shows that quota matching need not
 mechanically erase a breadth benefit, but does not establish real-data mediation.
 The protocol provides a reproducible sensitivity analysis rather than a unique
-causal explanation of the observed regularity.
+causal explanation of the observed regularity. The joint stability ranges retain
+training-subset variability and cannot establish a zero mean effect or mean
+equivalence. Known-target simulations assess target recovery, not the coverage
+of these intervals. External RNA experiments additionally use restricted
+293-gene representations; broader RNA representations remain a needed sensitivity.
+
+For study design, both targets should be reported: natural allocation estimates
+the benefit of the tested recruitment-and-sampling policy, while matched
+allocation asks whether that benefit survives a specified label distribution.
+Budgets, reference quotas, realized donor coverage, and subset sensitivity
+should accompany each curve. Neither a small matched estimate nor a positive
+natural estimate alone determines an optimal recruitment policy. Separating
+quota matching from donor allocation on real data and constructing calibrated
+intervals for seed-averaged effects are the next validation steps.
 
 The 40-patient APT cohort also limits patient-level inference: six disease
 groups contain only 6--8 independent patients each. Neither more cells nor
@@ -41,9 +53,9 @@ single-cell evaluation.
 
 Fixed cell totals can confound subject breadth with the training label
 distribution. Across APT, COMBAT, and OneK1K, class matching with within-class
-donor balancing changes the apparent advantage, while joint resampling reveals
-uncertainty hidden by conditioning on training subsets. These comparisons do
-not identify a unique causal mechanism or establish equivalence between
-sampling strategies. APT-Bench contributes an explicit evaluation protocol for
-subject--cell scaling, not a universal scaling law, model-superiority claim,
-or clinically validated disease predictor.
+donor balancing changes breadth estimates, while joint resampling exposes their
+sensitivity to training subsets and test subjects. APT-Bench makes the
+distinction between total and label-standardized allocation effects operational
+through a common evaluation contract. This supports more interpretable
+subject--cell comparisons without claiming a universal scaling law, equivalence
+between sampling strategies, or clinical validity.

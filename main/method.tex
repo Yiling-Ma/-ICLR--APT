@@ -109,7 +109,7 @@ soft routing, hierarchical loss, or contrastive regularization in isolation.
 
 \input{tables/transformer_reference_components}
 
-Disease recognition is not handled by a dedicated head inside \ourmethod{}. This is a deliberate modeling decision rather than a claim that disease is solved in a strong external sense: within-cohort disease prediction is already nearly saturated by simple classical baselines, while the architectural challenge addressed by \ourmethod{} is the unresolved cell-level hierarchy problem.
+Disease recognition is not handled by a dedicated head inside \ourmethod{}. The reference recipe addresses cell-level hierarchy prediction; disease-source prediction is evaluated separately as a within-cohort audit. High disease-source scores do not establish biological attribution or external clinical validity.
 
 \paragraph{Strictly nested cell-output transfer audit.}
 \label{sec:appendix:composition_bridge}

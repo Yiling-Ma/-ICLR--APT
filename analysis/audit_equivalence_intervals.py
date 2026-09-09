@@ -1,4 +1,4 @@
-"""Post-hoc practical-equivalence sensitivity using released joint intervals.
+"""Post-hoc stability-band sensitivity using released joint intervals.
 
 No TOST p-values are inferred from interval endpoints. Legacy intervals mix
 training-subset variability and test resampling; containment is descriptive.
@@ -68,7 +68,7 @@ def main():
         tex.append(" & ".join(["8--32" if g["family"]=="primary" else "Extended LR",
             names[g["dataset"]],g["task"],str(g["n"]),*map(str,g["counts"]),str(g["spans_both"])])+r" \\")
     tex += [r"\bottomrule",r"\end{tabular}",
-        r"\caption{Post-hoc practical-equivalence sensitivity: number of released joint 95\% intervals strictly inside each stated margin. The 8--32 rows use $T=6{,}400$ and both LR and XGBoost; extended rows use LR at both totals for adjacent subject-budget comparisons. $^*$Intervals reaching both $-0.01$ and $+0.01$, indicating insufficient precision to exclude meaningful effects in either direction. Counts are pointwise diagnostics, not formal TOST decisions or evidence that an entire scaling frontier is equivalent.}",
+        r"\caption{Post-hoc stability-band sensitivity: number of released joint 95\% stability intervals strictly inside each stated margin. The 8--32 rows use $T=6{,}400$ and both LR and XGBoost; extended rows use LR at both totals for adjacent subject-budget comparisons. $^*$Intervals reaching both $-0.01$ and $+0.01$, indicating that the resampling range spans changes of this magnitude in both directions. Counts are pointwise diagnostics, not mean-effect confidence intervals, formal TOST decisions, or evidence of equivalence.}",
         r"\label{tab:equivalence_sensitivity}",r"\end{table}"]
     (ROOT/"tables/equivalence_sensitivity.tex").write_text("\n".join(tex)+"\n")
     print(json.dumps(groups,indent=2))

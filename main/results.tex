@@ -16,19 +16,19 @@ among classes, and the resulting class proportions. For example, the mean
 number of observed fine classes rises with subject count in all three datasets,
 despite fixed total cells. Training-subset intervals are also much less stable
 than intervals that condition on the averaged training subsets and bootstrap
-only test subjects. The naive experiment therefore combines a label-distribution
-intervention with subject breadth and understates uncertainty from development
-sampling.
+only test subjects. The label-agnostic experiment therefore measures a total
+allocation effect, not a label-standardized effect. Conditioning on completed
+training subsets also omits sensitivity to alternative development samples.
 
-\subsection{Class Matching and Joint Resampling Change the Conclusion}
+\subsection{Breadth Estimates Depend on the Allocation Policy}
 \label{sec:results:class_matched}
 
-The corrected comparison freezes the $P=8$ observed class set and exact
+The matched comparison freezes the $P=8$ observed class set and exact
 per-class quotas, then samples those same quotas from 8 and 32 subjects. Every
 joint replicate first selects one completed training-subset seed and then
 resamples paired outer-test subjects. This targets the residual effect of
-redistributing a fixed class-matched cell budget across more subjects while
-propagating both uncertainty sources.
+redistributing a fixed class-matched cell budget across more subjects. The
+resulting interval describes joint stability, not precision of the seed mean.
 
 \begin{figure}[t]
 \centering
@@ -42,18 +42,19 @@ both panels are empirical 2.5th--97.5th seed percentiles, not confidence
 intervals of the mean. Unmatched runs and matched LR use 20 seeds; matched
 XGBoost uses 10. APT and COMBAT fine point estimates change sign for both models.
 Cross-panel changes are descriptive, not paired attenuation tests. The matched
-joint intervals, which additionally resample held-out subjects, all span zero
+joint stability intervals, which additionally resample held-out subjects, all span zero
 (Appendix Figure~\ref{fig:class_matched_joint}).}
 \label{fig:class_matched_scaling}
 \end{figure}
 
-The correction removes the apparent general rule
+The matched policy yields a different pattern
 (Figure~\ref{fig:class_matched_scaling}). At $T=6{,}400$, LR/XGBoost effects
 are $+0.0078/+0.0083$ for APT coarse but $-0.0050/-0.0058$ for APT fine.
 COMBAT effects are approximately zero for coarse and $-0.0028/-0.0027$ for
 fine. OneK1K effects are small and change sign across models. All 12 joint
-intervals include zero. The APT and COMBAT fine reversals are therefore not
-specific to a linear classifier, but no corrected effect is resolved. This is a
+stability intervals include zero. The APT and COMBAT fine point-estimate
+reversals are therefore not specific to a linear classifier, but their signs
+are not stable across joint resampling. This is a
 joint sampling-protocol contrast: the implementation fixes observed labels,
 class counts, and proportions and also uses within-class donor round robin.
 The attenuation cannot therefore be assigned solely to label distribution.
@@ -64,17 +65,17 @@ validation yields mean effects $+0.0202$, $+0.0119$, and $+0.0004$ for unmatched
 support-matched, and exact-quota sampling against an exactly zero overlap-quota
 target. Independent Monte Carlo references under donor shifts remain positive
 and are not mechanically removed by matching
-(Appendix~\ref{sec:appendix:known_target}). This validates a specified allocation
-estimand, not a universal causal effect of subject breadth.
+(Appendix~\ref{sec:appendix:known_target}). This checks recovery of a specified
+allocation target, not interval coverage or a universal causal effect of subject breadth.
 
-The result persists beyond the common 32-subject grid. Class-matched LR
+Beyond the common 32-subject grid, class-matched LR
 frontiers through 64 COMBAT and 128 OneK1K training donors yield adjacent
-effects between $-0.00065$ and $+0.00123$, with every joint interval spanning
-zero. Zero inclusion does not establish equivalence or a plateau. A post-hoc
-$\pm0.01$ sensitivity bound contains 11 of 12 adjacent frontier joint intervals,
+mean effects between $-0.00065$ and $+0.00123$, with every joint stability interval
+spanning zero. These ranges do not test mean equivalence or a plateau. A post-hoc
+$\pm0.01$ sensitivity band contains 11 of 12 adjacent frontier stability intervals,
 but only 4 of 12 main $T=6{,}400$ intervals and none of the four APT intervals
 (Appendix~\ref{sec:appendix:equivalence}). These are pointwise interval-containment
-diagnostics, not a universal saturation or optimal-allocation result. Complete unmatched
+diagnostics, not equivalence tests or an optimal-allocation result. Complete unmatched
 grids, class-support audits, matched doublings, extended frontiers, and
 uncertainty decompositions appear in
 Appendix~\ref{sec:appendix:fair_scaling}--

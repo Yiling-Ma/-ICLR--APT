@@ -14,8 +14,10 @@ alter per-class cell counts and proportions, and redistribute each class across
 subjects. A performance difference then combines subject breadth with a change
 in the training label distribution. Moreover, uncertainty over held-out
 subjects does not capture sensitivity to which training subjects and cells were
-sampled. Without controlling both problems, a smooth scaling curve can support
-the wrong conclusion about the value of additional subjects.
+sampled. A fixed-total curve answers a practical allocation question, but does
+not by itself identify a label-standardized breadth effect. Confusing these
+questions can turn a valid allocation result into an unsupported claim about
+the independent value of subject diversity.
 
 We make this failure mode the central target of APT-Bench. The primary dataset
 contains 361{,}792 single-cell aptamer profiles from 40 patients, measured with
@@ -24,19 +26,21 @@ transcriptome-derived subtypes. We first run a conventional label-agnostic
 fixed-total experiment over subject and cell budgets. We then introduce a
 class-matched comparison that freezes the observed class set and exact
 per-class cell quotas before changing the number of contributing subjects. Its
-primary interval jointly samples a completed training-subset seed and
-resamples paired held-out subjects, thereby propagating uncertainty from both
-the development and evaluation populations.
+joint stability interval samples one completed training-subset seed and
+resamples paired held-out subjects. It describes sensitivity to both sources
+of variation, not a confidence interval for the seed-averaged effect.
 
-The audit changes the empirical conclusion. Across APT, COMBAT CITE-seq, and
+The audit distinguishes two empirical questions. Across APT, COMBAT CITE-seq, and
 OneK1K, 37 of 38 label-agnostic comparisons favor reallocating a fixed cell
 budget from 8 to 32 subjects. With class quotas fixed and within-class donor balancing, effects
 become small and model- or cohort-dependent: APT and COMBAT fine-resolution
-point estimates reverse under both LR and XGBoost, and all 12 joint intervals
-include zero. Class-matched LR frontiers through 64 COMBAT and 128 OneK1K
-training subjects show no delayed resolved gain. These results do not imply
-that subject breadth is unimportant; they show that its effect cannot be read
-from a fixed-total curve that also changes the prediction problem.
+point estimates reverse under both LR and XGBoost. All 12 joint stability
+intervals include zero, showing sensitivity of the direction to joint
+resampling. Extended LR frontiers through 64 COMBAT and 128 OneK1K training
+subjects have small adjacent mean changes. Neither finding establishes a zero
+mean effect or equivalence. Recruiting more subjects can benefit learning
+through label coverage; our narrower comparison asks what remains under
+specified class quotas and donor allocation.
 
 APT hierarchy prediction supplies a concrete cell-annotation setting for this
 evaluation question; the soft-cascade Transformer is a reference recipe, not
@@ -47,7 +51,7 @@ validation of the scaling protocol.
 
 Our contributions are:
 \begin{itemize}
-    \item \textbf{A failure mode in subject--cell scaling.} We show that fixed-total, patient-disjoint experiments can still confound subject breadth with observed labels, class counts, and class proportions.
-    \item \textbf{A class-matched protocol with joint uncertainty.} The comparison freezes the marginal training label distribution and propagates variation from both sampled training subsets and held-out subjects.
-    \item \textbf{Cross-cohort evaluation evidence.} Experiments on APT, COMBAT, and OneK1K show how the matched protocol changes the apparent scaling conclusion across measurement settings; controlled simulations assess a specified allocation target rather than a universal causal effect.
+    \item \textbf{An estimand distinction for subject--cell scaling.} Fixed-total allocation effects can include changes in training-label support and composition; they should not be interpreted as label-standardized breadth effects.
+    \item \textbf{An explicit matched evaluation contract.} We specify class quotas, donor allocation, subject-balanced scoring, and a joint stability diagnostic rather than leaving these choices implicit in scaling curves.
+    \item \textbf{Cross-cohort evidence and target validation.} APT, COMBAT, and OneK1K demonstrate policy-dependent breadth estimates across measurement settings. Controlled simulations assess recovery of a specified allocation target, not a universal causal effect.
 \end{itemize}

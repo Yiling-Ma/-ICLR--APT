@@ -96,7 +96,7 @@ def render_table(effects: pd.DataFrame) -> None:
     lines += [
         r"\bottomrule",
         r"\end{tabular}",
-        r"\caption{Extended class-matched subject frontier for Logistic Regression. Each comparison holds the total training-cell budget, observed class set, and exact per-class cell quotas fixed while increasing the number of contributing training subjects. Values are paired mean changes; brackets are joint 95\% intervals from 2{,}000 replicates that sample a matched training-subset seed and then bootstrap held-out subjects. The final column is the empirical joint probability of a positive change.}",
+        r"\caption{Extended class-matched subject frontier for Logistic Regression. Each comparison holds the total training-cell budget, observed class set, and exact per-class cell quotas fixed while increasing the number of contributing training subjects. Values are paired mean changes; brackets are joint 95\% stability intervals from 2{,}000 replicates that sample a matched training-subset seed and then bootstrap held-out subjects. The final column is the empirical fraction of positive replicates, not a posterior probability. These ranges are not confidence intervals for seed-averaged effects.}",
         r"\label{tab:extended_subject_frontier}",
         r"\end{table}",
     ]

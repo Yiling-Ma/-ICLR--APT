@@ -69,22 +69,22 @@ Address \\
 \begin{abstract}
 Single-cell learning has two sampling axes: the number of biological subjects
 and the number of cells measured within each subject. Fixed-total-cell
-comparisons appear to isolate their tradeoff, yet increasing subject breadth
-can simultaneously change label support, per-class counts, and class
-proportions. We audit this failure mode with APT-Bench, a patient-disjoint
+comparisons measure their practical tradeoff, but do not isolate subject
+breadth from changes in training-label support and composition. We distinguish
+total allocation effects from label-standardized effects using APT-Bench, a patient-disjoint
 testbed of 361{,}792 aptamer profiles from 40 patients, and external evaluations
 on COMBAT and OneK1K. Our protocol fixes observed classes and exact cell quotas,
 uses within-class donor balancing, and jointly resamples training subsets and
-held-out subjects. The apparent breadth advantage in label-agnostic experiments
-attenuates under this protocol; fine-resolution point estimates reverse for
-both linear and boosted-tree models in APT and COMBAT, while joint intervals
-leave the corrected effects unresolved. Controlled simulations distinguish an
-exactly zero allocation effect from independently estimated nonzero targets.
-These findings do not establish a universal causal effect of subject breadth:
-the real-cohort control changes both label quotas and within-class allocation.
-Instead, APT-Bench makes training-label distribution and sampling uncertainty
-explicit parts of the evaluation contract, showing why fixed cell totals alone
-cannot justify conclusions about subject--cell scaling.
+held-out subjects to assess stability. Breadth estimates become smaller and
+policy-dependent; fine-resolution point estimates reverse for both linear and
+boosted-tree models in APT and COMBAT. These joint stability ranges are not
+confidence intervals for the seed-averaged effect. Controlled simulations
+check recovery of a specified allocation target against exact-null and
+independent Monte Carlo references. The real-cohort comparison changes both
+class quotas and donor allocation, so it does not identify their separate
+contributions. APT-Bench makes the sampling policy, label distribution, and
+stability of an allocation decision explicit, without equating practical
+recruitment gains with an isolated subject-breadth effect.
 \end{abstract}
 
 
@@ -808,7 +808,7 @@ cells are retained. All three runs complete 1{,}200/1{,}200 jobs and pass checks
 for exact total cells, identical paired class counts, non-overlapping test
 subjects, and contribution by every nominal training subject.
 These primary Logistic Regression runs use 20 matched subset seeds at both
-$T=3{,}200$ and $T=6{,}400$. To test whether the corrected direction is specific
+$T=3{,}200$ and $T=6{,}400$. To test whether the matched-policy direction is specific
 to a linear classifier, we repeat the identical control with the frozen XGBoost
 configuration at $T=6{,}400$ using 10 matched seeds. Each dataset completes
 300/300 additional jobs and passes the same checks; final production fits use
@@ -822,26 +822,30 @@ these remain bundled with the subject-breadth intervention.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.80\columnwidth]{figures/class_matched_scaling.pdf}
-\caption{Joint uncertainty for the completed class-matched protocol at
+\caption{Joint stability for the completed class-matched protocol at
 $T=6{,}400$. Points are mean changes in subject-balanced pooled OOF macro-F1
-from 8 to 32 subjects. The 95\% joint intervals select a training-subset seed
+from 8 to 32 subjects. The 95\% joint stability intervals select one training-subset seed
 and bootstrap paired held-out subjects; all 12 span zero. Unlike the seed-only
 bars in Figure~\ref{fig:class_matched_scaling}, these intervals include test-subject
-variability. Zero inclusion does not establish equivalence.}
+variability. They are not confidence intervals for the seed-averaged effect;
+zero inclusion does not test a zero mean or establish equivalence.}
 \label{fig:class_matched_joint}
 \end{figure}
 
-The primary interval propagates both uncertainty sources. In each of 2{,}000
+The primary stability diagnostic combines both variation sources. In each of 2{,}000
 replicates, we sample one completed training-subset seed uniformly, resample
 outer-test subjects with replacement, use the same subject draw for $P=8$ and
-$P=32$, and recompute the paired difference. All 18 joint 95\% intervals
-include zero, and the table reports the corresponding $\Pr(\Delta>0)$. For
+$P=32$, and recompute the paired difference. All 18 joint 95\% stability intervals
+include zero, and the table reports the empirical positive-replicate fraction. For
 decomposition, empirical seed-only intervals include zero in 16 of 18 rows;
 the exceptions are the two negative APT fine results at $T=6{,}400$.
 Subject-only intervals condition on the seed-averaged prediction matrix and can
-exclude zero even when the joint interval does not. We therefore treat the
-joint interval as primary and interpret the conditional intervals only as
-diagnostics of the two uncertainty sources.
+exclude zero even when the joint stability interval does not. The constructions
+answer different questions: the joint range retains variation between fitted
+training subsets rather than estimating uncertainty of their average. Neither
+zero inclusion nor the positive-replicate fraction is a test of the mean effect.
+These ranges also lack a demonstrated coverage guarantee for a future training
+cohort; they are conditional resampling diagnostics.
 
 \subsection{Extended External Subject Frontier}
 \label{sec:appendix:extended_subject_frontier}
@@ -864,7 +868,7 @@ optimal.
 \caption{Class-matched LR frontier beyond 32 training subjects. Points are
 mean subject-balanced pooled OOF macro-F1 over 10 matched training-subset seeds; bars
 are empirical 95\% seed intervals and therefore visualize subset sensitivity,
-not the primary joint uncertainty. The paired joint effect intervals are
+not uncertainty of the mean. The paired joint stability intervals are
 reported in Table~\ref{tab:extended_subject_frontier}.}
 \label{fig:extended_subject_frontier}
 \end{figure}
@@ -872,14 +876,14 @@ reported in Table~\ref{tab:extended_subject_frontier}.}
 \input{tables/extended_subject_frontier}
 
 All 12 adjacent frontier effects are small: their means range from $-0.00065$
-to $+0.00123$, and every joint interval includes zero. The four direct OneK1K
-$32\rightarrow128$ contrasts are likewise unresolved. This does not by itself
+to $+0.00123$, and every joint stability interval includes zero. The four direct OneK1K
+$32\rightarrow128$ contrasts likewise span zero under joint resampling. This does not
 establish a plateau or exclude practically meaningful changes. The explicit
 margin sensitivity below assesses interval width separately from zero inclusion.
 Because the intervention remains tied to these tasks, budgets, features, and LR
 configuration, it does not locate a universal saturation point or optimal allocation.
 
-\subsection{Practical-Equivalence Sensitivity}
+\subsection{Post-Hoc Stability-Band Sensitivity}
 \label{sec:appendix:equivalence}
 
 Failure to detect a difference is not evidence of equivalence
@@ -890,16 +894,13 @@ as sensitivity values. This is a reporting tolerance, not a validated clinical
 threshold, and was not prespecified for the completed experiments. It must not
 be conflated with the separate compact-panel tolerance $\delta=0.02$.
 
-For each released joint 95\% interval $[L,U]$, we report zero inclusion
+For each released joint 95\% stability interval $[L,U]$, we report zero inclusion
 ($L\leq0\leq U$) and strict containment ($-\epsilon<L$ and $U<\epsilon$)
-separately. Containment is evidence of practical equivalence only relative to
-that margin, interval construction, and estimand; zero inclusion alone is not.
-Intervals with $L\leq-\epsilon$ and $U\geq\epsilon$ lack precision to exclude
-meaningful effects in either direction. Other non-contained intervals can
-still leave a meaningful one-sided effect unresolved. These are not mutually
-exclusive categories, and interval width alone does not establish formal
-statistical power; we therefore use ``insufficient precision'' rather than
-claiming a quantified underpowered design.
+separately. Containment describes concentration of this conditional resampling
+distribution inside the chosen band, not equivalence of the mean allocation
+effects. Intervals with $L\leq-\epsilon$ and $U\geq\epsilon$ span changes of
+the stated magnitude in both directions. These diagnostics neither quantify
+statistical power nor provide a calibrated future-cohort guarantee.
 
 \input{tables/equivalence_sensitivity}
 
@@ -909,12 +910,12 @@ XGBoost interval spans both meaningful directions. Among adjacent external LR
 frontier comparisons, 11 of 12 intervals meet this criterion; the exception is
 OneK1K coarse $32\rightarrow64$ at $T=3{,}200$. With the tighter $\pm0.005$
 margin, no main interval and only 4 of 12 adjacent frontier intervals are
-contained. Conclusions about practical equivalence are thus explicitly
-margin-dependent, not a blanket finding that subjects have no value.
+contained. Descriptive stability is therefore margin-dependent; these counts
+do not establish that the sampling policies are equivalent or subjects have no value.
 
 We do not report formal TOST $p$-values. Conventional level-0.05 TOST is linked
 to a corresponding 90\% confidence interval, whereas this analysis retains the
-released joint 95\% intervals. Moreover, those intervals sample one completed
+released joint 95\% stability intervals. More fundamentally, those intervals sample one completed
 training-subset seed and then test subjects, combining between-fit variability
 with test uncertainty rather than estimating only a seed-averaged mean effect.
 Containment is therefore an exploratory joint-interval screen, not a calibrated
