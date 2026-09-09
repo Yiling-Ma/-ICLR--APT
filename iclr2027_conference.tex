@@ -74,12 +74,13 @@ from 40 patients, with a fixed five-lineage/27-subtype ontology, patient-level
 characterization audit, and explicit patient and cell training axes. Across
 matched neural and classical models, coarse lineage recognition remains
 substantially easier than fine subtype prediction. Unmatched fixed-total
-reallocations confound subject breadth with label support and class composition:
+reallocations confound subject breadth with the training label distribution:
 although 37 of 38 comparisons favor 32 rather than 8 subjects, a class-matched
 control reduces this apparent advantage to modest coarse gains in APT and
 OneK1K, while fine effects are small and change sign across cohorts. Thus the
 unmatched result is an audit target, not evidence for a universal
-subject-dominant scaling law.
+subject-dominant scaling law. Here, the label-distribution effect includes
+changes in observed classes, per-class counts, and class proportions.
 Strict nested
 aggregation shows that cell-model outputs retain disease-associated variation,
 but subtype composition has no resolved increment over lineage, cell count, or
@@ -520,17 +521,18 @@ and label-generation procedures.
 
 \input{tables/cross_cohort_scaling}
 
-\subsection{Class-Coverage Audit and Matched Control}
+\subsection{Label-Distribution Audit and Matched Control}
 \label{sec:appendix:class_matched_scaling}
 
 The label-agnostic grid samples cells uniformly within subjects and therefore
-permits rare classes to be absent. Machine-readable coverage tables report the
+allows the full marginal label distribution to vary. Machine-readable audit tables report the
 observed class count, unseen-at-training class count, cell count, and donor
 count for every class at every fold, seed, and scaling point. The main text
 reports the common fixed-total diagonals, where fine-class coverage increases
-slightly with $P$ despite fixed $T$.
+slightly with $P$ despite fixed $T$; this coverage statistic is only one
+observable component of the broader label-distribution effect.
 
-The class-matched control removes this pathway. The $P=8$ subset defines the
+The class-matched control fixes the marginal label distribution. The $P=8$ subset defines the
 observed labels and a proportional integer quota $T_k$ with a one-cell floor;
 capacity violations are deterministically redistributed. The same quota vector
 is then used at $P=8,16,32$. Within each class, a capacity-constrained
@@ -541,6 +543,9 @@ standardization is refit on each training subset, and all immutable outer-test
 cells are retained. All three runs complete 1{,}200/1{,}200 jobs and pass checks
 for exact total cells, identical paired class counts, non-overlapping test
 subjects, and contribution by every nominal training subject.
+It does not separately identify changes in disease--subtype composition,
+within-class allocation across subjects, or within-class subject heterogeneity;
+these remain bundled with the subject-breadth intervention.
 
 \input{tables/class_matched_scaling}
 

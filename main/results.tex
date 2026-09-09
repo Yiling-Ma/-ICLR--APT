@@ -61,7 +61,7 @@ patients with more cells, an equal-cell sensitivity also samples 1{,}900 cells
 per patient over 50 seeds. It changes coarse macro-F1 by at most $+0.005$ and
 fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
 
-\subsection{Label Support Confounds Naive Two-Axis Scaling}
+\subsection{The Label Distribution Confounds Naive Two-Axis Scaling}
 \label{sec:results:patient_cell_scaling}
 
 The fair scaling experiment holds outer-test subjects fixed and varies only the
@@ -85,7 +85,7 @@ effects are modest for coarse lineage and heterogeneous for fine subtype.}
 \end{figure}
 
 As a deliberately naive starting point, the original label-agnostic design
-reallocates cells without matching class support. Moving from 8 to 32 patients improves patient-balanced OOF
+reallocates cells without matching the training label distribution. Moving from 8 to 32 patients improves patient-balanced OOF
 macro-F1 in all 12 model--resolution--budget combinations, by 0.006--0.022
 (Appendix~\ref{sec:appendix:fair_scaling}). All paired patient-bootstrap and
 subset-seed intervals are above zero. Pooled-cell and mean within-patient
@@ -119,8 +119,8 @@ the grid. OneK1K matched doublings and response surfaces also favor the donor
 axis, but only narrowly for XGBoost coarse prediction. Across APT, COMBAT, and
 OneK1K, this naive analysis yields 37 of 38 unmatched fixed-total comparisons
 in favor of broader subject coverage. The numerical consistency is misleading
-if read as an isolated breadth effect because the sampled training distribution
-and fine-label support change simultaneously.
+if read as an isolated breadth effect because the sampled subjects and marginal
+training label distribution change simultaneously.
 
 The class audit confirms that this distinction matters. At the common
 $T=3{,}200$ diagonal, moving from $P=8$ to $P=32$ changes the mean number of
@@ -128,7 +128,9 @@ observed fine classes from 26.12 to 26.33 of 27 for APT, 36.97 to 37.34 of 39
 for COMBAT, and 27.10 to 27.26 of 30 for OneK1K. At $T=6{,}400$, the
 corresponding changes are 26.34 to 26.53, 37.81 to 38.10, and 28.31 to 28.47.
 These fractional averages represent fold/seed settings in which a test class
-changes from unseen to seen, which can directly affect macro-F1.
+changes from unseen to seen, which can directly affect macro-F1. They measure
+only one component of the label-distribution effect: per-class counts and
+proportions also change in the unmatched analysis.
 
 We therefore repeat LR after freezing the $P=8$ observed classes and exact
 per-class quotas within every fold/seed/task comparison
@@ -144,8 +146,9 @@ subject-bootstrap intervals for seed-averaged sufficient statistics are shown
 in Appendix~\ref{sec:appendix:class_matched_scaling}. Thus class matching
 changes the scientific conclusion: the transferable signal is at most a modest
 coarse-lineage association, whereas the apparently consistent fine-subtype
-advantage in the naive analysis is partly coverage-mediated and does not
-survive as a general breadth effect.
+advantage in the naive analysis is partly mediated by changes in label support
+and class composition and does not survive as a general breadth effect. This
+control does not attribute the change to unseen classes alone.
 
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}

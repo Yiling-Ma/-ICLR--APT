@@ -15,16 +15,18 @@ axes. Although it contains 361{,}792 cells, performance on unseen subjects must
 still be estimated from only 40 independent patients; cell-level splitting
 inflates scores and changes apparent model differences. The label-agnostic
 fixed-total design compares broader patient coverage with deeper sampling
-without changing total training cells, but it also changes fine-label support.
+without changing total training cells, but it also changes the marginal
+training label distribution.
 Its 37/38 direction is therefore a naive joint effect, not a pure
 subject-diversity estimate or a headline scaling law. The class-matched control
 changes the interpretation: after identical per-class quotas are enforced,
 small coarse gains persist in APT and OneK1K, whereas fine effects are
-heterogeneous and reverse in APT and COMBAT. More subjects can improve broad
-decision boundaries, but fine-label gains may arise because additional
-subjects make rare classes visible rather than because subject diversity is
-intrinsically dominant. Pool, source, and unrecorded batch coverage can still
-change with subject breadth, so even the matched result is associational.
+heterogeneous and reverse in APT and COMBAT. The unmatched fine-label gains are
+therefore partly mediated by changes in label support and class composition,
+not demonstrably by unseen-class coverage alone. Disease--subtype composition,
+within-class allocation across subjects, pool, source, and unrecorded batch
+coverage can still change with subject breadth, so even the matched result is
+associational.
 Correlated cells cannot create evidence about new patients, even when additional
 cells improve estimation of cell-type decision boundaries. Clinical single-cell
 benchmarks should therefore report patient-disjoint generalization together
@@ -55,8 +57,8 @@ APT-Bench establishes a patient-disjoint contract for hierarchical cell typing,
 two-axis scaling, and patient characterization from single-cell aptamer profiles.
 Coarse lineage is consistently easier than fine subtype prediction, with no
 supported cascade advantage over matched references. Its scaling audit shows
-that unmatched fixed-total comparisons can mistake changing label support for
-a subject-breadth benefit; after class matching, only modest coarse effects
+that unmatched fixed-total comparisons can mistake a label-distribution effect
+for a subject-breadth benefit; after class matching, only modest coarse effects
 remain and fine effects vary across cohorts. Nested transfer
 has no resolved subtype increment, and direct disease association remains
 confounded by patient-specific absolute-expression structure; clinical claims

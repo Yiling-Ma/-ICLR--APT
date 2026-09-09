@@ -34,14 +34,14 @@ This perspective leads to three empirical findings. First, coarse lineage
 recognition is substantially easier than fine subtype recognition across all
 models, and encoder-matched controls do not support an advantage for the
 soft cascade over the simpler neural references. Second, a two-axis scaling
-study identifies label-support confounding in fixed-total evaluations. When
+study identifies label-distribution confounding in fixed-total evaluations. When
 each paired setting uses exactly the same observed classes and per-class cell
 quotas, subject-breadth effects are modest for coarse lineage and small or
 sign-changing for fine subtype. By contrast, 37 of 38 unmatched comparisons
 favor reallocating cells from 8 to 32 subjects because that intervention also
-changes label support and class composition. Subject breadth is therefore a
+changes the training label distribution. Subject breadth is therefore a
 separate design axis, but an unmatched scaling curve cannot isolate its effect
-from task granularity and the classes made visible during training.
+from task granularity and the marginal class distribution during training.
 Third, strictly nested, disease-label-free XGBoost subtype
 probabilities retain disease-associated variation after patient aggregation:
 soft subtype composition reaches disease macro-F1 0.593 versus 0.477 for
@@ -55,5 +55,5 @@ Our contributions are therefore as follows.
 \begin{itemize}
     \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, two-axis scaling, and confounding-aware patient characterization.
     \item \textbf{A controlled account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. An encoder-matched reference ladder separates hierarchy mechanisms from backbone capacity and finds no supported gain from additional cascade complexity.
-    \item \textbf{A label-support audit for two-axis scaling.} Across APT, COMBAT, and OneK1K, we show that standard fixed-total comparisons conflate subject breadth with class support, then introduce a class-matched control that freezes observed classes and per-class cell quotas. The corrected effects are resolution- and cohort-dependent rather than a universal scaling law. A separate strict nested audit tests cross-task transfer from disease-label-free cell-model outputs without exposing either stage to outer-test patients.
+    \item \textbf{A label-distribution audit for two-axis scaling.} Across APT, COMBAT, and OneK1K, we show that standard fixed-total comparisons conflate subject breadth with the marginal training label distribution, then introduce a class-matched control that freezes observed classes and per-class cell quotas. The corrected effects are resolution- and cohort-dependent rather than a universal scaling law. A separate strict nested audit tests cross-task transfer from disease-label-free cell-model outputs without exposing either stage to outer-test patients.
 \end{itemize}
