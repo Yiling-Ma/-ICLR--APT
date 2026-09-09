@@ -13,18 +13,18 @@ patient-level characterization.
 The benchmark also separates the evaluation unit from the training-scaling
 axes. Although it contains 361{,}792 cells, performance on unseen subjects must
 still be estimated from only 40 independent patients; cell-level splitting
-inflates scores and changes apparent model differences. The fixed-total design
-compares broader patient coverage with deeper sampling without changing the
-total number of training cells, while matched doublings and a response surface
-expose dependence on the evaluated model, resolution, and budget. Broader
-patient coverage improves all APT fixed-total comparisons, and its mean matched
-doubling effect exceeds the cell-depth effect for both classical models at both
-resolutions. The fixed-total direction holds in all 18 COMBAT RNA/ADT
-comparisons and 7 of 8 OneK1K RNA comparisons, but external effects are usually
-seed-uncertain and one low-budget OneK1K XGBoost coarse result reverses.
-Replication across three blood cohorts therefore strengthens the
-subject-coverage finding while delimiting it as a variable average association,
-not a causal or universal scaling law.
+inflates scores and changes apparent model differences. The label-agnostic
+fixed-total design compares broader patient coverage with deeper sampling
+without changing total training cells, but it also changes fine-label support.
+Its 37/38 direction therefore describes the realistic joint consequence of
+adding subjects, not a pure subject-diversity effect. The class-matched control
+sharpens the interpretation: after identical per-class quotas are enforced,
+small coarse gains persist in APT and OneK1K, whereas fine effects are
+heterogeneous and reverse in APT and COMBAT. More subjects can improve broad
+decision boundaries, but fine-label gains may arise because additional
+subjects make rare classes visible rather than because subject diversity is
+intrinsically dominant. Pool, source, and unrecorded batch coverage can still
+change with subject breadth, so even the matched result is associational.
 Correlated cells cannot create evidence about new patients, even when additional
 cells improve estimation of cell-type decision boundaries. Clinical single-cell
 benchmarks should therefore report patient-disjoint generalization together
@@ -54,9 +54,10 @@ validation is required before clinical claims.
 APT-Bench establishes a patient-disjoint contract for hierarchical cell typing,
 two-axis scaling, and patient characterization from single-cell aptamer profiles.
 Coarse lineage is consistently easier than fine subtype prediction, with no
-supported cascade advantage over matched references. Across three cohorts, 37
-of 38 fixed-total comparisons favor subject breadth, with one reversal showing
-that the tendency is context-dependent rather than universal. Nested transfer
+supported cascade advantage over matched references. Unmatched fixed-total
+comparisons usually favor subject breadth, but a class-matched control shows
+that this tendency is stable mainly for coarse lineage and is not universal
+for fine subtype. Nested transfer
 has no resolved subtype increment, and direct disease association remains
 confounded by patient-specific absolute-expression structure; clinical claims
 require external validation.

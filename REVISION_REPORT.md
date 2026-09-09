@@ -122,9 +122,23 @@ clinical, causal, cross-batch, or external-generalization claims.
   (-0.0028; paired donor-bootstrap 95% CI [-0.0036, -0.0017]) and returns
   positive at 6,400 cells (+0.0056). No OneK1K empirical subset-seed interval
   excludes zero.
-- Across APT, COMBAT RNA/ADT, and OneK1K RNA, 37 of 38 fixed-total comparisons
-  favor broader subject coverage. This is reported as a replicated average
-  tendency with a documented counterexample, not a universal scaling law.
+- Across APT, COMBAT RNA/ADT, and OneK1K RNA, 37 of 38 label-agnostic
+  fixed-total comparisons favor broader subject coverage. This is now reported
+  as an unmatched joint effect that can include changing label support, not as
+  an isolated subject-diversity result.
+- Class-matched fixed-total control: complete for APT, COMBAT RNA, and OneK1K
+  RNA. Each dataset completed 1,200/1,200 LR jobs (five folds, 20 seeds, two
+  totals, three subject budgets, and two tasks), and every QA file is `PASS`.
+  Within each fold/seed/task, exact per-class quotas are frozen from the nested
+  P=8 subset and reused at P=16 and P=32. All nominal subjects contribute and
+  every paired condition has identical class counts and proportions.
+- The matched result revises the headline interpretation. Coarse P=32-minus-P=8
+  effects remain positive in APT (+0.006/+0.008) and OneK1K
+  (+0.003/+0.003), and are small in COMBAT (+0.001/+0.000). Fine effects are
+  negative in APT (-0.002/-0.005), near-zero or negative in COMBAT
+  (-0.001/-0.003), and slightly positive in OneK1K (+0.002/+0.001).
+  Consequently, 37/38 is retained only as the unmatched joint effect of subject
+  breadth and training-distribution coverage, not as an isolated diversity law.
 
 ## Not completed
 
@@ -149,11 +163,12 @@ clinical, causal, cross-batch, or external-generalization claims.
 
 The previous claim that within-patient cell depth is at least as influential as
 patient count was removed because it compared unequal endpoint changes. The
-replacement claim is narrower and directly supported: broader subject coverage
-is favored in 37 of 38 exact fixed-total comparisons across three blood cohorts
-and RNA, ADT, and aptamer inputs. One low-budget OneK1K XGBoost coarse setting
-reverses, and external subset-seed intervals are broad. The paper therefore
-claims a replicated average tendency, not a causal or universal law.
+unmatched fixed-total analysis favors broader subject coverage in 37 of 38
+comparisons, but the new class audit shows that increasing P also improves fine
+label support. In the class-matched control, a small coarse breadth effect
+transfers to APT and OneK1K, while fine effects change sign across cohorts.
+The paper therefore separates subject breadth, cell depth, and label support
+rather than claiming a patient-dominant scaling law.
 
 The previous pooled-OOF composition value (predicted subtype Macro-F1 0.400) is
 not used as a headline result. The strict nested value is 0.593. This numerical

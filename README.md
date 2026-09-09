@@ -9,6 +9,10 @@ inference-cell analyses are secondary measurement sensitivities.
 The two-axis scaling protocol is externally replicated on COMBAT CITE-seq RNA
 and ADT and on OneK1K RNA. OneK1K construction, split constraints, and rerun
 commands are documented in [`ONEK1K_SCALING_PROTOCOL.md`](ONEK1K_SCALING_PROTOCOL.md).
+A class-matched fixed-total control additionally freezes exact per-class cell
+quotas while varying the number of contributing subjects. Its runner,
+summarizer, protocols, QA files, and sufficient statistics are under
+`analysis/class_matched_scaling.py` and `outputs/class_matched_scaling/`.
 
 The formal task and split contract is documented in
 [`benchmark/README.md`](benchmark/README.md). The current repository is not yet a

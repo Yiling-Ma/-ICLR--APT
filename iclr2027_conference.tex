@@ -73,11 +73,12 @@ APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profile
 from 40 patients, with a fixed five-lineage/27-subtype ontology, patient-level
 characterization audit, and explicit patient and cell training axes. Across
 matched neural and classical models, coarse lineage recognition remains
-substantially easier than fine subtype prediction. At fixed total-cell budgets,
-reallocating cells from 8 to 32 subjects improves subject-balanced macro-F1 in
-37 of 38 comparisons across APT, external COMBAT CITE-seq RNA/ADT, and external
-OneK1K RNA evaluations; one low-budget XGBoost coarse setting reverses, and
-effect magnitude is context-dependent. Strict nested
+substantially easier than fine subtype prediction. Unmatched fixed-total
+reallocations favor 32 rather than 8 subjects in 37 of 38 APT, COMBAT, and
+OneK1K comparisons, but they also increase fine-label coverage. A class-matched
+control reveals a resolution-dependent result: modest coarse gains persist in
+APT and OneK1K, whereas fine effects are small and change sign across cohorts.
+Strict nested
 aggregation shows that cell-model outputs retain disease-associated variation,
 but subtype composition has no resolved increment over lineage, cell count, or
 recorded RNA-QC controls. Direct APT discrimination is also sensitive to
@@ -516,6 +517,39 @@ disease generalization or absolute accuracy across different feature spaces
 and label-generation procedures.
 
 \input{tables/cross_cohort_scaling}
+
+\subsection{Class-Coverage Audit and Matched Control}
+\label{sec:appendix:class_matched_scaling}
+
+The label-agnostic grid samples cells uniformly within subjects and therefore
+permits rare classes to be absent. Machine-readable coverage tables report the
+observed class count, unseen-at-training class count, cell count, and donor
+count for every class at every fold, seed, and scaling point. The main text
+reports the common fixed-total diagonals, where fine-class coverage increases
+slightly with $P$ despite fixed $T$.
+
+The class-matched control removes this pathway. The $P=8$ subset defines the
+observed labels and a proportional integer quota $T_k$ with a one-cell floor;
+capacity violations are deterministically redistributed. The same quota vector
+is then used at $P=8,16,32$. Within each class, a capacity-constrained
+round-robin sampler distributes cells across selected subjects before assigning
+a second cell from the same subject, so increasing $P$ changes realized donor
+coverage rather than class counts. Sampling is without replacement,
+standardization is refit on each training subset, and all immutable outer-test
+cells are retained. All three runs complete 1{,}200/1{,}200 jobs and pass checks
+for exact total cells, identical paired class counts, non-overlapping test
+subjects, and contribution by every nominal training subject.
+
+\input{tables/class_matched_scaling}
+
+The table reports paired subject-bootstrap intervals for the seed-averaged
+effect. Empirical 95\% subset-seed intervals include zero in 11 of 12 rows; the
+exception is APT fine at $T=6{,}400$, which is negative
+($[-0.0084,-0.0022]$). The bootstrap and seed intervals answer different
+questions: the former varies held-out subjects after averaging training-subset
+seeds, whereas the latter varies selected development subsets with the test
+subjects fixed. We therefore interpret sign and magnitude descriptively rather
+than treating either interval family as a universal significance test.
 
 \subsection{Secondary Descriptive Patient--Cell Scaling Surface}
 \label{sec:appendix:patient_cell_scaling}

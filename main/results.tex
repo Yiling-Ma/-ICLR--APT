@@ -61,7 +61,7 @@ patients with more cells, an equal-cell sensitivity also samples 1{,}900 cells
 per patient over 50 seeds. It changes coarse macro-F1 by at most $+0.005$ and
 fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
 
-\subsection{Patient Diversity and Cell Depth Are Separate Scaling Axes}
+\subsection{Subject Breadth, Cell Depth, and Label Support Are Distinct Axes}
 \label{sec:results:patient_cell_scaling}
 
 The fair scaling experiment holds outer-test subjects fixed and varies only the
@@ -84,7 +84,7 @@ OneK1K supports two totals under its 800-cell donor threshold.}
 \label{fig:cross_cohort_scaling}
 \end{figure}
 
-On APT, reallocating cells from 8 to 32 patients improves patient-balanced OOF
+In the original label-agnostic design, reallocating cells from 8 to 32 patients improves patient-balanced OOF
 macro-F1 in all 12 model--resolution--budget combinations, by 0.006--0.022
 (Figure~\ref{fig:cross_cohort_scaling}). All paired patient-bootstrap and
 subset-seed intervals are above zero. Pooled-cell and mean within-patient
@@ -115,9 +115,32 @@ coefficients are likewise larger for $\log_2 P$ than $\log_2 C$ in all four
 comparisons, although interactions show that neither effect is constant across
 the grid. OneK1K matched doublings and response surfaces also favor the donor
 axis, but only narrowly for XGBoost coarse prediction. Across APT, COMBAT, and
-OneK1K, 37 of 38 fixed-total comparisons favor broader subject coverage. The
-single reversal and broad external seed intervals show that this is a replicated
-average tendency across three blood cohorts, not a universal or causal law.
+OneK1K, 37 of 38 unmatched fixed-total comparisons favor broader subject
+coverage. This is a joint consequence of subject breadth and the sampled
+training distribution, not yet an isolated subject effect.
+
+The class audit confirms that this distinction matters. At the common
+$T=3{,}200$ diagonal, moving from $P=8$ to $P=32$ changes the mean number of
+observed fine classes from 26.12 to 26.33 of 27 for APT, 36.97 to 37.34 of 39
+for COMBAT, and 27.10 to 27.26 of 30 for OneK1K. At $T=6{,}400$, the
+corresponding changes are 26.34 to 26.53, 37.81 to 38.10, and 28.31 to 28.47.
+These fractional averages represent fold/seed settings in which a test class
+changes from unseen to seen, which can directly affect macro-F1.
+
+We therefore repeat LR after freezing the $P=8$ observed classes and exact
+per-class quotas within every fold/seed/task comparison
+(Table~\ref{tab:class_matched_scaling}). Mean donor coverage per observed class
+increases substantially while class counts remain identical. Coarse effects
+remain positive for APT ($+0.006/+0.008$) and OneK1K
+($+0.003/+0.003$), and are small for COMBAT ($+0.001/+0.000$).
+Fine effects are negative for APT ($-0.002/-0.005$), near zero to negative
+for COMBAT ($-0.001/-0.003$), and only slightly positive for OneK1K
+($+0.002/+0.001$). Most empirical seed intervals include zero; paired
+subject-bootstrap intervals for seed-averaged sufficient statistics are shown
+in Appendix~\ref{sec:appendix:class_matched_scaling}. Thus broader subject
+coverage has a transferable but modest coarse-lineage association, whereas the
+original fine-subtype gains are partly coverage-mediated and do not survive as
+a universal breadth effect.
 
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}

@@ -105,6 +105,21 @@ bootstrap intervals answer different uncertainty questions and are reported
 separately. This training-time design is distinct from inference subsampling in
 the compact-panel analysis.
 
+The fixed-total grid does not by itself isolate subject breadth: adding subjects
+can add rare labels and alter class proportions. We therefore run a separate
+class-matched control at the two cross-cohort totals,
+$T\in\{3200,6400\}$. For each outer-fold, seed, task, and $T$, the nested
+$P=8$ development subset freezes the observed class set and an integer
+per-class quota $T_k$. The identical $T_k$ values are then sampled without
+replacement at $P=8,16,32$, using capacity-constrained round-robin allocation
+to spread each class over as many selected subjects as possible. This makes
+class support, counts, and proportions identical within each paired comparison;
+only the subjects contributing those cells change. We refit class-weighted
+multinomial Logistic Regression and report subject-balanced OOF macro-F1,
+empirical intervals over 20 subset seeds, and paired subject-bootstrap
+intervals. Logistic Regression is used as a focused sampling control rather
+than as another model-comparison family.
+
 To test portability beyond a single assay and cohort, we apply the same grid to
 the public COMBAT CITE-seq blood atlas \citep{combat2022blood}. After a frozen
 quality and coverage audit, 105 donors and 700{,}706 cells are assigned to five

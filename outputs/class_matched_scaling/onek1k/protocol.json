@@ -1,0 +1,48 @@
+{
+  "class_matching": "identical integer per-class cell quota at P=8,16,32",
+  "dataset": "onek1k",
+  "models": [
+    "logistic_regression"
+  ],
+  "patient_budgets": [
+    8,
+    16,
+    32
+  ],
+  "primary_metric": "subject-balanced macro-F1 from pooled OOF subject-normalized confusions",
+  "protocol_hash": "74749b9de8a69391",
+  "quota_reference": "P=8 nested development subset, separately by fold/seed/task/T",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "tasks": {
+    "coarse": "coarse_subtype",
+    "fine": "cell_subtype"
+  },
+  "test_data": "all cells from immutable untouched outer-test subjects",
+  "total_training_cell_budgets": [
+    3200,
+    6400
+  ],
+  "version": "class-matched-fixed-total-v2",
+  "within_class_sampling": "capacity-constrained round robin across eligible selected subjects"
+}

@@ -1,0 +1,27 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrcc}
+\toprule
+Dataset & Task & $T$ & Classes (mean/total) & Donors/class ($P$: 8$\rightarrow$32) & $\Delta$ subject-balanced M-F1 \\
+\midrule
+APT & Coarse & 3,200 & 5.0/5 & 7.9$\rightarrow$28.5 & +0.0062 [+0.0008, +0.0129] \\
+APT & Coarse & 6,400 & 5.0/5 & 7.9$\rightarrow$30.5 & +0.0078 [+0.0022, +0.0160] \\
+APT & Fine & 3,200 & 26.8/27 & 7.1$\rightarrow$25.0 & -0.0024 [-0.0042, -0.0004] \\
+APT & Fine & 6,400 & 26.8/27 & 7.2$\rightarrow$27.4 & -0.0050 [-0.0068, -0.0026] \\
+COMBAT RNA & Coarse & 3,200 & 5.0/5 & 8.0$\rightarrow$29.0 & +0.0011 [+0.0005, +0.0017] \\
+COMBAT RNA & Coarse & 6,400 & 5.0/5 & 8.0$\rightarrow$31.3 & +0.0000 [-0.0004, +0.0004] \\
+COMBAT RNA & Fine & 3,200 & 39.0/39 & 7.2$\rightarrow$22.5 & -0.0007 [-0.0014, +0.0006] \\
+COMBAT RNA & Fine & 6,400 & 39.0/39 & 7.3$\rightarrow$26.6 & -0.0028 [-0.0037, -0.0018] \\
+OneK1K RNA & Coarse & 3,200 & 5.0/5 & 7.8$\rightarrow$27.7 & +0.0025 [+0.0020, +0.0031] \\
+OneK1K RNA & Coarse & 6,400 & 5.0/5 & 7.8$\rightarrow$29.6 & +0.0033 [+0.0026, +0.0039] \\
+OneK1K RNA & Fine & 3,200 & 29.0/30 & 6.2$\rightarrow$19.8 & +0.0019 [+0.0010, +0.0030] \\
+OneK1K RNA & Fine & 6,400 & 29.0/30 & 6.4$\rightarrow$22.1 & +0.0013 [+0.0002, +0.0023] \\
+\bottomrule
+\end{tabular}
+}
+\caption{Class-matched fixed-total control using class-weighted multinomial Logistic Regression. Within each outer-fold/seed/task pair, the $P=8$ subset freezes the observed classes and exact per-class cell quotas; the same quotas are used at $P=16$ and $P=32$. Brackets are 95\% paired subject-bootstrap intervals after averaging the 20 seed-level sufficient statistics; empirical seed intervals are released separately. Donors/class reports the mean number of subjects contributing cells to an observed class.}
+\label{tab:class_matched_scaling}
+\end{table}
