@@ -54,7 +54,13 @@ class counts, and proportions and also uses within-class donor round robin.
 The attenuation cannot therefore be assigned solely to label distribution.
 An independently controlled synthetic check separates quota matching from donor
 allocation (Appendix~\ref{sec:appendix:sequential_simulation}); it does not
-replace this separation on the real cohorts.
+replace this separation on the real cohorts. A complementary known-null
+validation yields mean effects $+0.0202$, $+0.0119$, and $+0.0004$ for unmatched,
+support-matched, and exact-quota sampling against an exactly zero overlap-quota
+target. Independent Monte Carlo references under donor shifts remain positive
+and are not mechanically removed by matching
+(Appendix~\ref{sec:appendix:known_target}). This validates a specified allocation
+estimand, not a universal causal effect of subject breadth.
 
 The result persists beyond the common 32-subject grid. Class-matched LR
 frontiers through 64 COMBAT and 128 OneK1K training donors yield adjacent

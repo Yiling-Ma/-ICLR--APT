@@ -1,0 +1,4621 @@
+{
+  "config": {
+    "cells": 120,
+    "classes": 6,
+    "reference": 512,
+    "replicates": 100,
+    "scenarios": [
+      {
+        "batch": 0.0,
+        "block": 0.0,
+        "donor": 0.0,
+        "name": "known_null",
+        "separation": 0.8
+      },
+      {
+        "batch": 0.0,
+        "block": 0.0,
+        "donor": 0.5,
+        "name": "mild_donor",
+        "separation": 0.8
+      },
+      {
+        "batch": 0.0,
+        "block": 0.0,
+        "donor": 1.5,
+        "name": "strong_donor",
+        "separation": 0.8
+      },
+      {
+        "batch": 0.0,
+        "block": 0.7,
+        "donor": 0.5,
+        "name": "correlated_cells",
+        "separation": 0.8
+      },
+      {
+        "batch": 0.0,
+        "block": 0.0,
+        "donor": 0.5,
+        "name": "weak_subtypes",
+        "separation": 0.3
+      },
+      {
+        "batch": 1.0,
+        "block": 0.0,
+        "donor": 0.5,
+        "name": "batch_shift",
+        "separation": 0.8
+      }
+    ],
+    "source_sha256": "99c65dab42e758f6fed689109184f61e9e1c9aaf77e1c8971e88cd8170971a86",
+    "test_subjects": 40,
+    "total": 480,
+    "train_subjects": 32
+  },
+  "evaluation": [
+    {
+      "effects": {
+        "A": -0.009860656185896655,
+        "B": -0.008431941911806018,
+        "C": 0.022010049960972944
+      },
+      "reference_support": 5,
+      "seed": 400000
+    },
+    {
+      "effects": {
+        "A": 0.06222551965529771,
+        "B": 0.06222551965529771,
+        "C": 0.039891954364610294
+      },
+      "reference_support": 5,
+      "seed": 400001
+    },
+    {
+      "effects": {
+        "A": 0.006419012008354097,
+        "B": 0.006419012008354097,
+        "C": -0.006416487428072826
+      },
+      "reference_support": 6,
+      "seed": 400002
+    },
+    {
+      "effects": {
+        "A": -0.02556656357094389,
+        "B": -0.023693677067063768,
+        "C": -0.07139752337188437
+      },
+      "reference_support": 5,
+      "seed": 400003
+    },
+    {
+      "effects": {
+        "A": -0.021763740909336804,
+        "B": -0.02447961480359745,
+        "C": -0.007457997176540498
+      },
+      "reference_support": 5,
+      "seed": 400004
+    },
+    {
+      "effects": {
+        "A": 0.007963764056472089,
+        "B": 0.007941909766049415,
+        "C": -0.006247384085182273
+      },
+      "reference_support": 5,
+      "seed": 400005
+    },
+    {
+      "effects": {
+        "A": 0.14398781376538436,
+        "B": 0.14398781376538436,
+        "C": 0.12963676643233213
+      },
+      "reference_support": 6,
+      "seed": 400006
+    },
+    {
+      "effects": {
+        "A": 0.012960723192408541,
+        "B": 0.015115736854439676,
+        "C": -0.013678794590081478
+      },
+      "reference_support": 5,
+      "seed": 400007
+    },
+    {
+      "effects": {
+        "A": 0.09664269172628576,
+        "B": 0.09664269172628576,
+        "C": 0.09415397859150937
+      },
+      "reference_support": 6,
+      "seed": 400008
+    },
+    {
+      "effects": {
+        "A": -0.037810457106783435,
+        "B": -0.04360672748958483,
+        "C": -0.046118008839337254
+      },
+      "reference_support": 5,
+      "seed": 400009
+    },
+    {
+      "effects": {
+        "A": 0.0776658460283412,
+        "B": 0.0776658460283412,
+        "C": 0.04024077403646287
+      },
+      "reference_support": 6,
+      "seed": 400010
+    },
+    {
+      "effects": {
+        "A": 0.03141373771422051,
+        "B": 0.03141373771422051,
+        "C": 0.02541715861948657
+      },
+      "reference_support": 6,
+      "seed": 400011
+    },
+    {
+      "effects": {
+        "A": -0.0003066779361196592,
+        "B": -0.0003066779361196592,
+        "C": 0.012740825689678159
+      },
+      "reference_support": 5,
+      "seed": 400012
+    },
+    {
+      "effects": {
+        "A": 0.1641667144714355,
+        "B": 0.1641667144714355,
+        "C": 0.1643048618286373
+      },
+      "reference_support": 6,
+      "seed": 400013
+    },
+    {
+      "effects": {
+        "A": 0.02191731156722898,
+        "B": 0.02191731156722898,
+        "C": 0.010915830250056713
+      },
+      "reference_support": 6,
+      "seed": 400014
+    },
+    {
+      "effects": {
+        "A": 0.1244817897195955,
+        "B": 0.1244817897195955,
+        "C": 0.1001783079194335
+      },
+      "reference_support": 6,
+      "seed": 400015
+    },
+    {
+      "effects": {
+        "A": 0.05138888335356806,
+        "B": 0.05138888335356806,
+        "C": 0.045000444390269845
+      },
+      "reference_support": 5,
+      "seed": 400016
+    },
+    {
+      "effects": {
+        "A": -0.013254051010588963,
+        "B": -0.013254051010588963,
+        "C": -0.0024236038855648956
+      },
+      "reference_support": 6,
+      "seed": 400017
+    },
+    {
+      "effects": {
+        "A": 0.0531222192316958,
+        "B": 0.05113425805382177,
+        "C": -0.02232103458629464
+      },
+      "reference_support": 5,
+      "seed": 400018
+    },
+    {
+      "effects": {
+        "A": 0.045982581764990704,
+        "B": 0.04415384233904324,
+        "C": 0.0584595941672032
+      },
+      "reference_support": 5,
+      "seed": 400019
+    },
+    {
+      "effects": {
+        "A": -0.0449534531537088,
+        "B": -0.0449534531537088,
+        "C": -0.03646581199992749
+      },
+      "reference_support": 6,
+      "seed": 400020
+    },
+    {
+      "effects": {
+        "A": 0.017710977171172704,
+        "B": 0.017710977171172704,
+        "C": 0.015394753912228498
+      },
+      "reference_support": 6,
+      "seed": 400021
+    },
+    {
+      "effects": {
+        "A": 0.042064799147035425,
+        "B": 0.020638530983441816,
+        "C": -0.023759996546211526
+      },
+      "reference_support": 5,
+      "seed": 400022
+    },
+    {
+      "effects": {
+        "A": 0.010541299342098964,
+        "B": 0.010541299342098964,
+        "C": 0.016350837564380327
+      },
+      "reference_support": 6,
+      "seed": 400023
+    },
+    {
+      "effects": {
+        "A": 0.01622795567685431,
+        "B": 0.01622795567685431,
+        "C": -0.012857270039380753
+      },
+      "reference_support": 6,
+      "seed": 400024
+    },
+    {
+      "effects": {
+        "A": 0.02929410917043912,
+        "B": 0.028930071124420365,
+        "C": 0.03796980964732616
+      },
+      "reference_support": 5,
+      "seed": 400025
+    },
+    {
+      "effects": {
+        "A": -0.003689994961019849,
+        "B": -0.003689994961019849,
+        "C": -0.006957099874663197
+      },
+      "reference_support": 6,
+      "seed": 400026
+    },
+    {
+      "effects": {
+        "A": 0.011382259498693204,
+        "B": 0.011382259498693204,
+        "C": 0.018228632894334573
+      },
+      "reference_support": 6,
+      "seed": 400027
+    },
+    {
+      "effects": {
+        "A": 0.02673166648043296,
+        "B": 0.027932846357530072,
+        "C": -0.014980253555798795
+      },
+      "reference_support": 5,
+      "seed": 400028
+    },
+    {
+      "effects": {
+        "A": -0.01180210656258085,
+        "B": -0.012332671570521592,
+        "C": -0.007411714103386258
+      },
+      "reference_support": 6,
+      "seed": 400029
+    },
+    {
+      "effects": {
+        "A": 0.07653878615063264,
+        "B": 0.07653878615063264,
+        "C": 0.05044320355252846
+      },
+      "reference_support": 6,
+      "seed": 400030
+    },
+    {
+      "effects": {
+        "A": 0.005824301567466161,
+        "B": 0.005122016843799981,
+        "C": -0.016201285754705808
+      },
+      "reference_support": 5,
+      "seed": 400031
+    },
+    {
+      "effects": {
+        "A": -0.018499440249829968,
+        "B": -0.018499440249829968,
+        "C": -0.028939921308313965
+      },
+      "reference_support": 6,
+      "seed": 400032
+    },
+    {
+      "effects": {
+        "A": 0.046896959727906085,
+        "B": 0.046896959727906085,
+        "C": 0.018435475818375235
+      },
+      "reference_support": 5,
+      "seed": 400033
+    },
+    {
+      "effects": {
+        "A": 0.015305102480801913,
+        "B": 0.015305102480801913,
+        "C": 0.00611673426423609
+      },
+      "reference_support": 6,
+      "seed": 400034
+    },
+    {
+      "effects": {
+        "A": 0.021829544841566073,
+        "B": 0.021829544841566073,
+        "C": 0.037271382044070545
+      },
+      "reference_support": 6,
+      "seed": 400035
+    },
+    {
+      "effects": {
+        "A": 0.01731833429631424,
+        "B": 0.01817621057312019,
+        "C": 0.004999350183961915
+      },
+      "reference_support": 5,
+      "seed": 400036
+    },
+    {
+      "effects": {
+        "A": 0.09752321363310035,
+        "B": 0.09752321363310035,
+        "C": 0.062291993812299384
+      },
+      "reference_support": 6,
+      "seed": 400037
+    },
+    {
+      "effects": {
+        "A": 0.039180870198942785,
+        "B": 0.03981051223135945,
+        "C": 0.0752456715440451
+      },
+      "reference_support": 5,
+      "seed": 400038
+    },
+    {
+      "effects": {
+        "A": 0.028528805363359666,
+        "B": 0.028528805363359666,
+        "C": 0.014624998132881206
+      },
+      "reference_support": 6,
+      "seed": 400039
+    },
+    {
+      "effects": {
+        "A": 0.004313004831808187,
+        "B": 0.004313004831808187,
+        "C": -0.011693353402682738
+      },
+      "reference_support": 5,
+      "seed": 400040
+    },
+    {
+      "effects": {
+        "A": -0.0014419812699362766,
+        "B": -0.0014419812699362766,
+        "C": 8.03651042152187e-05
+      },
+      "reference_support": 6,
+      "seed": 400041
+    },
+    {
+      "effects": {
+        "A": 0.03740395679265607,
+        "B": 0.04242551676443457,
+        "C": 0.041707985751302856
+      },
+      "reference_support": 5,
+      "seed": 400042
+    },
+    {
+      "effects": {
+        "A": 0.0924374046883496,
+        "B": 0.0924374046883496,
+        "C": 0.06306923439825357
+      },
+      "reference_support": 5,
+      "seed": 400043
+    },
+    {
+      "effects": {
+        "A": 0.14059608900905318,
+        "B": 0.09560138937915619,
+        "C": 0.10535000166544284
+      },
+      "reference_support": 5,
+      "seed": 400044
+    },
+    {
+      "effects": {
+        "A": 0.06681564387983979,
+        "B": 0.060313935105193006,
+        "C": 0.05275531267038169
+      },
+      "reference_support": 5,
+      "seed": 400045
+    },
+    {
+      "effects": {
+        "A": -0.023725880331881388,
+        "B": -0.023725880331881388,
+        "C": -0.0009043304171030275
+      },
+      "reference_support": 6,
+      "seed": 400046
+    },
+    {
+      "effects": {
+        "A": 0.039250138559513925,
+        "B": 0.03861255060513402,
+        "C": 0.03785144806608837
+      },
+      "reference_support": 6,
+      "seed": 400047
+    },
+    {
+      "effects": {
+        "A": 0.00895903007785831,
+        "B": 0.009218003667160302,
+        "C": 0.009471765373226693
+      },
+      "reference_support": 5,
+      "seed": 400048
+    },
+    {
+      "effects": {
+        "A": 0.06946178337172976,
+        "B": 0.06946178337172976,
+        "C": 0.10905492965655633
+      },
+      "reference_support": 6,
+      "seed": 400049
+    },
+    {
+      "effects": {
+        "A": 0.025722600852905342,
+        "B": 0.025758397524220322,
+        "C": 0.0011052933392195485
+      },
+      "reference_support": 5,
+      "seed": 400050
+    },
+    {
+      "effects": {
+        "A": 0.05293937639002899,
+        "B": 0.05293937639002899,
+        "C": 0.06528269633778394
+      },
+      "reference_support": 6,
+      "seed": 400051
+    },
+    {
+      "effects": {
+        "A": 0.0003407867332738679,
+        "B": 0.0003407867332738679,
+        "C": 0.02668768221168394
+      },
+      "reference_support": 6,
+      "seed": 400052
+    },
+    {
+      "effects": {
+        "A": 0.05405793114956736,
+        "B": 0.05405793114956736,
+        "C": 0.044959927443842806
+      },
+      "reference_support": 6,
+      "seed": 400053
+    },
+    {
+      "effects": {
+        "A": 0.003914999874986724,
+        "B": 0.003914999874986724,
+        "C": -0.014098083937034989
+      },
+      "reference_support": 6,
+      "seed": 400054
+    },
+    {
+      "effects": {
+        "A": 0.10919014018158496,
+        "B": 0.050367812922834654,
+        "C": 0.024519570789801104
+      },
+      "reference_support": 5,
+      "seed": 400055
+    },
+    {
+      "effects": {
+        "A": 0.011012681366691313,
+        "B": 0.011012681366691313,
+        "C": -0.017116215020252956
+      },
+      "reference_support": 5,
+      "seed": 400056
+    },
+    {
+      "effects": {
+        "A": 0.04680724020992427,
+        "B": 0.04680724020992427,
+        "C": 0.010070620897516924
+      },
+      "reference_support": 5,
+      "seed": 400057
+    },
+    {
+      "effects": {
+        "A": 0.08929911457743966,
+        "B": 0.08929911457743966,
+        "C": 0.0625906981438718
+      },
+      "reference_support": 6,
+      "seed": 400058
+    },
+    {
+      "effects": {
+        "A": 0.04484988794300837,
+        "B": 0.044003563410207946,
+        "C": 0.07143873769254044
+      },
+      "reference_support": 5,
+      "seed": 400059
+    },
+    {
+      "effects": {
+        "A": 0.1044213658079387,
+        "B": 0.1049608993881469,
+        "C": 0.09136306658687199
+      },
+      "reference_support": 5,
+      "seed": 400060
+    },
+    {
+      "effects": {
+        "A": 0.0033962581928112523,
+        "B": 0.0016276404630224395,
+        "C": 0.008834179340911352
+      },
+      "reference_support": 5,
+      "seed": 400061
+    },
+    {
+      "effects": {
+        "A": 0.016981992739857177,
+        "B": 0.016981992739857177,
+        "C": -0.014378820231130018
+      },
+      "reference_support": 6,
+      "seed": 400062
+    },
+    {
+      "effects": {
+        "A": 0.03746021136135197,
+        "B": 0.04030621225145059,
+        "C": 0.04143715330738468
+      },
+      "reference_support": 5,
+      "seed": 400063
+    },
+    {
+      "effects": {
+        "A": -0.012469957784457475,
+        "B": -0.012469957784457475,
+        "C": -0.0014665951566099067
+      },
+      "reference_support": 6,
+      "seed": 400064
+    },
+    {
+      "effects": {
+        "A": 0.025073558775880245,
+        "B": 0.025073558775880245,
+        "C": -0.021259675302993386
+      },
+      "reference_support": 6,
+      "seed": 400065
+    },
+    {
+      "effects": {
+        "A": -0.008500039934204784,
+        "B": -0.009925180958636426,
+        "C": -0.012283313072064428
+      },
+      "reference_support": 5,
+      "seed": 400066
+    },
+    {
+      "effects": {
+        "A": 0.10277559546525944,
+        "B": 0.08253826021910765,
+        "C": 0.06636323579163661
+      },
+      "reference_support": 5,
+      "seed": 400067
+    },
+    {
+      "effects": {
+        "A": 0.03185748911309377,
+        "B": 0.03185748911309377,
+        "C": 0.016368444009336014
+      },
+      "reference_support": 5,
+      "seed": 400068
+    },
+    {
+      "effects": {
+        "A": 0.08223092202331411,
+        "B": 0.08223092202331411,
+        "C": 0.02477855466462897
+      },
+      "reference_support": 6,
+      "seed": 400069
+    },
+    {
+      "effects": {
+        "A": -0.0348171777535109,
+        "B": -0.0348171777535109,
+        "C": 0.0034101112232237663
+      },
+      "reference_support": 6,
+      "seed": 400070
+    },
+    {
+      "effects": {
+        "A": 0.012863750654087791,
+        "B": 0.012863750654087791,
+        "C": -0.05545238813492176
+      },
+      "reference_support": 6,
+      "seed": 400071
+    },
+    {
+      "effects": {
+        "A": 0.01998542938869413,
+        "B": 0.01998542938869413,
+        "C": 0.032555797379142826
+      },
+      "reference_support": 6,
+      "seed": 400072
+    },
+    {
+      "effects": {
+        "A": 0.02510394776401198,
+        "B": 0.02834765440991477,
+        "C": 0.020753634375069607
+      },
+      "reference_support": 5,
+      "seed": 400073
+    },
+    {
+      "effects": {
+        "A": 0.026470282258296007,
+        "B": 0.025397121398796685,
+        "C": 0.029272033559634314
+      },
+      "reference_support": 5,
+      "seed": 400074
+    },
+    {
+      "effects": {
+        "A": 0.022889319495918936,
+        "B": 0.022889319495918936,
+        "C": 0.028199438731690285
+      },
+      "reference_support": 6,
+      "seed": 400075
+    },
+    {
+      "effects": {
+        "A": 0.08750866152387066,
+        "B": 0.08538258312578684,
+        "C": 0.058743402001096956
+      },
+      "reference_support": 5,
+      "seed": 400076
+    },
+    {
+      "effects": {
+        "A": 0.058126326967626984,
+        "B": 0.058126326967626984,
+        "C": 0.01678583170646747
+      },
+      "reference_support": 6,
+      "seed": 400077
+    },
+    {
+      "effects": {
+        "A": 0.020403858093777816,
+        "B": 0.020403858093777816,
+        "C": 0.015595366266824395
+      },
+      "reference_support": 6,
+      "seed": 400078
+    },
+    {
+      "effects": {
+        "A": 0.02836850722383405,
+        "B": 0.02836850722383405,
+        "C": 0.01638377394667645
+      },
+      "reference_support": 6,
+      "seed": 400079
+    },
+    {
+      "effects": {
+        "A": 0.04742127731516882,
+        "B": 0.04742127731516882,
+        "C": 0.021711520330013057
+      },
+      "reference_support": 6,
+      "seed": 400080
+    },
+    {
+      "effects": {
+        "A": 0.09554855033455112,
+        "B": 0.09014470066147967,
+        "C": 0.059538216092566376
+      },
+      "reference_support": 5,
+      "seed": 400081
+    },
+    {
+      "effects": {
+        "A": -0.059063587069684176,
+        "B": -0.05918649745650384,
+        "C": -0.08378828880730715
+      },
+      "reference_support": 5,
+      "seed": 400082
+    },
+    {
+      "effects": {
+        "A": 0.11313124278075687,
+        "B": 0.11287965279640239,
+        "C": 0.09571247876286176
+      },
+      "reference_support": 5,
+      "seed": 400083
+    },
+    {
+      "effects": {
+        "A": 0.08796684422092327,
+        "B": 0.07897140649218354,
+        "C": 0.06803640047691145
+      },
+      "reference_support": 5,
+      "seed": 400084
+    },
+    {
+      "effects": {
+        "A": -0.04799286423135435,
+        "B": -0.04799286423135435,
+        "C": -0.01570561829606465
+      },
+      "reference_support": 6,
+      "seed": 400085
+    },
+    {
+      "effects": {
+        "A": -0.017101159429550816,
+        "B": -0.01686577217675117,
+        "C": -0.04070391823516162
+      },
+      "reference_support": 5,
+      "seed": 400086
+    },
+    {
+      "effects": {
+        "A": 0.023315229433820972,
+        "B": 0.023315229433820972,
+        "C": 0.013172407954073151
+      },
+      "reference_support": 6,
+      "seed": 400087
+    },
+    {
+      "effects": {
+        "A": -0.00692848531002721,
+        "B": -0.006549480636250604,
+        "C": -0.007942394709349931
+      },
+      "reference_support": 5,
+      "seed": 400088
+    },
+    {
+      "effects": {
+        "A": 0.0051932163431952505,
+        "B": 0.0051932163431952505,
+        "C": 0.0019143708728862063
+      },
+      "reference_support": 6,
+      "seed": 400089
+    },
+    {
+      "effects": {
+        "A": -0.009207036198313812,
+        "B": -0.009207036198313812,
+        "C": -0.034229298094771154
+      },
+      "reference_support": 6,
+      "seed": 400090
+    },
+    {
+      "effects": {
+        "A": 0.04226890756352647,
+        "B": 0.028317251227994666,
+        "C": 0.003475605344163357
+      },
+      "reference_support": 5,
+      "seed": 400091
+    },
+    {
+      "effects": {
+        "A": 0.007406626917665804,
+        "B": 0.007406626917665804,
+        "C": -0.016301403343804588
+      },
+      "reference_support": 6,
+      "seed": 400092
+    },
+    {
+      "effects": {
+        "A": 0.0834922775038307,
+        "B": 0.0834922775038307,
+        "C": 0.03154788006788023
+      },
+      "reference_support": 6,
+      "seed": 400093
+    },
+    {
+      "effects": {
+        "A": 0.007220706912459907,
+        "B": 0.007220706912459907,
+        "C": 0.017462505818288232
+      },
+      "reference_support": 5,
+      "seed": 400094
+    },
+    {
+      "effects": {
+        "A": 0.04174728475353329,
+        "B": 0.039296191575755535,
+        "C": 0.0262708086247736
+      },
+      "reference_support": 5,
+      "seed": 400095
+    },
+    {
+      "effects": {
+        "A": -0.053659586624686006,
+        "B": -0.053659586624686006,
+        "C": -0.10362786549867342
+      },
+      "reference_support": 6,
+      "seed": 400096
+    },
+    {
+      "effects": {
+        "A": 0.030302066813983064,
+        "B": 0.030302066813983064,
+        "C": 0.03932245130143941
+      },
+      "reference_support": 6,
+      "seed": 400097
+    },
+    {
+      "effects": {
+        "A": 0.03824728241482522,
+        "B": 0.037612802675492274,
+        "C": 0.02312997400972472
+      },
+      "reference_support": 5,
+      "seed": 400098
+    },
+    {
+      "effects": {
+        "A": 0.011484028078891817,
+        "B": 0.011484028078891817,
+        "C": 0.0007528665301833048
+      },
+      "reference_support": 6,
+      "seed": 400099
+    }
+  ],
+  "reference": [
+    {
+      "effects": {
+        "oracle": -0.001503083327371424
+      },
+      "reference_support": 5,
+      "seed": 200000
+    },
+    {
+      "effects": {
+        "oracle": -0.017500529246957552
+      },
+      "reference_support": 6,
+      "seed": 200001
+    },
+    {
+      "effects": {
+        "oracle": 0.09350899757649367
+      },
+      "reference_support": 6,
+      "seed": 200002
+    },
+    {
+      "effects": {
+        "oracle": -0.059814482728972274
+      },
+      "reference_support": 6,
+      "seed": 200003
+    },
+    {
+      "effects": {
+        "oracle": -0.02919038043673472
+      },
+      "reference_support": 6,
+      "seed": 200004
+    },
+    {
+      "effects": {
+        "oracle": -0.02188173708402047
+      },
+      "reference_support": 6,
+      "seed": 200005
+    },
+    {
+      "effects": {
+        "oracle": 0.0005991642996857616
+      },
+      "reference_support": 6,
+      "seed": 200006
+    },
+    {
+      "effects": {
+        "oracle": 0.10189985716156508
+      },
+      "reference_support": 6,
+      "seed": 200007
+    },
+    {
+      "effects": {
+        "oracle": 0.007651561831833131
+      },
+      "reference_support": 5,
+      "seed": 200008
+    },
+    {
+      "effects": {
+        "oracle": -0.0049069306443431104
+      },
+      "reference_support": 6,
+      "seed": 200009
+    },
+    {
+      "effects": {
+        "oracle": 0.010455082574679697
+      },
+      "reference_support": 5,
+      "seed": 200010
+    },
+    {
+      "effects": {
+        "oracle": 0.07657915904825802
+      },
+      "reference_support": 5,
+      "seed": 200011
+    },
+    {
+      "effects": {
+        "oracle": 0.03047290884500231
+      },
+      "reference_support": 6,
+      "seed": 200012
+    },
+    {
+      "effects": {
+        "oracle": 0.04836096079359348
+      },
+      "reference_support": 6,
+      "seed": 200013
+    },
+    {
+      "effects": {
+        "oracle": 0.006534468282175743
+      },
+      "reference_support": 5,
+      "seed": 200014
+    },
+    {
+      "effects": {
+        "oracle": -0.014376392437549457
+      },
+      "reference_support": 5,
+      "seed": 200015
+    },
+    {
+      "effects": {
+        "oracle": -0.028599040088732264
+      },
+      "reference_support": 6,
+      "seed": 200016
+    },
+    {
+      "effects": {
+        "oracle": -0.009909743511970659
+      },
+      "reference_support": 5,
+      "seed": 200017
+    },
+    {
+      "effects": {
+        "oracle": 0.0010139989249368098
+      },
+      "reference_support": 5,
+      "seed": 200018
+    },
+    {
+      "effects": {
+        "oracle": 0.010388920252147382
+      },
+      "reference_support": 6,
+      "seed": 200019
+    },
+    {
+      "effects": {
+        "oracle": 0.0970988935066629
+      },
+      "reference_support": 6,
+      "seed": 200020
+    },
+    {
+      "effects": {
+        "oracle": 0.030268415822725603
+      },
+      "reference_support": 5,
+      "seed": 200021
+    },
+    {
+      "effects": {
+        "oracle": 0.050964414476343756
+      },
+      "reference_support": 6,
+      "seed": 200022
+    },
+    {
+      "effects": {
+        "oracle": -0.019244428082705323
+      },
+      "reference_support": 5,
+      "seed": 200023
+    },
+    {
+      "effects": {
+        "oracle": -0.036061840181096205
+      },
+      "reference_support": 6,
+      "seed": 200024
+    },
+    {
+      "effects": {
+        "oracle": 0.014962418049976722
+      },
+      "reference_support": 6,
+      "seed": 200025
+    },
+    {
+      "effects": {
+        "oracle": 0.015578702641763975
+      },
+      "reference_support": 5,
+      "seed": 200026
+    },
+    {
+      "effects": {
+        "oracle": -0.016514955097688966
+      },
+      "reference_support": 6,
+      "seed": 200027
+    },
+    {
+      "effects": {
+        "oracle": 0.021802209900018854
+      },
+      "reference_support": 6,
+      "seed": 200028
+    },
+    {
+      "effects": {
+        "oracle": -0.00656683765052446
+      },
+      "reference_support": 5,
+      "seed": 200029
+    },
+    {
+      "effects": {
+        "oracle": 0.047236911886219035
+      },
+      "reference_support": 6,
+      "seed": 200030
+    },
+    {
+      "effects": {
+        "oracle": -0.09662249277777551
+      },
+      "reference_support": 6,
+      "seed": 200031
+    },
+    {
+      "effects": {
+        "oracle": 0.038903098214155774
+      },
+      "reference_support": 5,
+      "seed": 200032
+    },
+    {
+      "effects": {
+        "oracle": 0.05200704735595918
+      },
+      "reference_support": 5,
+      "seed": 200033
+    },
+    {
+      "effects": {
+        "oracle": 0.03502961701259416
+      },
+      "reference_support": 6,
+      "seed": 200034
+    },
+    {
+      "effects": {
+        "oracle": 0.08838339337813067
+      },
+      "reference_support": 5,
+      "seed": 200035
+    },
+    {
+      "effects": {
+        "oracle": 0.09571030163886762
+      },
+      "reference_support": 5,
+      "seed": 200036
+    },
+    {
+      "effects": {
+        "oracle": 0.0438535880201395
+      },
+      "reference_support": 5,
+      "seed": 200037
+    },
+    {
+      "effects": {
+        "oracle": 0.05192124120352448
+      },
+      "reference_support": 6,
+      "seed": 200038
+    },
+    {
+      "effects": {
+        "oracle": 0.019424000554489895
+      },
+      "reference_support": 6,
+      "seed": 200039
+    },
+    {
+      "effects": {
+        "oracle": 0.03175330526333214
+      },
+      "reference_support": 5,
+      "seed": 200040
+    },
+    {
+      "effects": {
+        "oracle": 0.047534098423051174
+      },
+      "reference_support": 6,
+      "seed": 200041
+    },
+    {
+      "effects": {
+        "oracle": 0.04038772829405535
+      },
+      "reference_support": 6,
+      "seed": 200042
+    },
+    {
+      "effects": {
+        "oracle": 0.016140339188025765
+      },
+      "reference_support": 6,
+      "seed": 200043
+    },
+    {
+      "effects": {
+        "oracle": 0.06330231435144623
+      },
+      "reference_support": 6,
+      "seed": 200044
+    },
+    {
+      "effects": {
+        "oracle": -0.010114168997774398
+      },
+      "reference_support": 6,
+      "seed": 200045
+    },
+    {
+      "effects": {
+        "oracle": 0.12046105318106304
+      },
+      "reference_support": 6,
+      "seed": 200046
+    },
+    {
+      "effects": {
+        "oracle": -0.024181871002356914
+      },
+      "reference_support": 5,
+      "seed": 200047
+    },
+    {
+      "effects": {
+        "oracle": -0.02105034275473705
+      },
+      "reference_support": 6,
+      "seed": 200048
+    },
+    {
+      "effects": {
+        "oracle": -0.06183963753595384
+      },
+      "reference_support": 6,
+      "seed": 200049
+    },
+    {
+      "effects": {
+        "oracle": -0.03574229548138019
+      },
+      "reference_support": 6,
+      "seed": 200050
+    },
+    {
+      "effects": {
+        "oracle": 0.013560262156535441
+      },
+      "reference_support": 5,
+      "seed": 200051
+    },
+    {
+      "effects": {
+        "oracle": -0.005923055696216262
+      },
+      "reference_support": 5,
+      "seed": 200052
+    },
+    {
+      "effects": {
+        "oracle": 0.01613636155395126
+      },
+      "reference_support": 6,
+      "seed": 200053
+    },
+    {
+      "effects": {
+        "oracle": 0.011319109527022087
+      },
+      "reference_support": 5,
+      "seed": 200054
+    },
+    {
+      "effects": {
+        "oracle": 0.01820484547214135
+      },
+      "reference_support": 5,
+      "seed": 200055
+    },
+    {
+      "effects": {
+        "oracle": 0.030987083770469548
+      },
+      "reference_support": 5,
+      "seed": 200056
+    },
+    {
+      "effects": {
+        "oracle": -0.03074969599034416
+      },
+      "reference_support": 5,
+      "seed": 200057
+    },
+    {
+      "effects": {
+        "oracle": 0.047522164738433625
+      },
+      "reference_support": 5,
+      "seed": 200058
+    },
+    {
+      "effects": {
+        "oracle": 0.0029780004705634577
+      },
+      "reference_support": 6,
+      "seed": 200059
+    },
+    {
+      "effects": {
+        "oracle": -0.00043624271359221645
+      },
+      "reference_support": 6,
+      "seed": 200060
+    },
+    {
+      "effects": {
+        "oracle": -0.021572133974914864
+      },
+      "reference_support": 5,
+      "seed": 200061
+    },
+    {
+      "effects": {
+        "oracle": 0.13510356839900117
+      },
+      "reference_support": 6,
+      "seed": 200062
+    },
+    {
+      "effects": {
+        "oracle": 0.029572334480749418
+      },
+      "reference_support": 5,
+      "seed": 200063
+    },
+    {
+      "effects": {
+        "oracle": -0.060422390731973474
+      },
+      "reference_support": 6,
+      "seed": 200064
+    },
+    {
+      "effects": {
+        "oracle": 0.072930705479897
+      },
+      "reference_support": 6,
+      "seed": 200065
+    },
+    {
+      "effects": {
+        "oracle": 0.06808389179547292
+      },
+      "reference_support": 5,
+      "seed": 200066
+    },
+    {
+      "effects": {
+        "oracle": -0.025535727065250202
+      },
+      "reference_support": 5,
+      "seed": 200067
+    },
+    {
+      "effects": {
+        "oracle": 0.008794590062798924
+      },
+      "reference_support": 6,
+      "seed": 200068
+    },
+    {
+      "effects": {
+        "oracle": 0.03493972911933685
+      },
+      "reference_support": 5,
+      "seed": 200069
+    },
+    {
+      "effects": {
+        "oracle": 0.03452929814332051
+      },
+      "reference_support": 5,
+      "seed": 200070
+    },
+    {
+      "effects": {
+        "oracle": 0.03490580278095168
+      },
+      "reference_support": 5,
+      "seed": 200071
+    },
+    {
+      "effects": {
+        "oracle": 0.020126655441581542
+      },
+      "reference_support": 5,
+      "seed": 200072
+    },
+    {
+      "effects": {
+        "oracle": 0.03683155914300146
+      },
+      "reference_support": 5,
+      "seed": 200073
+    },
+    {
+      "effects": {
+        "oracle": 0.0685711515455939
+      },
+      "reference_support": 6,
+      "seed": 200074
+    },
+    {
+      "effects": {
+        "oracle": -0.004618186811980174
+      },
+      "reference_support": 5,
+      "seed": 200075
+    },
+    {
+      "effects": {
+        "oracle": 0.02542021372026465
+      },
+      "reference_support": 5,
+      "seed": 200076
+    },
+    {
+      "effects": {
+        "oracle": 0.011095860701182791
+      },
+      "reference_support": 5,
+      "seed": 200077
+    },
+    {
+      "effects": {
+        "oracle": 0.06086570276661496
+      },
+      "reference_support": 5,
+      "seed": 200078
+    },
+    {
+      "effects": {
+        "oracle": 0.021915233881714846
+      },
+      "reference_support": 6,
+      "seed": 200079
+    },
+    {
+      "effects": {
+        "oracle": 0.03306107312808865
+      },
+      "reference_support": 6,
+      "seed": 200080
+    },
+    {
+      "effects": {
+        "oracle": -0.042001636404460085
+      },
+      "reference_support": 6,
+      "seed": 200081
+    },
+    {
+      "effects": {
+        "oracle": 0.03916324396896664
+      },
+      "reference_support": 6,
+      "seed": 200082
+    },
+    {
+      "effects": {
+        "oracle": 0.04689122854265276
+      },
+      "reference_support": 6,
+      "seed": 200083
+    },
+    {
+      "effects": {
+        "oracle": 0.07899196871208314
+      },
+      "reference_support": 6,
+      "seed": 200084
+    },
+    {
+      "effects": {
+        "oracle": 0.11234070964792642
+      },
+      "reference_support": 6,
+      "seed": 200085
+    },
+    {
+      "effects": {
+        "oracle": 0.0690422831849351
+      },
+      "reference_support": 6,
+      "seed": 200086
+    },
+    {
+      "effects": {
+        "oracle": 0.03369584307051454
+      },
+      "reference_support": 5,
+      "seed": 200087
+    },
+    {
+      "effects": {
+        "oracle": 0.025282819112492305
+      },
+      "reference_support": 5,
+      "seed": 200088
+    },
+    {
+      "effects": {
+        "oracle": 0.024233317937436216
+      },
+      "reference_support": 6,
+      "seed": 200089
+    },
+    {
+      "effects": {
+        "oracle": 0.011318139012848949
+      },
+      "reference_support": 6,
+      "seed": 200090
+    },
+    {
+      "effects": {
+        "oracle": 0.09861760799109809
+      },
+      "reference_support": 6,
+      "seed": 200091
+    },
+    {
+      "effects": {
+        "oracle": -0.008558509607189846
+      },
+      "reference_support": 6,
+      "seed": 200092
+    },
+    {
+      "effects": {
+        "oracle": -0.030385177062979718
+      },
+      "reference_support": 6,
+      "seed": 200093
+    },
+    {
+      "effects": {
+        "oracle": -0.0029991372772074643
+      },
+      "reference_support": 5,
+      "seed": 200094
+    },
+    {
+      "effects": {
+        "oracle": 0.03032224752908791
+      },
+      "reference_support": 5,
+      "seed": 200095
+    },
+    {
+      "effects": {
+        "oracle": 0.07169594757853193
+      },
+      "reference_support": 6,
+      "seed": 200096
+    },
+    {
+      "effects": {
+        "oracle": 0.021718215519514583
+      },
+      "reference_support": 5,
+      "seed": 200097
+    },
+    {
+      "effects": {
+        "oracle": 0.017749272978244968
+      },
+      "reference_support": 5,
+      "seed": 200098
+    },
+    {
+      "effects": {
+        "oracle": -0.047451740422415345
+      },
+      "reference_support": 6,
+      "seed": 200099
+    },
+    {
+      "effects": {
+        "oracle": 0.03163320888168658
+      },
+      "reference_support": 6,
+      "seed": 200100
+    },
+    {
+      "effects": {
+        "oracle": 0.03986127714130583
+      },
+      "reference_support": 6,
+      "seed": 200101
+    },
+    {
+      "effects": {
+        "oracle": 0.005213745304497919
+      },
+      "reference_support": 6,
+      "seed": 200102
+    },
+    {
+      "effects": {
+        "oracle": -0.008733169602430257
+      },
+      "reference_support": 5,
+      "seed": 200103
+    },
+    {
+      "effects": {
+        "oracle": 0.0028257567544513473
+      },
+      "reference_support": 6,
+      "seed": 200104
+    },
+    {
+      "effects": {
+        "oracle": 0.05289949401179045
+      },
+      "reference_support": 5,
+      "seed": 200105
+    },
+    {
+      "effects": {
+        "oracle": -0.029850583392000585
+      },
+      "reference_support": 5,
+      "seed": 200106
+    },
+    {
+      "effects": {
+        "oracle": -0.05469172278851997
+      },
+      "reference_support": 6,
+      "seed": 200107
+    },
+    {
+      "effects": {
+        "oracle": 0.016700638746805996
+      },
+      "reference_support": 6,
+      "seed": 200108
+    },
+    {
+      "effects": {
+        "oracle": -0.0046123777912612796
+      },
+      "reference_support": 6,
+      "seed": 200109
+    },
+    {
+      "effects": {
+        "oracle": 0.054597808972188466
+      },
+      "reference_support": 5,
+      "seed": 200110
+    },
+    {
+      "effects": {
+        "oracle": 0.016195230199254673
+      },
+      "reference_support": 6,
+      "seed": 200111
+    },
+    {
+      "effects": {
+        "oracle": 0.0012066621188763782
+      },
+      "reference_support": 6,
+      "seed": 200112
+    },
+    {
+      "effects": {
+        "oracle": 0.025772677172695047
+      },
+      "reference_support": 5,
+      "seed": 200113
+    },
+    {
+      "effects": {
+        "oracle": 0.029733927702623786
+      },
+      "reference_support": 6,
+      "seed": 200114
+    },
+    {
+      "effects": {
+        "oracle": -0.0051562479549370765
+      },
+      "reference_support": 5,
+      "seed": 200115
+    },
+    {
+      "effects": {
+        "oracle": -0.026839845326780465
+      },
+      "reference_support": 6,
+      "seed": 200116
+    },
+    {
+      "effects": {
+        "oracle": 0.08307410764529588
+      },
+      "reference_support": 5,
+      "seed": 200117
+    },
+    {
+      "effects": {
+        "oracle": 0.010401259587582645
+      },
+      "reference_support": 5,
+      "seed": 200118
+    },
+    {
+      "effects": {
+        "oracle": 0.040305102573273466
+      },
+      "reference_support": 6,
+      "seed": 200119
+    },
+    {
+      "effects": {
+        "oracle": 0.03785850631944776
+      },
+      "reference_support": 5,
+      "seed": 200120
+    },
+    {
+      "effects": {
+        "oracle": 0.029907844660114202
+      },
+      "reference_support": 6,
+      "seed": 200121
+    },
+    {
+      "effects": {
+        "oracle": 0.026899045017036882
+      },
+      "reference_support": 5,
+      "seed": 200122
+    },
+    {
+      "effects": {
+        "oracle": 0.039897856217246896
+      },
+      "reference_support": 6,
+      "seed": 200123
+    },
+    {
+      "effects": {
+        "oracle": 0.05468973139773681
+      },
+      "reference_support": 6,
+      "seed": 200124
+    },
+    {
+      "effects": {
+        "oracle": 0.012223713234835842
+      },
+      "reference_support": 6,
+      "seed": 200125
+    },
+    {
+      "effects": {
+        "oracle": 0.05601200252414579
+      },
+      "reference_support": 6,
+      "seed": 200126
+    },
+    {
+      "effects": {
+        "oracle": -0.018616880999728025
+      },
+      "reference_support": 6,
+      "seed": 200127
+    },
+    {
+      "effects": {
+        "oracle": 0.034081814169083735
+      },
+      "reference_support": 5,
+      "seed": 200128
+    },
+    {
+      "effects": {
+        "oracle": 0.1357391194278042
+      },
+      "reference_support": 6,
+      "seed": 200129
+    },
+    {
+      "effects": {
+        "oracle": 0.0008151770393229341
+      },
+      "reference_support": 5,
+      "seed": 200130
+    },
+    {
+      "effects": {
+        "oracle": 0.00020437322410860048
+      },
+      "reference_support": 6,
+      "seed": 200131
+    },
+    {
+      "effects": {
+        "oracle": -0.052110401792403005
+      },
+      "reference_support": 6,
+      "seed": 200132
+    },
+    {
+      "effects": {
+        "oracle": 0.02131946779948507
+      },
+      "reference_support": 5,
+      "seed": 200133
+    },
+    {
+      "effects": {
+        "oracle": 0.01633271678553555
+      },
+      "reference_support": 6,
+      "seed": 200134
+    },
+    {
+      "effects": {
+        "oracle": 0.024315444236615358
+      },
+      "reference_support": 5,
+      "seed": 200135
+    },
+    {
+      "effects": {
+        "oracle": 0.02892965961160321
+      },
+      "reference_support": 5,
+      "seed": 200136
+    },
+    {
+      "effects": {
+        "oracle": -0.023194556969593272
+      },
+      "reference_support": 5,
+      "seed": 200137
+    },
+    {
+      "effects": {
+        "oracle": -0.04206012506328777
+      },
+      "reference_support": 5,
+      "seed": 200138
+    },
+    {
+      "effects": {
+        "oracle": 0.006471447862075541
+      },
+      "reference_support": 5,
+      "seed": 200139
+    },
+    {
+      "effects": {
+        "oracle": 0.027215020338144047
+      },
+      "reference_support": 6,
+      "seed": 200140
+    },
+    {
+      "effects": {
+        "oracle": 0.00028926524145350685
+      },
+      "reference_support": 6,
+      "seed": 200141
+    },
+    {
+      "effects": {
+        "oracle": 0.01818507997042651
+      },
+      "reference_support": 5,
+      "seed": 200142
+    },
+    {
+      "effects": {
+        "oracle": -0.004754721716324295
+      },
+      "reference_support": 5,
+      "seed": 200143
+    },
+    {
+      "effects": {
+        "oracle": -0.00018426493725343107
+      },
+      "reference_support": 6,
+      "seed": 200144
+    },
+    {
+      "effects": {
+        "oracle": -0.013697400224447709
+      },
+      "reference_support": 5,
+      "seed": 200145
+    },
+    {
+      "effects": {
+        "oracle": -0.04296625624261713
+      },
+      "reference_support": 5,
+      "seed": 200146
+    },
+    {
+      "effects": {
+        "oracle": 0.021153253776450276
+      },
+      "reference_support": 6,
+      "seed": 200147
+    },
+    {
+      "effects": {
+        "oracle": 0.018289218819603437
+      },
+      "reference_support": 5,
+      "seed": 200148
+    },
+    {
+      "effects": {
+        "oracle": -0.06745816527468074
+      },
+      "reference_support": 6,
+      "seed": 200149
+    },
+    {
+      "effects": {
+        "oracle": -0.02560224017009516
+      },
+      "reference_support": 5,
+      "seed": 200150
+    },
+    {
+      "effects": {
+        "oracle": -0.005268540033852631
+      },
+      "reference_support": 5,
+      "seed": 200151
+    },
+    {
+      "effects": {
+        "oracle": 0.08029209851421326
+      },
+      "reference_support": 6,
+      "seed": 200152
+    },
+    {
+      "effects": {
+        "oracle": 0.006484584777969371
+      },
+      "reference_support": 5,
+      "seed": 200153
+    },
+    {
+      "effects": {
+        "oracle": 0.07016805239847446
+      },
+      "reference_support": 5,
+      "seed": 200154
+    },
+    {
+      "effects": {
+        "oracle": -0.04216181437330785
+      },
+      "reference_support": 5,
+      "seed": 200155
+    },
+    {
+      "effects": {
+        "oracle": -0.08960122662781594
+      },
+      "reference_support": 6,
+      "seed": 200156
+    },
+    {
+      "effects": {
+        "oracle": -0.04021725804332532
+      },
+      "reference_support": 6,
+      "seed": 200157
+    },
+    {
+      "effects": {
+        "oracle": 0.04626745931512721
+      },
+      "reference_support": 5,
+      "seed": 200158
+    },
+    {
+      "effects": {
+        "oracle": 0.02179422550531729
+      },
+      "reference_support": 6,
+      "seed": 200159
+    },
+    {
+      "effects": {
+        "oracle": 0.082701468059519
+      },
+      "reference_support": 6,
+      "seed": 200160
+    },
+    {
+      "effects": {
+        "oracle": 0.0454526040614639
+      },
+      "reference_support": 6,
+      "seed": 200161
+    },
+    {
+      "effects": {
+        "oracle": 9.213154067522211e-05
+      },
+      "reference_support": 5,
+      "seed": 200162
+    },
+    {
+      "effects": {
+        "oracle": 0.0303091665569441
+      },
+      "reference_support": 5,
+      "seed": 200163
+    },
+    {
+      "effects": {
+        "oracle": -0.06670577185415194
+      },
+      "reference_support": 5,
+      "seed": 200164
+    },
+    {
+      "effects": {
+        "oracle": 0.036833600301232616
+      },
+      "reference_support": 5,
+      "seed": 200165
+    },
+    {
+      "effects": {
+        "oracle": 0.019519654417691767
+      },
+      "reference_support": 5,
+      "seed": 200166
+    },
+    {
+      "effects": {
+        "oracle": 0.01313372982037564
+      },
+      "reference_support": 6,
+      "seed": 200167
+    },
+    {
+      "effects": {
+        "oracle": 0.04061915129820848
+      },
+      "reference_support": 5,
+      "seed": 200168
+    },
+    {
+      "effects": {
+        "oracle": 0.01813374687912367
+      },
+      "reference_support": 6,
+      "seed": 200169
+    },
+    {
+      "effects": {
+        "oracle": 0.00036144226539081004
+      },
+      "reference_support": 5,
+      "seed": 200170
+    },
+    {
+      "effects": {
+        "oracle": 0.10840104348294255
+      },
+      "reference_support": 6,
+      "seed": 200171
+    },
+    {
+      "effects": {
+        "oracle": 0.017528457230936767
+      },
+      "reference_support": 5,
+      "seed": 200172
+    },
+    {
+      "effects": {
+        "oracle": 0.11634072065920414
+      },
+      "reference_support": 5,
+      "seed": 200173
+    },
+    {
+      "effects": {
+        "oracle": 0.010405557182449066
+      },
+      "reference_support": 5,
+      "seed": 200174
+    },
+    {
+      "effects": {
+        "oracle": 0.04929547466023532
+      },
+      "reference_support": 6,
+      "seed": 200175
+    },
+    {
+      "effects": {
+        "oracle": -0.009651526864003335
+      },
+      "reference_support": 6,
+      "seed": 200176
+    },
+    {
+      "effects": {
+        "oracle": -0.006845847807333882
+      },
+      "reference_support": 6,
+      "seed": 200177
+    },
+    {
+      "effects": {
+        "oracle": -0.0030405880265897967
+      },
+      "reference_support": 6,
+      "seed": 200178
+    },
+    {
+      "effects": {
+        "oracle": 0.029367392873595133
+      },
+      "reference_support": 6,
+      "seed": 200179
+    },
+    {
+      "effects": {
+        "oracle": 0.039397762042237716
+      },
+      "reference_support": 6,
+      "seed": 200180
+    },
+    {
+      "effects": {
+        "oracle": 0.022468323914715205
+      },
+      "reference_support": 5,
+      "seed": 200181
+    },
+    {
+      "effects": {
+        "oracle": 0.014016903499911249
+      },
+      "reference_support": 6,
+      "seed": 200182
+    },
+    {
+      "effects": {
+        "oracle": 0.0043488643513932
+      },
+      "reference_support": 5,
+      "seed": 200183
+    },
+    {
+      "effects": {
+        "oracle": 0.008513527023601919
+      },
+      "reference_support": 6,
+      "seed": 200184
+    },
+    {
+      "effects": {
+        "oracle": 0.050725244794461555
+      },
+      "reference_support": 6,
+      "seed": 200185
+    },
+    {
+      "effects": {
+        "oracle": 0.04973281685835185
+      },
+      "reference_support": 6,
+      "seed": 200186
+    },
+    {
+      "effects": {
+        "oracle": -0.025550240170999994
+      },
+      "reference_support": 6,
+      "seed": 200187
+    },
+    {
+      "effects": {
+        "oracle": 0.027437750402196925
+      },
+      "reference_support": 6,
+      "seed": 200188
+    },
+    {
+      "effects": {
+        "oracle": 0.03159474429351672
+      },
+      "reference_support": 5,
+      "seed": 200189
+    },
+    {
+      "effects": {
+        "oracle": 0.04596760030560032
+      },
+      "reference_support": 5,
+      "seed": 200190
+    },
+    {
+      "effects": {
+        "oracle": 0.01425062412793876
+      },
+      "reference_support": 5,
+      "seed": 200191
+    },
+    {
+      "effects": {
+        "oracle": 0.02055348402698426
+      },
+      "reference_support": 5,
+      "seed": 200192
+    },
+    {
+      "effects": {
+        "oracle": -0.07516466112159986
+      },
+      "reference_support": 6,
+      "seed": 200193
+    },
+    {
+      "effects": {
+        "oracle": 0.02684243218988941
+      },
+      "reference_support": 6,
+      "seed": 200194
+    },
+    {
+      "effects": {
+        "oracle": -0.015650702392441207
+      },
+      "reference_support": 6,
+      "seed": 200195
+    },
+    {
+      "effects": {
+        "oracle": -0.026992944477015723
+      },
+      "reference_support": 5,
+      "seed": 200196
+    },
+    {
+      "effects": {
+        "oracle": 0.05056168432720248
+      },
+      "reference_support": 6,
+      "seed": 200197
+    },
+    {
+      "effects": {
+        "oracle": 0.012136224790286254
+      },
+      "reference_support": 6,
+      "seed": 200198
+    },
+    {
+      "effects": {
+        "oracle": 0.030258448905296054
+      },
+      "reference_support": 6,
+      "seed": 200199
+    },
+    {
+      "effects": {
+        "oracle": 0.04960504435278801
+      },
+      "reference_support": 5,
+      "seed": 200200
+    },
+    {
+      "effects": {
+        "oracle": 0.042265331769522796
+      },
+      "reference_support": 6,
+      "seed": 200201
+    },
+    {
+      "effects": {
+        "oracle": -0.04438668881214236
+      },
+      "reference_support": 5,
+      "seed": 200202
+    },
+    {
+      "effects": {
+        "oracle": -0.029641800002153718
+      },
+      "reference_support": 6,
+      "seed": 200203
+    },
+    {
+      "effects": {
+        "oracle": 0.03720545467731845
+      },
+      "reference_support": 5,
+      "seed": 200204
+    },
+    {
+      "effects": {
+        "oracle": 0.031424348834040994
+      },
+      "reference_support": 6,
+      "seed": 200205
+    },
+    {
+      "effects": {
+        "oracle": -0.0265232835572074
+      },
+      "reference_support": 5,
+      "seed": 200206
+    },
+    {
+      "effects": {
+        "oracle": 0.013002721779987791
+      },
+      "reference_support": 6,
+      "seed": 200207
+    },
+    {
+      "effects": {
+        "oracle": 0.005380946621604266
+      },
+      "reference_support": 5,
+      "seed": 200208
+    },
+    {
+      "effects": {
+        "oracle": 0.06338370859288006
+      },
+      "reference_support": 5,
+      "seed": 200209
+    },
+    {
+      "effects": {
+        "oracle": -0.022949762324956546
+      },
+      "reference_support": 5,
+      "seed": 200210
+    },
+    {
+      "effects": {
+        "oracle": -0.054557190514020026
+      },
+      "reference_support": 6,
+      "seed": 200211
+    },
+    {
+      "effects": {
+        "oracle": 0.029202693664835522
+      },
+      "reference_support": 6,
+      "seed": 200212
+    },
+    {
+      "effects": {
+        "oracle": 0.009911635655855566
+      },
+      "reference_support": 5,
+      "seed": 200213
+    },
+    {
+      "effects": {
+        "oracle": -0.02856902797224742
+      },
+      "reference_support": 6,
+      "seed": 200214
+    },
+    {
+      "effects": {
+        "oracle": -0.01554373718700025
+      },
+      "reference_support": 6,
+      "seed": 200215
+    },
+    {
+      "effects": {
+        "oracle": 0.017727230821617423
+      },
+      "reference_support": 5,
+      "seed": 200216
+    },
+    {
+      "effects": {
+        "oracle": 0.04603370421870734
+      },
+      "reference_support": 5,
+      "seed": 200217
+    },
+    {
+      "effects": {
+        "oracle": 0.06578809183851742
+      },
+      "reference_support": 6,
+      "seed": 200218
+    },
+    {
+      "effects": {
+        "oracle": 0.04666882439950848
+      },
+      "reference_support": 5,
+      "seed": 200219
+    },
+    {
+      "effects": {
+        "oracle": 0.05606857303031898
+      },
+      "reference_support": 5,
+      "seed": 200220
+    },
+    {
+      "effects": {
+        "oracle": 0.009943269478939143
+      },
+      "reference_support": 5,
+      "seed": 200221
+    },
+    {
+      "effects": {
+        "oracle": 0.043210511874502366
+      },
+      "reference_support": 6,
+      "seed": 200222
+    },
+    {
+      "effects": {
+        "oracle": 0.04911951496124645
+      },
+      "reference_support": 6,
+      "seed": 200223
+    },
+    {
+      "effects": {
+        "oracle": 0.014792107053236303
+      },
+      "reference_support": 5,
+      "seed": 200224
+    },
+    {
+      "effects": {
+        "oracle": 0.013172000333344869
+      },
+      "reference_support": 5,
+      "seed": 200225
+    },
+    {
+      "effects": {
+        "oracle": 0.035569909932624044
+      },
+      "reference_support": 5,
+      "seed": 200226
+    },
+    {
+      "effects": {
+        "oracle": 0.03313242673196665
+      },
+      "reference_support": 6,
+      "seed": 200227
+    },
+    {
+      "effects": {
+        "oracle": 0.06142272512677216
+      },
+      "reference_support": 6,
+      "seed": 200228
+    },
+    {
+      "effects": {
+        "oracle": 0.0029662464159062596
+      },
+      "reference_support": 5,
+      "seed": 200229
+    },
+    {
+      "effects": {
+        "oracle": 0.015376353544165167
+      },
+      "reference_support": 5,
+      "seed": 200230
+    },
+    {
+      "effects": {
+        "oracle": 0.006273988077942216
+      },
+      "reference_support": 6,
+      "seed": 200231
+    },
+    {
+      "effects": {
+        "oracle": 0.008841842323961735
+      },
+      "reference_support": 6,
+      "seed": 200232
+    },
+    {
+      "effects": {
+        "oracle": 0.02295833910778916
+      },
+      "reference_support": 5,
+      "seed": 200233
+    },
+    {
+      "effects": {
+        "oracle": 0.009842088295976492
+      },
+      "reference_support": 6,
+      "seed": 200234
+    },
+    {
+      "effects": {
+        "oracle": 0.0883595478683814
+      },
+      "reference_support": 6,
+      "seed": 200235
+    },
+    {
+      "effects": {
+        "oracle": 0.01585832269581211
+      },
+      "reference_support": 6,
+      "seed": 200236
+    },
+    {
+      "effects": {
+        "oracle": -0.02326374363253758
+      },
+      "reference_support": 5,
+      "seed": 200237
+    },
+    {
+      "effects": {
+        "oracle": -0.05725813169774041
+      },
+      "reference_support": 6,
+      "seed": 200238
+    },
+    {
+      "effects": {
+        "oracle": -0.04441118601126959
+      },
+      "reference_support": 6,
+      "seed": 200239
+    },
+    {
+      "effects": {
+        "oracle": 0.027713803664549785
+      },
+      "reference_support": 6,
+      "seed": 200240
+    },
+    {
+      "effects": {
+        "oracle": 0.00994739284183449
+      },
+      "reference_support": 5,
+      "seed": 200241
+    },
+    {
+      "effects": {
+        "oracle": 0.013913136024864436
+      },
+      "reference_support": 6,
+      "seed": 200242
+    },
+    {
+      "effects": {
+        "oracle": -0.018282591721342056
+      },
+      "reference_support": 5,
+      "seed": 200243
+    },
+    {
+      "effects": {
+        "oracle": 0.03994400816618626
+      },
+      "reference_support": 5,
+      "seed": 200244
+    },
+    {
+      "effects": {
+        "oracle": 0.03968509532082659
+      },
+      "reference_support": 6,
+      "seed": 200245
+    },
+    {
+      "effects": {
+        "oracle": 0.022828550935700076
+      },
+      "reference_support": 6,
+      "seed": 200246
+    },
+    {
+      "effects": {
+        "oracle": -0.024283917136712352
+      },
+      "reference_support": 6,
+      "seed": 200247
+    },
+    {
+      "effects": {
+        "oracle": 0.04125976341741561
+      },
+      "reference_support": 5,
+      "seed": 200248
+    },
+    {
+      "effects": {
+        "oracle": 0.058679719801716934
+      },
+      "reference_support": 6,
+      "seed": 200249
+    },
+    {
+      "effects": {
+        "oracle": 0.07458815957083909
+      },
+      "reference_support": 6,
+      "seed": 200250
+    },
+    {
+      "effects": {
+        "oracle": -0.03563947289133962
+      },
+      "reference_support": 5,
+      "seed": 200251
+    },
+    {
+      "effects": {
+        "oracle": 0.07207004033364206
+      },
+      "reference_support": 5,
+      "seed": 200252
+    },
+    {
+      "effects": {
+        "oracle": 0.04782706600588821
+      },
+      "reference_support": 6,
+      "seed": 200253
+    },
+    {
+      "effects": {
+        "oracle": -0.012907293083874838
+      },
+      "reference_support": 6,
+      "seed": 200254
+    },
+    {
+      "effects": {
+        "oracle": 0.0027789608990550496
+      },
+      "reference_support": 5,
+      "seed": 200255
+    },
+    {
+      "effects": {
+        "oracle": -0.032216309318950365
+      },
+      "reference_support": 6,
+      "seed": 200256
+    },
+    {
+      "effects": {
+        "oracle": -0.03586595633417328
+      },
+      "reference_support": 5,
+      "seed": 200257
+    },
+    {
+      "effects": {
+        "oracle": 0.023695444435758883
+      },
+      "reference_support": 6,
+      "seed": 200258
+    },
+    {
+      "effects": {
+        "oracle": -0.021106010324085545
+      },
+      "reference_support": 5,
+      "seed": 200259
+    },
+    {
+      "effects": {
+        "oracle": -0.029139412301961543
+      },
+      "reference_support": 6,
+      "seed": 200260
+    },
+    {
+      "effects": {
+        "oracle": 0.03242384108466667
+      },
+      "reference_support": 6,
+      "seed": 200261
+    },
+    {
+      "effects": {
+        "oracle": 0.011410726856313114
+      },
+      "reference_support": 6,
+      "seed": 200262
+    },
+    {
+      "effects": {
+        "oracle": 0.02977434773302945
+      },
+      "reference_support": 6,
+      "seed": 200263
+    },
+    {
+      "effects": {
+        "oracle": -0.0008485739261608338
+      },
+      "reference_support": 5,
+      "seed": 200264
+    },
+    {
+      "effects": {
+        "oracle": -0.002676156823983755
+      },
+      "reference_support": 6,
+      "seed": 200265
+    },
+    {
+      "effects": {
+        "oracle": 0.044739593335211936
+      },
+      "reference_support": 6,
+      "seed": 200266
+    },
+    {
+      "effects": {
+        "oracle": 0.03761058842732906
+      },
+      "reference_support": 6,
+      "seed": 200267
+    },
+    {
+      "effects": {
+        "oracle": 0.07933233426283237
+      },
+      "reference_support": 5,
+      "seed": 200268
+    },
+    {
+      "effects": {
+        "oracle": 0.046095120682347446
+      },
+      "reference_support": 5,
+      "seed": 200269
+    },
+    {
+      "effects": {
+        "oracle": 0.006020819841488501
+      },
+      "reference_support": 5,
+      "seed": 200270
+    },
+    {
+      "effects": {
+        "oracle": 0.010689755434699189
+      },
+      "reference_support": 5,
+      "seed": 200271
+    },
+    {
+      "effects": {
+        "oracle": 0.0485436838678186
+      },
+      "reference_support": 6,
+      "seed": 200272
+    },
+    {
+      "effects": {
+        "oracle": 0.030688005252426764
+      },
+      "reference_support": 5,
+      "seed": 200273
+    },
+    {
+      "effects": {
+        "oracle": -0.03281752354070555
+      },
+      "reference_support": 5,
+      "seed": 200274
+    },
+    {
+      "effects": {
+        "oracle": 0.15289652291231526
+      },
+      "reference_support": 6,
+      "seed": 200275
+    },
+    {
+      "effects": {
+        "oracle": -0.01163403796772744
+      },
+      "reference_support": 5,
+      "seed": 200276
+    },
+    {
+      "effects": {
+        "oracle": -0.01633790081794173
+      },
+      "reference_support": 6,
+      "seed": 200277
+    },
+    {
+      "effects": {
+        "oracle": -0.023245111887205794
+      },
+      "reference_support": 5,
+      "seed": 200278
+    },
+    {
+      "effects": {
+        "oracle": 0.008485830385452808
+      },
+      "reference_support": 5,
+      "seed": 200279
+    },
+    {
+      "effects": {
+        "oracle": -0.01123476853446892
+      },
+      "reference_support": 6,
+      "seed": 200280
+    },
+    {
+      "effects": {
+        "oracle": 0.02988702165301721
+      },
+      "reference_support": 6,
+      "seed": 200281
+    },
+    {
+      "effects": {
+        "oracle": 0.055294272113906195
+      },
+      "reference_support": 5,
+      "seed": 200282
+    },
+    {
+      "effects": {
+        "oracle": -0.010921961395606916
+      },
+      "reference_support": 6,
+      "seed": 200283
+    },
+    {
+      "effects": {
+        "oracle": -0.05011564965646348
+      },
+      "reference_support": 5,
+      "seed": 200284
+    },
+    {
+      "effects": {
+        "oracle": 0.020978505368084654
+      },
+      "reference_support": 6,
+      "seed": 200285
+    },
+    {
+      "effects": {
+        "oracle": 0.020757019442158853
+      },
+      "reference_support": 6,
+      "seed": 200286
+    },
+    {
+      "effects": {
+        "oracle": 0.09194748168916644
+      },
+      "reference_support": 5,
+      "seed": 200287
+    },
+    {
+      "effects": {
+        "oracle": 0.026952822542626154
+      },
+      "reference_support": 5,
+      "seed": 200288
+    },
+    {
+      "effects": {
+        "oracle": 0.023656853784678356
+      },
+      "reference_support": 5,
+      "seed": 200289
+    },
+    {
+      "effects": {
+        "oracle": 0.010182940565994836
+      },
+      "reference_support": 5,
+      "seed": 200290
+    },
+    {
+      "effects": {
+        "oracle": 0.01665103024110376
+      },
+      "reference_support": 5,
+      "seed": 200291
+    },
+    {
+      "effects": {
+        "oracle": -0.04093243098324262
+      },
+      "reference_support": 5,
+      "seed": 200292
+    },
+    {
+      "effects": {
+        "oracle": 0.017657361785215653
+      },
+      "reference_support": 5,
+      "seed": 200293
+    },
+    {
+      "effects": {
+        "oracle": 0.09967792485999971
+      },
+      "reference_support": 6,
+      "seed": 200294
+    },
+    {
+      "effects": {
+        "oracle": 0.04498255955251956
+      },
+      "reference_support": 5,
+      "seed": 200295
+    },
+    {
+      "effects": {
+        "oracle": 0.09506626366783816
+      },
+      "reference_support": 6,
+      "seed": 200296
+    },
+    {
+      "effects": {
+        "oracle": 0.0275626088897713
+      },
+      "reference_support": 6,
+      "seed": 200297
+    },
+    {
+      "effects": {
+        "oracle": 0.00798890553734366
+      },
+      "reference_support": 6,
+      "seed": 200298
+    },
+    {
+      "effects": {
+        "oracle": -0.0018570504568242718
+      },
+      "reference_support": 6,
+      "seed": 200299
+    },
+    {
+      "effects": {
+        "oracle": 0.03946057167055933
+      },
+      "reference_support": 5,
+      "seed": 200300
+    },
+    {
+      "effects": {
+        "oracle": 0.03930123673215691
+      },
+      "reference_support": 5,
+      "seed": 200301
+    },
+    {
+      "effects": {
+        "oracle": 0.0075333081735323715
+      },
+      "reference_support": 5,
+      "seed": 200302
+    },
+    {
+      "effects": {
+        "oracle": -0.025619526934162196
+      },
+      "reference_support": 5,
+      "seed": 200303
+    },
+    {
+      "effects": {
+        "oracle": -0.06271634810922788
+      },
+      "reference_support": 5,
+      "seed": 200304
+    },
+    {
+      "effects": {
+        "oracle": 0.04873972667894749
+      },
+      "reference_support": 6,
+      "seed": 200305
+    },
+    {
+      "effects": {
+        "oracle": 0.08044405238516589
+      },
+      "reference_support": 5,
+      "seed": 200306
+    },
+    {
+      "effects": {
+        "oracle": 0.046046823869751174
+      },
+      "reference_support": 6,
+      "seed": 200307
+    },
+    {
+      "effects": {
+        "oracle": -0.007942011274682081
+      },
+      "reference_support": 6,
+      "seed": 200308
+    },
+    {
+      "effects": {
+        "oracle": 0.01187549369329638
+      },
+      "reference_support": 5,
+      "seed": 200309
+    },
+    {
+      "effects": {
+        "oracle": 0.13279334539570836
+      },
+      "reference_support": 5,
+      "seed": 200310
+    },
+    {
+      "effects": {
+        "oracle": 0.04927487780482509
+      },
+      "reference_support": 6,
+      "seed": 200311
+    },
+    {
+      "effects": {
+        "oracle": 0.028713522372974865
+      },
+      "reference_support": 6,
+      "seed": 200312
+    },
+    {
+      "effects": {
+        "oracle": 0.023588421811393645
+      },
+      "reference_support": 6,
+      "seed": 200313
+    },
+    {
+      "effects": {
+        "oracle": 0.05383084615738132
+      },
+      "reference_support": 6,
+      "seed": 200314
+    },
+    {
+      "effects": {
+        "oracle": -0.005704675432149753
+      },
+      "reference_support": 5,
+      "seed": 200315
+    },
+    {
+      "effects": {
+        "oracle": 0.05275266717862859
+      },
+      "reference_support": 6,
+      "seed": 200316
+    },
+    {
+      "effects": {
+        "oracle": 0.00015868237873517543
+      },
+      "reference_support": 6,
+      "seed": 200317
+    },
+    {
+      "effects": {
+        "oracle": 0.036655775099431576
+      },
+      "reference_support": 5,
+      "seed": 200318
+    },
+    {
+      "effects": {
+        "oracle": 0.08464459910925837
+      },
+      "reference_support": 6,
+      "seed": 200319
+    },
+    {
+      "effects": {
+        "oracle": 0.008037118529147624
+      },
+      "reference_support": 5,
+      "seed": 200320
+    },
+    {
+      "effects": {
+        "oracle": 0.014883181589744832
+      },
+      "reference_support": 6,
+      "seed": 200321
+    },
+    {
+      "effects": {
+        "oracle": 0.02091036390848594
+      },
+      "reference_support": 5,
+      "seed": 200322
+    },
+    {
+      "effects": {
+        "oracle": 0.08139213523353689
+      },
+      "reference_support": 6,
+      "seed": 200323
+    },
+    {
+      "effects": {
+        "oracle": 0.04827780523261471
+      },
+      "reference_support": 6,
+      "seed": 200324
+    },
+    {
+      "effects": {
+        "oracle": 0.05389468785835211
+      },
+      "reference_support": 6,
+      "seed": 200325
+    },
+    {
+      "effects": {
+        "oracle": 0.02498511358689187
+      },
+      "reference_support": 6,
+      "seed": 200326
+    },
+    {
+      "effects": {
+        "oracle": 0.028479251601284783
+      },
+      "reference_support": 5,
+      "seed": 200327
+    },
+    {
+      "effects": {
+        "oracle": 0.03994758540077581
+      },
+      "reference_support": 6,
+      "seed": 200328
+    },
+    {
+      "effects": {
+        "oracle": 0.07184191954655167
+      },
+      "reference_support": 5,
+      "seed": 200329
+    },
+    {
+      "effects": {
+        "oracle": 0.009266656849449384
+      },
+      "reference_support": 6,
+      "seed": 200330
+    },
+    {
+      "effects": {
+        "oracle": 0.04054051200910774
+      },
+      "reference_support": 6,
+      "seed": 200331
+    },
+    {
+      "effects": {
+        "oracle": 0.03372042705602929
+      },
+      "reference_support": 5,
+      "seed": 200332
+    },
+    {
+      "effects": {
+        "oracle": -0.05968600418181963
+      },
+      "reference_support": 6,
+      "seed": 200333
+    },
+    {
+      "effects": {
+        "oracle": 0.009850006767958441
+      },
+      "reference_support": 6,
+      "seed": 200334
+    },
+    {
+      "effects": {
+        "oracle": 0.007808018598464195
+      },
+      "reference_support": 5,
+      "seed": 200335
+    },
+    {
+      "effects": {
+        "oracle": -0.03944444955686055
+      },
+      "reference_support": 5,
+      "seed": 200336
+    },
+    {
+      "effects": {
+        "oracle": 0.115385949443772
+      },
+      "reference_support": 5,
+      "seed": 200337
+    },
+    {
+      "effects": {
+        "oracle": 0.020569528250081626
+      },
+      "reference_support": 6,
+      "seed": 200338
+    },
+    {
+      "effects": {
+        "oracle": 0.06950502793561991
+      },
+      "reference_support": 5,
+      "seed": 200339
+    },
+    {
+      "effects": {
+        "oracle": 0.08836677823766542
+      },
+      "reference_support": 5,
+      "seed": 200340
+    },
+    {
+      "effects": {
+        "oracle": 0.06563814731885798
+      },
+      "reference_support": 5,
+      "seed": 200341
+    },
+    {
+      "effects": {
+        "oracle": 0.051346083671068965
+      },
+      "reference_support": 5,
+      "seed": 200342
+    },
+    {
+      "effects": {
+        "oracle": 0.017788659027334897
+      },
+      "reference_support": 6,
+      "seed": 200343
+    },
+    {
+      "effects": {
+        "oracle": -0.002177666474411366
+      },
+      "reference_support": 6,
+      "seed": 200344
+    },
+    {
+      "effects": {
+        "oracle": -0.018413552635896224
+      },
+      "reference_support": 6,
+      "seed": 200345
+    },
+    {
+      "effects": {
+        "oracle": 0.001268702901442209
+      },
+      "reference_support": 5,
+      "seed": 200346
+    },
+    {
+      "effects": {
+        "oracle": 0.01850219930213126
+      },
+      "reference_support": 5,
+      "seed": 200347
+    },
+    {
+      "effects": {
+        "oracle": -0.017909799748623723
+      },
+      "reference_support": 5,
+      "seed": 200348
+    },
+    {
+      "effects": {
+        "oracle": -0.03710131886203827
+      },
+      "reference_support": 6,
+      "seed": 200349
+    },
+    {
+      "effects": {
+        "oracle": -0.03614201169566866
+      },
+      "reference_support": 6,
+      "seed": 200350
+    },
+    {
+      "effects": {
+        "oracle": -0.008685871967455738
+      },
+      "reference_support": 5,
+      "seed": 200351
+    },
+    {
+      "effects": {
+        "oracle": -0.004719494543837965
+      },
+      "reference_support": 5,
+      "seed": 200352
+    },
+    {
+      "effects": {
+        "oracle": -0.0008764196566696247
+      },
+      "reference_support": 6,
+      "seed": 200353
+    },
+    {
+      "effects": {
+        "oracle": -0.020891750673943554
+      },
+      "reference_support": 6,
+      "seed": 200354
+    },
+    {
+      "effects": {
+        "oracle": -0.05324029000087199
+      },
+      "reference_support": 6,
+      "seed": 200355
+    },
+    {
+      "effects": {
+        "oracle": 0.004704212220794757
+      },
+      "reference_support": 5,
+      "seed": 200356
+    },
+    {
+      "effects": {
+        "oracle": 0.018255404766068295
+      },
+      "reference_support": 6,
+      "seed": 200357
+    },
+    {
+      "effects": {
+        "oracle": 0.01747646196117436
+      },
+      "reference_support": 5,
+      "seed": 200358
+    },
+    {
+      "effects": {
+        "oracle": 0.06591351284833724
+      },
+      "reference_support": 6,
+      "seed": 200359
+    },
+    {
+      "effects": {
+        "oracle": -0.002489961499294313
+      },
+      "reference_support": 6,
+      "seed": 200360
+    },
+    {
+      "effects": {
+        "oracle": -0.0014786231347283518
+      },
+      "reference_support": 6,
+      "seed": 200361
+    },
+    {
+      "effects": {
+        "oracle": 0.006770488486211146
+      },
+      "reference_support": 5,
+      "seed": 200362
+    },
+    {
+      "effects": {
+        "oracle": 0.056105334170413246
+      },
+      "reference_support": 6,
+      "seed": 200363
+    },
+    {
+      "effects": {
+        "oracle": 0.07717070185111469
+      },
+      "reference_support": 6,
+      "seed": 200364
+    },
+    {
+      "effects": {
+        "oracle": 0.05270141324720762
+      },
+      "reference_support": 5,
+      "seed": 200365
+    },
+    {
+      "effects": {
+        "oracle": 0.02506673455717201
+      },
+      "reference_support": 5,
+      "seed": 200366
+    },
+    {
+      "effects": {
+        "oracle": 0.18387325304135443
+      },
+      "reference_support": 6,
+      "seed": 200367
+    },
+    {
+      "effects": {
+        "oracle": 0.036705912883493674
+      },
+      "reference_support": 6,
+      "seed": 200368
+    },
+    {
+      "effects": {
+        "oracle": 0.05164839160714563
+      },
+      "reference_support": 5,
+      "seed": 200369
+    },
+    {
+      "effects": {
+        "oracle": 0.056133299751363275
+      },
+      "reference_support": 6,
+      "seed": 200370
+    },
+    {
+      "effects": {
+        "oracle": 0.01458362335004576
+      },
+      "reference_support": 5,
+      "seed": 200371
+    },
+    {
+      "effects": {
+        "oracle": -0.009732997561404388
+      },
+      "reference_support": 5,
+      "seed": 200372
+    },
+    {
+      "effects": {
+        "oracle": -0.028252796260570867
+      },
+      "reference_support": 5,
+      "seed": 200373
+    },
+    {
+      "effects": {
+        "oracle": 0.019899875765837793
+      },
+      "reference_support": 6,
+      "seed": 200374
+    },
+    {
+      "effects": {
+        "oracle": -0.02711085627705967
+      },
+      "reference_support": 6,
+      "seed": 200375
+    },
+    {
+      "effects": {
+        "oracle": 0.05000486222405709
+      },
+      "reference_support": 6,
+      "seed": 200376
+    },
+    {
+      "effects": {
+        "oracle": 0.0366518374873544
+      },
+      "reference_support": 6,
+      "seed": 200377
+    },
+    {
+      "effects": {
+        "oracle": 0.04445984603082831
+      },
+      "reference_support": 6,
+      "seed": 200378
+    },
+    {
+      "effects": {
+        "oracle": -0.002812062167781293
+      },
+      "reference_support": 5,
+      "seed": 200379
+    },
+    {
+      "effects": {
+        "oracle": -0.05986963751293467
+      },
+      "reference_support": 5,
+      "seed": 200380
+    },
+    {
+      "effects": {
+        "oracle": 0.060409143052838066
+      },
+      "reference_support": 6,
+      "seed": 200381
+    },
+    {
+      "effects": {
+        "oracle": 0.004535652276615065
+      },
+      "reference_support": 5,
+      "seed": 200382
+    },
+    {
+      "effects": {
+        "oracle": -0.009329612459509196
+      },
+      "reference_support": 5,
+      "seed": 200383
+    },
+    {
+      "effects": {
+        "oracle": -0.017230048312695978
+      },
+      "reference_support": 6,
+      "seed": 200384
+    },
+    {
+      "effects": {
+        "oracle": -0.06391316716241313
+      },
+      "reference_support": 5,
+      "seed": 200385
+    },
+    {
+      "effects": {
+        "oracle": 0.0337658789755913
+      },
+      "reference_support": 5,
+      "seed": 200386
+    },
+    {
+      "effects": {
+        "oracle": 0.03210183311227294
+      },
+      "reference_support": 5,
+      "seed": 200387
+    },
+    {
+      "effects": {
+        "oracle": 0.014934557853015396
+      },
+      "reference_support": 5,
+      "seed": 200388
+    },
+    {
+      "effects": {
+        "oracle": 0.054838795417838704
+      },
+      "reference_support": 5,
+      "seed": 200389
+    },
+    {
+      "effects": {
+        "oracle": -0.002634830689492107
+      },
+      "reference_support": 6,
+      "seed": 200390
+    },
+    {
+      "effects": {
+        "oracle": 0.024935299128934885
+      },
+      "reference_support": 6,
+      "seed": 200391
+    },
+    {
+      "effects": {
+        "oracle": 0.059299540809326035
+      },
+      "reference_support": 5,
+      "seed": 200392
+    },
+    {
+      "effects": {
+        "oracle": -0.033605565796352044
+      },
+      "reference_support": 5,
+      "seed": 200393
+    },
+    {
+      "effects": {
+        "oracle": -0.035131871721868935
+      },
+      "reference_support": 6,
+      "seed": 200394
+    },
+    {
+      "effects": {
+        "oracle": 0.044565510391795904
+      },
+      "reference_support": 6,
+      "seed": 200395
+    },
+    {
+      "effects": {
+        "oracle": -0.02971829732873199
+      },
+      "reference_support": 6,
+      "seed": 200396
+    },
+    {
+      "effects": {
+        "oracle": 0.030460265844799606
+      },
+      "reference_support": 5,
+      "seed": 200397
+    },
+    {
+      "effects": {
+        "oracle": 0.013995355687345112
+      },
+      "reference_support": 5,
+      "seed": 200398
+    },
+    {
+      "effects": {
+        "oracle": 0.043792060631992424
+      },
+      "reference_support": 6,
+      "seed": 200399
+    },
+    {
+      "effects": {
+        "oracle": 0.021793349251492677
+      },
+      "reference_support": 6,
+      "seed": 200400
+    },
+    {
+      "effects": {
+        "oracle": 0.010422415062337986
+      },
+      "reference_support": 6,
+      "seed": 200401
+    },
+    {
+      "effects": {
+        "oracle": -0.011132889564268611
+      },
+      "reference_support": 5,
+      "seed": 200402
+    },
+    {
+      "effects": {
+        "oracle": -0.044274549303613464
+      },
+      "reference_support": 6,
+      "seed": 200403
+    },
+    {
+      "effects": {
+        "oracle": 0.017081298212102636
+      },
+      "reference_support": 5,
+      "seed": 200404
+    },
+    {
+      "effects": {
+        "oracle": 0.06240152828710738
+      },
+      "reference_support": 5,
+      "seed": 200405
+    },
+    {
+      "effects": {
+        "oracle": 0.014646226596976786
+      },
+      "reference_support": 6,
+      "seed": 200406
+    },
+    {
+      "effects": {
+        "oracle": -0.0016001482946934042
+      },
+      "reference_support": 6,
+      "seed": 200407
+    },
+    {
+      "effects": {
+        "oracle": 0.08216791976946392
+      },
+      "reference_support": 5,
+      "seed": 200408
+    },
+    {
+      "effects": {
+        "oracle": 0.034466148076772896
+      },
+      "reference_support": 6,
+      "seed": 200409
+    },
+    {
+      "effects": {
+        "oracle": -0.01080188410612326
+      },
+      "reference_support": 5,
+      "seed": 200410
+    },
+    {
+      "effects": {
+        "oracle": 0.051616874561810244
+      },
+      "reference_support": 6,
+      "seed": 200411
+    },
+    {
+      "effects": {
+        "oracle": -0.019008283989741248
+      },
+      "reference_support": 6,
+      "seed": 200412
+    },
+    {
+      "effects": {
+        "oracle": 0.07354232667948868
+      },
+      "reference_support": 6,
+      "seed": 200413
+    },
+    {
+      "effects": {
+        "oracle": 0.0038165401705837487
+      },
+      "reference_support": 5,
+      "seed": 200414
+    },
+    {
+      "effects": {
+        "oracle": 0.00971259610191555
+      },
+      "reference_support": 6,
+      "seed": 200415
+    },
+    {
+      "effects": {
+        "oracle": 0.025575227941753376
+      },
+      "reference_support": 5,
+      "seed": 200416
+    },
+    {
+      "effects": {
+        "oracle": -0.03378102901987756
+      },
+      "reference_support": 6,
+      "seed": 200417
+    },
+    {
+      "effects": {
+        "oracle": 0.060777008837172075
+      },
+      "reference_support": 6,
+      "seed": 200418
+    },
+    {
+      "effects": {
+        "oracle": 0.005392230468016845
+      },
+      "reference_support": 6,
+      "seed": 200419
+    },
+    {
+      "effects": {
+        "oracle": 0.0068466694474059175
+      },
+      "reference_support": 6,
+      "seed": 200420
+    },
+    {
+      "effects": {
+        "oracle": 0.025896335443985008
+      },
+      "reference_support": 5,
+      "seed": 200421
+    },
+    {
+      "effects": {
+        "oracle": 0.04402476827165086
+      },
+      "reference_support": 6,
+      "seed": 200422
+    },
+    {
+      "effects": {
+        "oracle": -0.0064932378853221895
+      },
+      "reference_support": 6,
+      "seed": 200423
+    },
+    {
+      "effects": {
+        "oracle": -0.009304761181830934
+      },
+      "reference_support": 5,
+      "seed": 200424
+    },
+    {
+      "effects": {
+        "oracle": 0.01051466489933256
+      },
+      "reference_support": 5,
+      "seed": 200425
+    },
+    {
+      "effects": {
+        "oracle": -0.005789349913029929
+      },
+      "reference_support": 6,
+      "seed": 200426
+    },
+    {
+      "effects": {
+        "oracle": 0.08166009763546567
+      },
+      "reference_support": 6,
+      "seed": 200427
+    },
+    {
+      "effects": {
+        "oracle": 0.01876766095989696
+      },
+      "reference_support": 5,
+      "seed": 200428
+    },
+    {
+      "effects": {
+        "oracle": 0.04336224675012984
+      },
+      "reference_support": 6,
+      "seed": 200429
+    },
+    {
+      "effects": {
+        "oracle": -0.02246774376644356
+      },
+      "reference_support": 6,
+      "seed": 200430
+    },
+    {
+      "effects": {
+        "oracle": 0.08278426998745131
+      },
+      "reference_support": 6,
+      "seed": 200431
+    },
+    {
+      "effects": {
+        "oracle": -0.04563984239599339
+      },
+      "reference_support": 6,
+      "seed": 200432
+    },
+    {
+      "effects": {
+        "oracle": -0.005755675832005647
+      },
+      "reference_support": 6,
+      "seed": 200433
+    },
+    {
+      "effects": {
+        "oracle": -0.0049107028090790705
+      },
+      "reference_support": 6,
+      "seed": 200434
+    },
+    {
+      "effects": {
+        "oracle": -0.061146587796001295
+      },
+      "reference_support": 6,
+      "seed": 200435
+    },
+    {
+      "effects": {
+        "oracle": 0.03858219745928143
+      },
+      "reference_support": 5,
+      "seed": 200436
+    },
+    {
+      "effects": {
+        "oracle": -0.006441626631399744
+      },
+      "reference_support": 6,
+      "seed": 200437
+    },
+    {
+      "effects": {
+        "oracle": 0.035074825052131886
+      },
+      "reference_support": 6,
+      "seed": 200438
+    },
+    {
+      "effects": {
+        "oracle": -0.025597555603557476
+      },
+      "reference_support": 6,
+      "seed": 200439
+    },
+    {
+      "effects": {
+        "oracle": -0.010836640905954154
+      },
+      "reference_support": 6,
+      "seed": 200440
+    },
+    {
+      "effects": {
+        "oracle": 0.005757800386699097
+      },
+      "reference_support": 5,
+      "seed": 200441
+    },
+    {
+      "effects": {
+        "oracle": -0.037486506157303645
+      },
+      "reference_support": 6,
+      "seed": 200442
+    },
+    {
+      "effects": {
+        "oracle": 0.040189714409398
+      },
+      "reference_support": 6,
+      "seed": 200443
+    },
+    {
+      "effects": {
+        "oracle": 0.0222385233346597
+      },
+      "reference_support": 5,
+      "seed": 200444
+    },
+    {
+      "effects": {
+        "oracle": 0.002457316805454357
+      },
+      "reference_support": 5,
+      "seed": 200445
+    },
+    {
+      "effects": {
+        "oracle": -0.014697534538353707
+      },
+      "reference_support": 5,
+      "seed": 200446
+    },
+    {
+      "effects": {
+        "oracle": -0.0076025942291386706
+      },
+      "reference_support": 5,
+      "seed": 200447
+    },
+    {
+      "effects": {
+        "oracle": 0.005910764791132228
+      },
+      "reference_support": 5,
+      "seed": 200448
+    },
+    {
+      "effects": {
+        "oracle": 0.018728088792065778
+      },
+      "reference_support": 5,
+      "seed": 200449
+    },
+    {
+      "effects": {
+        "oracle": 0.0240870119051122
+      },
+      "reference_support": 5,
+      "seed": 200450
+    },
+    {
+      "effects": {
+        "oracle": 0.0378208776716335
+      },
+      "reference_support": 6,
+      "seed": 200451
+    },
+    {
+      "effects": {
+        "oracle": 3.113578189256616e-05
+      },
+      "reference_support": 6,
+      "seed": 200452
+    },
+    {
+      "effects": {
+        "oracle": -0.03709302599942632
+      },
+      "reference_support": 5,
+      "seed": 200453
+    },
+    {
+      "effects": {
+        "oracle": -0.014360210792622397
+      },
+      "reference_support": 5,
+      "seed": 200454
+    },
+    {
+      "effects": {
+        "oracle": 0.038194294532953754
+      },
+      "reference_support": 5,
+      "seed": 200455
+    },
+    {
+      "effects": {
+        "oracle": 0.030759034433713472
+      },
+      "reference_support": 5,
+      "seed": 200456
+    },
+    {
+      "effects": {
+        "oracle": -0.016798933494033885
+      },
+      "reference_support": 5,
+      "seed": 200457
+    },
+    {
+      "effects": {
+        "oracle": 0.036504500945116036
+      },
+      "reference_support": 5,
+      "seed": 200458
+    },
+    {
+      "effects": {
+        "oracle": 0.010578887477189325
+      },
+      "reference_support": 6,
+      "seed": 200459
+    },
+    {
+      "effects": {
+        "oracle": 0.012159342961226338
+      },
+      "reference_support": 6,
+      "seed": 200460
+    },
+    {
+      "effects": {
+        "oracle": -0.011693406089735403
+      },
+      "reference_support": 5,
+      "seed": 200461
+    },
+    {
+      "effects": {
+        "oracle": 0.056660504603525286
+      },
+      "reference_support": 5,
+      "seed": 200462
+    },
+    {
+      "effects": {
+        "oracle": 0.039836667214180665
+      },
+      "reference_support": 5,
+      "seed": 200463
+    },
+    {
+      "effects": {
+        "oracle": -0.028733062844499113
+      },
+      "reference_support": 5,
+      "seed": 200464
+    },
+    {
+      "effects": {
+        "oracle": -0.03692514049839102
+      },
+      "reference_support": 5,
+      "seed": 200465
+    },
+    {
+      "effects": {
+        "oracle": 0.04607930760136214
+      },
+      "reference_support": 6,
+      "seed": 200466
+    },
+    {
+      "effects": {
+        "oracle": 0.0096217907916325
+      },
+      "reference_support": 5,
+      "seed": 200467
+    },
+    {
+      "effects": {
+        "oracle": 0.032696456753235015
+      },
+      "reference_support": 5,
+      "seed": 200468
+    },
+    {
+      "effects": {
+        "oracle": 0.011491302384766922
+      },
+      "reference_support": 5,
+      "seed": 200469
+    },
+    {
+      "effects": {
+        "oracle": 0.035253722174662494
+      },
+      "reference_support": 6,
+      "seed": 200470
+    },
+    {
+      "effects": {
+        "oracle": 0.06836939925933788
+      },
+      "reference_support": 6,
+      "seed": 200471
+    },
+    {
+      "effects": {
+        "oracle": 0.1006233805623355
+      },
+      "reference_support": 5,
+      "seed": 200472
+    },
+    {
+      "effects": {
+        "oracle": 0.08272802462904333
+      },
+      "reference_support": 5,
+      "seed": 200473
+    },
+    {
+      "effects": {
+        "oracle": 0.002151214418173897
+      },
+      "reference_support": 6,
+      "seed": 200474
+    },
+    {
+      "effects": {
+        "oracle": 0.05736627681252848
+      },
+      "reference_support": 5,
+      "seed": 200475
+    },
+    {
+      "effects": {
+        "oracle": 0.04018879073653936
+      },
+      "reference_support": 5,
+      "seed": 200476
+    },
+    {
+      "effects": {
+        "oracle": 0.007775830268209827
+      },
+      "reference_support": 6,
+      "seed": 200477
+    },
+    {
+      "effects": {
+        "oracle": 0.14091103987428355
+      },
+      "reference_support": 5,
+      "seed": 200478
+    },
+    {
+      "effects": {
+        "oracle": 0.022845123438624326
+      },
+      "reference_support": 6,
+      "seed": 200479
+    },
+    {
+      "effects": {
+        "oracle": 0.026843144924076134
+      },
+      "reference_support": 5,
+      "seed": 200480
+    },
+    {
+      "effects": {
+        "oracle": 0.013391594233766901
+      },
+      "reference_support": 5,
+      "seed": 200481
+    },
+    {
+      "effects": {
+        "oracle": 0.029364803351811686
+      },
+      "reference_support": 6,
+      "seed": 200482
+    },
+    {
+      "effects": {
+        "oracle": -0.024865317681490584
+      },
+      "reference_support": 6,
+      "seed": 200483
+    },
+    {
+      "effects": {
+        "oracle": 0.002034415734516015
+      },
+      "reference_support": 6,
+      "seed": 200484
+    },
+    {
+      "effects": {
+        "oracle": -0.04691372025600449
+      },
+      "reference_support": 5,
+      "seed": 200485
+    },
+    {
+      "effects": {
+        "oracle": 0.04182177877595972
+      },
+      "reference_support": 6,
+      "seed": 200486
+    },
+    {
+      "effects": {
+        "oracle": 0.05421665556928512
+      },
+      "reference_support": 6,
+      "seed": 200487
+    },
+    {
+      "effects": {
+        "oracle": -0.004125991315245492
+      },
+      "reference_support": 5,
+      "seed": 200488
+    },
+    {
+      "effects": {
+        "oracle": -0.036328206994478585
+      },
+      "reference_support": 5,
+      "seed": 200489
+    },
+    {
+      "effects": {
+        "oracle": 0.04131807546599092
+      },
+      "reference_support": 6,
+      "seed": 200490
+    },
+    {
+      "effects": {
+        "oracle": -0.02513045216213383
+      },
+      "reference_support": 6,
+      "seed": 200491
+    },
+    {
+      "effects": {
+        "oracle": 0.07949235943965088
+      },
+      "reference_support": 6,
+      "seed": 200492
+    },
+    {
+      "effects": {
+        "oracle": -0.0040094065186027095
+      },
+      "reference_support": 6,
+      "seed": 200493
+    },
+    {
+      "effects": {
+        "oracle": 0.07549597720640044
+      },
+      "reference_support": 5,
+      "seed": 200494
+    },
+    {
+      "effects": {
+        "oracle": -0.015537570433728887
+      },
+      "reference_support": 5,
+      "seed": 200495
+    },
+    {
+      "effects": {
+        "oracle": 0.020019640942754713
+      },
+      "reference_support": 5,
+      "seed": 200496
+    },
+    {
+      "effects": {
+        "oracle": 0.012554444752731986
+      },
+      "reference_support": 6,
+      "seed": 200497
+    },
+    {
+      "effects": {
+        "oracle": 0.03312006609360568
+      },
+      "reference_support": 6,
+      "seed": 200498
+    },
+    {
+      "effects": {
+        "oracle": 0.012962175982800805
+      },
+      "reference_support": 5,
+      "seed": 200499
+    },
+    {
+      "effects": {
+        "oracle": -7.056019261009183e-05
+      },
+      "reference_support": 6,
+      "seed": 200500
+    },
+    {
+      "effects": {
+        "oracle": 0.00270046371831012
+      },
+      "reference_support": 5,
+      "seed": 200501
+    },
+    {
+      "effects": {
+        "oracle": 0.011247222516375943
+      },
+      "reference_support": 6,
+      "seed": 200502
+    },
+    {
+      "effects": {
+        "oracle": -0.015856833408785964
+      },
+      "reference_support": 6,
+      "seed": 200503
+    },
+    {
+      "effects": {
+        "oracle": 0.07427178443895643
+      },
+      "reference_support": 5,
+      "seed": 200504
+    },
+    {
+      "effects": {
+        "oracle": 0.00884000082836811
+      },
+      "reference_support": 6,
+      "seed": 200505
+    },
+    {
+      "effects": {
+        "oracle": 0.0035409733568533275
+      },
+      "reference_support": 6,
+      "seed": 200506
+    },
+    {
+      "effects": {
+        "oracle": -0.01979634166813149
+      },
+      "reference_support": 5,
+      "seed": 200507
+    },
+    {
+      "effects": {
+        "oracle": 0.0006498548667621673
+      },
+      "reference_support": 5,
+      "seed": 200508
+    },
+    {
+      "effects": {
+        "oracle": -0.024472121803644775
+      },
+      "reference_support": 5,
+      "seed": 200509
+    },
+    {
+      "effects": {
+        "oracle": -0.00770180033327178
+      },
+      "reference_support": 5,
+      "seed": 200510
+    },
+    {
+      "effects": {
+        "oracle": -0.0029791751062462346
+      },
+      "reference_support": 5,
+      "seed": 200511
+    }
+  ],
+  "scenario": {
+    "batch": 1.0,
+    "block": 0.0,
+    "donor": 0.5,
+    "name": "batch_shift",
+    "separation": 0.8
+  },
+  "seconds": 6.8327648639678955,
+  "summary": {
+    "estimators": {
+      "A": {
+        "bias": 0.013658300278030978,
+        "bias_interval": [
+          0.0043165620329364,
+          0.023000038523125557
+        ],
+        "bias_mcse": 0.004766192982191112,
+        "empirical_replicate_interval": [
+          -0.04654914396947271,
+          0.13294179684656066
+        ],
+        "mean": 0.03178857524144657,
+        "rmse": 0.04626372270049726
+      },
+      "B": {
+        "bias": 0.011809174501580175,
+        "bias_interval": [
+          0.0028410698015663184,
+          0.020777279201594032
+        ],
+        "bias_mcse": 0.00457556362245605,
+        "empirical_replicate_interval": [
+          -0.04654914396947271,
+          0.11897077468107867
+        ],
+        "mean": 0.029939449464995768,
+        "rmse": 0.04378286170499015
+      },
+      "C": {
+        "bias": 0.0011159792309257816,
+        "bias_interval": [
+          -0.007985164892174735,
+          0.010217123354026298
+        ],
+        "bias_mcse": 0.004643440879132916,
+        "empirical_replicate_interval": [
+          -0.06382358413432714,
+          0.10729508886077739
+        ],
+        "mean": 0.019246254194341374,
+        "rmse": 0.042903124583932965
+      }
+    },
+    "paired_contrasts": {
+      "A-C": {
+        "interval": [
+          0.007776134317166486,
+          0.017308507777043902
+        ],
+        "mcse": 0.0024317279234381158,
+        "mean": 0.012542321047105193
+      },
+      "B-C": {
+        "interval": [
+          0.006287717568765087,
+          0.0150986729725437
+        ],
+        "mcse": 0.002247692705045565,
+        "mean": 0.010693195270654394
+      }
+    },
+    "reference_mcse": 0.0017266774516500917,
+    "reference_mean": 0.018130274963415592,
+    "target": 0.018130274963415592,
+    "target_kind": "independent Monte Carlo",
+    "target_mcse": 0.0017266774516500917
+  }
+}
