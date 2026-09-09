@@ -1,24 +1,45 @@
 \begin{table}[H]
 \centering
 \small
-\setlength{\tabcolsep}{3.5pt}
+\setlength{\tabcolsep}{8pt}
 \renewcommand{\arraystretch}{1.08}
-\resizebox{\columnwidth}{!}{
-\begin{tabular}{lrrrrrrr}
+\textbf{(a) Support--performance associations}\\[3pt]
+\begin{tabular}{lrrrr}
 \toprule
-\textbf{Model} & $\rho_{c}$ & $\rho_{p}$ & $\rho_{c\mid p}$ & $\rho_{p\mid c}$ & $G$ & $R_{\mathrm{sibling}}$ & \textbf{Cross-lineage} \\
+\textbf{Model} & $\rho_{c}$ & $\rho_{p}$ & $\rho_{c\mid p}$ & $\rho_{p\mid c}$ \\
 \midrule
-\ourmethod{} & 0.486 & 0.288 & 0.411 & -0.051 & 0.174 & 0.250 & 0.750 \\
-Flat FT-style Transformer & 0.505 & 0.255 & 0.464 & -0.123 & 0.176 & 0.243 & 0.757 \\
-FT-style Transformer $+$ HCE & 0.513 & 0.318 & 0.427 & -0.034 & 0.183 & 0.257 & 0.743 \\
-XGBoost & 0.540 & 0.275 & 0.496 & -0.130 & 0.179 & 0.246 & 0.754 \\
-Logistic Regression & 0.435 & 0.107 & 0.488 & -0.267 & 0.167 & 0.295 & 0.705 \\
-Linear SVM & 0.339 & -0.012 & 0.463 & -0.335 & 0.200 & 0.265 & 0.735 \\
-Random Forest & 0.661 & 0.418 & 0.564 & -0.035 & 0.158 & 0.191 & 0.809 \\
-Reference Correlation & 0.376 & 0.003 & 0.499 & -0.354 & 0.099 & 0.225 & 0.775 \\
+\ourmethod{} & 0.486 & 0.288 & 0.411 & -0.051 \\
+Flat FT-style Transformer & 0.505 & 0.255 & 0.464 & -0.123 \\
+FT-style Transformer $+$ HCE & 0.513 & 0.318 & 0.427 & -0.034 \\
+XGBoost & 0.540 & 0.275 & 0.496 & -0.130 \\
+Logistic Regression & 0.435 & 0.107 & 0.488 & -0.267 \\
+Linear SVM & 0.339 & -0.012 & 0.463 & -0.335 \\
+Random Forest & 0.661 & 0.418 & 0.564 & -0.035 \\
+Reference Correlation & 0.376 & 0.003 & 0.499 & -0.354 \\
 \bottomrule
 \end{tabular}
-}
-\caption{Exploratory subtype diagnostics on pooled patient-disjoint predictions. $\rho_c$ and $\rho_p$ are marginal Spearman associations of subtype F1 with log cell count and patient coverage; $\rho_{c\mid p}$ and $\rho_{p\mid c}$ are partial Spearman correlations computed by residualizing rank-transformed variables. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among errors, $R_{\mathrm{sibling}}$ retains the true parent lineage and Cross-lineage is its complement. With only 27 subtypes and limited variation in patient coverage, these associations are descriptive and do not establish causality.}
+
+\vspace{6pt}
+\textbf{(b) Granularity and error structure}\\[3pt]
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Model} & $G$ & $R_{\mathrm{sibling}}$ & \textbf{Cross-lineage} \\
+\midrule
+\ourmethod{} & 0.174 & 0.250 & 0.750 \\
+Flat FT-style Transformer & 0.176 & 0.243 & 0.757 \\
+FT-style Transformer $+$ HCE & 0.183 & 0.257 & 0.743 \\
+XGBoost & 0.179 & 0.246 & 0.754 \\
+Logistic Regression & 0.167 & 0.295 & 0.705 \\
+Linear SVM & 0.200 & 0.265 & 0.735 \\
+Random Forest & 0.158 & 0.191 & 0.809 \\
+Reference Correlation & 0.099 & 0.225 & 0.775 \\
+\bottomrule
+\end{tabular}
+\caption{Exploratory subtype diagnostics on pooled patient-disjoint predictions.
+$\rho_c$ and $\rho_p$ are marginal Spearman associations of subtype F1 with log
+cell count and patient coverage; partial correlations residualize ranked
+variables. $G=F_{1}^{\mathrm{coarse}}-F_{1}^{\mathrm{fine}}$. Among errors,
+$R_{\mathrm{sibling}}$ retains the true parent and Cross-lineage is its
+complement. These cohort-level summaries are descriptive, not causal.}
 \label{tab:subtype_diagnostics}
 \end{table}

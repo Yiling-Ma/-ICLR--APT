@@ -61,8 +61,9 @@ APT-Bench fixes the unit of input, prediction target, split, and metric for each
 track: five-lineage and 27-subtype prediction from one APT vector per cell;
 two-axis scaling over training patients and cells per patient; and strict
 cross-fitted aggregation from cell predictions to six-class patient-level
-characterization with gold-composition and technical controls. Novelty is not
-part of the primary contract. Outer-test-isolated aptamer measurement and
+characterization with gold-composition and technical controls. Open-set subtype
+discovery is outside the current contract; all primary hierarchy tasks use the
+fixed 5-lineage/27-subtype ontology. Outer-test-isolated aptamer measurement and
 inference-cell budgets are secondary sensitivities. The machine-readable manifest at
 \texttt{benchmark/splits/patient\_folds.json} assigns every pseudonymous patient
 to one outer fold; all selection remains inside development patients. Portable

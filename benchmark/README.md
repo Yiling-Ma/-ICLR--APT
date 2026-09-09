@@ -16,9 +16,9 @@ cross-site clinical generalization.
    patient-level metrics, and compare against gold-composition and technical
    controls.
 
-Leave-one-disease-out generalization is an exploratory stress test. Disease
-novelty detection is not evaluated and is not part of the primary benchmark
-contract. Compact-panel selection and inference-time cell subsampling are
+Leave-one-disease-out generalization is an exploratory stress test. Open-set
+subtype discovery is outside the current contract; all primary hierarchy tasks
+use the fixed 5-lineage/27-subtype ontology. Compact-panel selection and inference-time cell subsampling are
 secondary measurement-sensitivity analyses reported in the appendix.
 
 The budget controls have different meanings. A training-scale cell budget

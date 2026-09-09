@@ -272,3 +272,22 @@ make revision
 - Rendered-page visual inspection: **PASS** for the main scaling figure,
   disease table, Conclusion/statements boundary, and appendix audit/scaling
   tables; no clipping or unresolved references were observed.
+
+## Clarity and layout pass
+
+- Rewrote the Abstract to 160 words around the statistical-unit problem, the
+  patient-disjoint benchmark contract, the two-axis scaling result, the
+  composition/confounding audit, and the benchmark's intended significance.
+- Replaced the ambiguous novelty-contract statement with an explicit scope
+  boundary: open-set subtype discovery is excluded, while all primary hierarchy
+  tasks use the fixed five-lineage/27-subtype ontology.
+- Reduced the main hierarchy table to Coarse Macro-F1, Fine Macro-F1, Exact Path,
+  and Subtype Tree Distance. Fine accuracy, root-excluded hierarchical F1, and
+  natural consistency are reported together in the appendix.
+- Rebuilt the benchmark-comparison and subtype-diagnostic tables as readable
+  stacked panels, enlarged the fixed-total table, strengthened the main scaling
+  figure's legend and error bars, and enlarged the appendix scaling and
+  compact-panel figures.
+- Reordered appendix floats so the full scaling table uses the previously sparse
+  page before the scaling figures. A final 31-page render was inspected at normal
+  reading scale; no clipping, unresolved references, or overfull boxes remain.

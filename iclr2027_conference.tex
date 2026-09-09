@@ -67,29 +67,22 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell assays produce hundreds of thousands of cells, but evaluation on new
-subjects is determined by the number of independent patients. We introduce
-APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer
-profiles from 40 patients across six disease groups. It separates five-lineage
-and 27-subtype cell annotation from patient-level characterization and makes
-both patient diversity and within-patient cell depth explicit training axes.
-Cell-level splitting inflates performance, and across neural and classical
-models coarse lineage recognition remains substantially easier than fine
-subtype prediction. At three fixed total-cell budgets, reallocating training
-cells from 8 to 32 subjects improves subject-balanced macro-F1 in all 30
-comparisons across APT, an external 105-donor COMBAT CITE-seq RNA replication,
-and a matched COMBAT ADT sensitivity. Effect magnitude and subset-seed stability
-remain dataset-, modality-, task-, and model-dependent. A strict nested bridge aggregates disease-label-free XGBoost subtype probabilities
-without exposing either stage to outer-test patients. Predicted subtype
-composition retains disease-associated variation (patient macro-F1 0.593), but
-its gains over lineage composition, cell count, and recorded RNA-QC controls have
-patient-bootstrap intervals spanning zero. Stronger direct APT discrimination
-is sensitive to patient-specific absolute-expression signatures whose
-biological and technical origins cannot be separated with the available
-metadata. APT-Bench therefore provides a statistically explicit setting for
-studying observational unit, annotation granularity, training scale, and
-cross-task representation transfer, while limiting disease conclusions to the APT
-cohort.
+Single-cell clinical assays can contain many cells but few independent subjects,
+making the split unit and sampling budget central to evaluation. We introduce
+APT-Bench, a patient-disjoint benchmark of 361{,}792 single-cell aptamer profiles
+from 40 patients, with a fixed five-lineage/27-subtype ontology, patient-level
+characterization audit, and explicit patient and cell training axes. Across
+matched neural and classical models, coarse lineage recognition remains
+substantially easier than fine subtype prediction. At three fixed total-cell
+budgets, reallocating cells from 8 to 32 subjects improves subject-balanced
+macro-F1 in all 30 comparisons across APT and external COMBAT CITE-seq RNA and
+ADT evaluations, although effect magnitude is context-dependent. Strict nested
+aggregation shows that cell-model outputs retain disease-associated variation,
+but subtype composition has no resolved increment over lineage, cell count, or
+recorded RNA-QC controls. Direct APT discrimination is also sensitive to
+patient-specific absolute-expression structure whose biological and technical
+origins are not identifiable here. APT-Bench makes statistical unit,
+granularity, and training scale explicit for evaluation on unseen subjects.
 \end{abstract}
 
 
@@ -520,9 +513,11 @@ whereas $C{=}100\rightarrow\mathrm{all}$ is a larger and patient-dependent
 change, this surface is descriptive only. All direct comparisons between the
 two axes use the fixed-total and matched-doubling analysis in the main paper.
 
+\input{tables/patient_cell_scaling_full}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/patient_cell_scaling_heatmaps.pdf}
+\includegraphics[width=\textwidth]{figures/patient_cell_scaling_heatmaps.pdf}
 \caption{Pooled patient-disjoint Macro-F1 over the complete training-patient
 and per-patient training-cell grid. Values average 20 nested subset seeds except
 for the deterministic full-data endpoint. Color scales are shared across
@@ -532,15 +527,13 @@ models within each task.}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.98\textwidth]{figures/patient_scaling_curves.pdf}
+\includegraphics[width=\textwidth]{figures/patient_scaling_curves.pdf}
 \caption{Patient-budget curves at each fixed per-patient cell cap. Intervals
 show subset-resampling variability; they do not represent uncertainty over a
 new patient population. Non-monotonic local changes are retained rather than
 smoothed.}
 \label{fig:patient_scaling_curves}
 \end{figure}
-
-\input{tables/patient_cell_scaling_full}
 
 The surface is cohort- and range-specific. We do not compare its unequal
 endpoints or use it to establish a patient- or cell-dominant scaling law, and it
@@ -607,7 +600,7 @@ All five outer folds select $B^*=10$ under this rule.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
+\includegraphics[width=\columnwidth]{figures/panel_size_curve.png}
 \caption{
 Patient-level disease-association macro-F1 under feature-budget controls. Solid
 lines show pooled out-of-fold performance obtained using fold-specific Top-$B$

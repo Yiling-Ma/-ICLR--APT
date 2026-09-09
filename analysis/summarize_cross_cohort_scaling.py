@@ -108,7 +108,7 @@ def create_figure(frame: pd.DataFrame, output_dir: Path) -> None:
     offsets = np.linspace(-0.22, 0.22, len(TOTAL_BUDGETS))
     colors = ("#315B7D", "#C05A3B", "#4F7A51")
     y = np.arange(len(groups))
-    fig, ax = plt.subplots(figsize=(7.2, max(3.2, 0.54 * len(groups) + 1.4)))
+    fig, ax = plt.subplots(figsize=(7.6, max(3.6, 0.60 * len(groups) + 1.5)))
     for offset, color, total in zip(offsets, colors, TOTAL_BUDGETS):
         means = np.array([group.loc[total, "mean"] for group in groups])
         lows = np.array(
@@ -123,15 +123,26 @@ def create_figure(frame: pd.DataFrame, output_dir: Path) -> None:
             xerr=np.vstack((means - lows, highs - means)),
             fmt="o",
             color=color,
-            capsize=2.5,
+            markersize=5.5,
+            elinewidth=1.5,
+            capsize=4,
+            capthick=1.3,
             label=f"T={total:,}",
         )
     ax.axvline(0, color="#222222", linewidth=0.9)
     ax.set_yticks(y, labels)
     ax.invert_yaxis()
-    ax.set_xlabel(r"$\Delta$ subject-balanced Macro-F1: 32 vs. 8 training subjects")
+    ax.set_xlabel(r"$\Delta$ subject-balanced Macro-F1: 32 vs. 8 training subjects", fontsize=10)
+    ax.tick_params(axis="both", labelsize=9)
     ax.grid(axis="x", alpha=0.2)
-    ax.legend(frameon=False, ncol=3, loc="lower center", bbox_to_anchor=(0.5, 1.01))
+    ax.legend(
+        frameon=False,
+        fontsize=9,
+        markerscale=1.1,
+        ncol=3,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 1.01),
+    )
     fig.tight_layout()
     for suffix in ("pdf", "png"):
         fig.savefig(output_dir / f"cross_cohort_scaling.{suffix}", dpi=300, bbox_inches="tight")

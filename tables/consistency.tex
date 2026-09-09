@@ -1,22 +1,18 @@
 \begin{table}[H]
 \centering
 \small
-\setlength{\tabcolsep}{8pt}
+\setlength{\tabcolsep}{7pt}
 \renewcommand{\arraystretch}{1.10}
-\begin{tabular}{lc}
+\begin{tabular}{lccc}
 \toprule
-\textbf{Model} & \textbf{Coarse--Fine Consistency} \\
+\textbf{Model} & \textbf{Fine Acc.} & \textbf{Root-excl. Hier. F1} & \textbf{Consistency} \\
 \midrule
-\ourmethod{} & 0.812 \\
-Flat FT-style Transformer & 0.795 \\
-FT-style Transformer $+$ HCE & 0.834 \\
-XGBoost & 0.736 \\
-Logistic Regression & 0.568 \\
-Linear SVM & 0.631 \\
-Random Forest & 0.573 \\
-Reference Correlation & 0.380 \\
+\ourmethod{} & 0.305 & 0.404 & 0.812 \\
+Flat FT-style Transformer & 0.315 & 0.411 & 0.795 \\
+FT-style Transformer $+$ HCE & 0.306 & 0.405 & 0.834 \\
+XGBoost & 0.323 & 0.420 & 0.736 \\
 \bottomrule
 \end{tabular}
-\caption{Natural coarse--fine consistency on the same 361{,}792-cell, 40-patient pooled out-of-fold artifacts as Table~\ref{tab:main}. For each model, the hard fine prediction is mapped to its parent and compared with the corresponding hard coarse prediction. \emph{Unknown} is excluded. Consistency is supporting evidence rather than predictive superiority because it can be changed by constrained decoding.}
+\caption{Auxiliary hierarchy diagnostics on the same 361{,}792-cell pooled OOF artifacts as Table~\ref{tab:main}. Root-excluded hierarchical F1 is the example-averaged F1 between the true and predicted $\{\text{lineage},\text{subtype}\}$ sets; the always-correct root is omitted. Consistency maps each hard fine prediction to its parent and compares it with the independent coarse prediction. \emph{Unknown} is excluded and no constrained decoding is used.}
 \label{tab:consistency}
 \end{table}

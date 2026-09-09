@@ -1,25 +1,38 @@
 \begin{table*}[t]
 \centering
 \small
-\setlength{\tabcolsep}{3.5pt}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llllccccc}
+\setlength{\tabcolsep}{6pt}
+\textbf{(a) Task and evaluation scope}\\[3pt]
+\begin{tabular}{llllc}
 \toprule
-Resource & Primary input & Reported scope & Main unit & Hierarchy & Patient task & Two-axis scale & Assay budget & Public pipeline \\
+Resource & Primary input & Reported scope & Main unit & Hierarchy \\
 \midrule
-Open Problems & Multiple & 12 living tasks & Task-specific & Task-specific & Task-specific & No & No & Yes \\
-scMultiBench & RNA/ADT/ATAC & 64 real + 22 simulated & Cell/dataset & No & No & No & Feature selection & Yes \\
-SPARE & scRNA-seq & 5 datasets, 8 methods & Sample & No & Yes & No & No & Yes \\
-PaSCient & scRNA-seq & 12.5M cells, 2,700 patients & Patient & No & Yes & No & No & Not audited \\
-APT-Bench & 293 aptamers & 1 cohort, 40 patients & Cell + patient & Yes & Audit & Yes & Yes & Pending release \\
+Open Problems & Multiple & 12 living tasks & Task-specific & Task-specific \\
+scMultiBench & RNA/ADT/ATAC & 64 real + 22 simulated & Cell/dataset & No \\
+SPARE & scRNA-seq & 5 datasets, 8 methods & Sample & No \\
+PaSCient & scRNA-seq & 12.5M cells, 2,700 patients & Patient & No \\
+APT-Bench & 293 aptamers & 1 cohort, 40 patients & Cell + patient & Yes \\
 \bottomrule
 \end{tabular}
-}
+\vspace{6pt}
+
+\textbf{(b) Protocol components and availability}\\[3pt]
+\begin{tabular}{lcccc}
+\toprule
+Resource & Patient task & Two-axis scale & Assay budget & Public pipeline \\
+\midrule
+Open Problems & Task-specific & No & No & Yes \\
+scMultiBench & No & No & Feature selection & Yes \\
+SPARE & Yes & No & No & Yes \\
+PaSCient & Yes & No & No & Not audited \\
+APT-Bench & Audit & Yes & Yes & Pending release \\
+\bottomrule
+\end{tabular}
 \caption{Scope comparison with recent single-cell evaluation resources
 \citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}.
 ``Task-specific'' means that the living platform defines multiple contracts
 rather than one shared clinical protocol. APT-Bench is narrower in cohorts but
-uniquely combines a fixed aptamer modality, patient-disjoint coarse-to-fine cell
+combines a fixed aptamer modality, patient-disjoint coarse-to-fine cell
 typing, within-cohort patient-level audit, and controlled patient/cell and assay
 budgets. Its public release remains a submission requirement, not a completed
 claim.}
