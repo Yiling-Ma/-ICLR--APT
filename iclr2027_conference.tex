@@ -74,10 +74,12 @@ from 40 patients, with a fixed five-lineage/27-subtype ontology, patient-level
 characterization audit, and explicit patient and cell training axes. Across
 matched neural and classical models, coarse lineage recognition remains
 substantially easier than fine subtype prediction. Unmatched fixed-total
-reallocations favor 32 rather than 8 subjects in 37 of 38 APT, COMBAT, and
-OneK1K comparisons, but they also increase fine-label coverage. A class-matched
-control reveals a resolution-dependent result: modest coarse gains persist in
-APT and OneK1K, whereas fine effects are small and change sign across cohorts.
+reallocations confound subject breadth with label support and class composition:
+although 37 of 38 comparisons favor 32 rather than 8 subjects, a class-matched
+control reduces this apparent advantage to modest coarse gains in APT and
+OneK1K, while fine effects are small and change sign across cohorts. Thus the
+unmatched result is an audit target, not evidence for a universal
+subject-dominant scaling law.
 Strict nested
 aggregation shows that cell-model outputs retain disease-associated variation,
 but subtype composition has no resolved increment over lineage, cell count, or
@@ -441,8 +443,8 @@ The fixed-total diagonals satisfy $PC\in\{3200,6400,12800\}$ exactly.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/fixed_total_scaling.pdf}
-\caption{APT-only fixed-total response curves underlying the cross-cohort
-effect summary in Figure~\ref{fig:cross_cohort_scaling}. Points are pooled OOF
+\caption{APT-only fixed-total response curves underlying the unmatched
+cross-cohort diagnostic in Table~\ref{tab:cross_cohort_scaling}. Points are pooled OOF
 macro-F1 means over 20 matched subset seeds; bars are empirical 95\% seed
 intervals. Patient-balanced and patient-bootstrap results are provided in the
 machine-readable artifacts.}

@@ -13,6 +13,8 @@ A class-matched fixed-total control additionally freezes exact per-class cell
 quotas while varying the number of contributing subjects. Its runner,
 summarizer, protocols, QA files, and sufficient statistics are under
 `analysis/class_matched_scaling.py` and `outputs/class_matched_scaling/`.
+This is the primary scaling audit: unmatched breadth comparisons are retained
+as a naive diagnostic because they also change label support and composition.
 
 The formal task and split contract is documented in
 [`benchmark/README.md`](benchmark/README.md). The current repository is not yet a

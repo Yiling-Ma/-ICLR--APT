@@ -4,6 +4,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import pandas as pd
 
 
@@ -103,6 +106,54 @@ def write_table(effects: pd.DataFrame) -> None:
     (ROOT / "tables/class_matched_scaling.tex").write_text("\n".join(lines) + "\n")
 
 
+def write_figure(effects: pd.DataFrame) -> None:
+    order = [
+        ("APT", "coarse"),
+        ("APT", "fine"),
+        ("COMBAT RNA", "coarse"),
+        ("COMBAT RNA", "fine"),
+        ("OneK1K RNA", "coarse"),
+        ("OneK1K RNA", "fine"),
+    ]
+    labels = [f"{dataset} / {task.capitalize()}" for dataset, task in order]
+    colors = {3200: "#176B87", 6400: "#D95F3D"}
+    offsets = {3200: -0.12, 6400: 0.12}
+
+    fig, ax = plt.subplots(figsize=(6.6, 3.55))
+    for total in sorted(colors):
+        subset = effects[effects.total == total].set_index(["dataset", "task"])
+        means = [subset.loc[key, "delta_p32_minus_p8_mean"] for key in order]
+        lows = [subset.loc[key, "patient_bootstrap_ci_low"] for key in order]
+        highs = [subset.loc[key, "patient_bootstrap_ci_high"] for key in order]
+        y = [index + offsets[total] for index in range(len(order))]
+        ax.errorbar(
+            means,
+            y,
+            xerr=[[mean - low for mean, low in zip(means, lows)],
+                  [high - mean for mean, high in zip(means, highs)]],
+            fmt="o",
+            color=colors[total],
+            markersize=4.5,
+            capsize=2.5,
+            linewidth=1.15,
+            label=f"T={total:,}",
+        )
+
+    ax.axvline(0, color="#2C2C2C", linewidth=0.8)
+    ax.set_yticks(range(len(order)), labels)
+    ax.invert_yaxis()
+    ax.set_xlabel(r"$\Delta$ subject-balanced Macro-F1: 32 vs. 8 subjects")
+    ax.grid(axis="x", color="#D9D9D9", linewidth=0.55)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.tick_params(axis="y", length=0, labelsize=8)
+    ax.tick_params(axis="x", labelsize=8)
+    ax.legend(frameon=False, ncol=2, fontsize=8, loc="lower right")
+    fig.tight_layout(pad=0.35)
+    fig.savefig(ROOT / "figures/class_matched_scaling.pdf", bbox_inches="tight")
+    fig.savefig(ROOT / "figures/class_matched_scaling.png", dpi=240, bbox_inches="tight")
+    plt.close(fig)
+
+
 def add_matched_class_counts(effects: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for key in DATASETS:
@@ -122,6 +173,7 @@ def main() -> None:
     effects = add_matched_class_counts(matched_effects())
     effects.to_csv(OUTPUT / "class_matched_effects_all.csv", index=False)
     write_table(effects)
+    write_figure(effects)
 
 
 if __name__ == "__main__":

@@ -123,9 +123,9 @@ clinical, causal, cross-batch, or external-generalization claims.
   positive at 6,400 cells (+0.0056). No OneK1K empirical subset-seed interval
   excludes zero.
 - Across APT, COMBAT RNA/ADT, and OneK1K RNA, 37 of 38 label-agnostic
-  fixed-total comparisons favor broader subject coverage. This is now reported
-  as an unmatched joint effect that can include changing label support, not as
-  an isolated subject-diversity result.
+  fixed-total comparisons favor broader subject coverage. This is retained only
+  as a naive result to audit: it jointly changes subject breadth, label support,
+  and class composition and is not an isolated patient-diversity effect.
 - Class-matched fixed-total control: complete for APT, COMBAT RNA, and OneK1K
   RNA. Each dataset completed 1,200/1,200 LR jobs (five folds, 20 seeds, two
   totals, three subject budgets, and two tasks), and every QA file is `PASS`.
@@ -137,8 +137,9 @@ clinical, causal, cross-batch, or external-generalization claims.
   (+0.003/+0.003), and are small in COMBAT (+0.001/+0.000). Fine effects are
   negative in APT (-0.002/-0.005), near-zero or negative in COMBAT
   (-0.001/-0.003), and slightly positive in OneK1K (+0.002/+0.001).
-  Consequently, 37/38 is retained only as the unmatched joint effect of subject
-  breadth and training-distribution coverage, not as an isolated diversity law.
+  Consequently, class matching is the primary scaling result. The 37/38 count
+  is retained only as the naive joint effect that motivates the label-support
+  audit, not as a universal law or headline finding.
 
 ## Not completed
 
@@ -163,12 +164,13 @@ clinical, causal, cross-batch, or external-generalization claims.
 
 The previous claim that within-patient cell depth is at least as influential as
 patient count was removed because it compared unequal endpoint changes. The
-unmatched fixed-total analysis favors broader subject coverage in 37 of 38
-comparisons, but the new class audit shows that increasing P also improves fine
-label support. In the class-matched control, a small coarse breadth effect
-transfers to APT and OneK1K, while fine effects change sign across cohorts.
-The paper therefore separates subject breadth, cell depth, and label support
-rather than claiming a patient-dominant scaling law.
+primary scaling finding is instead methodological: unmatched fixed-total
+comparisons confound subject breadth with label support and class composition.
+The naive analysis favors broader subject coverage in 37 of 38 comparisons,
+but after class matching only a small coarse effect transfers to APT and
+OneK1K, while fine effects change sign across cohorts. The paper therefore
+identifies and corrects label-support confounding rather than claiming a
+patient-dominant scaling law.
 
 The previous pooled-OOF composition value (predicted subtype Macro-F1 0.400) is
 not used as a headline result. The strict nested value is 0.593. This numerical

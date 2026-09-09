@@ -61,7 +61,7 @@ patients with more cells, an equal-cell sensitivity also samples 1{,}900 cells
 per patient over 50 seeds. It changes coarse macro-F1 by at most $+0.005$ and
 fine macro-F1 by $-0.007$ to $-0.009$, leaving the qualitative ordering intact.
 
-\subsection{Subject Breadth, Cell Depth, and Label Support Are Distinct Axes}
+\subsection{Label Support Confounds Naive Two-Axis Scaling}
 \label{sec:results:patient_cell_scaling}
 
 The fair scaling experiment holds outer-test subjects fixed and varies only the
@@ -73,23 +73,25 @@ design is then frozen for external COMBAT CITE-seq and OneK1K cohorts.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.78\columnwidth]{figures/cross_cohort_scaling.pdf}
-\caption{Cross-cohort fixed-total scaling. Points are changes in
-subject-balanced, subject-disjoint OOF macro-F1 when a fixed total of $T$
-training cells is reallocated from 8 to 32 independent subjects; positive
-values favor broader subject coverage. Bars are 95\% paired subject-bootstrap
-intervals over fixed outer-test subjects after averaging seeds. APT, COMBAT
-RNA, and OneK1K RNA use LR/XGBoost; COMBAT ADT is an LR-only sensitivity.
-OneK1K supports two totals under its 800-cell donor threshold.}
-\label{fig:cross_cohort_scaling}
+\includegraphics[width=0.82\columnwidth]{figures/class_matched_scaling.pdf}
+\caption{Primary class-matched fixed-total scaling control. Each comparison
+freezes the observed classes and exact per-class cell quotas before reallocating
+the same $T$ training cells from 8 to 32 subjects. Points are changes in
+subject-balanced, subject-disjoint OOF macro-F1 for LR; bars are 95\% paired
+subject-bootstrap intervals over fixed outer-test subjects after averaging 20
+subset seeds. Eleven of 12 empirical seed intervals include zero. The corrected
+effects are modest for coarse lineage and heterogeneous for fine subtype.}
+\label{fig:class_matched_scaling}
 \end{figure}
 
-In the original label-agnostic design, reallocating cells from 8 to 32 patients improves patient-balanced OOF
+As a deliberately naive starting point, the original label-agnostic design
+reallocates cells without matching class support. Moving from 8 to 32 patients improves patient-balanced OOF
 macro-F1 in all 12 model--resolution--budget combinations, by 0.006--0.022
-(Figure~\ref{fig:cross_cohort_scaling}). All paired patient-bootstrap and
+(Appendix~\ref{sec:appendix:fair_scaling}). All paired patient-bootstrap and
 subset-seed intervals are above zero. Pooled-cell and mean within-patient
 sensitivities give the same qualitative direction, with isolated uncertainties
-detailed in Appendix~\ref{sec:appendix:fair_scaling}.
+detailed in Appendix~\ref{sec:appendix:fair_scaling}. These are unmatched
+associations to be audited below, not estimates of a pure subject-breadth effect.
 
 The direction transfers to COMBAT despite a different cohort, measurement
 technology, and 39-class fine taxonomy. Across 105 donors and 700{,}706 cells,
@@ -115,9 +117,10 @@ coefficients are likewise larger for $\log_2 P$ than $\log_2 C$ in all four
 comparisons, although interactions show that neither effect is constant across
 the grid. OneK1K matched doublings and response surfaces also favor the donor
 axis, but only narrowly for XGBoost coarse prediction. Across APT, COMBAT, and
-OneK1K, 37 of 38 unmatched fixed-total comparisons favor broader subject
-coverage. This is a joint consequence of subject breadth and the sampled
-training distribution, not yet an isolated subject effect.
+OneK1K, this naive analysis yields 37 of 38 unmatched fixed-total comparisons
+in favor of broader subject coverage. The numerical consistency is misleading
+if read as an isolated breadth effect because the sampled training distribution
+and fine-label support change simultaneously.
 
 The class audit confirms that this distinction matters. At the common
 $T=3{,}200$ diagonal, moving from $P=8$ to $P=32$ changes the mean number of
@@ -129,7 +132,8 @@ changes from unseen to seen, which can directly affect macro-F1.
 
 We therefore repeat LR after freezing the $P=8$ observed classes and exact
 per-class quotas within every fold/seed/task comparison
-(Table~\ref{tab:class_matched_scaling}). Mean donor coverage per observed class
+(Figure~\ref{fig:class_matched_scaling};
+Table~\ref{tab:class_matched_scaling}). Mean donor coverage per observed class
 increases substantially while class counts remain identical. Coarse effects
 remain positive for APT ($+0.006/+0.008$) and OneK1K
 ($+0.003/+0.003$), and are small for COMBAT ($+0.001/+0.000$).
@@ -137,10 +141,11 @@ Fine effects are negative for APT ($-0.002/-0.005$), near zero to negative
 for COMBAT ($-0.001/-0.003$), and only slightly positive for OneK1K
 ($+0.002/+0.001$). Most empirical seed intervals include zero; paired
 subject-bootstrap intervals for seed-averaged sufficient statistics are shown
-in Appendix~\ref{sec:appendix:class_matched_scaling}. Thus broader subject
-coverage has a transferable but modest coarse-lineage association, whereas the
-original fine-subtype gains are partly coverage-mediated and do not survive as
-a universal breadth effect.
+in Appendix~\ref{sec:appendix:class_matched_scaling}. Thus class matching
+changes the scientific conclusion: the transferable signal is at most a modest
+coarse-lineage association, whereas the apparently consistent fine-subtype
+advantage in the naive analysis is partly coverage-mediated and does not
+survive as a general breadth effect.
 
 \subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}
