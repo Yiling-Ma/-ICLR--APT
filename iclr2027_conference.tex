@@ -720,7 +720,7 @@ integer per-class quotas for every fold, seed, task, and total; only the number
 of selected subjects allowed to contribute those cells changes. Each new point
 uses 10 nested subset seeds, all immutable outer-test subjects, and the same
 joint resampling of training-subset seed and held-out subjects used in the
-primary matched control. This extension is an external-cohort saturation
+primary matched control. This extension is an external-cohort allocation
 sensitivity rather than a claim that its largest tested $P$ is globally
 optimal.
 
@@ -739,11 +739,55 @@ reported in Table~\ref{tab:extended_subject_frontier}.}
 
 All 12 adjacent frontier effects are small: their means range from $-0.00065$
 to $+0.00123$, and every joint interval includes zero. The four direct OneK1K
-$32\rightarrow128$ contrasts are likewise unresolved. The external curves are
-therefore consistent with a plateau over this tested fixed-total range rather
-than a continued subject-breadth gain. Because the intervention remains tied
-to these tasks, budgets, features, and LR configuration, it does not locate a
-universal saturation point or optimal allocation.
+$32\rightarrow128$ contrasts are likewise unresolved. This does not by itself
+establish a plateau or exclude practically meaningful changes. The explicit
+margin sensitivity below assesses interval width separately from zero inclusion.
+Because the intervention remains tied to these tasks, budgets, features, and LR
+configuration, it does not locate a universal saturation point or optimal allocation.
+
+\subsection{Practical-Equivalence Sensitivity}
+\label{sec:appendix:equivalence}
+
+Failure to detect a difference is not evidence of equivalence
+\citep{lakens2017equivalence}. After inspecting the existing results, we add an
+\emph{exploratory} smallest-effect sensitivity bound $\epsilon=0.01$ absolute
+subject-balanced pooled Macro-F1 (one percentage point), with $0.005$ and $0.02$
+as sensitivity values. This is a reporting tolerance, not a validated clinical
+threshold, and was not prespecified for the completed experiments. It must not
+be conflated with the separate compact-panel tolerance $\delta=0.02$.
+
+For each released joint 95\% interval $[L,U]$, we report zero inclusion
+($L\leq0\leq U$) and strict containment ($-\epsilon<L$ and $U<\epsilon$)
+separately. Containment is evidence of practical equivalence only relative to
+that margin, interval construction, and estimand; zero inclusion alone is not.
+Intervals with $L\leq-\epsilon$ and $U\geq\epsilon$ lack precision to exclude
+meaningful effects in either direction. Other non-contained intervals can
+still leave a meaningful one-sided effect unresolved. These are not mutually
+exclusive categories, and interval width alone does not establish formal
+statistical power; we therefore use ``insufficient precision'' rather than
+claiming a quantified underpowered design.
+
+\input{tables/equivalence_sensitivity}
+
+At $T=6{,}400$, only 4 of 12 main comparison intervals meet the $\pm0.01$
+containment criterion; none of the four APT intervals does. The APT coarse
+XGBoost interval spans both meaningful directions. Among adjacent external LR
+frontier comparisons, 11 of 12 intervals meet this criterion; the exception is
+OneK1K coarse $32\rightarrow64$ at $T=3{,}200$. With the tighter $\pm0.005$
+margin, no main interval and only 4 of 12 adjacent frontier intervals are
+contained. Conclusions about practical equivalence are thus explicitly
+margin-dependent, not a blanket finding that subjects have no value.
+
+We do not report formal TOST $p$-values. Conventional level-0.05 TOST is linked
+to a corresponding 90\% confidence interval, whereas this analysis retains the
+released joint 95\% intervals. Moreover, those intervals sample one completed
+training-subset seed and then test subjects, combining between-fit variability
+with test uncertainty rather than estimating only a seed-averaged mean effect.
+Containment is therefore an exploratory joint-interval screen, not a calibrated
+confirmatory equivalence test. Results are pointwise, without a simultaneous
+equivalence guarantee across rows, and do not establish a continuous plateau
+between or beyond the tested budgets. This audit concerns the completed legacy
+controls, not the ongoing A--D GPU rerun.
 
 \subsection{Secondary Descriptive Patient--Cell Scaling Surface}
 \label{sec:appendix:patient_cell_scaling}
