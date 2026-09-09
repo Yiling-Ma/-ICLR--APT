@@ -6,7 +6,7 @@ superiority. Across matched neural and classical models, broad lineage is more
 reliably recovered than transcriptome-derived subtype, and no advantage for the
 soft cascade over simpler matched references is statistically supported. The resulting
 granularity gap and the uncertain subtype-versus-lineage gain in the strict
-nested composition bridge show that additional model complexity alone does not
+nested transfer audit show that additional model complexity alone does not
 resolve fine cell typing or establish that finer predictions improve
 patient-level characterization.
 
@@ -52,18 +52,12 @@ validation is required before clinical claims.
 
 APT-Bench establishes a patient-disjoint evaluation contract for hierarchical
 cell typing and patient-level characterization from single-cell aptamer
-profiles. Across matched neural and classical models, coarse lineage is
-consistently easier than fine transcriptome-derived subtype prediction, and
-additional cascade complexity provides no statistically supported advantage
-over matched Transformer references. Controlled
-fixed-total and matched-scale experiments show that broader patient coverage is
-the stronger scaling axis over the tested APT range; all corresponding COMBAT
-RNA and ADT fixed-total comparisons reproduce the direction while revealing
-dataset- and subset-dependent magnitudes. Strict nested composition analysis further shows that imperfect
-cell typing can preserve patient-level disease-associated variation, although
-its incremental value over coarser or technical summaries is unresolved.
-Within-cohort disease discrimination is strongly associated with
-patient-specific absolute-expression structure. These findings position
-APT-Bench as a benchmark for statistical-unit, granularity, scaling, and error
-propagation effects, while external cohorts remain necessary for clinical
+profiles. Coarse lineage is consistently easier than fine subtype prediction,
+and additional cascade complexity has no supported advantage over matched
+Transformer references. Fixed-total experiments identify broader patient
+coverage as the stronger scaling axis over the tested APT range; COMBAT RNA and
+ADT reproduce the direction with dataset-dependent magnitudes. Nested analysis
+finds cross-task transfer but no resolved subtype increment or error-propagation
+relationship. Direct disease association remains confounded by patient-specific
+absolute-expression structure, so external cohorts are required for clinical
 claims.

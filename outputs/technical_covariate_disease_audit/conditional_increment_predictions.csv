@@ -1,0 +1,121 @@
+feature_set,outer_fold,patient_id,true_disease,predicted_disease
+Recorded QC,0,CRC11,CRC,HCC
+Recorded QC,0,CRC16,CRC,CRC
+Recorded QC,0,GC29_P_cDNA,GC,PC
+Recorded QC,0,GC30_P_cDNA,GC,GC
+Recorded QC,0,HCC-2-2,HCC,CRC
+Recorded QC,0,PBMC-6,Normal,Normal
+Recorded QC,0,PC-3,PC,PC
+Recorded QC,0,PRZ2,BTC,BTC
+Recorded QC,1,CRC22,CRC,PC
+Recorded QC,1,CRC24,CRC,HCC
+Recorded QC,1,GC31_P_cDNA,GC,PC
+Recorded QC,1,HCC-2-1_1,HCC,GC
+Recorded QC,1,HCC-24,HCC,HCC
+Recorded QC,1,PBMC-1,Normal,Normal
+Recorded QC,1,PC-5,PC,PC
+Recorded QC,1,PRZ6,BTC,BTC
+Recorded QC,2,CRC13,CRC,CRC
+Recorded QC,2,CRC23,CRC,CRC
+Recorded QC,2,GC32_P_cDNA,GC,CRC
+Recorded QC,2,HCC-1,HCC,HCC
+Recorded QC,2,HCC-3-2_1,HCC,CRC
+Recorded QC,2,PBMC-4,Normal,Normal
+Recorded QC,2,PC-1,PC,BTC
+Recorded QC,2,PRZ5,BTC,BTC
+Recorded QC,3,CRC25,CRC,HCC
+Recorded QC,3,GC36_P_cDNA,GC,GC
+Recorded QC,3,HCC-3-1_2,HCC,HCC
+Recorded QC,3,PBMC-3,Normal,Normal
+Recorded QC,3,PC-4,PC,CRC
+Recorded QC,3,PC-6,PC,GC
+Recorded QC,3,PRZ3,BTC,GC
+Recorded QC,3,PRZ4,BTC,CRC
+Recorded QC,4,CRC17,CRC,CRC
+Recorded QC,4,GC28_P_cDNA,GC,HCC
+Recorded QC,4,GC2_P_cDNA,GC,PC
+Recorded QC,4,HCC-22,HCC,GC
+Recorded QC,4,PBMC-2,Normal,Normal
+Recorded QC,4,PBMC-5,Normal,Normal
+Recorded QC,4,PC-2,PC,PC
+Recorded QC,4,PRZ1,BTC,BTC
+Recorded QC + predicted lineage,0,CRC11,CRC,CRC
+Recorded QC + predicted lineage,0,CRC16,CRC,CRC
+Recorded QC + predicted lineage,0,GC29_P_cDNA,GC,GC
+Recorded QC + predicted lineage,0,GC30_P_cDNA,GC,HCC
+Recorded QC + predicted lineage,0,HCC-2-2,HCC,CRC
+Recorded QC + predicted lineage,0,PBMC-6,Normal,Normal
+Recorded QC + predicted lineage,0,PC-3,PC,PC
+Recorded QC + predicted lineage,0,PRZ2,BTC,BTC
+Recorded QC + predicted lineage,1,CRC22,CRC,GC
+Recorded QC + predicted lineage,1,CRC24,CRC,HCC
+Recorded QC + predicted lineage,1,GC31_P_cDNA,GC,GC
+Recorded QC + predicted lineage,1,HCC-2-1_1,HCC,HCC
+Recorded QC + predicted lineage,1,HCC-24,HCC,BTC
+Recorded QC + predicted lineage,1,PBMC-1,Normal,BTC
+Recorded QC + predicted lineage,1,PC-5,PC,PC
+Recorded QC + predicted lineage,1,PRZ6,BTC,BTC
+Recorded QC + predicted lineage,2,CRC13,CRC,GC
+Recorded QC + predicted lineage,2,CRC23,CRC,HCC
+Recorded QC + predicted lineage,2,GC32_P_cDNA,GC,CRC
+Recorded QC + predicted lineage,2,HCC-1,HCC,HCC
+Recorded QC + predicted lineage,2,HCC-3-2_1,HCC,HCC
+Recorded QC + predicted lineage,2,PBMC-4,Normal,Normal
+Recorded QC + predicted lineage,2,PC-1,PC,GC
+Recorded QC + predicted lineage,2,PRZ5,BTC,BTC
+Recorded QC + predicted lineage,3,CRC25,CRC,HCC
+Recorded QC + predicted lineage,3,GC36_P_cDNA,GC,GC
+Recorded QC + predicted lineage,3,HCC-3-1_2,HCC,HCC
+Recorded QC + predicted lineage,3,PBMC-3,Normal,Normal
+Recorded QC + predicted lineage,3,PC-4,PC,BTC
+Recorded QC + predicted lineage,3,PC-6,PC,GC
+Recorded QC + predicted lineage,3,PRZ3,BTC,HCC
+Recorded QC + predicted lineage,3,PRZ4,BTC,BTC
+Recorded QC + predicted lineage,4,CRC17,CRC,CRC
+Recorded QC + predicted lineage,4,GC28_P_cDNA,GC,GC
+Recorded QC + predicted lineage,4,GC2_P_cDNA,GC,PC
+Recorded QC + predicted lineage,4,HCC-22,HCC,GC
+Recorded QC + predicted lineage,4,PBMC-2,Normal,Normal
+Recorded QC + predicted lineage,4,PBMC-5,Normal,Normal
+Recorded QC + predicted lineage,4,PC-2,PC,CRC
+Recorded QC + predicted lineage,4,PRZ1,BTC,BTC
+Recorded QC + predicted subtype,0,CRC11,CRC,CRC
+Recorded QC + predicted subtype,0,CRC16,CRC,PC
+Recorded QC + predicted subtype,0,GC29_P_cDNA,GC,PC
+Recorded QC + predicted subtype,0,GC30_P_cDNA,GC,BTC
+Recorded QC + predicted subtype,0,HCC-2-2,HCC,HCC
+Recorded QC + predicted subtype,0,PBMC-6,Normal,Normal
+Recorded QC + predicted subtype,0,PC-3,PC,PC
+Recorded QC + predicted subtype,0,PRZ2,BTC,BTC
+Recorded QC + predicted subtype,1,CRC22,CRC,GC
+Recorded QC + predicted subtype,1,CRC24,CRC,GC
+Recorded QC + predicted subtype,1,GC31_P_cDNA,GC,GC
+Recorded QC + predicted subtype,1,HCC-2-1_1,HCC,HCC
+Recorded QC + predicted subtype,1,HCC-24,HCC,GC
+Recorded QC + predicted subtype,1,PBMC-1,Normal,Normal
+Recorded QC + predicted subtype,1,PC-5,PC,PC
+Recorded QC + predicted subtype,1,PRZ6,BTC,PC
+Recorded QC + predicted subtype,2,CRC13,CRC,PC
+Recorded QC + predicted subtype,2,CRC23,CRC,HCC
+Recorded QC + predicted subtype,2,GC32_P_cDNA,GC,GC
+Recorded QC + predicted subtype,2,HCC-1,HCC,HCC
+Recorded QC + predicted subtype,2,HCC-3-2_1,HCC,HCC
+Recorded QC + predicted subtype,2,PBMC-4,Normal,Normal
+Recorded QC + predicted subtype,2,PC-1,PC,BTC
+Recorded QC + predicted subtype,2,PRZ5,BTC,BTC
+Recorded QC + predicted subtype,3,CRC25,CRC,GC
+Recorded QC + predicted subtype,3,GC36_P_cDNA,GC,GC
+Recorded QC + predicted subtype,3,HCC-3-1_2,HCC,HCC
+Recorded QC + predicted subtype,3,PBMC-3,Normal,Normal
+Recorded QC + predicted subtype,3,PC-4,PC,PC
+Recorded QC + predicted subtype,3,PC-6,PC,GC
+Recorded QC + predicted subtype,3,PRZ3,BTC,BTC
+Recorded QC + predicted subtype,3,PRZ4,BTC,BTC
+Recorded QC + predicted subtype,4,CRC17,CRC,BTC
+Recorded QC + predicted subtype,4,GC28_P_cDNA,GC,GC
+Recorded QC + predicted subtype,4,GC2_P_cDNA,GC,PC
+Recorded QC + predicted subtype,4,HCC-22,HCC,CRC
+Recorded QC + predicted subtype,4,PBMC-2,Normal,Normal
+Recorded QC + predicted subtype,4,PBMC-5,Normal,Normal
+Recorded QC + predicted subtype,4,PC-2,PC,CRC
+Recorded QC + predicted subtype,4,PRZ1,BTC,BTC

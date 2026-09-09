@@ -112,7 +112,7 @@ grids, deeper sampling from fewer subjects does not recover the average
 performance obtained from broader subject coverage. This remains an
 observational result from two blood studies, not a universal or causal law.
 
-\subsection{Nested Composition Preserves Disease-Associated Variation}
+\subsection{Nested Cell-Output Transfer Preserves Disease-Associated Variation}
 \label{sec:results:composition_bridge}
 
 Composition connects cell typing to patient characterization, but a pooled OOF
@@ -132,6 +132,11 @@ subtype composition reaches macro-F1 0.516, so the predicted representation is
 not merely a noisier estimate of annotated abundance; it may also retain model
 confidence or technical structure.
 
+This is a representation-transfer audit, not evidence of error propagation: it
+does not establish a subtype-abundance source, fine-over-coarse utility, or that
+better typing improves patient characterization. Hard/soft and predicted/gold
+sensitivities are reported in Appendix~\ref{sec:appendix:composition_bridge}.
+
 Log cell count alone reaches macro-F1 0.531 ($p=0.00010$). A six-feature
 nuisance-only model using recovered cell count and patient summaries of the
 recorded transcriptomic UMI and detected-gene QC fields reaches macro-F1 0.566
@@ -142,6 +147,10 @@ global-multinomial composition null, and a fold-ID prediction control do not
 establish biological mediation. The defensible finding is therefore narrower:
 cell predictions preserve disease-associated variation, but they do not show
 incremental value beyond available nuisance summaries.
+
+A stricter conditional audit likewise finds no resolved subtype increment over
+recorded QC plus lineage: $\Delta$ macro-F1 $=+0.016$ (95\% paired
+patient-bootstrap CI $[-0.120,0.169]$; Appendix~\ref{sec:appendix:disease_patient_level}).
 
 \input{tables/disease}
 

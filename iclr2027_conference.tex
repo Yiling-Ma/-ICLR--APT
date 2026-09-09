@@ -88,7 +88,7 @@ is sensitive to patient-specific absolute-expression signatures whose
 biological and technical origins cannot be separated with the available
 metadata. APT-Bench therefore provides a statistically explicit setting for
 studying observational unit, annotation granularity, training scale, and
-cross-task error propagation, while limiting disease conclusions to the APT
+cross-task representation transfer, while limiting disease conclusions to the APT
 cohort.
 \end{abstract}
 
@@ -299,6 +299,14 @@ result. They remain proxies rather than measured batch labels, so this analysis
 detects known nuisance structure but cannot rule out unrecorded acquisition
 effects.
 
+We also test conditional subtype value rather than comparing each representation
+in isolation. Under the same nested folds and inner regularization selection,
+recorded QC plus predicted lineage reaches macro-F1 0.583 and AUROC 0.875;
+recorded QC plus the full predicted subtype vector reaches 0.599 and 0.825. The
+subtype-minus-lineage macro-F1 increment is $+0.016$ with 95\% paired
+patient-bootstrap CI $[-0.120,0.169]$ (10{,}000 resamples). Thus subtype detail
+does not provide a resolved conditional increment in this cohort.
+
 \input{tables/technical_covariate_audit}
 
 \input{tables/disease_cell_level}
@@ -312,7 +320,7 @@ We additionally trained a 40-way classifier to predict patient identity from ind
 \paragraph{Patient-level summary-feature control.}
 Finally, to confirm that the disease signal does not rely only on cell-level pseudo-replication, we trained a genuinely patient-level classifier using each patient's median 293-dimensional APT profile. This summary-feature model reaches patient accuracy $0.950$, patient macro-F1 $0.948$, and macro-AUROC $1.000$. Together with the sensitivity analyses above, this indicates that disease information is present at the patient level but strongly entangled with absolute-expression offsets that cannot be cleanly separated without acquisition-batch metadata.
 
-\paragraph{Strict nested composition bridge.}
+\paragraph{Strict nested cell-output transfer audit.}
 Ordinary pooled OOF predictions are insufficient for stacking because a base
 model used to create a disease-training feature may have seen the eventual
 disease outer-test patients. We therefore use the nested protocol defined in
@@ -327,6 +335,16 @@ reach macro-F1 0.516 and 0.301, respectively. The apparently stronger predicted
 than gold point estimate is not statistically resolved and warns that predicted
 probabilities may encode model-confidence or technical structure beyond true
 cell abundance.
+
+This experiment is therefore a representation-transfer audit, not an error-
+propagation analysis. It does not establish that the transferred signal
+originates from subtype abundance, that fine subtype is more useful than coarse
+lineage, that better typing improves patient characterization, or that the
+signal is independent of confidence and technical structure. Consistent with
+this distinction, the soft-minus-hard subtype macro-F1 difference is only
+$+0.069$ (95\% patient-bootstrap CI $[-0.077,0.221]$), and the
+predicted-minus-gold subtype difference is $+0.077$ (95\% CI
+$[-0.100,0.256]$).
 
 Across 10{,}000 complete patient-label permutations, predicted subtype and
 lineage composition have plus-one $p=0.00010$ and $p=0.00020$. However, log cell

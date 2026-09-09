@@ -12,6 +12,7 @@
 | Strict bridge patient predictions | `outputs/oof_composition_bridge/patient_disease_predictions.parquet` | Same as above | Confusion matrices and paired bootstrap |
 | Legacy-versus-strict protocol audit | `outputs/oof_composition_bridge/legacy_vs_nested_audit.csv` | `analysis/generate_composition_protocol_audit.py` | Appendix protocol audit; not interpreted as a leakage effect |
 | Composition controls and permutations | `outputs/oof_composition_bridge/equal_cell_sensitivity.csv`, `negative_controls.csv`, `permutation_test_results.csv` | `analysis/oof_composition_bridge_downstream.py` | Disease/composition results and appendix |
+| Conditional subtype increment | `outputs/technical_covariate_disease_audit/conditional_increment_summary.csv`, `conditional_increment_bootstrap.csv` | `analysis/conditional_subtype_increment_audit.py` | Disease transfer results and appendix |
 | Historical descriptive patient-cell surface | Historical `outputs/patient_cell_scaling/` summaries retained on the experiment host; committed table fragments are secondary only | Historical `analysis/patient_cell_scaling.py` protocol v2 | Appendix only |
 | Fair fixed-total scaling | `outputs/patient_cell_scaling_fair/fixed_total_results.csv`, `fair_scaling_qa.json` | `analysis/patient_cell_scaling.py`, `analysis/summarize_fair_patient_cell_scaling.py` | Abstract, Results, Appendix |
 | Matched patient/cell doublings | `outputs/patient_cell_scaling_fair/matched_doubling_effects.csv` | Same as above | Results, Appendix |

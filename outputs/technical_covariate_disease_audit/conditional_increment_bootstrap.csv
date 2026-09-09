@@ -1,0 +1,3 @@
+comparison,metric,difference,ci_low,ci_high,bootstrap_replicates
+Recorded QC + predicted subtype minus Recorded QC + predicted lineage,macro_f1,0.01625226625226628,-0.11990251442457331,0.16867666278366744,10000
+Recorded QC + predicted subtype minus Recorded QC,macro_f1,0.03304048892284184,-0.16003763712842997,0.22965343888137987,10000

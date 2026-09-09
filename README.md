@@ -2,8 +2,8 @@
 
 This repository contains the APT-Bench ICLR 2027 manuscript, analysis code, and
 selected result artifacts. APT-Bench studies patient-disjoint hierarchical cell
-typing, two-axis patient/cell training scale, and strict cross-fitted propagation
-from cell predictions to patient-level characterization. Compact-panel and
+typing, two-axis patient/cell training scale, and strict cross-fitted transfer
+from cell-model outputs to patient-level characterization. Compact-panel and
 inference-cell analyses are secondary measurement sensitivities.
 
 The formal task and split contract is documented in

@@ -10,12 +10,16 @@ Recovered cell count & 1 & 0.575 & 0.531 & 0.800 \\
 RNA QC summaries & 3 & 0.475 & 0.478 & 0.787 \\
 All recorded QC proxies & 6 & 0.550 & 0.566 & 0.859 \\
 Predicted soft subtype composition & 27 & 0.600 & 0.593 & 0.854 \\
+Recorded QC $+$ predicted lineage & 11 & 0.575 & 0.583 & 0.875 \\
+Recorded QC $+$ predicted subtype & 33 & 0.600 & 0.599 & 0.825 \\
 \bottomrule
 \end{tabular}
 \caption{Matched patient-level nuisance audit. All rows use the same outer
 folds and inner patient-level regularization selection. The predicted-composition
 minus all-recorded-QC Macro-F1 difference is $+0.027$ with a 95\% paired
 patient-bootstrap interval of $[-0.157,0.215]$ (2{,}000 resamples). Recorded
-QC fields are incomplete proxies, not batch labels.}
+QC fields are incomplete proxies, not batch labels. In the conditional audit,
+the subtype-minus-lineage Macro-F1 increment is $+0.016$ with 95\% paired
+patient-bootstrap interval $[-0.120,0.169]$ (10{,}000 resamples).}
 \label{tab:technical_covariate_audit}
 \end{table}

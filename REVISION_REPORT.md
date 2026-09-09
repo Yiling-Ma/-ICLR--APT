@@ -80,6 +80,11 @@ clinical, causal, cross-batch, or external-generalization claims.
   Macro-F1, with paired patient-bootstrap 95% CI [-0.157, 0.215]. This does not
   establish incremental disease information beyond the available nuisance
   summaries, and the missing acquisition variables remain untestable.
+- In the conditional audit, QC plus predicted lineage reaches macro-F1 0.583
+  and AUROC 0.875, whereas QC plus predicted subtype reaches 0.599 and 0.825.
+  The conditional subtype-minus-lineage Macro-F1 increment is +0.016 with 95%
+  paired patient-bootstrap CI [-0.120, 0.169]. The paper therefore makes no
+  subtype-increment or cross-task error-propagation claim.
 - Hierarchy metrics and wrong-conditioned cross-lineage null: complete.
 - Compact-panel Random-B, inference-cell, permutation, and XGBoost-SHAP controls:
   complete, but the primary budget selection remains conditional on a ranking
@@ -133,8 +138,10 @@ not used as a headline result. The strict nested value is 0.593. This numerical
 difference is not interpreted as a leakage effect because the corrected
 analysis also changes hard versus soft features, transformation, and downstream
 regularization selection; `legacy_vs_nested_audit.csv` records the comparison.
-The composition bridge remains predictive and associational because its
-increment over lineage composition and log cell count is unresolved.
+The composition bridge is now named a cross-task representation-transfer audit.
+It remains predictive and associational because its increments over lineage
+composition, log cell count, and recorded RNA-QC proxies are unresolved. It is
+not presented as evidence that typing errors propagate to disease performance.
 
 The historically named DropCascade implementation is now presented as the
 soft-cascade member of an encoder-matched reference ladder rather than as a
@@ -160,6 +167,7 @@ described as within-cohort and confounding-sensitive.
   `analysis/patient_cell_scaling.py`,
   `analysis/summarize_fair_patient_cell_scaling.py`,
   `analysis/generate_composition_protocol_audit.py`,
+  `analysis/conditional_subtype_increment_audit.py`,
   `analysis/technical_covariate_disease_audit.py`, `Makefile`, and
   `requirements-analysis.txt`.
 - Benchmark contract and audit documentation: `README.md`,
@@ -205,6 +213,16 @@ python analysis/technical_covariate_disease_audit.py \
   --output-dir outputs/technical_covariate_disease_audit
 ```
 
+The conditional subtype-increment audit uses the committed nested features:
+
+```bash
+python analysis/conditional_subtype_increment_audit.py \
+  --composition-features outputs/oof_composition_bridge/patient_composition_features.parquet \
+  --patient-qc outputs/technical_covariate_disease_audit/patient_qc_features.csv \
+  --folds benchmark/splits/patient_folds.json \
+  --output-dir outputs/technical_covariate_disease_audit
+```
+
 The fair scaling production run used the same immutable folds and resumable
 shards:
 
@@ -238,13 +256,17 @@ make revision
 - Compact-panel budget selection is outer-test isolated but conditional on one
   ranking per outer-development set; fully nested inner-fold reranking remains
   future work.
+- The research main text currently ends on PDF page 10. If the final ICLR 2027
+  format enforces a nine-page main-text limit, one page must still be compressed
+  or moved to the appendix before submission.
 
 ## Final QA
 
-- Final main-text page count: **9 pages**, with Conclusion and non-counted
-  statements on page 9 and References beginning on page 10.
+- Final research main-text page count: **10 pages**. Non-counted statements and
+  References begin on page 11; the complete PDF has 31 pages.
 - Final PDF path: `output/pdf/APT-Bench_ICLR2027_revised.pdf`.
-- Numerical artifact-to-paper audit: **PASS**; scaling and composition claims
+- Numerical artifact-to-paper audit: **PASS**; scaling, transfer, and conditional
+  subtype-increment claims
   were checked against the CSV/JSON files listed in `CLAIM_ARTIFACT_MAP.md`.
 - Code syntax and LaTeX build: **PASS**.
 - Rendered-page visual inspection: **PASS** for the main scaling figure,

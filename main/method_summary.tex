@@ -22,4 +22,7 @@ selected by patient-level inner CV, is then evaluated once on the sealed eight
 patients. Thus neither the cell-typing stage nor the disease stage uses an
 outer-test patient during preprocessing, feature construction, fitting, or
 selection. Appendix~\ref{sec:appendix:composition_bridge} provides the complete
-data flow and controls.
+data flow and controls. A conditional increment audit uses the same nested
+features and tuning protocol to compare recorded QC plus predicted lineage
+against recorded QC plus predicted subtype composition; subtype probabilities
+implicitly contain their lineage sums.
