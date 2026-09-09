@@ -1,0 +1,118 @@
+{
+  "seed": 42,
+  "n_boot": 2000,
+  "patients": 40,
+  "metrics": [
+    {
+      "modality": "apt",
+      "task": "coarse",
+      "classes": 5,
+      "raw": 0.287874111538695,
+      "chance": 0.18632363764717938,
+      "adjusted": 0.1248045028589414,
+      "lower": 0.10336722401817106,
+      "upper": 0.1469707750606815,
+      "entropy": 1.25288331441477,
+      "effective_classes": 3.5004212360644194,
+      "min_prevalence": 0.0030874617796375504,
+      "max_prevalence": 0.4530787006446135
+    },
+    {
+      "modality": "apt",
+      "task": "fine",
+      "classes": 27,
+      "raw": 0.10399544836616768,
+      "chance": 0.03264491497798611,
+      "adjusted": 0.07375836907556842,
+      "lower": 0.056280896069245176,
+      "upper": 0.08508629723977107,
+      "entropy": 2.48756426011598,
+      "effective_classes": 12.031933738857479,
+      "min_prevalence": 0.00014176807970281503,
+      "max_prevalence": 0.2318812911551875
+    },
+    {
+      "modality": "rna",
+      "task": "coarse",
+      "classes": 5,
+      "raw": 0.7897652112380328,
+      "chance": 0.19847558747599536,
+      "adjusted": 0.7377063187633465,
+      "lower": 0.7190847834103705,
+      "upper": 0.7517581045347477,
+      "entropy": 1.25288331441477,
+      "effective_classes": 3.5004212360644194,
+      "min_prevalence": 0.00308746177963755,
+      "max_prevalence": 0.4530787006446135
+    },
+    {
+      "modality": "rna",
+      "task": "fine",
+      "classes": 27,
+      "raw": 0.4419737689082568,
+      "chance": 0.03459806003090838,
+      "adjusted": 0.42197523333171566,
+      "lower": 0.37416076688332295,
+      "upper": 0.4460851842705659,
+      "entropy": 2.48756426011598,
+      "effective_classes": 12.031933738857479,
+      "min_prevalence": 0.00014176807970281503,
+      "max_prevalence": 0.2318812911551875
+    },
+    {
+      "modality": "apt_rna",
+      "task": "coarse",
+      "classes": 5,
+      "raw": 0.7939041633064655,
+      "chance": 0.19856160475079515,
+      "adjusted": 0.7428425716621058,
+      "lower": 0.7217620366298629,
+      "upper": 0.7597422798723908,
+      "entropy": 1.2528833144147697,
+      "effective_classes": 3.5004212360644185,
+      "min_prevalence": 0.0030874617796375504,
+      "max_prevalence": 0.4530787006446134
+    },
+    {
+      "modality": "apt_rna",
+      "task": "fine",
+      "classes": 27,
+      "raw": 0.47295557898498125,
+      "chance": 0.035450883892733785,
+      "adjusted": 0.45358467265817615,
+      "lower": 0.4026003505669637,
+      "upper": 0.48065139595748524,
+      "entropy": 2.48756426011598,
+      "effective_classes": 12.031933738857479,
+      "min_prevalence": 0.00014176807970281503,
+      "max_prevalence": 0.23188129115518752
+    }
+  ],
+  "gaps": [
+    {
+      "modality": "apt",
+      "adjusted_gap": 0.051046133783372985,
+      "lower": 0.029512803570640362,
+      "upper": 0.07960984522235116
+    },
+    {
+      "modality": "rna",
+      "adjusted_gap": 0.3157310854316308,
+      "lower": 0.29338052414011045,
+      "upper": 0.35619888135745936
+    },
+    {
+      "modality": "apt_rna",
+      "adjusted_gap": 0.2892578990039296,
+      "lower": 0.26392303572788683,
+      "upper": 0.32868079527056654
+    }
+  ],
+  "sources": {
+    "outputs/paired_rna_oracle/runs/fold0.npz": "8215bd65831c7c6b0ba1706d210e45ccbf7949deaf02720e83e60f070fee587c",
+    "outputs/paired_rna_oracle/runs/fold1.npz": "cbee4ca6827803659c43cd954bfeeadf3776375cd47109cd53843ccbd4c92fc6",
+    "outputs/paired_rna_oracle/runs/fold2.npz": "2cfd72e808c131c37ac6e3cecb1e0be1f0bd954ebd7f841233febd862a2fab32",
+    "outputs/paired_rna_oracle/runs/fold3.npz": "a85e0b74ba8186dbcf349271a2b42c35c72a4aa1a4fd761015b9f4098d5219d7",
+    "outputs/paired_rna_oracle/runs/fold4.npz": "e4a806890256b4f20db8ecdc1c8c7414feec070270d157676fa71cf4b5d583b6"
+  }
+}

@@ -80,8 +80,8 @@ model- and cohort-dependent, or negative, and all 12 joint intervals include
 zero; class-matched LR extensions to 64 COMBAT and 128 OneK1K subjects reveal
 no delayed resolved benefit. APT-Bench supplies the primary patient-disjoint testbed with 361{,}792
 single-cell aptamer profiles from 40 patients. Its hierarchy and patient-
-characterization tracks serve as case studies: coarse lineage is much easier
-than fine subtype prediction, while disease-associated variation is entangled
+characterization tracks serve as case studies of label resolution and
+statistical unit, while disease-associated variation is entangled
 with patient-specific absolute-expression structure. The central result is
 therefore methodological: fixed cell totals are insufficient for subject--cell
 scaling unless label distribution and both sources of sampling uncertainty are
@@ -264,6 +264,48 @@ patient-disjoint taxonomy; it does not estimate annotation accuracy.
     data-access, license, and intended-use terms referenced in the Ethics and
     Reproducibility Statements.}
 \end{itemize}
+
+\subsection{Chance-Adjusted Resolution Diagnostic}
+\label{sec:appendix:granularity_chance}
+
+Raw coarse and fine Macro-F1 compare five-class and 27-class tasks with different
+label frequencies and decision boundaries. We therefore treat their difference
+as descriptive, not evidence of a resolution deficit beyond task cardinality.
+Using the released 40 patient-specific OOF confusion matrices from the matched
+linear-probe RNA diagnostic, we normalize each matrix to unit mass and average
+over patients to obtain $M$. Let $p_k=\sum_j M_{kj}$ and
+$q_k=\sum_i M_{ik}$. The independence reference $M^0_{ij}=p_iq_j$ retains both
+true and predicted marginals while breaking their association. We report
+\begin{equation}
+S_0=\frac{1}{K}\sum_k\frac{2p_kq_k}{p_k+q_k},\qquad
+S_{\mathrm{adj}}=\frac{\operatorname{MacroF1}(M)-S_0}{1-S_0},
+\end{equation}
+with zero contribution when $p_k+q_k=0$. This is F1 of an independence matrix,
+not the exact expectation of finite-sample permutation F1. Each of 2,000 paired
+patient-bootstrap draws recomputes $M$, both marginals, and the adjustment; the
+same patient draw is used for both resolutions and all modalities. These
+intervals condition on the fitted models and do not include retraining variation.
+
+\input{tables/granularity_chance}
+
+For APT, the raw coarse/fine scores 0.288/0.104 have chance references
+0.186/0.033 and adjusted scores 0.125/0.074. The difference shrinks from 0.184
+to 0.051 (95\% interval $[0.030,0.080]$). Adjusted RNA and APT+RNA differences
+are 0.316 ($[0.293,0.356]$) and 0.289 ($[0.264,0.329]$), respectively.
+The subject-balanced true-label entropies are 1.253 and 2.488 nats, corresponding
+to effective class counts $\exp(H)$ of 3.50 and 12.03. These describe rather
+than match class imbalance. The adjustment accounts for marginal chance
+agreement, but does not control label boundaries, class count, annotation
+reliability, or within-lineage separability; none of these residual differences
+establishes a cardinality-independent biological granularity effect.
+
+True-lineage-conditioned subtype decoding is not evaluated here. It requires
+OOF subtype scores restricted to the children of the true lineage (or separately
+trained conditional classifiers); hard predictions and confusion matrices cannot
+recover that decision. In particular, filtering to predictions that already
+match the true lineage would select easier cases rather than provide this
+control. Thus the present diagnostic cannot attribute fine errors uniquely to
+lineage identification versus within-lineage discrimination.
 
 \subsection{Benchmark Interface and Release Contract}
 \label{sec:appendix:benchmark_release}

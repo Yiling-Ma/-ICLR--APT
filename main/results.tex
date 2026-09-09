@@ -74,7 +74,7 @@ whereas equal-cell-per-patient evaluation changes patient-disjoint scores by at
 most 0.009. Preventing patient overlap, rather than merely reweighting cells, is
 therefore the consequential control.
 
-Under patient-disjoint evaluation, all models exhibit a large coarse--fine gap
+Under patient-disjoint evaluation, all models have lower raw fine than coarse F1
 (Appendix Table~\ref{tab:main}). The soft-cascade recipe reaches coarse/fine macro-F1
 0.326/0.152 and the flat Transformer 0.323/0.147; no soft-cascade comparison
 with Flat, HCE, or XGBoost excludes zero. Because only the soft cascade uses
@@ -83,8 +83,14 @@ not evidence for an individual hierarchy component.
 
 A paired-RNA probe reaches 0.790/0.442, versus 0.288/0.104 for APT under the
 same linear-probe protocol; APT+RNA raises RNA fine macro-F1 by $+0.031$ (95\%
-CI $[0.016,0.046]$). Limited APT resolution is therefore one contributor, not a
-complete explanation, because RNA itself retains a large granularity gap.
+CI $[0.016,0.046]$). This establishes an input-dependent reconstruction difference
+under this probe, not an intrinsic limit of the APT modality. These five-class and 27-class tasks
+also differ in entropy, imbalance, and label boundaries; their raw F1 difference
+does not isolate biological resolution. In the matched linear-probe diagnostic,
+a marginal-chance adjustment reduces the APT coarse-minus-fine difference from
+0.184 to 0.051 (paired patient-bootstrap 95\% interval $[0.030,0.080]$;
+Appendix~\ref{sec:appendix:granularity_chance}). The residual is descriptive:
+chance adjustment does not equate task cardinality or within-lineage difficulty.
 Per-subtype support and error-conditioned hierarchy analyses remain exploratory
 and are reported in Appendix~\ref{sec:appendix:subtype_audit}.
 
