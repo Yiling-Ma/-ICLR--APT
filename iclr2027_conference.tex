@@ -79,10 +79,8 @@ subjects. After class matching, LR and XGBoost effects become small,
 model- and cohort-dependent, or negative, and all 12 joint intervals include
 zero; class-matched LR extensions to 64 COMBAT and 128 OneK1K subjects reveal
 no delayed resolved benefit. APT-Bench supplies the primary patient-disjoint testbed with 361{,}792
-single-cell aptamer profiles from 40 patients. Its hierarchy and patient-
-characterization tracks serve as case studies of label resolution and
-statistical unit, while disease-associated variation is entangled
-with patient-specific absolute-expression structure. The central result is
+single-cell aptamer profiles from 40 patients, complemented by public
+cross-cohort evaluations. The central result is
 therefore methodological: fixed cell totals are insufficient for subject--cell
 scaling unless label distribution and both sources of sampling uncertainty are
 made explicit.
@@ -453,10 +451,27 @@ procedure.}
 \subsection{Confounding Audit of Within-Cohort Disease Association}
 \label{sec:appendix:disease_patient_level}
 
+\paragraph{Exploratory scope and independent sample size.}
+All disease analyses reuse one cohort of 40 independent patients across six
+groups (6--8 patients per group); the 361{,}792 cells are repeated observations,
+not additional independent disease outcomes. Outer-fold disease models are
+developed on only 32 patients. Nested cross-fitting separates training from
+evaluation but does not increase the number of independent subjects, remove
+unmeasured confounding, or turn repeated analyses into independent replications.
+Regularization and inner validation mitigate model-selection risk without
+eliminating the uncertainty associated with this small development sample.
+The representation comparisons and post-hoc sensitivities below are exploratory,
+not confirmatory evidence of incremental subtype value or clinical utility.
+Reported patient-bootstrap intervals do not account for the full adaptive
+history of analysis choices. Clinical validation would require an independent
+APT cohort with recorded acquisition covariates and a frozen preprocessing,
+feature-selection, and prediction pipeline; the external scaling experiments
+do not supply that disease-validation cohort.
+
 \input{tables/disease}
 
 \paragraph{Cell-level prediction of the disease source of a held-out patient.}
-Table~\ref{tab:disease} reports the main associational patient-characterization
+Table~\ref{tab:disease} reports the exploratory patient-characterization
 audit. For completeness, Table~\ref{tab:disease_cell_level} reports the pooled
 \emph{cell-level} source-prediction metric, in which every held-out cell is
 treated as a target and pooled across all 361{,}792 cells. This is an easier and

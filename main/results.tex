@@ -111,23 +111,18 @@ chance adjustment does not equate task cardinality or within-lineage difficulty.
 Per-subtype support and error-conditioned hierarchy analyses remain exploratory
 and are reported in Appendix~\ref{sec:appendix:subtype_audit}.
 
-\subsection{Patient Characterization as a Case Study}
+\subsection{Exploratory Patient-Level Audit}
 \label{sec:results:composition_bridge}
 
-Strict nested cross-fitting connects cell outputs to patient characterization
-without exposing an outer-test patient to either stage. Disease-label-free
-XGBoost subtype probabilities reach patient macro-F1 0.593, versus 0.477 for
-lineage probabilities, but the difference is unresolved ($+0.116$, 95\% CI
-$[-0.015,0.262]$). Subtype composition also has no resolved increment over log
-cell count, recorded RNA-QC summaries, or QC plus lineage. This establishes
-associational representation transfer, not subtype mediation or error
-propagation.
-
-Direct APT disease prediction is stronger but sensitive to patient-specific
-structure: patient-wise centering reduces majority-vote accuracy by 35 points,
-and individual cells readily predict their source patient. Disease, patient,
-and unrecorded acquisition effects are not identifiable in this cohort.
-Consequently, disease prediction, compact panels, and inference-cell budgets
-remain secondary diagnostics in Appendix~\ref{sec:appendix:disease_patient_level}
-and Appendix~\ref{sec:appendix:minimal_panel}; they are not additional core
-contributions.
+The disease audit has 40 independent patients, not 361{,}792 independent
+outcomes. Under strict nested cross-fitting, the subtype-minus-lineage
+patient macro-F1 difference remains unresolved ($+0.116$, 95\% patient-bootstrap
+CI $[-0.015,0.262]$), with no resolved subtype increment over the recorded
+nuisance controls. Correct splitting does not distinguish biological from
+unrecorded acquisition effects. We therefore treat these results as exploratory
+within-cohort associations, not evidence of incremental subtype utility,
+cross-task error propagation, or clinical validity. Complete disease,
+compact-panel, and inference-cell audits appear in
+Appendix~\ref{sec:appendix:disease_patient_level} and
+Appendix~\ref{sec:appendix:minimal_panel}; the scaling contribution does not
+depend on their predictive performance.

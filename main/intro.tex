@@ -38,20 +38,16 @@ training subjects show no delayed resolved gain. These results do not imply
 that subject breadth is unimportant; they show that its effect cannot be read
 from a fixed-total curve that also changes the prediction problem.
 
-Two APT analyses illustrate why the protocol matters. First, patient-disjoint
-coarse-to-fine typing records resolution-dependent scores and prevents cell-level
-identity leakage; a soft-cascade Transformer is only one reference recipe, not
-the paper's method contribution. Second, strict nested aggregation tests whether
-cell outputs transfer to patient characterization. The transferred signal is
-associational and has no resolved subtype increment over lineage or recorded
-nuisance summaries, while direct disease prediction is sensitive to
-patient-specific absolute-expression structure. Compact panels and
-inference-cell budgets are therefore confined to secondary appendix
-sensitivities.
+APT hierarchy prediction supplies a concrete cell-annotation setting for this
+evaluation question; the soft-cascade Transformer is a reference recipe, not
+the method contribution. Disease characterization, compact panels, and
+inference-cell budgets remain exploratory appendix audits of the 40-patient
+cohort. They neither establish clinical utility nor provide independent
+validation of the scaling protocol.
 
 Our contributions are:
 \begin{itemize}
     \item \textbf{A failure mode in subject--cell scaling.} We show that fixed-total, patient-disjoint experiments can still confound subject breadth with observed labels, class counts, and class proportions.
     \item \textbf{A class-matched protocol with joint uncertainty.} The comparison freezes the marginal training label distribution and propagates variation from both sampled training subsets and held-out subjects.
-    \item \textbf{Cross-cohort evidence and scoped case studies.} APT, COMBAT, and OneK1K show that the correction materially changes the scaling conclusion; hierarchy and patient-characterization analyses demonstrate the consequences for a new single-cell aptamer modality without expanding the primary claim.
+    \item \textbf{Cross-cohort evaluation evidence.} Experiments on APT, COMBAT, and OneK1K show how the matched protocol changes the apparent scaling conclusion across measurement settings; controlled simulations assess a specified allocation target rather than a universal causal effect.
 \end{itemize}

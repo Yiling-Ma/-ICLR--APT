@@ -25,22 +25,25 @@ mechanically erase a breadth benefit, but does not establish real-data mediation
 The protocol provides a reproducible sensitivity analysis rather than a unique
 causal explanation of the observed regularity.
 
-The APT case studies clarify the scope rather than add parallel stories.
-Hierarchy prediction demonstrates that leakage and granularity alter the
-apparent learning problem, while the nested patient audit shows that correct
-splitting cannot resolve unmeasured acquisition confounding. Neither a complex
-hierarchy model nor a compact feature panel repairs an ill-specified estimand.
-For clinical single-cell evaluation, subject and cell budgets, label support,
-split units, and both uncertainty sources should therefore be reported as part
-of the benchmark contract.
+The 40-patient APT cohort also limits patient-level inference: six disease
+groups contain only 6--8 independent patients each. Neither more cells nor
+additional resampling supplies independent clinical replication. Nested
+validation controls information flow, but does not resolve limited precision,
+adaptive analysis choices, or unmeasured acquisition confounding. The disease
+audits are consequently exploratory and are not prerequisites for the scaling
+contribution. COMBAT and OneK1K extend the scaling evaluation, not the clinical
+validation of APT disease prediction. More generally, subject and cell budgets,
+label support, split units, and both uncertainty sources should be explicit in
+single-cell evaluation.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
 Fixed cell totals can confound subject breadth with the training label
-distribution. A class-matched, jointly resampled evaluation reverses or removes
-the apparent subject advantage across APT, COMBAT, and OneK1K, while APT
-hierarchy and patient-characterization case studies expose the practical
-consequences of statistical-unit and nuisance mismatches. APT-Bench therefore
-contributes an evaluation protocol for asking subject--cell scaling questions,
-not a universal scaling law or a claim of model superiority.
+distribution. Across APT, COMBAT, and OneK1K, class matching with within-class
+donor balancing changes the apparent advantage, while joint resampling reveals
+uncertainty hidden by conditioning on training subsets. These comparisons do
+not identify a unique causal mechanism or establish equivalence between
+sampling strategies. APT-Bench contributes an explicit evaluation protocol for
+subject--cell scaling, not a universal scaling law, model-superiority claim,
+or clinically validated disease predictor.
