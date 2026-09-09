@@ -1,0 +1,121 @@
+feature_set,sample_id,disease,prediction
+Recovered cell count,CRC11,CRC,HCC
+Recovered cell count,CRC13,CRC,PC
+Recovered cell count,CRC16,CRC,HCC
+Recovered cell count,CRC17,CRC,CRC
+Recovered cell count,CRC22,CRC,PC
+Recovered cell count,CRC23,CRC,GC
+Recovered cell count,CRC24,CRC,HCC
+Recovered cell count,CRC25,CRC,HCC
+Recovered cell count,GC28_P_cDNA,GC,HCC
+Recovered cell count,GC29_P_cDNA,GC,PC
+Recovered cell count,GC2_P_cDNA,GC,PC
+Recovered cell count,GC30_P_cDNA,GC,HCC
+Recovered cell count,GC31_P_cDNA,GC,HCC
+Recovered cell count,GC32_P_cDNA,GC,HCC
+Recovered cell count,GC36_P_cDNA,GC,HCC
+Recovered cell count,HCC-1,HCC,HCC
+Recovered cell count,HCC-2-1_1,HCC,HCC
+Recovered cell count,HCC-2-2,HCC,HCC
+Recovered cell count,HCC-22,HCC,HCC
+Recovered cell count,HCC-24,HCC,HCC
+Recovered cell count,HCC-3-1_2,HCC,HCC
+Recovered cell count,HCC-3-2_1,HCC,HCC
+Recovered cell count,PBMC-1,Normal,Normal
+Recovered cell count,PBMC-2,Normal,Normal
+Recovered cell count,PBMC-3,Normal,Normal
+Recovered cell count,PBMC-4,Normal,Normal
+Recovered cell count,PBMC-5,Normal,Normal
+Recovered cell count,PBMC-6,Normal,Normal
+Recovered cell count,PC-1,PC,Normal
+Recovered cell count,PC-2,PC,PC
+Recovered cell count,PC-3,PC,PC
+Recovered cell count,PC-4,PC,PC
+Recovered cell count,PC-5,PC,PC
+Recovered cell count,PC-6,PC,HCC
+Recovered cell count,PRZ1,BTC,BTC
+Recovered cell count,PRZ2,BTC,BTC
+Recovered cell count,PRZ3,BTC,BTC
+Recovered cell count,PRZ4,BTC,HCC
+Recovered cell count,PRZ5,BTC,BTC
+Recovered cell count,PRZ6,BTC,BTC
+RNA QC summaries,CRC11,CRC,CRC
+RNA QC summaries,CRC13,CRC,BTC
+RNA QC summaries,CRC16,CRC,HCC
+RNA QC summaries,CRC17,CRC,HCC
+RNA QC summaries,CRC22,CRC,PC
+RNA QC summaries,CRC23,CRC,BTC
+RNA QC summaries,CRC24,CRC,BTC
+RNA QC summaries,CRC25,CRC,HCC
+RNA QC summaries,GC28_P_cDNA,GC,CRC
+RNA QC summaries,GC29_P_cDNA,GC,GC
+RNA QC summaries,GC2_P_cDNA,GC,PC
+RNA QC summaries,GC30_P_cDNA,GC,GC
+RNA QC summaries,GC31_P_cDNA,GC,BTC
+RNA QC summaries,GC32_P_cDNA,GC,BTC
+RNA QC summaries,GC36_P_cDNA,GC,GC
+RNA QC summaries,HCC-1,HCC,GC
+RNA QC summaries,HCC-2-1_1,HCC,GC
+RNA QC summaries,HCC-2-2,HCC,HCC
+RNA QC summaries,HCC-22,HCC,HCC
+RNA QC summaries,HCC-24,HCC,CRC
+RNA QC summaries,HCC-3-1_2,HCC,HCC
+RNA QC summaries,HCC-3-2_1,HCC,HCC
+RNA QC summaries,PBMC-1,Normal,Normal
+RNA QC summaries,PBMC-2,Normal,Normal
+RNA QC summaries,PBMC-3,Normal,Normal
+RNA QC summaries,PBMC-4,Normal,Normal
+RNA QC summaries,PBMC-5,Normal,Normal
+RNA QC summaries,PBMC-6,Normal,Normal
+RNA QC summaries,PC-1,PC,BTC
+RNA QC summaries,PC-2,PC,PC
+RNA QC summaries,PC-3,PC,PC
+RNA QC summaries,PC-4,PC,PC
+RNA QC summaries,PC-5,PC,PC
+RNA QC summaries,PC-6,PC,GC
+RNA QC summaries,PRZ1,BTC,PC
+RNA QC summaries,PRZ2,BTC,CRC
+RNA QC summaries,PRZ3,BTC,HCC
+RNA QC summaries,PRZ4,BTC,BTC
+RNA QC summaries,PRZ5,BTC,GC
+RNA QC summaries,PRZ6,BTC,GC
+All recorded QC proxies,CRC11,CRC,HCC
+All recorded QC proxies,CRC13,CRC,CRC
+All recorded QC proxies,CRC16,CRC,CRC
+All recorded QC proxies,CRC17,CRC,CRC
+All recorded QC proxies,CRC22,CRC,PC
+All recorded QC proxies,CRC23,CRC,CRC
+All recorded QC proxies,CRC24,CRC,HCC
+All recorded QC proxies,CRC25,CRC,HCC
+All recorded QC proxies,GC28_P_cDNA,GC,HCC
+All recorded QC proxies,GC29_P_cDNA,GC,PC
+All recorded QC proxies,GC2_P_cDNA,GC,PC
+All recorded QC proxies,GC30_P_cDNA,GC,GC
+All recorded QC proxies,GC31_P_cDNA,GC,PC
+All recorded QC proxies,GC32_P_cDNA,GC,CRC
+All recorded QC proxies,GC36_P_cDNA,GC,GC
+All recorded QC proxies,HCC-1,HCC,HCC
+All recorded QC proxies,HCC-2-1_1,HCC,GC
+All recorded QC proxies,HCC-2-2,HCC,CRC
+All recorded QC proxies,HCC-22,HCC,GC
+All recorded QC proxies,HCC-24,HCC,HCC
+All recorded QC proxies,HCC-3-1_2,HCC,HCC
+All recorded QC proxies,HCC-3-2_1,HCC,CRC
+All recorded QC proxies,PBMC-1,Normal,Normal
+All recorded QC proxies,PBMC-2,Normal,Normal
+All recorded QC proxies,PBMC-3,Normal,Normal
+All recorded QC proxies,PBMC-4,Normal,Normal
+All recorded QC proxies,PBMC-5,Normal,Normal
+All recorded QC proxies,PBMC-6,Normal,Normal
+All recorded QC proxies,PC-1,PC,BTC
+All recorded QC proxies,PC-2,PC,PC
+All recorded QC proxies,PC-3,PC,PC
+All recorded QC proxies,PC-4,PC,CRC
+All recorded QC proxies,PC-5,PC,PC
+All recorded QC proxies,PC-6,PC,GC
+All recorded QC proxies,PRZ1,BTC,BTC
+All recorded QC proxies,PRZ2,BTC,BTC
+All recorded QC proxies,PRZ3,BTC,GC
+All recorded QC proxies,PRZ4,BTC,CRC
+All recorded QC proxies,PRZ5,BTC,BTC
+All recorded QC proxies,PRZ6,BTC,BTC

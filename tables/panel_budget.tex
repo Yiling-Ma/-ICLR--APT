@@ -19,7 +19,7 @@
 \end{tabular}
 
 \caption{
-Outer-test-isolated patient-level panel selection for disease recognition. In each
+Outer-test-isolated feature-budget sensitivity for the mixed disease-associated signal. In each
 outer fold, aptamer ranking and budget selection are performed using
 outer-development patients only, and the selected budget is evaluated once on
 the untouched outer-test patients. The ranking is fixed across inner validation
@@ -27,8 +27,9 @@ splits; $B$ is selected conditional on that ranking. Under the analysis-specifie
 non-preregistered tolerance margin $\delta=0.02$, all five folds select the same development budget
 $B^*=10$, and the resulting 10-aptamer panels preserve the observed
 full-panel patient macro-F1 for both Logistic Regression and XGBoost.
-This result supports a measurement-efficiency interpretation rather than a
-claim of unique causal biomarkers.
+This result demonstrates feature redundancy of the observed mixed
+disease-associated signal. It does not validate a reduced assay, a biological
+signature, or unique causal biomarkers.
 }
 \label{tab:panel_budget}
 

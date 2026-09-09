@@ -14,16 +14,11 @@
 & \textbf{Patient Acc.} & \textbf{Macro-F1} & \textbf{Macro-AUROC} & \textbf{Perm. $p$} \\
 \midrule
 
-Cell-level classifiers$^{*}$, majority vote
-& \textbf{1.000} & \textbf{1.000} & -- & -- \\
-
-\midrule
-
-Patient-level APT median $+$ LR$^\dagger$
-& 0.950 & 0.948 & 1.000 & 0.0010 \\
-
 Log cell count $+$ LR$^\ddagger$
 & 0.575 & 0.531 & 0.800 & 0.00010 \\
+
+All recorded QC proxies $+$ LR$^\P$
+& 0.550 & 0.566 & 0.859 & -- \\
 
 Nested soft subtype composition $+$ LR$^\S$
 & 0.600 & 0.593 & 0.854 & 0.00010 \\
@@ -45,10 +40,9 @@ Gold lineage composition $+$ LR$^\ddagger$
 
 \parbox{\columnwidth}{
 \footnotesize
-$^{*}$ Five cell-level classifiers share the $40/40$ majority-vote result;
-their distinct cell metrics appear in Table~\ref{tab:disease_cell_level}.
-$^\dagger$ One 293-APT median vector per patient.
 $^\ddagger$ Patient-level technical or paired-transcriptomic oracle features.
+$^\P$ Recovered cell count plus five patient summaries of recorded RNA UMI and
+detected-gene QC fields; see Appendix~\ref{sec:appendix:disease_patient_level}.
 $^\S$ Soft probabilities from disease-label-free XGBoost under strict nested
 cross-fitting. Composition rows use raw proportions; LR regularization is tuned
 only within each outer-development set. Composition permutation tests use
@@ -56,12 +50,13 @@ only within each outer-development set. Composition permutation tests use
 }
 
 \caption{
-\textbf{Patient-level} disease classification ($n=40$). The majority-vote
-accuracy has 95\% Clopper--Pearson CI $[0.912,1.000]$. Predicted composition
-retains disease-associated variation, but its gains over lineage composition
-and cell count have bootstrap intervals spanning zero. All
-disease results are within-cohort estimates, not evidence of clinical
-generalization; see Appendix~\ref{sec:appendix:disease_patient_level}.
+\textbf{Associational patient-characterization audit} ($n=40$). Predicted
+composition retains disease-associated variation, but its gains over lineage
+composition, recovered cell count, and recorded RNA-QC proxies have
+patient-bootstrap intervals spanning zero. These representations may contain biological, patient, or technical
+structure. Direct APT classifiers and their confounding controls are confined
+to Appendix~\ref{sec:appendix:disease_patient_level}; no row establishes
+biological mediation or clinical generalization.
 }
 \label{tab:disease}
 

@@ -1,0 +1,2 @@
+comparison,metric,difference,ci_low,ci_high,bootstrap_replicates
+predicted_soft_subtype_minus_all_recorded_qc,macro_f1,0.026996532878885926,-0.15650225076855517,0.21499019369526828,2000

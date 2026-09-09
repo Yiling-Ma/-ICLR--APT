@@ -14,6 +14,6 @@ $B$ & Model & Top-$B$ & Random mean [95\% interval] & Percentile \\
 20 & XGBoost & 1.000 & 0.981 [0.923, 1.000] & 75.0 \\
 \bottomrule
 \end{tabular}
-\caption{Compact-panel random controls over 100 panel repeats. Top-$B$ uses fold-specific outer-development LR rankings. Each repeat draws one random panel shared across outer folds; both classifiers are refitted in every fold. The percentile is the empirical midrank of Top-$B$ within the random distribution.}
+\caption{Feature-redundancy controls over 100 panel repeats. Top-$B$ uses fold-specific outer-development LR rankings. Each repeat draws one random panel shared across outer folds; both classifiers are refitted in every fold. The percentile is the empirical midrank of Top-$B$ within the random distribution. Because disease and unrecorded acquisition effects are not identifiable, these values characterize only the mixed within-cohort signal.}
 \label{tab:psas_random}
 \end{table}

@@ -46,7 +46,7 @@ are designed probes rather than an arbitrary learned basis.
 
 APT-Bench contains two kinds of targets at different observational units.
 \begin{itemize}
-    \item \textbf{Patient-level disease recognition.} Each patient is assigned to one of six disease groups.
+    \item \textbf{Patient-level disease-association audit.} Each patient is assigned to one of six disease groups. Because every participant contributes a single acquisition and batch metadata are unavailable, this target supports within-cohort association and confounding analyses, not biological attribution or clinical validation.
     \item \textbf{Cell-level hierarchy prediction.} Each cell is assigned to one of five coarse immune lineages and one of \numsubtypes{} fine subtypes. Every subtype maps to exactly one parent lineage through a manually curated lookup table. The same subtype names and operational definitions are used across all six disease groups rather than being redefined by disease.
 \end{itemize}
 Disease is therefore not treated as the root of a three-level hierarchy. It is a separate patient-level label observed on the same blood draw.
@@ -123,4 +123,7 @@ accuracy, root-excluded example-averaged lineage/subtype F1, and subtype-tree di
 support correlations, sibling errors, and the coarse--fine gap are exploratory
 difficulty diagnostics.
 
-We report disease recognition at the patient level, since the clinical decision is made per patient rather than per cell. Cell-level disease accuracies are included only as supplementary evidence and are not interpreted as though hundreds of thousands of cells were independent disease observations.
+We audit disease association at the patient level because disease labels belong
+to patients rather than cells. Cell-level source-prediction accuracies are
+included only as supplementary confounding diagnostics and are not interpreted
+as though hundreds of thousands of cells were independent disease observations.

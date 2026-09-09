@@ -1,0 +1,4 @@
+feature_set,n_features,accuracy,macro_f1,macro_auroc,permutation_p_macro_f1,null_macro_f1_mean,null_macro_f1_q025,null_macro_f1_q975,selected_c_by_fold
+Recovered cell count,1,0.575,0.5309697709697709,0.8002959943447076,,,,,10.0;100.0;100.0;10.0;100.0
+RNA QC summaries,3,0.475,0.4782051282051282,0.7871718763262882,,,,,100.0;100.0;100.0;100.0;100.0
+All recorded QC proxies,6,0.55,0.5659438600615071,0.8594592192937781,,,,,1.0;1.0;10.0;10.0;10.0

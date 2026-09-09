@@ -11,11 +11,13 @@ Unlike gene-vocabulary scRNA-seq or antibody-derived-tag integration benchmarks,
 our predictive input is a fixed 293-aptamer binding panel. This enables three
 questions: how performance changes from coarse lineage to fine subtype; how
 patient-level disease evaluation handles many correlated cells but only 40
-subjects; and how many measured aptamers and held-out cells preserve that disease signal at inference.
+subjects; and whether cell-level predictions retain patient-associated
+variation under strict nested aggregation.
 
 APT-Bench fixes three patient-disjoint tracks: coarse-to-fine cell typing,
-patient-level disease recognition with statistical-unit audits, and measurement
-efficiency over aptamer-measurement and inference-aggregation budgets. Its reusable contribution is not a
+two-axis training-scale evaluation, and cross-fitted patient characterization
+with explicit technical controls. Aptamer-panel and inference-cell budgets are
+reported only as secondary sensitivities of the observed within-cohort signal. Its reusable contribution is not a
 claim that one cohort spans deployment, but a common contract for a new modality:
 immutable patient folds, explicit observational units, leakage-resistant metrics,
 and outer-test-isolated budget controls that can extend to future clinical single-cell cohorts.
@@ -46,13 +48,14 @@ observations. Third, strictly nested, disease-label-free XGBoost subtype
 probabilities retain disease-associated variation after patient aggregation:
 soft subtype composition reaches disease macro-F1 0.593 versus 0.477 for
 lineage composition. The paired difference is uncertain, however, and subtype
-composition does not significantly exceed a cell-count-only control. The
+composition does not significantly exceed cell count or a six-feature recorded
+RNA-QC baseline. The
 bridge is therefore predictive and associational; direct APT discrimination is
 stronger but sensitive to patient-specific absolute-expression structure.
 
 Our contributions are therefore as follows.
 \begin{itemize}
-    \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize three tasks with fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, patient-level disease audit, and measurement efficiency.
+    \item \textbf{APT-Bench, a patient-disjoint benchmark for single-cell APT liquid biopsy.} We formalize fixed patient folds, common inputs and labels, and a portable evaluation contract spanning hierarchy prediction, two-axis scaling, and confounding-aware patient characterization.
     \item \textbf{A controlled account of the granularity gap.} Beyond aggregate macro-F1, we report joint hierarchy metrics, subtype-level support analyses, and patient-clustered comparisons. An encoder-matched reference ladder separates hierarchy mechanisms from backbone capacity and finds no supported gain from additional cascade complexity.
     \item \textbf{Controlled and externally replicated two-axis scaling.} Fixed-total-cell and matched-doubling experiments distinguish subject diversity from within-subject depth; the fixed-total direction is tested on COMBAT RNA and ADT, while strict nested cross-fitting converts disease-label-free subtype probabilities into patient compositions without exposing either stage to outer-test patients.
 \end{itemize}

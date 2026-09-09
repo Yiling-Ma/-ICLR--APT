@@ -1,0 +1,21 @@
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Recorded feature set} & \textbf{$d$} & \textbf{Acc.} & \textbf{Macro-F1} & \textbf{Macro-AUROC} \\
+\midrule
+Recovered cell count & 1 & 0.575 & 0.531 & 0.800 \\
+RNA QC summaries & 3 & 0.475 & 0.478 & 0.787 \\
+All recorded QC proxies & 6 & 0.550 & 0.566 & 0.859 \\
+Predicted soft subtype composition & 27 & 0.600 & 0.593 & 0.854 \\
+\bottomrule
+\end{tabular}
+\caption{Matched patient-level nuisance audit. All rows use the same outer
+folds and inner patient-level regularization selection. The predicted-composition
+minus all-recorded-QC Macro-F1 difference is $+0.027$ with a 95\% paired
+patient-bootstrap interval of $[-0.157,0.215]$ (2{,}000 resamples). Recorded
+QC fields are incomplete proxies, not batch labels.}
+\label{tab:technical_covariate_audit}
+\end{table}

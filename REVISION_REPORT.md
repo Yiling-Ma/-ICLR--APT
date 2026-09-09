@@ -44,6 +44,17 @@ matched doublings along each axis, pooled cell-weighted Macro-F1, mean
 within-patient Macro-F1, separate subset-seed intervals, paired patient bootstrap
 intervals, and a descriptive response surface with outer-fold fixed effects.
 
+### Technical-confounding audit
+
+The disease track now includes a matched nuisance-only baseline built from the
+recorded RNA QC fields. For every patient, the analysis summarizes recovered
+cell count, median and interquartile-range log UMI count, median and
+interquartile-range detected-gene count, and the median detected-gene/UMI
+ratio. Logistic Regression regularization is selected by four-fold inner
+patient CV inside each 32-patient outer-development set, using the same sealed
+eight-patient outer folds as the composition bridge. The comparison therefore
+does not benefit from test-patient leakage or a weaker tuning protocol.
+
 ## Metadata and scope audit
 
 The merged benchmark metadata contain only `cell_id`, `sample_id`, `disease`,
@@ -64,6 +75,11 @@ clinical, causal, cross-batch, or external-generalization claims.
   soft lineage composition reaches 0.477. The paired difference is +0.116 with
   patient-bootstrap 95% CI [-0.015, 0.262]. The corresponding subtype-minus-log
   cell-count difference is +0.062 with 95% CI [-0.087, 0.218].
+- The six-feature recorded-QC baseline reaches patient accuracy/macro-F1/AUROC
+  0.550/0.566/0.859. Predicted subtype composition exceeds it by only +0.027
+  Macro-F1, with paired patient-bootstrap 95% CI [-0.157, 0.215]. This does not
+  establish incremental disease information beyond the available nuisance
+  summaries, and the missing acquisition variables remain untestable.
 - Hierarchy metrics and wrong-conditioned cross-lineage null: complete.
 - Compact-panel Random-B, inference-cell, permutation, and XGBoost-SHAP controls:
   complete, but the primary budget selection remains conditional on a ranking
@@ -127,7 +143,13 @@ claim an algorithmic contribution. The prespecified patient-bootstrap tests
 are framed as an architecture audit, and their null result is reported as a
 benchmark finding: additional cascade complexity is not supported after
 controlling the backbone and training budget.
-winner. Compact panels are secondary appendix sensitivities supporting
+
+Direct APT disease classifiers, compact panels, and attribution are no longer
+primary disease results. The main table instead reports composition and
+recorded-nuisance controls, while direct 40/40 majority vote and the 0.950
+median-APT accuracy are confined to an appendix confounding audit. Patient-level
+attribution figures were removed. Compact panels are secondary appendix
+sensitivities supporting
 conditional within-cohort redundancy, not clinical performance, a uniquely
 minimal panel, or validated biomarkers. Disease prediction is consistently
 described as within-cohort and confounding-sensitive.
@@ -137,7 +159,8 @@ described as within-cohort and confounding-sensitive.
 - Analysis and reproduction: `analysis/oof_composition_bridge.py`,
   `analysis/patient_cell_scaling.py`,
   `analysis/summarize_fair_patient_cell_scaling.py`,
-  `analysis/generate_composition_protocol_audit.py`, `Makefile`, and
+  `analysis/generate_composition_protocol_audit.py`,
+  `analysis/technical_covariate_disease_audit.py`, `Makefile`, and
   `requirements-analysis.txt`.
 - Benchmark contract and audit documentation: `README.md`,
   `benchmark/README.md`, `REVISION_PLAN.md`, `CLAIM_ARTIFACT_MAP.md`, and this
@@ -148,6 +171,8 @@ described as within-cohort and confounding-sensitive.
 - New fair-scaling artifacts: `outputs/patient_cell_scaling_fair/`; raw resumable
   run bundles remain at
   `/home/mayiling/projs/apt_agent/outputs/patient_cell_scaling_fair/runs/`.
+- New confounding-audit artifacts:
+  `outputs/technical_covariate_disease_audit/`.
 
 ## Reproduction
 
@@ -166,6 +191,18 @@ python analysis/oof_composition_bridge.py audit
 python analysis/oof_composition_bridge.py fit-base --device cuda --n-jobs 8
 python analysis/oof_composition_bridge.py aggregate
 python analysis/oof_composition_bridge_downstream.py --n-jobs 32 --permutations 10000
+```
+
+The recorded-nuisance audit was generated with:
+
+```bash
+python analysis/technical_covariate_disease_audit.py \
+  --metadata data/metadata.csv \
+  --annotation data/cell_annotation.csv \
+  --folds benchmark/splits/patient_folds.json \
+  --composition-predictions outputs/oof_composition_bridge/patient_disease_predictions.parquet \
+  --permutations 0 \
+  --output-dir outputs/technical_covariate_disease_audit
 ```
 
 The fair scaling production run used the same immutable folds and resumable

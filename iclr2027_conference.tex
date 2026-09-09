@@ -82,7 +82,7 @@ and a matched COMBAT ADT sensitivity. Effect magnitude and subset-seed stability
 remain dataset-, modality-, task-, and model-dependent. A strict nested bridge aggregates disease-label-free XGBoost subtype probabilities
 without exposing either stage to outer-test patients. Predicted subtype
 composition retains disease-associated variation (patient macro-F1 0.593), but
-its gains over lineage composition and a cell-count-only control have
+its gains over lineage composition, cell count, and recorded RNA-QC controls have
 patient-bootstrap intervals spanning zero. Stronger direct APT discrimination
 is sensitive to patient-specific absolute-expression signatures whose
 biological and technical origins cannot be separated with the available
@@ -264,11 +264,42 @@ procedure.}
 
 \input{tables/benchmark_comparison}
 
-\subsection{Disease Classification: Cell-Level Source Prediction and Patient-Level Sensitivity Analyses}
+\subsection{Confounding Audit of Within-Cohort Disease Association}
 \label{sec:appendix:disease_patient_level}
 
 \paragraph{Cell-level prediction of the disease source of a held-out patient.}
-Table~\ref{tab:disease} reports patient-level disease classification, the correct statistical unit for a per-patient diagnostic call. For reference and comparability with earlier reporting conventions, Table~\ref{tab:disease_cell_level} additionally reports the pooled \emph{cell-level} metric, in which every held-out cell is treated as an independent prediction target and pooled across all 361{,}792 cells from the five test folds. This is an easier and statistically different task than patient-level diagnosis, since cells from the same patient are correlated observations rather than independent draws and patients with more cells contribute more weight. We therefore report this metric only as a lower-level diagnostic.
+Table~\ref{tab:disease} reports the main associational patient-characterization
+audit. For completeness, Table~\ref{tab:disease_cell_level} reports the pooled
+\emph{cell-level} source-prediction metric, in which every held-out cell is
+treated as a target and pooled across all 361{,}792 cells. This is an easier and
+statistically different task than patient-level characterization, since cells
+from the same patient are correlated and patients with more cells contribute
+more weight. We report it only as a confounding diagnostic.
+
+\paragraph{Non-identifiability of disease and acquisition effects.}
+Every participant contributes one acquisition, so patient identity is nested
+within both disease group and any unrecorded processing batch. The released
+metadata contain disease and patient identifiers plus transcriptomic UMI and
+detected-gene counts, but no plate, run, date, library, operator, or site field.
+Consequently, neither patient-disjoint prediction nor label permutation can
+identify whether a patient-associated APT offset is biological, technical, or
+mixed. No analysis below is interpreted as disease biology, biomarker
+validation, or clinical performance.
+
+\paragraph{Recorded nuisance-only baselines.}
+We aggregate the only available per-cell QC fields to each patient: recovered
+cell count; medians of $\log(1+\mathrm{UMI})$ and
+$\log(1+\mathrm{detected\ genes})$; median detected-gene/UMI ratio; and the
+interquartile ranges of the two log-count variables. Each feature set uses the
+same outer folds as the composition bridge, four-fold inner patient CV on the
+32 outer-development patients to select LR regularization, refitting on all 32,
+and one evaluation on the sealed eight patients. Table~\ref{tab:technical_covariate_audit}
+shows that these recorded QC proxies alone approach the predicted-composition
+result. They remain proxies rather than measured batch labels, so this analysis
+detects known nuisance structure but cannot rule out unrecorded acquisition
+effects.
+
+\input{tables/technical_covariate_audit}
 
 \input{tables/disease_cell_level}
 
@@ -498,29 +529,6 @@ endpoints or use it to establish a patient- or cell-dominant scaling law, and it
 cannot estimate the benefit of patients drawn from new sites or acquisition
 batches.
 
-\subsection{Patient-Level Lineage-Resolved Attribution Audit}
-\label{sec:appendix:apt_markers}
-
-We revisit disease attribution at the patient, rather than cell, level. For patient $p$, lineage $m$, and aptamer $j$, we compute $\bar{x}_{pmj}=n_{pm}^{-1}\sum_{i\in(p,m)}x_{ij}$, so every point in Figures~\ref{fig:apt_markers_raw} and~\ref{fig:apt_markers_centered} represents one patient regardless of cell count. We show the three aptamers with the best mean rank across the five outer-fold PSAS rankings (APT-179, APT-225, and APT-164) in the three major immune compartments. The raw view is paired with a patient-centered view obtained by subtracting each patient's per-aptamer median across all of their cells before lineage aggregation. Disease groups contain only 6--8 patients, and the two views use the same vertical scale.
-
-This is an exploratory full-cohort visualization, not an independently validated biomarker analysis. Raw patient means separate several disease groups, but much of that separation contracts toward zero after patient centering, consistent with the centering sensitivity in Appendix~\ref{sec:appendix:disease_patient_level}. The available feature manifest contains only anonymized APT identifiers and no verified protein-target mapping. We therefore make no molecular-plausibility, protein-target, or pathway claim from these panels.
-
-\begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figures/patient_lineage_attribution_raw.png}
-\caption{Raw patient-level lineage-resolved distributions for the three highest-ranked stable PSAS aptamers. Each dot is one patient-lineage mean and boxes summarize patients, not cells; disease-group sample sizes are shown on the horizontal axis. Aptamer selection and visualization use the full cohort and are exploratory.}
-\label{fig:apt_markers_raw}
-\end{figure}
-\clearpage
-
-\begin{figure}[p]
-\centering
-\includegraphics[width=\textwidth]{figures/patient_lineage_attribution_centered.png}
-\caption{Patient-centered counterpart to Figure~\ref{fig:apt_markers_raw}. Before lineage aggregation, each patient's per-aptamer median across all cells is subtracted. Each dot is one patient-lineage mean and boxes summarize patients, not cells. The vertical limits match the corresponding raw panels so that contraction after centering is directly visible. Aptamer selection and visualization use the full cohort and are exploratory.}
-\label{fig:apt_markers_centered}
-\end{figure}
-\clearpage
-
 \subsection{Coarse--Fine Consistency Diagnostic}
 \label{sec:appendix:consistency}
 
@@ -528,12 +536,14 @@ Independent coarse and fine classifiers can disagree about the hierarchy even wh
 
 \input{tables/consistency}
 
-\subsection{Minimal Aptamer Panel for Disease Classification}
+\subsection{Feature-Redundancy Sensitivity of the Mixed Disease-Associated Signal}
 \label{sec:appendix:minimal_panel}
 
-To characterize assay measurement sensitivity, we asked how many of the 293
-aptamers preserve the observed within-cohort disease result. This is not a
-clinical deployment or biomarker analysis. Patient-Stable Aptamer Selection
+We asked how many of the 293 aptamers preserve the observed within-cohort
+disease-associated result. Because biological and technical sources are not
+identifiable, this section characterizes feature redundancy of a mixed signal;
+it does not validate a reduced assay, clinical deployment, or biomarker panel.
+Patient-Stable Aptamer Selection
 (PSAS) denotes the fold-specific ranking and development-only budget-selection
 protocol below; ``stable'' refers to comparison of ranks across outer folds,
 not to patient-balanced fitting of the LR ranker.
@@ -581,12 +591,14 @@ All five outer folds select $B^*=10$ under this rule.
 \centering
 \includegraphics[width=0.78\columnwidth]{figures/panel_size_curve.png}
 \caption{
-Patient-level disease macro-F1 under compact aptamer-budget controls. Solid
+Patient-level disease-association macro-F1 under feature-budget controls. Solid
 lines show pooled out-of-fold performance obtained using fold-specific Top-$B$
 panels; dotted lines and ribbons show the mean and empirical 95\% interval over
 100 random-panel repeats. Each repeat shares one panel across outer folds, with
 models refit foldwise. The dashed line is the full 293-aptamer reference; scores
 pool the 40 outer-test patients once each.
+Because acquisition effects are unrecorded, the curves quantify redundancy of
+the mixed within-cohort signal rather than reduced-assay validity.
 }
 \label{fig:panel_curve_main}
 \end{figure}
@@ -607,11 +619,11 @@ We next crossed aptamer budget $B\in\{5,10,20,293\}$ with inference-time cell ca
 
 \input{tables/psas_cellcount_controls}
 
-Finally, we tested whether the compact result depends on Logistic Regression coefficients as the attribution mechanism. Within each outer-development set, we fitted a full-panel XGBoost model and computed absolute TreeSHAP contributions on at most 1,000 cells per development patient. We first averaged over cells within each patient and then over patients, preventing high-cell-count patients from dominating the attribution ranking. The LR--SHAP Jaccard overlap is moderate rather than complete (0.501 for Top-10 and 0.475 for Top-20), yet panels from either ranking achieve patient macro-F1 1.0 when evaluated with either LR or XGBoost (Table~\ref{tab:psas_shap}). This cross-model control supports measurement efficiency and predictive redundancy, not a unique molecular signature.
+Finally, we tested whether the compact result depends on Logistic Regression coefficients as the attribution mechanism. Within each outer-development set, we fitted a full-panel XGBoost model and computed absolute TreeSHAP contributions on at most 1,000 cells per development patient. We first averaged over cells within each patient and then over patients, preventing high-cell-count patients from dominating the attribution ranking. The LR--SHAP Jaccard overlap is moderate rather than complete (0.501 for Top-10 and 0.475 for Top-20), yet panels from either ranking achieve patient macro-F1 1.0 when evaluated with either LR or XGBoost (Table~\ref{tab:psas_shap}). This cross-model control supports predictive redundancy of the mixed signal, not measurement efficiency, molecular specificity, or a unique signature.
 
 \input{tables/psas_shap_controls}
 
-The fold-overlap LR ranking is also stable. The highest-ranked aptamers by mean outer-fold rank are APT-179, APT-225, APT-164, APT-166, APT-57, APT-69, APT-125, APT-161, APT-172, and APT-218, and 290 of the 293 aptamers are retained after a simple redundancy screen at $|r| \le 0.9$. Appendix~\ref{sec:appendix:apt_markers} visualizes the top three at the patient-lineage level, including a patient-centering control; because only anonymized IDs are available, neither analysis supports protein-target or pathway interpretation.
+The fold-overlap LR ranking is also stable. The highest-ranked aptamers by mean outer-fold rank are APT-179, APT-225, APT-164, APT-166, APT-57, APT-69, APT-125, APT-161, APT-172, and APT-218, and 290 of the 293 aptamers are retained after a simple redundancy screen at $|r| \le 0.9$. These anonymized IDs have no verified public protein-target mapping, and feature ranking under unresolved confounding cannot support protein-target, pathway, or molecular-plausibility interpretation. We therefore omit the earlier full-cohort attribution visualization.
 
 \subsection{Balanced Sampling Ablation}
 \label{sec:appendix:sampler}

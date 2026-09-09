@@ -132,25 +132,28 @@ subtype composition reaches macro-F1 0.516, so the predicted representation is
 not merely a noisier estimate of annotated abundance; it may also retain model
 confidence or technical structure.
 
-Log cell count alone reaches macro-F1 0.531 ($p=0.00010$), and predicted
-subtype composition exceeds it by only $+0.062$ (95\% CI
-$[-0.087,0.218]$). Equal-cell sensitivity, a global-multinomial composition
-null, and a fold-ID prediction control do not reveal a cell-count or fold
-signature sufficient to explain the complete bridge, but they also do not
-establish biological mediation. The defensible finding is that imperfect
-patient-disjoint cell predictions preserve patient-level disease-associated
-variation; incremental value over coarse or technical summaries remains
-unresolved.
+Log cell count alone reaches macro-F1 0.531 ($p=0.00010$). A six-feature
+nuisance-only model using recovered cell count and patient summaries of the
+recorded transcriptomic UMI and detected-gene QC fields reaches macro-F1 0.566
+and AUROC 0.859. Predicted subtype composition exceeds the cell-count model by
+only $+0.062$ (95\% CI $[-0.087,0.218]$) and the full recorded-QC model by
+$+0.027$ (95\% CI $[-0.157,0.215]$). Equal-cell sensitivity, a
+global-multinomial composition null, and a fold-ID prediction control do not
+establish biological mediation. The defensible finding is therefore narrower:
+cell predictions preserve disease-associated variation, but they do not show
+incremental value beyond available nuisance summaries.
 
 \input{tables/disease}
 
-Direct APT discrimination is strong within this cohort but confounding-sensitive.
-Five cell-level baselines yield the same $40/40$ patient majority-vote result,
-and a patient-level median-APT model reaches accuracy 0.950. Patient-wise
-centering reduces majority-vote accuracy from 1.000 to 0.650, while a 40-way
-patient-identity diagnostic reaches 88.4\% accuracy on held-out cells. Because
-acquisition-batch metadata and an external APT cohort are unavailable, these
-offsets cannot be separated into biological and technical sources. We therefore
-do not interpret this task as clinical validation. Compact-panel and
-inference-cell sensitivities are secondary analyses in
+\paragraph{Identifiability boundary.}
+Direct APT discrimination is strong but confounding-sensitive. Patient-wise
+centering produces a 35-point drop in majority-vote accuracy, and individual
+cells readily identify their source patient. Each participant contributes one
+acquisition, while plate, run, date, library, and site covariates and an external
+APT cohort are unavailable. Disease, patient, and unrecorded acquisition effects
+are therefore not statistically identifiable from this cohort: resampling,
+permutation testing, or additional models cannot separate them. We consequently
+treat direct APT prediction, compact panels, and attribution only as diagnostics
+of a mixed within-cohort signal; full values and controls are confined to
+Appendix~\ref{sec:appendix:disease_patient_level} and
 Appendix~\ref{sec:appendix:minimal_panel}.
