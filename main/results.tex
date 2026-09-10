@@ -49,6 +49,17 @@ Appendix~\ref{sec:appendix:granularity_chance}.
 \subsection{Connecting Cell Profiles to Patient Characterization}
 \label{sec:results:composition_bridge}
 
+We first test whether soft cell predictions recover reference patient
+composition, independently of disease classification. Across all 27 subtypes,
+equal-patient, equal-subtype mean absolute error is 0.0148, compared with 0.0231
+for the outer-training patients' mean reference composition. The paired error
+reduction is 0.0084 (95\% patient-bootstrap CI $[0.0065,0.0101]$).
+At the lineage level, the reduction is $-0.0033$ (CI $[-0.0139,0.0067]$).
+Thus, subtype summaries recover reference composition better than this
+training-only constant baseline; they do not thereby establish an incremental
+disease-prediction benefit. Appendix~\ref{sec:appendix:composition_recovery}
+defines the baseline and uncertainty calculation.
+
 We next ask whether the cell-model outputs retain information associated
 with the patient's disease group. Strict nested cross-fitting constructs
 training and test patient representations without exposing disease-test

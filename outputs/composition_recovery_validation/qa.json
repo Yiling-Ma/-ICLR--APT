@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "patients": 40,
+  "bootstrap": 2000,
+  "baseline": "outer-development patient mean reference composition",
+  "scope": "conditional on completed OOF fits; per-class intervals exploratory, not simultaneous; disease-adjusted ranks are descriptive, not causal"
+}

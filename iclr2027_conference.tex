@@ -198,6 +198,21 @@ transcriptome-derived clusters and annotations provide the cell labels. For a
 benchmark release, this overview must be accompanied by the following provenance
 and protocol fields.
 
+\paragraph{Outstanding disease-confounding validation.}
+\todo{Obtain a sample-linked acquisition manifest from the data owner: patient
+and sample IDs, collection and processing dates, APT assay batch, plate/pool,
+reagent lot, library-preparation batch, sequencing run, site, and available
+fresh/frozen and handling records. Audit disease-by-batch overlap before
+choosing a validation design. Where disease groups have adequate cross-batch
+support, evaluate patient-disjoint, held-out-batch generalization with all
+preprocessing and selection restricted to training data. If disease and batch
+are inseparable, obtain crossed-batch samples or an independent APT cohort;
+statistical adjustment alone cannot identify their separate contributions.
+The NC matrices must not be treated as external validation if they are the
+healthy subset of this cohort. These validations are pending, not completed.}
+Expression and QC matrices alone do not establish acquisition provenance;
+current disease results remain within-cohort associations.
+
 \paragraph{Transcriptomic preprocessing and cell quality control.}
 The transcriptomic count matrix was processed with Seurat following its standard
 workflow of normalization, feature selection, dimensionality reduction,
@@ -601,6 +616,33 @@ result over 50 seeds. A 50-repeat global-multinomial composition control average
 macro-F1 0.170, and fold-ID prediction from global OOF composition is below
 chance. These controls support a predictive and associational bridge, not causal
 mediation or independent biological validation.
+
+\subsection{Patient Composition Recovery}
+\label{sec:appendix:composition_recovery}
+For each of the 40 outer-test patients, we compare the mean soft cell-type
+probabilities with reference cell fractions. The constant baseline is the
+equal-patient mean reference composition of the 32 outer-development patients
+in that fold; no test-patient annotations enter its construction. For $K$
+classes and $N$ test patients, the recovery error is
+\[
+ E=\frac{1}{N}\sum_{p=1}^{N}\frac{1}{K}\sum_{k=1}^{K}
+ |\widehat{\pi}_{pk}-\pi_{pk}|.
+\]
+We report $E_{\mathrm{baseline}}-E_{\mathrm{model}}$, so positive values favor
+predicted compositions. All five lineages or all 27 subtypes are included,
+without selecting well-recovered classes. Absolute errors across these two
+resolutions are not directly comparable because their denominators differ.
+Using 2,000 disease-stratified paired patient-bootstrap replicates, subtype
+error decreases from 0.02314 to 0.01478, a reduction of 0.00836
+($[0.00648,0.01010]$). Lineage error changes from 0.05495 to 0.05827, a
+reduction of $-0.00332$ ($[-0.01389,0.00670]$). Intervals are pointwise and
+conditional on the completed cross-fitted cell models; they do not include
+training-subset or model-fitting uncertainty. The accompanying per-class
+audit reports error, signed bias, and rank correlation for every class.
+Disease-adjusted rank correlations residualize both ranked fractions on
+disease-group indicators and are descriptive, not evidence of biological
+specificity or causal independence from disease. Reference recovery does not
+validate the annotation itself or imply improved disease characterization.
 
 \input{outputs/oof_composition_bridge/legacy_vs_nested_audit}
 
