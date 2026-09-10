@@ -1,61 +1,62 @@
 \section{Discussion}
 \label{sec:discussion}
 
-The central finding is not that more subjects are unimportant, but that a
-standard fixed-total experiment does not estimate their isolated value. Across
-three datasets, the label-agnostic design produces an apparently general
-subject-breadth advantage. Under fixed class quotas and within-class donor
-balancing, mean effects are small and model- and cohort-dependent. This does
-not invalidate natural sampling: its gains can include practically valuable
-label coverage. It does invalidate treating that gain as an isolated diversity
-effect. Patient-disjoint splitting prevents subject overlap; specifying the
-allocation policy determines which scientific question the scaling curve answers.
+The motivating question is whether blood-derived single-cell APT profiles
+can support both immune-cell identification and characterization of the
+patient's disease state. Our results show that these are connected but
+non-equivalent evaluation targets. APT measurements support lineage and subtype
+prediction at different performance levels, while patient summaries can retain
+disease-associated variation that is not reducible to validated cell abundance.
+A joint evaluation is useful precisely because success at one level does not
+establish success at the other.
 
-The class-matched protocol deliberately targets a narrower estimand. It holds
-observed labels, per-class cell counts, and class proportions fixed while
-changing how many subjects contribute those cells. It does not fix
-disease--subtype composition, within-class subject heterogeneity, or unrecorded
-pool and batch structure. The remaining effect is therefore still
-associational, and a near-zero estimate under the tested budgets is not a
-universal saturation law. In particular, the existing real-data contrast changes
-both label quotas and within-class allocation, so it does not identify their
-separate contributions. The synthetic check shows that quota matching need not
-mechanically erase a breadth benefit, but does not establish real-data mediation.
-The protocol provides a reproducible sensitivity analysis rather than a unique
-causal explanation of the observed regularity. The joint stability ranges retain
-training-subset variability and cannot establish a zero mean effect or mean
-equivalence. Known-target simulations assess target recovery, not the coverage
-of these intervals. External RNA experiments additionally use restricted
-293-gene representations; broader RNA representations remain a needed sensitivity.
+\paragraph{What is learned about cell identity?}
+The paired-input diagnostic places APT performance in the context of the
+transcriptomic labels it is asked to reconstruct. Stronger RNA reconstruction
+under the matched probe suggests input-dependent accessibility of these labels,
+not a proven information-theoretic limit of aptamers. RNA-informed annotation,
+fixed HVG selection, class imbalance, and uncertain subtype boundaries remain
+alternative contributors. Independent annotation review and controlled
+within-lineage tests are needed before assigning the residual difficulty to
+biological resolution alone. The Transformer comparisons evaluate reference
+recipes, not an established algorithmic advance.
 
-For study design, both targets should be reported: natural allocation estimates
-the benefit of the tested recruitment-and-sampling policy, while matched
-allocation asks whether that benefit survives a specified label distribution.
-Budgets, reference quotas, realized donor coverage, and subset sensitivity
-should accompany each curve. Neither a small matched estimate nor a positive
-natural estimate alone determines an optimal recruitment policy. Separating
-quota matching from donor allocation on real data and constructing calibrated
-intervals for seed-averaged effects are the next validation steps.
+\paragraph{What is learned about patient state?}
+The nested bridge demonstrates disease-associated information in cell-model
+outputs, but does not show that improved subtype typing improves disease
+characterization. Direct APT prediction and composition-based prediction can
+use different information. Patient-centering sensitivity and strong identity
+recognition make absolute-expression structure an important explanation to
+test, rather than a validated biomarker. Forty patients across six groups
+provide limited independent evidence, regardless of how many cells are
+measured. COMBAT and OneK1K broaden the sampling audit but do not resolve these
+APT-specific clinical questions.
 
-The 40-patient APT cohort also limits patient-level inference: six disease
-groups contain only 6--8 independent patients each. Neither more cells nor
-additional resampling supplies independent clinical replication. Nested
-validation controls information flow, but does not resolve limited precision,
-adaptive analysis choices, or unmeasured acquisition confounding. The disease
-audits are consequently exploratory and are not prerequisites for the scaling
-contribution. COMBAT and OneK1K extend the scaling evaluation, not the clinical
-validation of APT disease prediction. More generally, subject and cell budgets,
-label support, split units, and both uncertainty sources should be explicit in
-single-cell evaluation.
+\paragraph{From research assay to blood-based application.}
+A credible next study would freeze the assay, preprocessing, annotation,
+and prediction pipeline, document input volume and cell recovery, record
+acquisition batches, and evaluate an independent APT cohort. Biological and
+technical variation must be distinguished through study design, not only
+post-hoc adjustment. The present compact-panel and inference-cell results
+describe redundancy within this cohort; they cannot establish a minimal blood
+volume, a validated diagnostic panel, or equivalent training on fewer cells.
+
+The supporting scaling analysis adds a practical caution: natural allocation
+and fixed-label allocation estimate different benefits of recruiting subjects.
+The latter also changes within-class donor allocation in the current
+implementation. Joint stability ranges are not confidence intervals for the
+seed-averaged effect. These findings qualify resource-allocation conclusions
+without replacing the central cell-to-patient question.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-Fixed cell totals can confound subject breadth with the training label
-distribution. Across APT, COMBAT, and OneK1K, class matching with within-class
-donor balancing changes breadth estimates, while joint resampling exposes their
-sensitivity to training subsets and test subjects. APT-Bench makes the
-distinction between total and label-standardized allocation effects operational
-through a common evaluation contract. This supports more interpretable
-subject--cell comparisons without claiming a universal scaling law, equivalence
-between sampling strategies, or clinical validity.
+APT-Bench evaluates a common blood-derived molecular input at two levels:
+immune-cell identity and patient disease-associated state. Patient-disjoint
+cell typing, paired-input reconstruction, and nested cell-to-patient transfer
+separate what the profiles predict from what those predictions establish.
+APT supports measurable information at both levels, but fine-subtype utility
+and the biological origin of disease-associated offsets remain unresolved.
+The benchmark provides a structured basis for improving and validating
+blood-based characterization, not a claim that reliable one-drop disease
+diagnosis has already been achieved.

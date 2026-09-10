@@ -1,57 +1,55 @@
 \section{Introduction}
 
-Single-cell datasets can contain millions of observations while representing
-far fewer independent biological subjects. This creates a practical design
-question: under a fixed training-cell budget, should a study
-sample more subjects or profile more cells from each subject? A common two-axis
-analysis varies subject breadth and within-subject depth while holding their
-product fixed. Such a comparison appears controlled because the total number of
-training cells is unchanged.
+A blood sample contains information about its constituent immune cells and
+variation associated with the person from whom it was collected. A single-cell
+assay can therefore be asked two connected questions: which cells are present,
+and what do their measurements reveal about the patient's disease state?
+Single-cell aptamer profiling offers a setting in which to evaluate both
+questions using the same molecular measurements. The long-term motivation is
+minimally invasive blood-based characterization; reliable diagnosis from a
+specified small blood volume is an eventual validation target, not an outcome
+established by this study.
 
-Fixed total cells are not sufficient. Replacing cells from existing subjects
-with cells from new subjects can also introduce previously absent classes,
-alter per-class cell counts and proportions, and redistribute each class across
-subjects. A performance difference then combines subject breadth with a change
-in the training label distribution. Moreover, uncertainty over held-out
-subjects does not capture sensitivity to which training subjects and cells were
-sampled. A fixed-total curve answers a practical allocation question, but does
-not by itself identify a label-standardized breadth effect. Confusing these
-questions can turn a valid allocation result into an unsupported claim about
-the independent value of subject diversity.
+Moving from that motivation to an evaluation requires separating cell identity
+from patient state. A model can distinguish broad immune lineages without
+reconstructing transcriptome-defined subtypes. Conversely, a disease classifier
+can exploit patient-level measurement offsets without learning cell composition.
+High performance at one level therefore need not validate the other. Correlated
+cells also cannot substitute for independent patients when estimating disease
+generalization. These distinctions motivate a benchmark that connects the two
+levels while testing the limits of their interpretation.
 
-We make this failure mode the central target of APT-Bench. The primary dataset
-contains 361{,}792 single-cell aptamer profiles from 40 patients, measured with
-a fixed 293-feature panel and annotated into five immune lineages and 27
-transcriptome-derived subtypes. We first run a conventional label-agnostic
-fixed-total experiment over subject and cell budgets. We then introduce a
-class-matched comparison that freezes the observed class set and exact
-per-class cell quotas before changing the number of contributing subjects. Its
-joint stability interval samples one completed training-subset seed and
-resamples paired held-out subjects. It describes sensitivity to both sources
-of variation, not a confidence interval for the seed-averaged effect.
+We introduce APT-Bench, comprising 361{,}792 labeled single-cell profiles from
+40 participants in five cancer groups and healthy controls. Each cell has 293
+aptamer measurements and paired-transcriptome-derived labels in a five-lineage,
+27-subtype ontology. The benchmark evaluates APT-only cell typing and
+within-cohort patient characterization under fixed patient-disjoint folds.
+A paired-RNA diagnostic asks how reconstructability depends on the input
+modality, while strictly nested cross-fitting connects predicted cell profiles
+to patient-level disease labels without exposing test patients during either
+learning stage (Figure~\ref{fig:cell_patient_overview}).
 
-The audit distinguishes two empirical questions. Across APT, COMBAT CITE-seq, and
-OneK1K, 37 of 38 label-agnostic comparisons favor reallocating a fixed cell
-budget from 8 to 32 subjects. With class quotas fixed and within-class donor balancing, effects
-become small and model- or cohort-dependent: APT and COMBAT fine-resolution
-point estimates reverse under both LR and XGBoost. All 12 joint stability
-intervals include zero, showing sensitivity of the direction to joint
-resampling. Extended LR frontiers through 64 COMBAT and 128 OneK1K training
-subjects have small adjacent mean changes. Neither finding establishes a zero
-mean effect or equivalence. Recruiting more subjects can benefit learning
-through label coverage; our narrower comparison asks what remains under
-specified class quotas and donor allocation.
+The results establish a differentiated picture rather than a single diagnostic
+success claim. APT models recover broad lineage labels more accurately than
+fine subtypes under the tested tasks; a matched linear probe reconstructs both
+more strongly from paired RNA. Predicted cell-profile summaries carry
+disease-associated information, but do not establish incremental subtype value
+over lineage and recorded technical proxies. Direct APT disease-source
+prediction is much stronger, yet its sensitivity to patient-wise centering
+reveals dependence on absolute-expression structure whose biological and
+technical contributions cannot be separated with the available metadata.
 
-APT hierarchy prediction supplies a concrete cell-annotation setting for this
-evaluation question; the soft-cascade Transformer is a reference recipe, not
-the method contribution. Disease characterization, compact panels, and
-inference-cell budgets remain exploratory appendix audits of the 40-patient
-cohort. They neither establish clinical utility nor provide independent
-validation of the scaling protocol.
+Reliability is therefore part of the biological question, not an independent
+promise of clinical validity. Patient-disjoint splits, subject-balanced metrics,
+and acquisition-sensitivity controls delimit what can be concluded from this
+cohort. Supporting sampling experiments on APT, COMBAT, and OneK1K further show
+why subject count, cell count, and training label distribution must be
+distinguished. These external datasets evaluate sampling behavior; they do not
+independently validate APT disease prediction.
 
 Our contributions are:
 \begin{itemize}
-    \item \textbf{An estimand distinction for subject--cell scaling.} Fixed-total allocation effects can include changes in training-label support and composition; they should not be interpreted as label-standardized breadth effects.
-    \item \textbf{An explicit matched evaluation contract.} We specify class quotas, donor allocation, subject-balanced scoring, and a joint stability diagnostic rather than leaving these choices implicit in scaling curves.
-    \item \textbf{Cross-cohort evidence and target validation.} APT, COMBAT, and OneK1K demonstrate policy-dependent breadth estimates across measurement settings. Controlled simulations assess recovery of a specified allocation target, not a universal causal effect.
+    \item \textbf{A linked cell-to-patient evaluation setting.} APT-Bench specifies cell-identity and disease-associated characterization tasks on the same single-cell aptamer profiles, with fixed patient partitions and an explicit hierarchy.
+    \item \textbf{An assessment of recoverable information.} Cell-typing references, a paired-RNA diagnostic, and a nested cell-to-patient bridge distinguish label reconstruction from patient-level association without assuming that one validates the other.
+    \item \textbf{A reliability audit for interpretation.} Leakage, acquisition sensitivity, and supporting sampling controls identify which findings remain cohort- and protocol-dependent, providing requirements for subsequent biological and clinical validation.
 \end{itemize}

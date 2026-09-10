@@ -1,14 +1,14 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Evaluation across cells and subjects.}
-Reusable single-cell benchmarks increasingly separate datasets, models, and
-metrics and adopt sample- or study-disjoint evaluation
-\citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}.
-These practices prevent direct leakage, but do not by themselves isolate the
-effect of subject breadth when a fixed-total subsample changes the training
-label distribution. Our contribution complements patient-disjoint splitting
-with class-matched allocation and a joint development/test stability diagnostic.
+\paragraph{Blood-based characterization.}
+Multi-cancer detection commonly uses circulating DNA, methylation,
+fragmentomics, or bulk proteins
+\citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
+Our question is complementary: whether single-cell aptamer measurements can
+support both immune-cell identification and patient disease-associated
+characterization. APT-Bench evaluates that connection within a research cohort;
+it does not equate within-cohort classification with prospective screening.
 
 \paragraph{Single-cell representations and hierarchy.}
 Geneformer, scGPT, and scFoundation motivate large transcriptomic
@@ -16,17 +16,16 @@ representations, while controlled studies show that simple baselines can remain
 competitive \citep{theodoris2023transfer,cui2024scgpt,hao2024large,kedzierska2025zero}.
 Cell annotation also motivates hierarchical losses and architectures
 \citep{jia2025schdeepinsight,cultrera2026improving}. We use flat, HCE, and
-soft-cascade Transformers plus XGBoost as an APT case study. Because their
+soft-cascade Transformers alongside classical models as APT references. Because their
 complete objectives are not matched, this ladder illustrates the evaluation
-setting rather than constituting the primary method or a component ablation.
+setting rather than constituting a new learning algorithm or component ablation.
 
-\paragraph{Clinical assays and measurement budgets.}
-Multi-cancer detection commonly uses circulating DNA, methylation,
-fragmentomics, or bulk proteins
-\citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
-Single-cell APT instead observes many correlated cells from each blood draw,
-making subject, training-cell, feature, and inference-cell budgets distinct.
-Gradient-boosted trees are strong tabular baselines
-\citep{grinsztajn2022tree,erickson2026tabarena}; compact-panel analyses are kept
-secondary because feature redundancy cannot resolve biological versus technical
-confounding.
+\paragraph{Evaluation across cells and subjects.}
+Reusable single-cell benchmarks separate datasets, models, and metrics and
+adopt sample- or study-disjoint evaluation
+\citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}.
+APT-Bench links cell and patient tasks with nested cross-fitting and makes
+their statistical units explicit. Gradient-boosted trees provide strong
+tabular references \citep{grinsztajn2022tree,erickson2026tabarena}.
+Supporting sampling and feature-budget audits address correlated observations
+and resource choices, but cannot resolve biological versus technical confounding.

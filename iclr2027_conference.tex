@@ -18,7 +18,7 @@
 \usepackage{makecell}
 
 
-\title{APT-Bench: Auditing Label-Distribution \mbox{Confounding} in Subject--Cell Scaling}
+\title{APT-Bench: Evaluating Cell Identity and Disease-Associated Information in \mbox{Single-Cell} Aptamer Profiles}
 % Global paper constants
 
 \newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
@@ -67,24 +67,24 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell learning has two sampling axes: the number of biological subjects
-and the number of cells measured within each subject. Fixed-total-cell
-comparisons measure their practical tradeoff, but do not isolate subject
-breadth from changes in training-label support and composition. We distinguish
-total allocation effects from label-standardized effects using APT-Bench, a patient-disjoint
-testbed of 361{,}792 aptamer profiles from 40 patients, and external evaluations
-on COMBAT and OneK1K. Our protocol fixes observed classes and exact cell quotas,
-uses within-class donor balancing, and jointly resamples training subsets and
-held-out subjects to assess stability. Breadth estimates become smaller and
-policy-dependent; fine-resolution point estimates reverse for both linear and
-boosted-tree models in APT and COMBAT. These joint stability ranges are not
-confidence intervals for the seed-averaged effect. Controlled simulations
-check recovery of a specified allocation target against exact-null and
-independent Monte Carlo references. The real-cohort comparison changes both
-class quotas and donor allocation, so it does not identify their separate
-contributions. APT-Bench makes the sampling policy, label distribution, and
-stability of an allocation decision explicit, without equating practical
-recruitment gains with an isolated subject-breadth effect.
+Can the same blood-derived single-cell measurements identify immune-cell
+subtypes and characterize a patient's disease-associated state? We introduce
+APT-Bench to evaluate this question using 361{,}792 single-cell profiles,
+293 aptamer measurements, and paired-transcriptome-derived labels from 40
+participants across five cancer groups and healthy controls. Fixed
+patient-disjoint folds link hierarchical cell typing to patient-level
+characterization through strictly nested cross-fitting. APT models recover
+broad lineages more accurately than fine subtypes under the tested tasks;
+a matched paired-RNA probe reconstructs the reference labels more strongly.
+Predicted subtype summaries retain disease-associated information, but do not
+establish incremental value over lineage and recorded technical proxies.
+Direct APT disease-source prediction is stronger, yet its sensitivity to
+patient-wise centering reveals dependence on absolute-expression structure
+whose biological and technical origins remain unresolved. Supporting
+cross-cohort sampling audits further qualify conclusions drawn from correlated
+cells. APT-Bench provides a cell-to-patient evaluation framework for blood-based
+characterization, separating predictive information from the independent
+validation needed for biological interpretation and clinical use.
 \end{abstract}
 
 
@@ -181,7 +181,8 @@ independently reproducible benchmark release.}
 
 \input{main/method}
 
-\input{tables/main_result}
+The main cell-identity results are reported in Table~\ref{tab:main}; the
+following sections supply their implementation and diagnostic details.
 
 \section{Dataset and Evaluation Details}
 
@@ -509,7 +510,8 @@ APT cohort with recorded acquisition covariates and a frozen preprocessing,
 feature-selection, and prediction pipeline; the external scaling experiments
 do not supply that disease-validation cohort.
 
-\input{tables/disease}
+Table~\ref{tab:disease} in the main text summarizes the patient-representation
+comparison; this section supplies its controls and interpretation limits.
 
 \paragraph{Cell-level prediction of the disease source of a held-out patient.}
 Table~\ref{tab:disease} reports the exploratory patient-characterization
@@ -692,10 +694,19 @@ remains explicitly cell-weighted.
 
 \input{tables/patient_balanced_cell_sensitivity}
 
+\subsection{Supporting Subject--Cell Sampling Audit}
+\label{sec:appendix:scaling_support}
+
+The following analyses address sampling-policy sensitivity, not the clinical
+validity of disease prediction. They preserve the completed cross-cohort
+evidence as support for the cell-to-patient evaluation.
+\input{main/scaling_estimands}
+\input{main/scaling_support}
+
 \subsection{Fair Fixed-Total and Matched-Scale Analysis}
 \label{sec:appendix:fair_scaling}
 
-The primary scaling design uses $P\in\{8,16,32\}$ and
+The supporting scaling design uses $P\in\{8,16,32\}$ and
 $C\in\{100,200,400,800,1600\}$, with 20 nested subset seeds for every outer
 fold. Because every retained patient has at least 1{,}929 cells, all finite caps
 are feasible without replacement. Disease-stratified patient orderings are

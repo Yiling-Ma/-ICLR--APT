@@ -1,0 +1,23 @@
+\paragraph{Two allocation estimands.}
+For a specified sampling policy $\pi$ and learning procedure $f$, define
+\begin{equation}
+\Delta_{\pi}(T)=\mathbb{E}\!\left[S(f_{\pi,32,T})-S(f_{\pi,8,T})\right],
+\label{eq:allocation_estimand}
+\end{equation}
+where $S$ is subject-balanced pooled macro-F1 and the expectation averages
+training-subset randomization under the fixed cohort and evaluation protocol.
+Natural sampling estimates a \emph{total allocation effect}, including label
+distribution changes. The matched policy estimates a \emph{label-standardized
+allocation effect} relative to the sampled $P=8$ quota vector, averaged over
+these reference draws. It also imposes within-class donor round robin. These
+are different policy targets, not competing estimators of a uniquely true
+patient effect; neither isolates biological diversity from batch structure.
+
+\paragraph{Stability is not uncertainty of the mean.}
+The released joint stability interval is the central 95\% range obtained by
+selecting one completed subset seed and bootstrapping paired test subjects.
+It retains between-subset variability rather than averaging resampled seeds.
+Its zero inclusion does not test $\Delta_{\pi}(T)=0$, and its positive-replicate
+fraction is neither a posterior probability nor a significance test. Inference
+for the seed-averaged effect requires a separately constructed interval;
+the present main comparisons report stability, not that inferential claim.

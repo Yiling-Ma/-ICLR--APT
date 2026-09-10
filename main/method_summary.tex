@@ -1,9 +1,8 @@
-\section{Evaluation Instantiations}
+\section{From Cell Models to Patient Representations}
 \label{sec:method_summary}
 
-The primary scaling audit uses class-weighted multinomial Logistic Regression
-and XGBoost to test whether the policy contrast is model-specific. The secondary
-APT hierarchy case study additionally contains a flat
+\paragraph{Cell-identity references.}
+The APT hierarchy evaluation uses classical references and a flat
 Transformer, the same model trained with a two-level adaptation of HCE
 \citep{cultrera2026improving}, and a soft-cascade Transformer. These references
 share the APT tokenizer, encoder dimensions, optimizer, training budget,
@@ -12,13 +11,13 @@ checkpoint rule. The ladder therefore holds backbone capacity fixed while
 comparing complete reference recipes. Their objectives are not matched: only
 the soft-cascade model uses disease labels for cross-disease contrastive pairing,
 whereas Flat and HCE use classification losses alone. The ladder is therefore
-not a component ablation and is secondary to the scaling protocol.
+not a component ablation or a proposed new diagnostic architecture.
 Appendix~\ref{sec:method} records the implementation
 and component matrix; no routing, HCE, or contrastive effect is claimed in
 isolation.
 
 Baseline coverage is intentionally distinguished from input compatibility.
-LR and XGBoost are the completed scaling probes; the APT hierarchy summary
+LR and XGBoost are included in the APT hierarchy summary, which
 also reports Linear SVM, Random Forest, and reference correlation alongside
 the three Transformer recipes. These are not an exhaustive model leaderboard.
 Plain MLP/ResNet and additional modern tabular learners are applicable to the
@@ -37,6 +36,7 @@ applicable but unevaluated here, rather than intrinsically incompatible.
 We make no claim that computational expense alone excludes them, nor that
 unrun models underperform the reported references.
 
+\paragraph{Nested cell-to-patient bridge.}
 For the composition bridge, each disease outer fold seals eight patients. A
 final disease-label-free XGBoost subtype model trained on the other 32 patients
 constructs outer-test compositions. Downstream training compositions for those
@@ -50,3 +50,12 @@ data flow and controls. A conditional increment audit uses the same nested
 features and tuning protocol to compare recorded QC plus predicted lineage
 against recorded QC plus predicted subtype composition; subtype probabilities
 implicitly contain their lineage sums.
+
+\paragraph{Direct measurement summaries and controls.}
+Patient-median APT profiles provide a route to disease-group prediction that
+does not require inferred cell identities. Cell-level disease-source predictions
+with patient majority voting form a separate diagnostic. We compare these
+associations with patient-wise centering, patient-identity recognition, and
+recorded QC summaries rather than treating high within-cohort scores as
+clinical validation. Full settings are in
+Appendix~\ref{sec:appendix:disease_patient_level}.
