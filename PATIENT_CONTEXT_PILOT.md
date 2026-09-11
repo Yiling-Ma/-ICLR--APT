@@ -115,3 +115,47 @@ Background: [Balanced Softmax](https://proceedings.neurips.cc/paper/2020/hash/2b
 is an existing long-tail baseline; [ADTnorm](https://pmc.ncbi.nlm.nih.gov/articles/PMC11261982/)
 already studies protein normalization under variable cell compositions.
 Patient-context normalization alone is therefore not a novelty claim.
+
+## Completed Development Results
+
+All 36 student fits completed on vllab11. All five unit tests and the independent
+artifact audit passed. The audit verified actual patient/context membership,
+every stored global context mean's self-exclusion, upstream patient isolation,
+and all prediction-derived confusion matrices.
+
+| Input scheme | CE fine | CE coarse | Balanced fine | Balanced coarse |
+| --- | ---: | ---: | ---: | ---: |
+| Raw | 0.1200 | 0.3276 | 0.1047 | 0.3103 |
+| Centered | 0.1194 | 0.3179 | 0.1165 | 0.3056 |
+| Global context | 0.1314 | 0.3438 | 0.1225 | 0.3224 |
+| Soft lineage context | 0.1199 | 0.3435 | 0.1117 | 0.3054 |
+| Uniform hierarchy correction | 0.1315 | 0.3437 | 0.1219 | 0.3195 |
+| Reliable hierarchy correction | 0.1353 | 0.3415 | 0.1173 | 0.3243 |
+
+For reliable hierarchy correction under CE, paired fine Macro-F1 differences
+and pointwise seed/patient-bootstrap 95% intervals are:
+
+- Versus raw: +0.0153 [0.0026, 0.0211].
+- Versus global context: +0.0039 [-0.0051, 0.0116].
+- Versus soft lineage context: +0.0155 [-0.0053, 0.0254].
+- Versus uniform hierarchy correction: +0.0038 [-0.0036, 0.0089].
+
+The coarse difference versus raw is +0.0139 [0.0033, 0.0228], but versus global
+context it is -0.0024 [-0.0122, 0.0056]. Balanced Softmax does not improve these
+schemes under this fixed recipe; this does not rule out other long-tail tuning.
+
+Interpretation: the pilot motivates further patient-context experiments, but
+does not establish the new hierarchy/reliability components' incremental value
+over simpler context features. Selection among twelve configurations and prior
+use of these patients preclude a confirmatory claim. Do not replace the main
+paper method or headline performance with this pilot result. No outer-fold
+evaluation or independent validation has been run for this candidate.
+
+Next decision: freeze a narrower raw/global-context/uniform/reliable CE
+comparison before wider evaluation, with upstream/context-seed sensitivity
+and explicit compute/capacity checks. Preserve the ordinary-context baseline
+even if it erases the proposed component's apparent advantage.
+
+Small results: `outputs/patient_context_pilot_v1/summary.csv`, `seed_scores.csv`,
+`completion.json`, and `audit.json`. Audit code:
+`analysis/audit_patient_context_pilot.py`. All large caches stay on SSD.

@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "patient and cell partition isolation",
+    "context budget and patient membership",
+    "every saved context mean excludes its own query",
+    "probabilities and reconstructed confusion matrices"
+  ],
+  "fits_audited": 36,
+  "protocol_hash": "c73cc314e39d41950c9d5bb946ebd5b28c82332ca462e26ccf8b7ecfb0285d9a",
+  "status": "PASS"
+}

@@ -2,6 +2,7 @@
 import argparse
 from pathlib import Path
 import numpy as np
+import pandas as pd
 import patient_context_pilot as p
 
 
@@ -39,6 +40,7 @@ def audit(out):
     assert len(covered) == len(set(covered)) == len(tr)
     data = dict(np.load(out/"validation.npz"))
     fits = 0
+    records = []
     for method in p.METHODS:
         for loss in p.LOSSES:
             for seed in p.SEEDS:
@@ -53,11 +55,14 @@ def audit(out):
                 np.testing.assert_array_equal(ids, result["patients"])
                 for task in ("fine", "coarse"):
                     np.testing.assert_array_equal(cms[task], result[task])
+                    records.append(dict(method=method, loss=loss, seed=seed, task=task,
+                        score=p.common.core.f1_from_confusion(p.common.core.patient_balanced_matrix(cms[task]))))
                 fits += 1
     value = dict(status="PASS", fits_audited=fits, protocol_hash=cfg["protocol_hash"],
                  checks=["patient and cell partition isolation", "context budget and patient membership",
                          "every saved context mean excludes its own query", "probabilities and reconstructed confusion matrices"])
     p.common.save_json(out/"audit.json", value)
+    pd.DataFrame(records).to_csv(out/"seed_scores.csv", index=False)
     print(value, flush=True)
 
 

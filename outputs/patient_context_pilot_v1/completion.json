@@ -1,0 +1,13 @@
+{
+  "fits": 36,
+  "limitations": [
+    "fixed context and upstream seeds",
+    "pointwise intervals, multiple candidates",
+    "nominal input dimensions equal, active information differs",
+    "no outer or external confirmation"
+  ],
+  "protocol_hash": "c73cc314e39d41950c9d5bb946ebd5b28c82332ca462e26ccf8b7ecfb0285d9a",
+  "scope": "development; no superiority claim",
+  "status": "PASS",
+  "validation_patients": 8
+}
