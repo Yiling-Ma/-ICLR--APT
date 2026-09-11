@@ -1,0 +1,22 @@
+{
+  "operation": "Re-evaluation of frozen predictions, no refitting",
+  "historical_metric_check": true,
+  "patient_fold_alignment": true,
+  "neural_barcode_alignment": "Not independently checked; neural pooled exports lack cell IDs",
+  "full_mlp_available": false,
+  "sources": {
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/dropcascade_kfold5/pooled_oof_predictions.csv": "892dccbf1c674a7093838cbb0c8d29ca02d49f588d7de5c96012db945ac0d2e0",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/coarse/xgboost/pooled_oof_predictions.csv": "eb05b0561697a8b110602ed3690c5466b30274156562b6a4272fc92197ebaa05",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/coarse/linear_svm/pooled_oof_predictions.csv": "a9a7a541d5f6c295639c9d9490fa90e4390173f059068f1ae86674ae896e13fd",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/coarse/logistic_regression/pooled_oof_predictions.csv": "f936a3c90af2d2716f7cf14a14e2d88184ee1784e52a7e4d8305d4ceeba1d941",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/coarse/random_forest/pooled_oof_predictions.csv": "5a624d8a1de93d63436c0c1bdea5a8abdb23606d033c1047e0a57e658df34bc3",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/coarse/reference_correlation/pooled_oof_predictions.csv": "7798b5d44254cd5c25368f8365883ddee45e8283e521d7ddde285285595eb39b",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/fine/xgboost/pooled_oof_predictions.csv": "a73eb5df8cbaa4a8061d14d36d603e8a208dbeedd69ee0e0c5f5d14c913ec820",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/fine/linear_svm/pooled_oof_predictions.csv": "7b7c9c68fb70cc8877497732cc82453d2bcf25f4a4a8c6b4e41955a4acd7391e",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/fine/logistic_regression/pooled_oof_predictions.csv": "0d5d889df238044f62021af488f65d4fea236196e3ff6c1f2c6ce812e9531266",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/fine/random_forest/pooled_oof_predictions.csv": "686b61e9fedf4792d29910295b1c4b458f4c735025fdc84e32692a6347371846",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/classical_baselines_kfold5/fine/reference_correlation/pooled_oof_predictions.csv": "09461b1f6db920ea62fb990b3c56e238133c939f90f679b75a98aaa629c773bd",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/matched_ft_transformer/flat_ce/pooled_oof_predictions.csv": "778e88fc34889029842d6d007de415e9818175ebf2648cfb56493d90b89ab235",
+    "/home/mayiling/projs/apt_agent/cell_JEPA/outputs/matched_ft_transformer/hce/pooled_oof_predictions.csv": "d2be0f1144bbd3af6b6b61a9fc52ccf455f5364d960a9264eb690527fb76ba4f"
+  }
+}

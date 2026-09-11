@@ -1,66 +1,56 @@
 \section{Discussion}
 \label{sec:discussion}
 
-The motivating question is whether blood-derived single-cell APT profiles
-can support both immune-cell identification and characterization of the
-patient's disease state. Our results show that these are connected but
-non-equivalent evaluation targets. APT measurements support lineage and subtype
-prediction at different performance levels, while patient summaries can retain
-disease-associated variation that is not reducible to validated cell abundance.
-A joint evaluation is useful precisely because success at one level does not
-establish success at the other.
+APT-Bench makes single-cell aptamer profiling a defined cell-typing evaluation
+problem: the input is APT alone, the targets are paired-transcriptomic
+annotations, and generalization is measured on held-out patients. The
+reference suite establishes comparison points across linear, tree-based,
+and Transformer recipes. Soft-cascade Transformer supplies an explicit
+hierarchy-aware design, but the benchmark does not depend on demonstrating
+its superiority or presenting its components as novel algorithms.
 
-\paragraph{What is learned about cell identity?}
-The paired-input diagnostic places APT performance in the context of the
-transcriptomic labels it is asked to reconstruct. Stronger RNA reconstruction
-under the matched probe suggests input-dependent accessibility of these labels,
-not a proven information-theoretic limit of aptamers. RNA-informed annotation,
-fixed HVG selection, class imbalance, and uncertain subtype boundaries remain
-alternative contributors. Independent annotation review and controlled
-within-lineage tests are needed before assigning the residual difficulty to
-biological resolution alone. The Transformer comparisons evaluate reference
-recipes, not an established algorithmic advance.
+\paragraph{Interpreting model and modality comparisons.}
+The main table holds the measurement modality fixed; the matched-input probe
+instead holds the probe protocol fixed while varying APT and RNA. These
+questions must not be conflated. RNA-derived annotations favor interpretation
+of RNA performance as internal label reconstruction, not independent truth
+validation. Lower fine F1 also reflects different class counts, prevalence,
+and boundaries. Full-budget MLP/ResNet coverage and objective-matched cascade
+ablations remain incomplete. The retrospective shift to subject-balanced
+reporting changes the estimand without changing model checkpoints; historical
+cell-weighted scores are preserved for traceability.
 
-\paragraph{What is learned about patient state?}
-Soft subtype summaries improve reference-composition recovery over an
-outer-training mean baseline, providing a direct cell-to-patient reconstruction
-result rather than relying only on disease prediction. This result is conditional
-on RNA-derived annotations and the fitted cell models.
-The nested bridge demonstrates disease-associated information in cell-model
-outputs, but does not show that improved subtype typing improves disease
-characterization. Direct APT prediction and composition-based prediction can
-use different information. Patient-centering sensitivity and strong identity
-recognition make absolute-expression structure an important explanation to
-test, rather than a validated biomarker. Forty patients across six groups
-provide limited independent evidence, regardless of how many cells are
-measured. COMBAT and OneK1K broaden the sampling audit but do not resolve these
-APT-specific clinical questions.
+\paragraph{From cell predictions to patient use.}
+Subtype summaries improve reference-composition recovery over a training-mean
+baseline, providing a concrete aggregate-information result even when fine
+cell typing remains difficult. This does not imply an incremental benefit
+for disease discrimination. Forty participants across six groups provide
+limited independent evidence, and patient-disjoint folds cannot remove
+disease-correlated acquisition effects. Centering can remove biological as
+well as technical variation. A compact panel that preserves this mixed signal
+is consequently not a validated diagnostic panel, and inference-cell
+subsampling does not establish reduced training requirements.
 
-\paragraph{From research assay to blood-based application.}
-A credible next study would freeze the assay, preprocessing, annotation,
-and prediction pipeline, document input volume and cell recovery, record
-acquisition batches, and evaluate an independent APT cohort. Biological and
-technical variation must be distinguished through study design, not only
-post-hoc adjustment. The present compact-panel and inference-cell results
-describe redundancy within this cohort; they cannot establish a minimal blood
-volume, a validated diagnostic panel, or equivalent training on fewer cells.
-
-The supporting scaling analysis adds a practical caution: natural allocation
-and fixed-label allocation estimate different benefits of recruiting subjects.
-The latter also changes within-class donor allocation in the current
-implementation. Joint stability ranges are not confidence intervals for the
-seed-averaged effect. These findings qualify resource-allocation conclusions
-without replacing the central cell-to-patient question.
+\paragraph{Scope and next validation.}
+The benchmark is conditional on one APT cohort and its operational taxonomy.
+Independent annotation review, completed dataset provenance and access
+documentation, and portable reproduction remain necessary release work.
+A subsequent clinical study must freeze the assay and model, document input
+volume and cell recovery, record acquisition batches, and test an independent
+APT cohort. External RNA datasets broaden the sampling audit, not the
+clinical evidence for this assay. These boundaries retain blood-based
+characterization as the motivation without treating one-drop diagnosis as
+an established result.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench evaluates a common blood-derived molecular input at two levels:
-immune-cell identity and patient disease-associated state. Patient-disjoint
-cell typing, paired-input reconstruction, and nested cell-to-patient transfer
-separate what the profiles predict from what those predictions establish.
-APT supports measurable information at both levels, but fine-subtype utility
-and the biological origin of disease-associated offsets remain unresolved.
-The benchmark provides a structured basis for improving and validating
-blood-based characterization, not a claim that reliable one-drop disease
-diagnosis has already been achieved.
+APT-Bench establishes patient-disjoint evaluation of lineage and subtype
+prediction from single-cell aptamer profiles, with classical and neural
+references including Soft-cascade Transformer. Separate APT-only and
+paired-input comparisons distinguish architecture performance from modality
+effects. Nested patient aggregation demonstrates reference-composition
+recovery while leaving incremental disease utility unresolved. The benchmark
+provides a basis for improving APT cell models and evaluating their downstream
+use; acquisition-aware independent validation is required before clinical
+claims.

@@ -10,7 +10,10 @@ minimally invasive blood-based characterization; reliable diagnosis from a
 specified small blood volume is an eventual validation target, not an outcome
 established by this study.
 
-Moving from that motivation to an evaluation requires separating cell identity
+The primary aim of this paper is a benchmark for APT-only cell typing in new
+patients, with a documented hierarchy-aware reference model. Patient-level
+disease characterization is a secondary application, not an equally validated
+clinical endpoint. Moving from the motivation to an evaluation requires separating cell identity
 from patient state. A model can distinguish broad immune lineages without
 reconstructing transcriptome-defined subtypes. Conversely, a disease classifier
 can exploit patient-level measurement offsets without learning cell composition.
@@ -24,20 +27,23 @@ We introduce APT-Bench, comprising 361{,}792 labeled single-cell profiles from
 aptamer measurements and paired-transcriptome-derived labels in a five-lineage,
 27-subtype ontology. The benchmark evaluates APT-only cell typing and
 within-cohort patient characterization under fixed patient-disjoint folds.
-A paired-RNA diagnostic asks how reconstructability depends on the input
+A Soft-cascade Transformer combines global subtype prediction with softly
+routed lineage experts as one reference alongside linear, tree-based, and
+other Transformer models. Benchmark validity does not depend on that model
+winning, and the current comparisons do not isolate its component effects.
+A separate paired-RNA diagnostic asks how reconstructability depends on the input
 modality, while strictly nested cross-fitting connects predicted cell profiles
 to patient-level disease labels without exposing test patients during either
 learning stage (Figure~\ref{fig:cell_patient_overview}).
 
-The results establish a differentiated picture rather than a single diagnostic
-success claim. APT models recover broad lineage labels more accurately than
-fine subtypes under the tested tasks; a matched linear probe reconstructs both
-more strongly from paired RNA. Predicted cell-profile summaries carry
-disease-associated information, but do not establish incremental subtype value
-over lineage and recorded technical proxies. Direct APT disease-source
-prediction is much stronger, yet its sensitivity to patient-wise centering
-reveals dependence on absolute-expression structure whose biological and
-technical contributions cannot be separated with the available metadata.
+The results establish reference performance for a targeted molecular input
+rather than a diagnostic success claim. Fine typing remains difficult under
+the evaluated models. A matched-input probe reconstructs the RNA-derived
+labels more strongly from RNA; that modality contrast is not evidence of
+algorithm superiority on identical inputs. In the secondary application,
+predicted subtype summaries improve reference-composition recovery over a
+training-mean baseline. Disease association remains a distinct question, with
+unresolved incremental subtype value and acquisition-related explanations.
 
 Reliability is therefore part of the biological question, not an independent
 promise of clinical validity. Patient-disjoint splits, subject-balanced metrics,
@@ -49,7 +55,7 @@ independently validate APT disease prediction.
 
 Our contributions are:
 \begin{itemize}
-    \item \textbf{A linked cell-to-patient evaluation setting.} APT-Bench specifies cell-identity and disease-associated characterization tasks on the same single-cell aptamer profiles, with fixed patient partitions and an explicit hierarchy.
-    \item \textbf{An assessment of recoverable information.} Cell-typing references, a paired-RNA diagnostic, and a nested cell-to-patient bridge distinguish label reconstruction from patient-level association without assuming that one validates the other.
-    \item \textbf{A reliability audit for interpretation.} Leakage, acquisition sensitivity, and supporting sampling controls identify which findings remain cohort- and protocol-dependent, providing requirements for subsequent biological and clinical validation.
+    \item \textbf{An APT cell-typing benchmark.} We specify a paired-annotation dataset, fixed patient partitions, ontology, and patient-aware evaluation for a 293-channel single-cell aptamer input.
+    \item \textbf{A reference-model suite.} Classical and Transformer recipes, including a documented Soft-cascade reference, establish APT-only comparison points; a separate paired-input diagnostic assesses modality dependence.
+    \item \textbf{A cell-to-patient application study.} Nested aggregation tests reference-composition recovery and exploratory disease association, with explicit controls for alternative sources of predictive signal.
 \end{itemize}

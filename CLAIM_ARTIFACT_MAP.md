@@ -4,8 +4,11 @@
 |---|---|---|---|
 | Filtered cohort size, patients, APT features | `outputs/patient_cell_scaling_fair/protocol_audit.md` after final run; raw inputs `data/metadata.csv`, `data/cell_annotation.csv`, `data/apt_expression.parquet` | `analysis/patient_cell_scaling.py audit` | Abstract, Problem Setup |
 | Fixed patient folds | `benchmark/splits/patient_folds.json`; strict bridge mirror `outputs/oof_composition_bridge/patient_fold_manifest.csv` | Frozen manifest, audited by both pipelines | Problem Setup, all evaluations |
-| Coarse/fine and hierarchical model metrics | `analysis/generated/hierarchy_main_metrics.csv`, `analysis/generated/hierarchy_path_metrics.csv` | `analysis/generate_hierarchy_main_table.py` | Main hierarchy table |
-| Paired model comparisons | `analysis/generated/hierarchy_paired_comparisons.csv` | `analysis/generate_hierarchy_main_table.py` | Main hierarchy caption/results |
+| Primary subject-balanced coarse/fine metrics | `analysis/generated/benchmark_reweighted_metrics.csv`, `benchmark_reweighted_audit.json` | `analysis/revise_benchmark_table.py` | Main APT-only table; complete appendix inventory |
+| Historical cell-weighted and path metrics | `analysis/generated/hierarchy_main_metrics.csv`, `hierarchy_path_metrics.csv` | Legacy generator; reweighted evaluator reproduces point estimates | Appendix historical metrics and path diagnostics |
+| Historical paired model comparisons | `analysis/generated/hierarchy_paired_comparisons.csv` | `analysis/generate_hierarchy_main_table.py` | Appendix only, not transferred to subject-balanced scores |
+| Matched-input APT/RNA reference | `outputs/paired_information_validation/summary.csv`, `completion.json` | `analysis/validate_paired_information.py`, `analysis/prepare_fold_rna.R` | Separate main modality table and appendix; training-subset-only HVGs |
+| Reference composition recovery | `outputs/composition_recovery_validation/` | `analysis/validate_composition_recovery.py` | Secondary patient-level application |
 | Per-subtype support and F1 | `analysis/generated/subtype_per_class.csv`, `analysis/generated/subtype_model_summary.csv` | `analysis/generate_subtype_audit.py` | Subtype results and appendix |
 | Wrong-conditioned cross-lineage null | `analysis/generated/hierarchy_error_null.csv` | `analysis/generate_subtype_audit.py` | Appendix error analysis |
 | Strict nested composition bridge | `outputs/oof_composition_bridge/disease_results_summary.csv`, `outputs/oof_composition_bridge/paired_feature_comparisons.csv` | `analysis/oof_composition_bridge.py`, `analysis/oof_composition_bridge_downstream.py` | Disease/composition results |
@@ -26,6 +29,9 @@
 | Patient-label permutation | `analysis/results/patient_permutation_n1000/patient_label_permutation_summary.json` | `analysis/run_patient_label_permutation.py` | Disease audit appendix |
 | Patient-lineage attribution | `analysis/results/patient_lineage_attribution.csv`, `patient_lineage_attribution_summary.csv` | `analysis/plot_patient_lineage_attribution.py` | Appendix figures |
 
-The APT, COMBAT RNA/ADT, OneK1K, and cross-cohort scaling QA files are `PASS`;
-all abstract and main-text scaling values are copied from these machine-readable
-artifacts.
+The revised abstract centers the benchmark, not scaling. The sampling rows
+above describe historical result locations: full fixed-total, doubling,
+response-surface, and cross-cohort comparisons now belong to the supporting
+appendix audit. Compact-panel material is a secondary redundancy diagnostic,
+not a primary assay-efficiency contribution. Do not interpret old location
+descriptions as current headline claims.

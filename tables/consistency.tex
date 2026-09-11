@@ -3,16 +3,16 @@
 \small
 \setlength{\tabcolsep}{7pt}
 \renewcommand{\arraystretch}{1.10}
-\begin{tabular}{lccc}
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Model} & \textbf{Fine Acc.} & \textbf{Root-excl. Hier. F1} & \textbf{Consistency} \\
+\textbf{Model} & \textbf{Fine Acc.} & \makecell{Root-excluded\\Hier. F1} & \textbf{Consistency} & \makecell{Exact\\Path} & \makecell{Subtype\\Tree Dist.} \\
 \midrule
-\ourmethod{} & 0.305 & 0.404 & 0.812 \\
-Flat FT-style Transformer & 0.315 & 0.411 & 0.795 \\
-FT-style Transformer $+$ HCE & 0.306 & 0.405 & 0.834 \\
-XGBoost & 0.323 & 0.420 & 0.736 \\
+\ourmethod{} & 0.305 & 0.404 & 0.812 & 0.253 & 2.431 \\
+Flat FT-style Transformer & 0.315 & 0.411 & 0.795 & 0.257 & 2.407 \\
+FT-style Transformer $+$ HCE & 0.306 & 0.405 & 0.834 & 0.259 & 2.418 \\
+XGBoost & 0.323 & 0.420 & 0.736 & 0.248 & 2.375 \\
 \bottomrule
 \end{tabular}
-\caption{Auxiliary hierarchy diagnostics on the same 361{,}792-cell pooled OOF artifacts as Table~\ref{tab:main}. Root-excluded hierarchical F1 is the example-averaged F1 between the true and predicted $\{\text{lineage},\text{subtype}\}$ sets; the always-correct root is omitted. Consistency maps each hard fine prediction to its parent and compares it with the independent coarse prediction. \emph{Unknown} is excluded and no constrained decoding is used.}
+\caption{Cell-weighted auxiliary hierarchy diagnostics on the same frozen OOF predictions as Table~\ref{tab:main}. Root-excluded hierarchical F1 is the example-averaged F1 between true and predicted $\{\text{lineage},\text{subtype}\}$ sets; the always-correct root is omitted. Exact Path requires both independent predictions to be correct. Consistency compares the mapped fine parent with the independent coarse prediction. Subtype Tree Distance uses only the predicted subtype and its mapped parent: 0/2/4 for correct/sibling/cross-lineage predictions (lower is better). \emph{Unknown} is excluded; no constrained decoding is used.}
 \label{tab:consistency}
 \end{table}

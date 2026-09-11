@@ -27,6 +27,9 @@ def main():
         writer.writerows((r["subtype"], r["lineage"]) for r in subtypes)
     paths = ["benchmark/splits/patient_folds.json", "analysis/generated/subtype_per_class.csv",
              "analysis/generated/hierarchy_main_metrics.csv", "analysis/generated/hierarchy_path_metrics.csv",
+             "analysis/generated/benchmark_reweighted_metrics.csv",
+             "analysis/generated/benchmark_reweighted_audit.json",
+             "analysis/revise_benchmark_table.py",
              "outputs/cross_cohort_scaling/cross_cohort_fixed_total_effects.csv",
              "outputs/class_matched_scaling/class_matched_effects_all.csv",
              "outputs/scaling_ground_truth_validation/summary.json",

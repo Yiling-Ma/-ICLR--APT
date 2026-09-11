@@ -17,7 +17,7 @@ APT-only prediction in held-out patients
 \end{minipage}}
 \hfill$\longrightarrow$\hfill
 \fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
-\textbf{Patient state}\\[4pt]
+\textbf{Secondary readout}\\[4pt]
 Nested cell-output summaries\\[3pt]
 Compare with direct APT and recorded QC
 \end{minipage}}
@@ -60,8 +60,9 @@ not end-to-end validation of a small-volume diagnostic assay.
 \label{sec:data:contract}
 \label{sec:data:protocols}
 
-The evaluation has two connected levels. \textbf{Cell identity}
-predicts lineage and subtype from APT alone. \textbf{Patient characterization}
+The evaluation has a primary task and a secondary application.
+\textbf{Cell identity} predicts lineage and subtype from APT alone.
+\textbf{Patient characterization}
 predicts disease-group membership from patient summaries of measurements or
 cell-model outputs. The latter is an exploratory association task: with one
 acquisition per participant and incomplete acquisition metadata, disease
@@ -81,31 +82,48 @@ portable end-to-end evaluator remain release requirements.
 \subsection{Metrics and Statistical Units}
 \label{sec:data:imbalance}
 
-Coarse and fine macro-F1 are the primary cell metrics. Exact-path accuracy and
-subtype-tree distance describe joint hierarchy errors; root-excluded
-hierarchical F1 and consistency are supplementary. The main hierarchy table
-uses cell-weighted pooled OOF predictions and 2{,}000 paired patient bootstraps.
-The designated comparison family contrasts the soft-cascade recipe with HCE
-and XGBoost at both resolutions, with Holm correction across four tests.
-Flat and other classical comparisons are descriptive only.
+Coarse and fine subject-balanced pooled Macro-F1 (SB-Macro-F1) are the primary
+cell metrics. For patient $p$, let $C^{(p)}$ be the confusion matrix over a fixed
+$K$-class ontology and $n_p$ its number of evaluated cells. Define
+\begin{equation}
+\overline C=\frac{1}{P}\sum_{p=1}^{P}\frac{C^{(p)}}{n_p},\qquad
+\mathrm{SB\text{-}MacroF1}=\frac{1}{K}\sum_{k=1}^{K}
+\frac{2\overline C_{kk}}{\sum_j\overline C_{kj}+\sum_i\overline C_{ik}}.
+\label{eq:primary_sb_f1}
+\end{equation}
+A zero denominator contributes zero. Each patient's entire matrix, not each
+class row, is normalized to unit mass. This differs from cell-weighted pooled
+Macro-F1 and from mean within-subject Macro-F1. We retrospectively re-score the
+frozen OOF predictions under this primary reporting convention; checkpoints
+are not reselected. Historical cell-weighted scores remain in
+Table~\ref{tab:hierarchy_cell_weighted}.
+
+Main-table intervals use 2{,}000 paired patient-bootstrap resamples, with the
+same patient multiplicities across models. They are pointwise, conditional on
+the fitted models and fixed fold design, and do not include model-selection
+or training-seed uncertainty. The main comparison is descriptive; an interval
+for an individual score is not a test of pairwise superiority. Historical
+cell-weighted tests against HCE and XGBoost remain separately documented and
+are not transferred to the new metric. Exact-path accuracy, subtype-tree
+distance, root-excluded hierarchical F1, and consistency are appendix diagnostics.
 
 Patient characterization uses one prediction per patient, with patient-level
 accuracy, macro-F1, and macro-AUROC. Its effective disease sample is 40, not
 361{,}792. Nested model selection prevents direct test exposure but does not
 remove confounding or uncertainty from exploratory analysis choices.
 
-Subject-balanced sensitivities first normalize each held-out subject's
-confusion matrix to unit mass before pooling. This differs from cell-weighted
-pooling and from averaging within-subject macro-F1. The paired-RNA probe and
-supporting scaling analyses use this subject-balanced pooled metric; their
-scores are not directly interchangeable with the main cell-weighted table.
+The paired-RNA probe also uses subject-balanced pooled Macro-F1, but has a
+different training budget and preprocessing protocol; its scores must not be
+interpreted as additional architecture rows in the main table.
 Appendix~\ref{sec:appendix:protocol_sensitivity} gives the definitions.
 
 \subsection{Supporting Reliability Analyses}
 
 The paired-RNA analysis is an internal reconstruction diagnostic, since RNA
-also supplies the reference annotations. Its data-development HVG selection
-means it is not an independent, leakage-free RNA benchmark baseline.
+also supplies the reference annotations. In the current matched-input probe,
+HVG selection is fitted separately within inner and outer training subsets;
+this prevents feature-selection exposure to their evaluation patients, but
+does not make RNA an independent validation of RNA-derived labels.
 Centering, patient-identity prediction, and recorded QC controls probe
 alternative explanations for disease association. Feature-panel and
 inference-cell subsampling are secondary redundancy diagnostics, not evidence

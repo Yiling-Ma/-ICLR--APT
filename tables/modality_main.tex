@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{llcc}
+\toprule
+Probe & Input & Coarse SB-Macro-F1 & Fine SB-Macro-F1 \\
+\midrule
+Linear SGD & APT & 0.277 & 0.090 \\
+Linear SGD & RNA & 0.742 & 0.431 \\
+Linear SGD & APT + RNA & 0.751 & 0.458 \\
+\midrule
+MLP & APT & 0.310 & 0.094 \\
+MLP & RNA & 0.871 & 0.584 \\
+MLP & APT + RNA & 0.873 & 0.606 \\
+\bottomrule
+\end{tabular}
+\caption{Separate matched-input modality reference, not an APT-only model
+leaderboard. Inputs share paired cells, patient folds, and a capped training
+budget; RNA feature selection and standardization are training-subset-only.
+RNA also underlies the reference labels, so these are reconstruction results,
+not independent annotation validation. Full pointwise patient intervals and
+noise/shuffling controls are in Table~\ref{tab:paired_rna_oracle}.}
+\label{tab:modality_main}
+\end{table}

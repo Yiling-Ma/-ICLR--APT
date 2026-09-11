@@ -1,23 +1,17 @@
 \begin{table}[t]
-\centering
-\small
+\centering\small
 \setlength{\tabcolsep}{6pt}
-\renewcommand{\arraystretch}{1.08}
-\begin{tabular}{lrrrr}
+\begin{tabular}{llcc}
 \toprule
-\textbf{Model} & \textbf{Coarse M-F1} & \textbf{Fine M-F1} & \textbf{Exact Path} & \textbf{Subtype Tree Dist.}$\downarrow$ \\
+Model & Input & Coarse SB-Macro-F1 $\uparrow$ & Fine SB-Macro-F1 $\uparrow$ \\
 \midrule
-Logistic Regression & 0.299 & 0.132 & -- & -- \\
-Linear SVM & 0.311 & 0.111 & -- & -- \\
-Random Forest & 0.250 & 0.092 & -- & -- \\
-Reference Correlation & 0.172 & 0.072 & -- & -- \\
-\midrule
-\ourmethod{} & 0.326 & \textbf{0.152} & 0.253 & 2.431 \\
-Flat FT-style Transformer & 0.323 & 0.147 & 0.257 & 2.407 \\
-FT-style Transformer $+$ HCE & \textbf{0.333$^{\mathrm{n.s.}}$} & 0.151$^{\mathrm{n.s.}}$ & \textbf{0.259} & 2.418 \\
-XGBoost & 0.322$^{\mathrm{n.s.}}$ & 0.143$^{\mathrm{n.s.}}$ & 0.248 & \textbf{2.375} \\
+Logistic Regression & APT & 0.298 [0.281, 0.315] & 0.126 [0.107, 0.139] \\
+XGBoost & APT & 0.325 [0.302, 0.345] & 0.137 [0.120, 0.149] \\
+Flat Transformer & APT & 0.326 [0.300, 0.348] & 0.139 [0.114, 0.155] \\
+HCE Transformer & APT & 0.335 [0.310, 0.356] & 0.143 [0.121, 0.160] \\
+\ourmethod{} & APT & 0.332 [0.306, 0.354] & 0.145 [0.122, 0.160] \\
 \bottomrule
 \end{tabular}
-\caption{Patient-disjoint 5-fold hierarchy evaluation on cell-weighted pooled OOF predictions from 40 patients. Coarse and fine Macro-F1 are primary. Exact Path requires independent coarse and fine predictions to be correct; Tree Distance is 0/2/4 for correct/sibling/cross-lineage subtype predictions. Dashes denote joint path metrics not present in the audited summary for those classical rows, not failed runs or zero scores. The designated soft-cascade comparisons with HCE and XGBoost use 2{,}000 paired patient bootstraps and Holm correction across four coarse/fine tests; $^{\mathrm{n.s.}}$ denotes no adjusted significance. Flat and other classical comparisons are descriptive only. Transformer rows match backbone and budget but not the complete objective (Table~\ref{tab:transformer_components}); they are recipe comparisons, not component ablations. Remaining diagnostics and definitions are in Appendix~\ref{sec:appendix:consistency}.}
+\caption{Primary APT-only cell-typing comparison: five patient-disjoint folds, 40 patients, 361{,}792 cells. Entries are subject-balanced pooled Macro-F1 with pointwise 95\% patient-bootstrap intervals (2{,}000 resamples). Frozen predictions are retrospectively re-scored with equal total patient weight; checkpoints are unchanged. Comparisons are descriptive, conditional on fitted models. Transformer auxiliary supervision differs (Table~\ref{tab:transformer_components}); full-budget MLP coverage remains unavailable.}
 \label{tab:main}
 \end{table}

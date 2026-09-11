@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{llcc}
+\toprule
+Model & Input & Coarse CW-Macro-F1 $\uparrow$ & Fine CW-Macro-F1 $\uparrow$ \\
+\midrule
+\ourmethod{} & APT & 0.326 [0.300, 0.350] & 0.152 [0.129, 0.166] \\
+Flat Transformer & APT & 0.323 [0.299, 0.344] & 0.147 [0.120, 0.161] \\
+HCE Transformer & APT & 0.333 [0.310, 0.354] & 0.151 [0.127, 0.166] \\
+XGBoost & APT & 0.322 [0.298, 0.343] & 0.143 [0.127, 0.158] \\
+Linear SVM & APT & 0.311 [0.296, 0.325] & 0.111 [0.093, 0.126] \\
+Logistic Regression & APT & 0.299 [0.283, 0.315] & 0.132 [0.113, 0.146] \\
+Random Forest & APT & 0.250 [0.228, 0.271] & 0.092 [0.082, 0.100] \\
+Reference Correlation & APT & 0.172 [0.149, 0.189] & 0.072 [0.055, 0.082] \\
+\bottomrule
+\end{tabular}
+\caption{Historical cell-weighted pooled Macro-F1, with pointwise 95\% patient-bootstrap intervals, for the frozen APT-only hierarchy predictions. The same predictions are reweighted in Table~\ref{tab:main}; the estimands differ. Classical auxiliary references are retained here rather than omitted from the benchmark.}
+\label{tab:hierarchy_cell_weighted}
+\end{table}

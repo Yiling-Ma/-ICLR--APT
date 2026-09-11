@@ -18,7 +18,7 @@
 \usepackage{makecell}
 
 
-\title{APT-Bench: Evaluating Cell Identity and Disease-Associated Information in \mbox{Single-Cell} Aptamer Profiles}
+\title{APT-Bench: Patient-Disjoint Cell Typing from \mbox{Single-Cell} Aptamer Profiles}
 % Global paper constants
 
 \newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
@@ -67,24 +67,24 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Can the same blood-derived single-cell measurements identify immune-cell
-subtypes and characterize a patient's disease-associated state? We introduce
-APT-Bench to evaluate this question using 361{,}792 single-cell profiles,
-293 aptamer measurements, and paired-transcriptome-derived labels from 40
-participants across five cancer groups and healthy controls. Fixed
-patient-disjoint folds link hierarchical cell typing to patient-level
-characterization through strictly nested cross-fitting. APT models recover
-broad lineages more accurately than fine subtypes under the tested tasks;
-a matched paired-RNA probe reconstructs the reference labels more strongly.
-Predicted subtype summaries retain disease-associated information, but do not
-establish incremental value over lineage and recorded technical proxies.
-Direct APT disease-source prediction is stronger, yet its sensitivity to
-patient-wise centering reveals dependence on absolute-expression structure
-whose biological and technical origins remain unresolved. Supporting
-cross-cohort sampling audits further qualify conclusions drawn from correlated
-cells. APT-Bench provides a cell-to-patient evaluation framework for blood-based
-characterization, separating predictive information from the independent
-validation needed for biological interpretation and clinical use.
+Single-cell aptamer profiling offers a blood-derived molecular input for
+immune-cell identification, but evaluating it requires separating performance
+on additional cells from generalization to new patients. We introduce
+APT-Bench, a benchmark of 361{,}792 cells with 293 aptamer measurements from
+40 participants across five cancer groups and healthy controls. Paired
+transcriptomic annotations define five lineages and 27 subtypes. Five fixed
+patient-disjoint folds and subject-balanced evaluation compare linear,
+tree-based, and Transformer references on the same APT-only tasks. We describe
+a Soft-cascade Transformer reference that combines global subtype prediction
+with softly routed lineage experts, without assuming a model-specific
+advantage. The benchmark exposes substantial remaining difficulty in fine
+typing; a separate matched-input RNA diagnostic contextualizes, rather than
+replaces, the APT comparison. As a downstream case study, nested cell-output
+aggregation recovers patient subtype composition better than a training-mean
+reference, while incremental disease-prediction value remains unresolved.
+APT-Bench establishes a framework for comparing models of this measurement
+modality and studying their patient-level use, with clinical interpretation
+requiring acquisition-aware external validation.
 \end{abstract}
 
 
@@ -254,18 +254,18 @@ consistency, not independent biological validity.
 \todo{Document independent validation of the subtype-to-lineage mapping, including
 reviewers, disagreements, adjudication, and any marker-based checks.}
 
-\subsection{Paired-RNA Internal Reconstructability Oracle}
+\subsection{Paired-Input Internal Reconstruction Reference}
 \label{sec:appendix:paired_rna_oracle}
 
-We use the paired transcriptome as a diagnostic oracle to distinguish an APT
-information limitation from complete non-reconstructability of the operational
-labels. This analysis is deliberately outside the primary APT-only benchmark.
-The RNA representation contains 2{,}000 log-normalized highly variable genes
-selected by Seurat-style dispersion during data development. All 361{,}792
-benchmark cells match uniquely to this matrix by cell barcode. Because this
-feature representation and the manual labels arise from the same transcriptomic
-pipeline, the oracle is circular with respect to label construction and cannot
-serve as independent validation or a leakage-free model comparison.
+We use paired RNA as an internal label-reconstruction reference, separate from
+the primary APT-only model comparison. The current matched-input experiment
+replaces the earlier data-development HVG representation: 2{,}000 features
+are selected by mean-binned log-count dispersion within each inner or outer
+training subset, using the original RNA count matrix. All 361{,}792 benchmark
+cells are aligned by barcode. This controls feature-selection exposure to
+evaluation patients, but the transcriptomic modality also underlies the manual
+annotations. Stronger RNA reconstruction therefore does not independently
+validate those annotations or establish an intrinsic APT information limit.
 
 Within each of the five fixed patient-disjoint folds, we compare five inputs:
 APT only, paired RNA only, APT+RNA, RNA plus random 293-dimensional noise, and
@@ -280,7 +280,8 @@ class-weighted linear SGD and one-hidden-layer MLP probes for 40 epochs at both
 resolutions, using one inner patient-disjoint validation fold to select the
 regularization strength. Scores use subject-normalized OOF confusion matrices,
 and 2{,}000 paired patient-bootstrap replicates quantify modality contrasts.
-This matched-budget probe is not directly comparable to the full-training model ladder in
+This matched-budget probe uses the main subject-balanced metric, but is not
+an architecture comparison with the full-training model ladder in
 Table~\ref{tab:main}.
 
 \input{tables/paired_rna_oracle}
@@ -472,17 +473,18 @@ coverage of the joint uncertainty procedure used on real data.
 \subsection{Benchmark Interface and Release Contract}
 \label{sec:appendix:benchmark_release}
 
-The hierarchy submission interface contains pseudonymous cell and patient IDs,
+The primary hierarchy submission interface contains pseudonymous cell and patient IDs,
 true and predicted lineage, and true and predicted subtype. The disease interface
 contains one row per patient with the true disease and six class scores. The
-efficiency track additionally records the aptamer measurement budget, inference-time cell budget, selection
+secondary budget diagnostic additionally records the aptamer measurement budget, inference-time cell budget, selection
 seed, and the development-only feature ranking. These common interfaces permit
 new models to be scored without reproducing their internal training pipelines.
 
 The evaluation layer is portable to other clinical single-cell datasets. It
 implements group-disjoint out-of-fold prediction; patient-clustered bootstrap
-uncertainty; coarse and fine macro-F1, exact-path accuracy, hierarchical F1,
-subtype-tree distance, granularity gap, and sibling versus cross-lineage error;
+uncertainty; subject-balanced and cell-weighted pooled coarse and fine Macro-F1,
+exact-path accuracy, root-excluded hierarchical F1, subtype-tree distance,
+the descriptive coarse-minus-fine difference, and sibling versus cross-lineage error;
 patient-level aggregation versus cell-level
 pseudoreplication; patient-centering and identity diagnostics; and nested feature-
 and cell-budget curves. A future dataset can replace the assay features,
@@ -509,6 +511,8 @@ procedure.}
 
 \subsection{Confounding Audit of Within-Cohort Disease Association}
 \label{sec:appendix:disease_patient_level}
+
+\input{tables/disease}
 
 \paragraph{Exploratory scope and independent sample size.}
 All disease analyses reuse one cohort of 40 independent patients across six
@@ -732,9 +736,11 @@ pooled point estimate subject-balanced; patient cell counts range from
 recomputes both hierarchy endpoints after sampling 1{,}900 cells without
 replacement from every patient for each of 50 seeds. Coarse macro-F1 changes by
 at most $+0.005$, while fine macro-F1 changes by $-0.007$ to $-0.009$; the
-qualitative model ordering is unchanged. The main conclusions are therefore not
-driven by a few high-cell-count patients, although the headline pooled metric
-remains explicitly cell-weighted.
+qualitative ordering in this sensitivity is unchanged. These small changes
+describe robustness of the historical cell-weighted scores to equal-cell
+sampling; they do not prove absence of patient influence. The main table now
+uses exact subject-normalized confusion pooling rather than this Monte Carlo
+subsampling approximation.
 
 \input{tables/patient_balanced_cell_sensitivity}
 
@@ -1028,7 +1034,23 @@ batches.
 \subsection{Coarse--Fine Consistency Diagnostic}
 \label{sec:appendix:consistency}
 
-Independent coarse and fine classifiers can disagree about the hierarchy even when each prediction is plausible in isolation. Table~\ref{tab:consistency} reports their natural agreement. Unlike an earlier single-split analysis, this version uses the same five-fold pooled out-of-fold prediction artifacts as the main hierarchy results, so every patient contributes exactly once to both evaluations.
+Independent coarse and fine classifiers can disagree about the hierarchy even
+when each prediction is plausible in isolation. Table~\ref{tab:consistency}
+reports their natural agreement on the same frozen OOF predictions as the
+main results. These auxiliary path metrics remain cell-weighted averages,
+whereas the main Macro-F1 table now balances patient contributions.
+
+\input{tables/hierarchy_subject_balanced_all}
+\input{tables/hierarchy_cell_weighted}
+
+The main reporting metric was revised retrospectively without retraining,
+retuning, or reselecting checkpoints. The historical cell-weighted comparison
+family contrasted Soft-cascade with HCE and XGBoost at coarse and fine
+resolution, using 2{,}000 paired patient bootstrap resamples and Holm correction
+over four tests; none reached adjusted significance. Those tests do not apply
+to the subject-balanced results. Flat and auxiliary classical comparisons
+remain descriptive. The saved re-evaluation script reproduces the old point
+estimates before generating the new table, and records source-artifact hashes.
 
 \input{tables/consistency}
 

@@ -19,9 +19,18 @@ python analysis/plot_scaling_protocol_contrast.py
 make paper
 ```
 
-These commands validate selected saved artifacts, regenerate Figure 1, and
+These commands validate selected saved artifacts, regenerate the appendix
+sampling-protocol figure, and
 compile the PDF. They do not retrain models or regenerate every result from
 raw observations. The paper build requires LaTeX/latexmk.
+
+The revised main table uses subject-balanced re-evaluation of frozen full-budget
+OOF predictions, not the historical cell-weighted metric. Reproduction commands,
+source checks, and remaining full-budget MLP coverage are documented in
+`BENCHMARK_STORY_REVISION.md`. Run `analysis/revise_benchmark_table.py` to rebuild
+the current main table; `analysis/generate_hierarchy_main_table.py` and
+`analysis/render_paired_rna_oracle.py` are legacy generators and should not be
+used to overwrite the revised tables.
 
 The self-contained simulation can be rerun separately with numpy and scikit-learn:
 
