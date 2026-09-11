@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "upstream patient isolation and target coverage",
+    "evaluation indices and probability normalization",
+    "confusion matrices independently reconstructed"
+  ],
+  "fits_audited": 90,
+  "protocol_hash": "a13bfad32d414298cc9c89b40b19d95809ba0ebdca89c7513241b891ee4980a9",
+  "status": "PASS"
+}

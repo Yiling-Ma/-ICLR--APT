@@ -164,3 +164,37 @@ mixing. Full five-fold validation retains all six candidates unchanged.
 Machine-readable results are in `outputs/rna_apt_distillation_v1/pilot/`.
 `analysis/audit_rna_apt_distillation.py` independently checks patient isolation,
 target coverage, normalized predictions, and confusion-matrix reconstruction.
+
+## Full Validation Results
+
+All 90 student fits completed across five folds and three matched student seeds,
+covering 40 held-out patients. The independent artifact audit passed for all
+fits, including patient isolation, cached-target coverage, probability
+normalization, and confusion matrices reconstructed from predictions.
+
+| Candidate | Fine Macro-F1 | Coarse Macro-F1 |
+| --- | ---: | ---: |
+| Supervised | 0.1173 | 0.3146 |
+| Ordinary KD | 0.1157 | 0.3203 |
+| Confidence-weighted KD | 0.1151 | 0.3205 |
+| Projected conditional target | 0.1153 | 0.3196 |
+| Fixed shrinkage | 0.1159 | 0.3215 |
+| Lineage-risk shrinkage | 0.1166 | 0.3212 |
+
+The pilot's fine improvement did not replicate in full validation. Lineage-risk
+shrinkage minus supervised learning is -0.0007 [-0.0040, 0.0028] fine Macro-F1;
+its difference from ordinary KD is 0.0008 [-0.0019, 0.0034]. Fixed shrinkage
+minus ordinary KD is 0.0002 [-0.0021, 0.0021]. These intervals do not establish
+an improvement, nor do they establish equivalence.
+
+Coarse scores are higher with distillation than with supervised learning:
+ordinary KD improves by 0.0057 [0.0019, 0.0091]. However, the new components do
+not establish additional gains beyond ordinary KD. Lineage-risk shrinkage minus
+ordinary KD is 0.0009 [-0.0017, 0.0032] coarse Macro-F1; fixed shrinkage minus
+ordinary KD is 0.0012 [-0.0018, 0.0039]. All intervals remain pointwise and
+conditional on the fixed upstream fits, not multiplicity-adjusted confirmation.
+
+Decision: retain this experiment as an unresolved/negative method-development
+screen, not as evidence for a performance-advantaged core algorithm. No new
+method superiority claim has been added to the main paper. Machine-readable
+results and audit records are in `outputs/rna_apt_distillation_v1/validation/`.
