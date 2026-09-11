@@ -20,7 +20,10 @@ import patient_cell_scaling as core
 from paired_rna_oracle import patient_class_weights
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'outputs/paired_information_validation'
+OUT = Path(os.environ.get(
+    'APT_PAIRED_OUT',
+    str(ROOT / 'outputs/paired_information_validation'),
+)).resolve()
 SEED = 20260911
 CAP = 1000
 MODES = ['rna', 'apt', 'rna_apt', 'rna_noise', 'rna_shuffled_apt']
