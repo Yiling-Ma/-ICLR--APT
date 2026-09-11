@@ -1,15 +1,15 @@
-\section{Hierarchy-Aware Reference Ladder}
+\section{Transformer Reference Implementation Details}
 \label{sec:method}
 
-APT-Bench evaluates progressively structured, backbone- and budget-matched neural references:
-a flat Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses
-on the genuine cell-level hierarchy, lineage $\rightarrow$ subtype, and leaves
-disease-association auditing to separate tabular baselines and patient-level aggregation.
-Its released code retains the historical identifier \texttt{DropCascade} for
+This appendix gives the implementation details for the hierarchy-aware
+reference ladder introduced in Section~\ref{sec:method_summary}: a flat
+Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses on the
+cell-level hierarchy, lineage $\rightarrow$ subtype, while disease-association
+audits use separate tabular baselines and patient-level aggregation. The
+released code retains the historical identifier \texttt{DropCascade} for
 artifact compatibility. That identifier denotes a reproducible benchmark
-baseline, not a proposed algorithm or a claim that its global path, auxiliary
-coarse objective, soft routing, or contrastive construction independently
-improves performance.
+baseline, not a claim that its global path, auxiliary coarse objective, soft
+routing, or contrastive construction independently improves performance.
 
 \subsection{Cell Encoder}
 \label{sec:method:backbone}

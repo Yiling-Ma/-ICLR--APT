@@ -1,20 +1,48 @@
-\section{From Cell Models to Patient Representations}
+\section{Hierarchy-Aware APT Models and Patient Readouts}
 \label{sec:method_summary}
 
-\paragraph{Cell-identity references.}
-The APT hierarchy evaluation uses classical references and a flat
-Transformer, the same model trained with a two-level adaptation of HCE
-\citep{cultrera2026improving}, and a soft-cascade Transformer. These references
-share the APT tokenizer, encoder dimensions, optimizer, training budget,
-patient folds, training-only preprocessing, and validation fine-macro-F1
-checkpoint rule. The ladder therefore holds backbone capacity fixed while
-comparing complete reference recipes. Their objectives are not matched: only
-the soft-cascade model uses disease labels for cross-disease contrastive pairing,
-whereas Flat and HCE use classification losses alone. The ladder is therefore
-not a component ablation or a proposed new diagnostic architecture.
-Appendix~\ref{sec:method} records the implementation
-and component matrix; no routing, HCE, or contrastive effect is claimed in
-isolation.
+\paragraph{Hierarchy-aware cell-identity references.}
+The first APT-Bench contract is APT-only prediction of immune-cell identity in
+held-out patients. We therefore include a hierarchy-aware neural reference as a
+main method, not only as an appendix diagnostic. Each cell is represented by a
+293-dimensional standardized APT vector. The Transformer backbone embeds
+aptamer identity and value as tokens, prepends a learnable \texttt{[CLS]} token,
+and uses the final \texttt{[CLS]} state $z$ as the cell representation.
+
+Let $M=5$ lineages and $K=\numsubtypes{}$ subtypes define the fixed ontology,
+with parent map $m(k)$. The soft-cascade reference predicts lineage logits
+$c=W_cz$ and routing probabilities $p(m\mid x)=\operatorname{softmax}(c)_m$.
+Subtype logits combine a global subtype path and lineage-specific experts:
+\begin{equation}
+s_k(x)=g_k(z)+\alpha\,p(m(k)\mid x)e_{m(k),k}(z)
++\gamma\log\{\epsilon+(1-\epsilon)p(m(k)\mid x)\}.
+\label{eq:main_soft_cascade}
+\end{equation}
+We use $\alpha=1$, $\epsilon=0.1$, and ramp $\gamma$ from 0 to 0.5 during early
+training. The loss is
+\begin{equation}
+\mathcal{L}=\mathcal{L}_{\mathrm{fine}}
++0.5\,\mathcal{L}_{\mathrm{coarse}}
++w(t)\mathcal{L}_{\mathrm{contrast}},
+\label{eq:main_cascade_loss}
+\end{equation}
+where $w(t)$ ramps to 0.2. The contrastive term uses same-subtype,
+cross-disease cells as positives and different-subtype cells as negatives,
+with additional emphasis on within-lineage negatives. This construction is
+intended to provide a reproducible hierarchy-aware reference for the benchmark;
+disease recognition itself is evaluated separately at the patient level.
+
+The neural ladder compares the soft cascade with a flat Transformer and the
+same Transformer trained with a two-level HCE adaptation
+\citep{cultrera2026improving}. These references share the APT tokenizer,
+encoder dimensions, optimizer, training budget, patient folds, training-only
+preprocessing, and validation fine-macro-F1 checkpoint rule. Their objectives
+are not fully matched: only the soft-cascade model uses disease labels for
+cross-disease contrastive pairing, whereas Flat and HCE use classification
+losses alone. Thus the ladder is a benchmark reference comparison, not a
+component ablation; no routing, HCE, or contrastive effect is claimed in
+isolation. Appendix~\ref{sec:method} records implementation details and the
+component matrix.
 
 Baseline coverage is intentionally distinguished from input compatibility.
 LR and XGBoost are included in the APT hierarchy summary, which
