@@ -6,12 +6,15 @@ cd "$ROOT"
 PYTHON=/home/mayiling/opt/apt-ft-baselines/bin/python
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 export APT_XGB_DEVICE=cuda:0 ONEK1K_XGB_DEVICE=cuda:0 COMBAT_XGB_DEVICE=cuda:0
+export COMBAT_PREPARED_DIR=${COMBAT_PREPARED_DIR:-/home/mayiling/data/combat/prepared}
+export ONEK1K_PREPARED_DIR=${ONEK1K_PREPARED_DIR:-/home/mayiling/data/onek1k/prepared}
 OUT=${APT_SEQUENTIAL_OUT:-/ssd3/mayiling/apt_agent_runtime/sequential_scaling}
 mkdir -p "$OUT/logs"
 exec 9>"$OUT/batch.lock"
 flock -n 9 || { echo 'Another batch is running'; exit 1; }
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
-for dataset in apt combat_rna onek1k; do
+DATASETS=${APT_SEQUENTIAL_DATASETS:-"apt combat_rna onek1k"}
+for dataset in $DATASETS; do
   pids=()
   for shard in 0 1 2 3; do
     CUDA_VISIBLE_DEVICES=$shard "$PYTHON" -u analysis/sequential_scaling_controls.py run \
