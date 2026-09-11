@@ -1,0 +1,13 @@
+{
+  "limitations": [
+    "fixed teacher/projector seed, not all upstream uncertainty",
+    "no C2KD/BioKD/TabM or independent-cohort comparison yet",
+    "lineage coefficient uses target-risk proxy, not observed student treatment effect",
+    "pointwise intervals, no multiplicity-adjusted superiority claim"
+  ],
+  "protocol_hash": "0804e279af7fba3c1fc676e9107186b29ef79d06bda6fd67ccb4115405963375",
+  "scope": "development pilot",
+  "status": "PASS",
+  "student_fits": 18,
+  "test_patients": 8
+}

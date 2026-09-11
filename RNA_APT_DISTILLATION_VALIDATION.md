@@ -138,3 +138,29 @@ The launcher uses a lock and protocol-hash-checked caches for safe resumption.
 Implementation: `analysis/rna_apt_distillation.py`,
 `analysis/prepare_distillation_rna.R`, `analysis/run_rna_apt_distillation.sh`.
 Tests: `analysis/test_rna_apt_distillation.py`.
+
+## Development Pilot Results
+
+The eight-patient inner-validation pilot completed all 18 student fits and
+passed the artifact audit. These are development results, not main-paper
+performance estimates or a basis for choosing the full-validation candidate.
+
+| Candidate | Fine Macro-F1 | Coarse Macro-F1 |
+| --- | ---: | ---: |
+| Supervised | 0.1195 | 0.3275 |
+| Ordinary KD | 0.1221 | 0.3289 |
+| Confidence-weighted KD | 0.1215 | 0.3300 |
+| Projected conditional target | 0.1232 | 0.3339 |
+| Fixed shrinkage | 0.1253 | 0.3339 |
+| Lineage-risk shrinkage | 0.1228 | 0.3316 |
+
+Fixed shrinkage minus ordinary KD is 0.0033 fine Macro-F1, with a pointwise
+joint-bootstrap 95% interval of [-0.0009, 0.0051]. Lineage-risk shrinkage minus
+ordinary KD is 0.0007 [-0.0014, 0.0024]. Neither establishes superiority.
+The adaptive coefficients are [0.75, 0.75, 0.50, 1.00, 0.75] in encoded lineage
+order. The pilot therefore does not justify adaptive complexity over fixed
+mixing. Full five-fold validation retains all six candidates unchanged.
+
+Machine-readable results are in `outputs/rna_apt_distillation_v1/pilot/`.
+`analysis/audit_rna_apt_distillation.py` independently checks patient isolation,
+target coverage, normalized predictions, and confusion-matrix reconstruction.
