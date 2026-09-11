@@ -38,9 +38,10 @@ The paper makes one contribution with three concrete components:
     \item \textbf{A specified evaluation contract:} APT-only lineage and subtype
     prediction with a fixed ontology, patient-disjoint folds, and explicit
     cell-weighted versus subject-balanced metrics.
-    \item \textbf{Evidence that the split changes the conclusion:} the evaluated
-    cell-level split controls consistently overstate performance relative to
-    the new-patient protocol, motivating patient-disjoint reporting.
+    \item \textbf{A split-protocol audit:} cell-level split controls yield higher
+    scores in both evaluated model families at both label resolutions,
+    demonstrating why held-out-cell and new-patient performance must be
+    distinguished.
     \item \textbf{Reference results and an auditable interface:} classical and
     neural predictions, metric code, split manifests, and documented artifact
     checks establish comparison points for subsequent APT models.

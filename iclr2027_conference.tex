@@ -67,24 +67,23 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Evaluation of single-cell aptamer cell typing must distinguish additional
-cells from additional patients. We introduce APT-Bench, a patient-disjoint
-benchmark specification and reference evaluation comprising 361{,}792 cells,
-293 aptamer measurements, and paired-transcriptomic annotations for five
-lineages and 27 subtypes from 40 participants. Five fixed outer patient folds
-and subject-balanced pooled Macro-F1 define the new-patient evaluation
-contract. In the available XGBoost and Soft-cascade Transformer controls,
-cell-level splitting produces higher coarse and fine Macro-F1 in all four
-comparisons, with increases of 0.050--0.108 on the historical cell-weighted
-metric. These protocol contrasts show that held-out-cell performance can give
-an optimistic account of new-patient generalization, without isolating a
-causal leakage effect. Classical and Transformer references establish
-performance under the patient-disjoint contract; Soft-cascade is a
-hierarchy-aware baseline rather than a claimed algorithmic contribution.
-Paired RNA and patient aggregation provide secondary context, not independent
-clinical validation. APT-Bench centers the statistical unit of evaluation in
-this measurement modality, while complete data access and portable
-reproduction remain explicit release requirements.
+Single-cell aptamer profiles offer a targeted representation for immune-cell
+typing, but evaluating additional cells from known patients does not establish
+generalization to new patients. We introduce APT-Bench, a benchmark
+specification and reference evaluation of 361{,}792 cells from 40 participants,
+with 293 aptamer measurements and RNA-derived labels for five lineages and
+27 subtypes. The benchmark combines five fixed patient-disjoint folds,
+subject-balanced pooled Macro-F1, and classical and neural reference models.
+Across the available XGBoost and Soft-cascade Transformer split controls,
+cell-level splitting yields higher coarse and fine Macro-F1 in all four
+comparisons, by 0.050--0.108 on the cell-weighted metric. These comparisons
+demonstrate protocol-dependent optimism, rather than isolating a causal
+leakage effect. Under the patient-disjoint contract, reference models achieve
+coarse/fine subject-balanced Macro-F1 of 0.298--0.335/0.126--0.145,
+establishing a challenging evaluation setting for subsequent APT models.
+APT-Bench makes the unit of generalization explicit when assessing this
+measurement modality; complete data access and portable reproduction remain
+requirements for its public release.
 \end{abstract}
 
 

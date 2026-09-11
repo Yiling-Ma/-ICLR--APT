@@ -9,15 +9,14 @@ Patient-disjoint testing and subject-balanced scoring address different
 issues: the former separates people across training and test sets, while
 the latter limits unequal cell recovery from dominating the score.
 
-\paragraph{Benchmark contribution versus model contribution.}
+\paragraph{A reusable comparison setting.}
 The resource specifies an APT input, operational ontology, fixed patient folds,
 metrics, and reference results. Soft-cascade is a hierarchy-aware reference,
-not a claimed algorithmic advance. The value of the benchmark must therefore
-be judged by the relevance of its task, evaluation validity, and usability,
-not by whether that reference wins. Complete data access, permissions,
+not a claimed algorithmic advance. These references establish comparison
+points for improving APT cell typing without changing the input modality,
+ontology, or held-out patient partitions. Complete data access, permissions,
 annotation provenance, and a portable evaluator remain necessary release
-requirements; incomplete delivery cannot be repaired by stronger novelty
-language. Full-budget MLP coverage and more comprehensive APT-compatible
+requirements. Full-budget MLP coverage and more comprehensive APT-compatible
 annotation baselines also remain limitations.
 
 \paragraph{Boundaries of the evidence.}
@@ -33,11 +32,12 @@ resource-allocation algorithm is a contribution of this paper.
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench specifies patient-disjoint cell typing from single-cell aptamer
-profiles and establishes classical and neural reference results under an
-explicit patient-aware metric. The evaluated cell-level split controls give
-consistently higher performance than the new-patient protocol, demonstrating
-why held-out cells must not substitute for held-out patients in reporting
-generalization. The benchmark's next requirements are complete reproducible
-release and independent APT validation, not an unsupported claim of algorithmic
-or clinical superiority.
+APT-Bench establishes a patient-disjoint evaluation setting for cell typing
+from single-cell aptamer profiles, with a fixed label ontology, explicit
+subject-balanced scoring, and classical and neural reference results.
+Cell-level splitting produces higher scores in both evaluated model families
+at both resolutions, showing why held-out cells must not substitute for
+held-out patients in reporting generalization. The resulting comparison
+setting supports development of APT models against a clearly defined
+new-patient target. Complete reproducible release and independent APT cohorts
+are the next steps toward a broadly usable benchmark.
