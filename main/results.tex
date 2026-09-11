@@ -1,110 +1,71 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{APT-Only Cell Typing in Held-Out Patients}
-\label{sec:results:subtype_audit}
+\subsection{Cell-Level Splitting Gives an Optimistic Evaluation}
 \label{sec:results:protocol}
 
-Table~\ref{tab:main} compares the frozen APT-only reference predictions using
-subject-balanced pooled Macro-F1. The table addresses model performance on the
-same measurement modality and label ontology, not whether APT outperforms RNA.
-All evaluations include the same 40 held-out patients across the five folds.
-Coarse/fine SB-Macro-F1 is 0.298/0.126 for LR and 0.325/0.137 for
-XGBoost. Flat, HCE, and Soft-cascade Transformers reach 0.326/0.139,
-0.335/0.143, and 0.332/0.145, respectively. The cascade has the highest fine
-point estimate among these rows, while HCE has the highest coarse estimate;
-we do not infer a model-specific advantage from these rankings.
-Pointwise patient-bootstrap intervals describe uncertainty in each fitted
-recipe's performance; they are not evidence that the cascade's individual
-components improve prediction.
+The benchmark first asks whether evaluation on additional cells represents
+generalization to additional patients. Table~\ref{tab:protocol_sensitivity}
+contrasts the historical cell-level split controls with the frozen
+patient-disjoint evaluation. Cell-level splitting gives higher scores for
+both models at both resolutions: $+0.050/+0.069$ coarse/fine Macro-F1 for
+XGBoost and $+0.090/+0.108$ for Soft-cascade. The apparent fine advantage of
+Soft-cascade over XGBoost is also larger under cell splitting (0.048 versus
+approximately 0.009 under patient-disjoint evaluation).
+
+\input{tables/protocol_sensitivity}
+
+These comparisons use the historical cell-weighted metric in both columns;
+they must not be compared numerically with the subject-balanced main
+leaderboard below. They contrast evaluation protocols, including their
+training/test allocation, rather than estimating a causal leakage effect
+under a fully matched randomized design. They support a specific conclusion:
+held-out-cell performance should not be presented as evidence of new-patient
+generalization. They do not show that all model rankings reverse or quantify
+optimism for every possible cohort.
+
+\subsection{Reference Performance Under the Patient-Disjoint Contract}
+\label{sec:results:subtype_audit}
+
+Table~\ref{tab:main} compares APT-only reference predictions using
+subject-balanced pooled Macro-F1 on the same 40 held-out patients.
+Coarse/fine scores are 0.298/0.126 for LR and 0.325/0.137 for XGBoost.
+Flat, HCE, and Soft-cascade Transformers reach 0.326/0.139,
+0.335/0.143, and 0.332/0.145. These point estimates establish reference
+performance, not a statistically demonstrated cascade advantage.
 
 \input{tables/main_result}
 
-The full reference inventory and historical cell-weighted results are in
+The complete inventory and historical cell-weighted scores are in
 Tables~\ref{tab:hierarchy_sb_all} and \ref{tab:hierarchy_cell_weighted}.
-A plain MLP has been evaluated in the separate matched-input probe below,
-but not under the full-training hierarchy protocol; it is not substituted
-into this table. This missing full-budget reference is a coverage limitation,
-not evidence of incompatibility or underperformance.
+Fine prediction remains difficult across references. However, five-lineage
+and 27-subtype tasks differ in class count, prevalence, and annotation
+boundaries; their score difference is not an isolated assay-resolution
+effect. Full class-level and hierarchy diagnostics are in
+Appendix~\ref{sec:appendix:subtype_audit}. Missing full-budget MLP coverage
+and objective differences between Transformer recipes limit conclusions
+about architecture choice.
 
-All reference models have lower raw fine than coarse F1. The five- and
-27-class tasks differ in class count, imbalance, and annotation boundaries,
-so this difference is descriptive rather than an assay-resolution limit.
-Class-level support and hierarchy errors are reported in
-Appendix~\ref{sec:appendix:subtype_audit}. The contribution is a common
-evaluation setting and reference suite, not a required cascade victory.
+\subsection{Secondary Context: RNA and Patient Summaries}
 
-\subsection{A Separate Paired-Input Modality Reference}
+The paired-input diagnostic is not an extension of the APT-only leaderboard.
+Under its capped matched-probe protocol, an MLP reaches coarse/fine
+SB-Macro-F1 0.310/0.094 from APT and 0.871/0.584 from RNA; APT+RNA reaches
+0.873/0.606. Training-subset-only HVG selection avoids feature-selection
+exposure, but RNA also supplies the reference annotations. The comparison
+therefore concerns internal label reconstruction, not independent biological
+validation or APT algorithm superiority
+(Appendix~\ref{sec:appendix:paired_rna_oracle}).
 
-To distinguish input modality from architecture, we compare APT, paired RNA,
-and their concatenation with the same two probe families, paired cells,
-patient folds, and training budget (Table~\ref{tab:modality_main}). The probe
-uses up to 1{,}000 training cells per development patient and selects RNA HVGs
-separately inside each inner and outer training subset. Although the metric
-matches Table~\ref{tab:main}, preprocessing, training budget, and model recipes
-differ; this is not an extension of the APT-only leaderboard.
-
-\input{tables/modality_main}
-
-RNA reconstructs the operational labels more strongly than APT for both
-probes. For the MLP, adding APT to RNA improves fine Macro-F1 by $+0.022$
-(95\% paired patient-bootstrap CI $[0.013,0.037]$); for the linear SGD probe
-the increment is $+0.028$ ($[0.013,0.041]$). The MLP combined input also
-exceeds RNA plus within-patient shuffled APT by $+0.010$ ($[0.002,0.017]$),
-whereas this contrast is unresolved for SGD. Full noise and pairing controls
-are in Appendix~\ref{sec:appendix:paired_rna_oracle}.
-
-These results support complementary association under a matched probe, not
-APT superiority over RNA or an information-theoretic limit of the assay.
-Training-fold feature selection addresses preprocessing exposure, but RNA
-also supplies the reference annotations and therefore cannot independently
-validate their biological accuracy. Chance-adjusted resolution diagnostics
-are retained in Appendix~\ref{sec:appendix:granularity_chance}.
-
-\subsection{Secondary Application: Patient-Level Summaries}
-\label{sec:results:composition_bridge}
-
-We first evaluate patient composition without using disease labels.
-Nested soft subtype summaries have equal-patient, equal-subtype mean absolute
-error 0.0148, versus 0.0231 for the outer-training patients' mean reference
-composition. The paired error reduction is 0.0084 (95\% patient-bootstrap CI
-$[0.0065,0.0101]$). This establishes improvement over a training-only constant
-reference for composition reconstruction, not a disease-prediction benefit.
-The lineage reduction is unresolved. Definitions and coverage diagnostics
-are in Appendix~\ref{sec:appendix:composition_recovery}.
-
-As an exploratory disease readout, nested predicted subtype composition
-reaches patient Macro-F1 0.593 versus 0.477 for predicted lineage composition.
-Their paired difference is unresolved ($+0.116$; $[-0.015,0.262]$), and
-conditioning both representations on recorded QC reduces the increment to
-$+0.016$ ($[-0.120,0.169]$). Table~\ref{tab:disease} reports reference
-compositions and nuisance baselines. Thus cell-model outputs carry
-disease-associated information, but do not establish incremental fine-subtype
-utility or a relationship between improved typing and improved diagnosis.
-
-Direct APT summaries show stronger within-cohort association: patient-median
-APT plus LR reaches accuracy 0.950. However, centering reduces a separate
-cell-level LR majority-vote readout from 40/40 to 26/40 correct patients,
-and an identity diagnostic reaches 88.4\% on held-out cells from known
-patients. These controls implicate patient-specific expression structure
-without identifying its biological or technical origin. The independent
-disease sample remains 40; acquisition metadata and external APT validation
-are outstanding. Full controls and secondary budget diagnostics are in
-Appendices~\ref{sec:appendix:disease_patient_level} and
-\ref{sec:appendix:minimal_panel}.
-
-\subsection{Supporting Evaluation Audits}
-
-Cell-random splitting inflates historical cell-weighted coarse/fine Macro-F1
-by $+0.090/+0.108$ for the soft cascade and $+0.050/+0.069$ for XGBoost.
-This motivates patient-disjoint evaluation independently of the choice to
-balance patients at scoring time. Equal-cell subsampling, error-conditioned
-hierarchy nulls, and class-level diagnostics remain available in the appendix.
-
-Sampling studies on APT, COMBAT, and OneK1K examine how subject breadth, cell
-depth, and training-label allocation change performance. Natural fixed-total
-and class-quota-matched policies estimate different allocation contrasts;
-the latter also changes within-class donor allocation. Full grids, uncertainty
-definitions, extended frontiers, and simulations are in
-Appendix~\ref{sec:appendix:scaling_support}. They qualify resource-allocation
-claims and do not constitute external validation of APT disease prediction.
+As a secondary patient-level case study, nested subtype summaries reduce
+reference-composition error from 0.0231 for a training-mean baseline to
+0.0148 (paired reduction 0.0084; 95\% patient-bootstrap CI
+$[0.0065,0.0101]$). Their disease Macro-F1 is 0.593 versus 0.477 for
+lineage summaries, but the difference is unresolved
+($+0.116$; $[-0.015,0.262]$). Strong direct APT disease association is
+sensitive to patient-wise centering and cannot be separated from acquisition
+effects with the available metadata. Forty patients do not establish clinical
+validity. The complete case study and controls remain in
+Appendices~\ref{sec:appendix:composition_recovery} and
+\ref{sec:appendix:disease_patient_level}, rather than forming a second
+headline contribution.

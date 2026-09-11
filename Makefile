@@ -37,3 +37,9 @@ paper:
 	cp $(PDF_TMP)/iclr2027_conference.pdf output/pdf/APT-Bench_ICLR2027_revised.pdf
 
 revision: composition-audit fair-scaling-summarize cross-cohort-summary class-matched-summary paper
+
+.PHONY: sampling-report
+sampling-report:
+	mkdir -p tmp/sampling-report output/pdf
+	latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=tmp/sampling-report sampling_report.tex
+	cp tmp/sampling-report/sampling_report.pdf output/pdf/APT-Bench_Sampling_Report.pdf

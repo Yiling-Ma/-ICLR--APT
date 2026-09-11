@@ -1,56 +1,43 @@
 \section{Discussion}
 \label{sec:discussion}
 
-APT-Bench makes single-cell aptamer profiling a defined cell-typing evaluation
-problem: the input is APT alone, the targets are paired-transcriptomic
-annotations, and generalization is measured on held-out patients. The
-reference suite establishes comparison points across linear, tree-based,
-and Transformer recipes. Soft-cascade Transformer supplies an explicit
-hierarchy-aware design, but the benchmark does not depend on demonstrating
-its superiority or presenting its components as novel algorithms.
+The central lesson of APT-Bench is that the unit of generalization must be
+part of the cell-typing benchmark. The observed cell-split optimism is
+consistent across the two evaluated model families and both resolutions,
+but its magnitude is specific to the available protocol comparisons.
+Patient-disjoint testing and subject-balanced scoring address different
+issues: the former separates people across training and test sets, while
+the latter limits unequal cell recovery from dominating the score.
 
-\paragraph{Interpreting model and modality comparisons.}
-The main table holds the measurement modality fixed; the matched-input probe
-instead holds the probe protocol fixed while varying APT and RNA. These
-questions must not be conflated. RNA-derived annotations favor interpretation
-of RNA performance as internal label reconstruction, not independent truth
-validation. Lower fine F1 also reflects different class counts, prevalence,
-and boundaries. Full-budget MLP/ResNet coverage and objective-matched cascade
-ablations remain incomplete. The retrospective shift to subject-balanced
-reporting changes the estimand without changing model checkpoints; historical
-cell-weighted scores are preserved for traceability.
+\paragraph{Benchmark contribution versus model contribution.}
+The resource specifies an APT input, operational ontology, fixed patient folds,
+metrics, and reference results. Soft-cascade is a hierarchy-aware reference,
+not a claimed algorithmic advance. The value of the benchmark must therefore
+be judged by the relevance of its task, evaluation validity, and usability,
+not by whether that reference wins. Complete data access, permissions,
+annotation provenance, and a portable evaluator remain necessary release
+requirements; incomplete delivery cannot be repaired by stronger novelty
+language. Full-budget MLP coverage and more comprehensive APT-compatible
+annotation baselines also remain limitations.
 
-\paragraph{From cell predictions to patient use.}
-Subtype summaries improve reference-composition recovery over a training-mean
-baseline, providing a concrete aggregate-information result even when fine
-cell typing remains difficult. This does not imply an incremental benefit
-for disease discrimination. Forty participants across six groups provide
-limited independent evidence, and patient-disjoint folds cannot remove
-disease-correlated acquisition effects. Centering can remove biological as
-well as technical variation. A compact panel that preserves this mixed signal
-is consequently not a validated diagnostic panel, and inference-cell
-subsampling does not establish reduced training requirements.
-
-\paragraph{Scope and next validation.}
-The benchmark is conditional on one APT cohort and its operational taxonomy.
-Independent annotation review, completed dataset provenance and access
-documentation, and portable reproduction remain necessary release work.
-A subsequent clinical study must freeze the assay and model, document input
-volume and cell recovery, record acquisition batches, and test an independent
-APT cohort. External RNA datasets broaden the sampling audit, not the
-clinical evidence for this assay. These boundaries retain blood-based
-characterization as the motivation without treating one-drop diagnosis as
-an established result.
+\paragraph{Boundaries of the evidence.}
+The APT cohort contains 40 participants and RNA-derived reference labels.
+Independent annotation checks and additional APT cohorts are needed to
+assess broader generalization. Patient-disjoint testing does not remove
+disease-correlated acquisition effects, so the secondary disease study is
+not clinical validation. Paired RNA contextualizes label reconstruction
+rather than establishing an aptamer information limit. Subject--cell sampling
+analyses are preserved in a separate report; neither a scaling law nor a
+resource-allocation algorithm is a contribution of this paper.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-APT-Bench establishes patient-disjoint evaluation of lineage and subtype
-prediction from single-cell aptamer profiles, with classical and neural
-references including Soft-cascade Transformer. Separate APT-only and
-paired-input comparisons distinguish architecture performance from modality
-effects. Nested patient aggregation demonstrates reference-composition
-recovery while leaving incremental disease utility unresolved. The benchmark
-provides a basis for improving APT cell models and evaluating their downstream
-use; acquisition-aware independent validation is required before clinical
-claims.
+APT-Bench specifies patient-disjoint cell typing from single-cell aptamer
+profiles and establishes classical and neural reference results under an
+explicit patient-aware metric. The evaluated cell-level split controls give
+consistently higher performance than the new-patient protocol, demonstrating
+why held-out cells must not substitute for held-out patients in reporting
+generalization. The benchmark's next requirements are complete reproducible
+release and independent APT validation, not an unsupported claim of algorithmic
+or clinical superiority.

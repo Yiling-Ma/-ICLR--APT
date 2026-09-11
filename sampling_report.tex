@@ -1,0 +1,88 @@
+
+\documentclass{article} % For LaTeX2e
+\usepackage{iclr2027_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{makecell}
+
+
+\title{APT-Bench: Supplementary Sampling Analyses}
+% Global paper constants
+
+\newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
+
+\newcommand{\numsubtypes}{27}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the \iclrfinalcopy macro remains commented out below.
+% Non-anonymous submissions will be rejected without review.
+
+\author{Antiquus S.~Hippocampus, Natalia Cerebro \& Amelie P. Amygdale \thanks{ Use footnote for providing further information
+about author (webpage, alternative address)---\emph{not} for acknowledging
+funding agencies.  Funding acknowledgements go at the end of the paper.} \\
+Department of Computer Science\\
+Cranberry-Lemon University\\
+Pittsburgh, PA 15213, USA \\
+\texttt{\{hippo,brain,jen\}@cs.cranberry-lemon.edu} \\
+\And
+Ji Q. Ren \& Yevgeny LeNet \\
+Department of Computational Neuroscience \\
+University of the Witwatersrand \\
+Joburg, South Africa \\
+\texttt{\{robot,net\}@wits.ac.za} \\
+\AND
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This standalone report preserves the supporting subject--cell sampling
+analyses previously included in the APT-Bench manuscript. These experiments
+address allocation policies, training-label distribution, and uncertainty,
+not the primary APT cell-typing benchmark or external disease validation.
+The report retains the historical analyses and their limitations; separation
+from the paper does not delete results or promote them to independent claims.
+\end{abstract}
+\section{Scope and Statistical Units}
+The main APT-Bench paper evaluates APT-only cell typing on new patients.
+This report instead compares training-allocation policies on APT, COMBAT,
+and OneK1K. Subject-balanced pooled Macro-F1 normalizes each subject's
+confusion matrix by its total cell count before pooling, using a fixed
+class universe and zero contribution for undefined class F1. Cell-weighted
+historical results are labeled separately. The report preserves fixed-cohort
+and fixed-fold limitations, differentiates stability ranges from confidence
+intervals for mean effects, and does not claim a universal scaling law.
+\section{Synthetic Validation}
+\input{supplement/scaling_synthetic}
+\section{Real-Cohort Sampling Audits}
+\input{supplement/scaling_empirical}
+\bibliography{iclr2027_conference}
+\bibliographystyle{iclr2027_conference}
+\end{document}

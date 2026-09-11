@@ -1,4 +1,4 @@
-\begin{table}[H]
+\begin{table}[t]
 \centering
 \small
 \setlength{\tabcolsep}{6pt}
@@ -22,13 +22,13 @@
 \end{tabular}
 
 \caption{
-Macro-F1 under the primary patient-disjoint protocol versus a leakage-prone
-cell-level split control. Cell-level splitting inflates performance for
-both methods, and does so more strongly for \ourmethod{} than for
-XGBoost. This demonstrates that evaluation protocol can change both
-absolute performance and the apparent relative advantage of model
-families, which is why APT-Bench treats patient-disjoint evaluation as a
-requirement rather than a reporting option.
+Historical cell-weighted pooled Macro-F1 under patient-disjoint evaluation
+versus the available cell-level split controls. All four model--resolution
+comparisons are higher under cell splitting. These are protocol comparisons,
+not matched-seed causal estimates of leakage alone; no uncertainty for the
+protocol difference is asserted. Differences were computed before rounding.
+The separate APT-only leaderboard (Table~\ref{tab:main}) reweights patients
+and therefore uses a different metric.
 }
 \label{tab:protocol_sensitivity}
 

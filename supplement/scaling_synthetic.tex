@@ -1,0 +1,108 @@
+\subsection{Sequential Controls: Synthetic Mechanism Check}
+\label{sec:appendix:sequential_simulation}
+
+The real-data class-matched sampler fixes class quotas and spreads cells across
+donors within each class. To distinguish these operations, we implement four
+conditions with common random cell priorities and nested development subject
+sets: (A) uniform pooled-cell sampling; (B) restriction to the eight-subject
+reference class set, reserving one cell per class before uniform filling;
+(C) exact reference class quotas with uniform within-class sampling; and
+(D) the same quotas with capacity-constrained donor round robin in randomized
+donor order. At fixed total, exact class proportions and exact counts are
+equivalent constraints, not separate ablations. This A condition is not the
+legacy equal-cell-per-subject sampler. Sequential contrasts are order-dependent
+descriptions, not causal mediation estimates.
+
+We evaluate this implementation on synthetic data, not a semi-synthetic clinical
+cohort. Each of 20 seeds generates six class centers $\mu_k\sim
+\mathcal{N}(0,s^2I_{12})$ and 48 subjects with 400 cells each. Subject label
+probabilities are $\operatorname{softmax}(\eta_p)$, where
+$\eta_p\sim\mathcal{N}(0,m^2I_6)$, and features are
+$x_{pi}=\mu_{y_{pi}}+b_p+\epsilon_{pi}$, with
+$b_p\sim\mathcal{N}(0,a^2I_{12})$ and
+$\epsilon_{pi}\sim\mathcal{N}(0,I_{12})$ independently. We vary
+$a,m\in\{0,1.5\}$ and $s\in\{0.5,1.5\}$. The first 32 subjects form the
+development pool; the remaining 16 are untouched test subjects. An unweighted
+LR probe is refit with training-only standardization for each condition and
+$P\in\{8,32\}$ at total 1,600 training cells. All conditions reuse the same
+realization and test subjects within a seed.
+
+\input{tables/sequential_simulation}
+
+With exchangeable subjects ($a=m=0$), mean effects are near zero. With label
+mixture variation alone and $s=0.5$, the unmatched mean effect is $+0.0245$,
+compared with $-0.0011$ after quota matching. Conversely, with subject offsets
+alone and $s=0.5$, quota matching retains a mean effect of $+0.0280$, compared
+with unmatched $+0.0281$. Thus matching does not invariably eliminate a breadth
+benefit in this generator. Seed variability is substantial; these results do
+not establish interval coverage, a universal correction, or the mechanism in
+APT, COMBAT, or OneK1K. Support is complete in these simulations, so they do not
+test missing-class recovery. Separate real-cohort A--D results are not included
+in this version; the existing class-matched tables must not be interpreted as
+that decomposition.
+
+\subsection{Known-Null and Independent-Target Validation}
+\label{sec:appendix:known_target}
+
+Known generator parameters are not themselves a known learning effect.
+We therefore define the target explicitly as
+\begin{equation}
+\theta_C=\mathbb{E}\!\left[S_C(32,Q_8)-S_C(8,Q_8)\right],
+\end{equation}
+where $S$ is subject-balanced pooled six-subtype Macro-F1 on untouched test
+subjects, and $Q_8$ is the development-only eight-subject class-quota reference.
+The expectation integrates over generated cohorts and sampling. This
+overlap-quota policy target excludes gains from acquiring labels absent at
+$P=8$; it is not the total practical value of recruiting more subjects.
+
+We generate a hierarchy of three lineages with two sibling subtypes each in
+eight dimensions. Fixed class centers are $\mu_k=2e_{\lfloor k/2\rfloor}
++(-1)^{k+1}s e_{3+\lfloor k/2\rfloor}$ for $k=0,\ldots,5$ (zero-indexed axes).
+Features follow $x_{pi}=\mu_{y_{pi}}+b_p+u_{p,g(i)}+v_{h(p)}+\epsilon_{pi}$,
+with independent isotropic Gaussian effects: donor standard deviation $a$,
+ten-cell block standard deviation $c$, four-donor batch standard deviation
+$b$, and residual standard deviation 1. Within-subject correlation can thus
+arise at donor or cell-block level; these covariance components should not be
+interpreted as independent empirical estimates of biological heterogeneity.
+Subject label probabilities are softmax-normal with logit standard deviation
+1.5, and the sixth subtype is available in only 10\% of subjects. Each cohort
+contains 32 development and 40 test subjects, with 120 cells per subject.
+The training total is 480 at both $P=8$ and $P=32$; preprocessing and LR fitting
+follow the preceding synthetic probe. Train and test subjects and batches are
+disjoint. All tasks retain the fixed six-class scoring ontology.
+
+The base setting is $(a,c,b,s)=(0,0,0,0.8)$. Conditional on the label-only
+quota reference, training features in each class are iid with the same
+distribution for both subject budgets. Consequently, the C fitted-model
+distribution, and hence expected test score, is identical: $\theta_C=0$
+exactly. This argument does not require balanced natural class proportions or
+complete support. Additional settings change only $a$ to 0.5 or 1.5; stress
+settings start from $a=0.5$ and set $c=0.7$, $s=0.3$, or $b=1$, respectively.
+In the batch setting, increased subject breadth also increases batch coverage;
+the target remains a policy contrast rather than a separate donor effect.
+
+For every non-null setting we estimate $\theta_C$ using 512 independent
+reference cohorts, with a direct uniform-without-replacement index sampler
+separate from the evaluated priority-sampling implementation. Another 100
+independent cohorts evaluate A/B/C using paired subject pools, cell priorities,
+and test sets. Reference and evaluation random-seed ranges are disjoint.
+We report reference Monte Carlo standard errors (MCSE), estimator bias, and
+RMSE. Normal Monte Carlo intervals for bias combine evaluation-mean variance
+and independent reference-mean variance; these are not patient-bootstrap
+coverage measurements or multiplicity-adjusted tests.
+
+\input{tables/scaling_ground_truth}
+
+Under the exact null, A and B yield mean effects $+0.0202$ and $+0.0119$,
+whereas C yields $+0.0004$ (bias interval $[-0.0017,0.0026]$). The independent
+reference check is $+0.00043$ with MCSE $0.00053$, consistent with the analytic
+null. Mild and strong donor shifts have reference effects $+0.0110$ and
+$+0.0135$; C estimates $+0.0102$ and $+0.0168$, respectively, rather than
+mechanically forcing both to zero. Higher shift variance does not guarantee
+a proportionally larger learning benefit. Across all six settings, C has lower
+RMSE against this target than A or B. Nevertheless, A/B differences can be
+legitimate benefits of their own allocation policies: their error relative to
+$\theta_C$ demonstrates estimand mismatch, not that all observed breadth gains
+are spurious. Non-null targets remain Monte Carlo approximations. This
+validation neither identifies real-cohort causal mediation nor establishes
+coverage of the joint uncertainty procedure used on real data.

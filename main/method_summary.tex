@@ -1,92 +1,50 @@
-\section{Reference Models and Patient Readouts}
+\section{Benchmark Reference Models}
 \label{sec:method_summary}
 
-\subsection{Soft-Cascade Transformer}
-The first APT-Bench contract is APT-only prediction of immune-cell identity in
-held-out patients. We therefore include a hierarchy-aware neural reference as a
-documented reference model in the main text. Each cell is represented by a
-293-dimensional standardized APT vector. The Transformer backbone embeds
-aptamer identity and value as tokens, prepends a learnable \texttt{[CLS]} token,
-and uses the final \texttt{[CLS]} state $z$ as the cell representation.
+\paragraph{APT-only comparisons.}
+LR and XGBoost provide linear and nonlinear tabular references. Flat and HCE
+Transformers and a Soft-cascade Transformer provide backbone-matched neural
+recipes. All use APT at inference and the same outer patient partitions.
+Training and validation follow each recipe's documented protocol; identical
+outer folds do not imply identical training-set sizes or fully matched tuning.
+Linear SVM, Random Forest, and reference correlation remain in the full
+appendix inventory. A full-budget plain MLP/ResNet evaluation is not available;
+its absence is a coverage limitation, not evidence of incompatibility.
 
-Let $M=5$ lineages and $K=\numsubtypes{}$ subtypes define the fixed ontology,
-with parent map $m(k)$. The soft-cascade reference predicts lineage logits
-$c=W_cz$ and routing probabilities $p(m\mid x)=\operatorname{softmax}(c)_m$.
-Subtype logits combine a global subtype path and lineage-specific experts:
+\paragraph{Hierarchy-aware reference.}
+Soft-cascade Transformer embeds aptamer identities and values, and uses the
+final \texttt{[CLS]} representation $z$ for cell prediction. A coarse head
+provides probabilities $p(m\mid x)$ for the five lineages. For subtype $k$
+with parent $m(k)$, its logit combines a global prediction with a softly
+weighted lineage expert:
 \begin{equation}
-s_k(x)=g_k(z)+\alpha\,p(m(k)\mid x)e_{m(k),k}(z)
+s_k(x)=g_k(z)+\alpha p(m(k)\mid x)e_{m(k),k}(z)
 +\gamma\log\{\epsilon+(1-\epsilon)p(m(k)\mid x)\}.
 \label{eq:main_soft_cascade}
 \end{equation}
-We use $\alpha=1$, $\epsilon=0.1$, and ramp $\gamma$ from 0 to 0.5 during early
-training. The loss is
-\begin{equation}
-\mathcal{L}=\mathcal{L}_{\mathrm{fine}}
-+0.5\,\mathcal{L}_{\mathrm{coarse}}
-+w(t)\mathcal{L}_{\mathrm{contrast}},
-\label{eq:main_cascade_loss}
-\end{equation}
-where $w(t)$ ramps to 0.2. The contrastive term uses same-subtype,
-cross-disease cells as positives and different-subtype cells as negatives,
-with additional emphasis on within-lineage negatives. This construction is
-intended to provide a reproducible hierarchy-aware reference for the benchmark;
-disease recognition itself is evaluated separately at the patient level.
+The independent coarse and fine heads are evaluated without constrained
+decoding. Flat removes the cascade; HCE instead uses a two-level hierarchical
+loss adaptation \citep{cultrera2026improving}. Only Soft-cascade uses
+cross-disease supervised contrastive pairing, so their objectives and
+auxiliary disease-label usage differ. These are reference-recipe comparisons,
+not component ablations. No routing or contrastive contribution is claimed
+in isolation. Appendix~\ref{sec:method} gives the full architecture, losses,
+hyperparameters, and component matrix.
 
-\subsection{APT-Only Baseline Comparisons}
-The neural ladder compares the soft cascade with a flat Transformer and the
-same Transformer trained with a two-level HCE adaptation
-\citep{cultrera2026improving}. These references share the APT tokenizer,
-encoder dimensions, optimizer, training budget, patient folds, training-only
-preprocessing, and validation fine-macro-F1 checkpoint rule. Their objectives
-are not fully matched: only the soft-cascade model uses disease labels for
-cross-disease contrastive pairing, whereas Flat and HCE use classification
-losses alone. Thus the ladder is a benchmark reference comparison, not a
-component ablation; no routing, HCE, or contrastive effect is claimed in
-isolation. Appendix~\ref{sec:method} records implementation details and the
-component matrix.
+\paragraph{Input compatibility.}
+Gene-based pretrained models such as scGPT and Geneformer
+\citep{cui2024scgpt,theodoris2023transfer} do not directly accept anonymous
+aptamer feature IDs without a verified mapping or a separately trained adapter.
+Supplying paired RNA would change the input contract. This distinguishes an
+undefined direct APT input from an adaptable but unevaluated model; it does
+not justify claiming superiority over transcriptomic annotation methods.
 
-Baseline coverage is intentionally distinguished from input compatibility.
-LR and XGBoost supply linear and nonlinear tabular comparisons in the main
-APT-only table, alongside the three Transformer recipes. Linear SVM, Random
-Forest, and reference correlation are retained in the complete appendix
-inventory. These are not an exhaustive model leaderboard.
-Plain MLP/ResNet and additional modern tabular learners are applicable to the
-APT matrix but lack completed full hierarchy evaluations in this release;
-we do not classify their absence as incompatibility or underperformance.
-HCE supplies a hierarchy-loss reference, not comprehensive coverage of
-single-cell annotation systems.
-
-Pretrained transcriptomic encoders such as scGPT and Geneformer use gene-based
-inputs \citep{cui2024scgpt,theodoris2023transfer}. The anonymous APT feature IDs
-have no verified public gene-token mapping, so direct use of those checkpoints
-is not defined for the APT-only task. Learning an APT adapter would introduce
-an additional training protocol, while supplying paired RNA would change the
-input modality. On the external RNA cohorts, transcriptomic encoders are
-applicable but unevaluated here, rather than intrinsically incompatible.
-We make no claim that computational expense alone excludes them, nor that
-unrun models underperform the reported references.
-
-\subsection{Secondary Patient-Level Readouts}
-\paragraph{Nested cell-to-patient bridge.}
-For the composition bridge, each disease outer fold seals eight patients. A
-final disease-label-free XGBoost subtype model trained on the other 32 patients
-constructs outer-test compositions. Downstream training compositions for those
-32 patients are instead produced by four inner patient-disjoint fits, each
-trained on 24 patients. A class-weighted multinomial LR, with regularization
-selected by patient-level inner CV, is then evaluated once on the sealed eight
-patients. Thus neither the cell-typing stage nor the disease stage uses an
-outer-test patient during preprocessing, feature construction, fitting, or
-selection. Appendix~\ref{sec:appendix:composition_bridge} provides the complete
-data flow and controls. A conditional increment audit uses the same nested
-features and tuning protocol to compare recorded QC plus predicted lineage
-against recorded QC plus predicted subtype composition; subtype probabilities
-implicitly contain their lineage sums.
-
-\paragraph{Direct measurement summaries and controls.}
-Patient-median APT profiles provide a route to disease-group prediction that
-does not require inferred cell identities. Cell-level disease-source predictions
-with patient majority voting form a separate diagnostic. We compare these
-associations with patient-wise centering, patient-identity recognition, and
-recorded QC summaries rather than treating high within-cohort scores as
-clinical validation. Full settings are in
-Appendix~\ref{sec:appendix:disease_patient_level}.
+\paragraph{Secondary analyses.}
+A separate matched-input probe varies APT and RNA while holding its training
+budget and patient folds fixed. The patient-level case study uses
+disease-label-free XGBoost cell predictions and nested cross-fitting:
+disease-training compositions come from inner held-out patients, and
+disease-test compositions come from the untouched outer fold. Downstream LR
+selection remains within development patients. These analyses contextualize
+APT typing; they are not additional primary benchmark tasks or validated
+clinical endpoints.

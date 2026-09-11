@@ -5,10 +5,10 @@
 Multi-cancer detection commonly uses circulating DNA, methylation,
 fragmentomics, or bulk proteins
 \citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
-Our question is complementary: whether single-cell aptamer measurements can
-support both immune-cell identification and patient disease-associated
-characterization. APT-Bench evaluates that connection within a research cohort;
-it does not equate within-cohort classification with prospective screening.
+APT-Bench addresses the complementary evaluation question of identifying
+immune cells from single-cell aptamer measurements in new patients. Its
+disease-associated case study is secondary; within-cohort classification is
+not prospective screening.
 
 \paragraph{Single-cell representations and hierarchy.}
 Geneformer, scGPT, and scFoundation motivate large transcriptomic
@@ -24,8 +24,8 @@ setting rather than constituting a new learning algorithm or component ablation.
 Reusable single-cell benchmarks separate datasets, models, and metrics and
 adopt sample- or study-disjoint evaluation
 \citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}.
-APT-Bench links cell and patient tasks with nested cross-fitting and makes
-their statistical units explicit. Gradient-boosted trees provide strong
+APT-Bench makes the statistical unit explicit for APT cell typing and contrasts
+new-patient evaluation with cell-level split controls. Gradient-boosted trees provide strong
 tabular references \citep{grinsztajn2022tree,erickson2026tabarena}.
-Supporting sampling and feature-budget audits address correlated observations
-and resource choices, but cannot resolve biological versus technical confounding.
+Separate sampling and feature-budget reports do not constitute additional
+primary contributions or resolve biological versus technical confounding.

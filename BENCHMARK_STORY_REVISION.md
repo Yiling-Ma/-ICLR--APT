@@ -1,5 +1,19 @@
 # Benchmark-first manuscript revision
 
+## Further focus revision
+
+The paper now centers one contribution: patient-disjoint evaluation for APT
+cell typing, with the observed split-protocol sensitivity as its central
+empirical evidence. The four historical model-by-resolution controls all give
+higher cell-split scores, but do not isolate a causal leakage effect or justify
+a universal claim. No unsupported "first benchmark" priority claim is added.
+Soft-cascade remains a reference; RNA and disease analyses are brief secondary
+context. Scaling sections and simulations have been moved intact into
+`supplement/scaling_synthetic.tex` and `supplement/scaling_empirical.tex`, built
+through `sampling_report.tex`. Results have not been deleted or rerun.
+The public data/permissions/evaluator release gap remains a substantive blocker,
+not a concern this writing change resolves.
+
 ## Scope
 
 Primary contribution: an APT-only, patient-disjoint cell-typing benchmark.

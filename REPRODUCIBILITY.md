@@ -15,13 +15,11 @@ From the repository root, using Python with numpy, pandas, and matplotlib:
 
 ```sh
 python analysis/audit_release_inventory.py
-python analysis/plot_scaling_protocol_contrast.py
 make paper
 ```
 
-These commands validate selected saved artifacts, regenerate the appendix
-sampling-protocol figure, and
-compile the PDF. They do not retrain models or regenerate every result from
+These commands validate selected saved artifacts and compile the paper PDF.
+They do not retrain models or regenerate every result from
 raw observations. The paper build requires LaTeX/latexmk.
 
 The revised main table uses subject-balanced re-evaluation of frozen full-budget
@@ -31,6 +29,12 @@ source checks, and remaining full-budget MLP coverage are documented in
 the current main table; `analysis/generate_hierarchy_main_table.py` and
 `analysis/render_paired_rna_oracle.py` are legacy generators and should not be
 used to overwrite the revised tables.
+
+Sampling analyses have been removed from the paper and preserved in a
+standalone report. Build it independently with `make sampling-report`;
+its PDF is `output/pdf/APT-Bench_Sampling_Report.pdf`. Figure rebuilding uses
+`python analysis/plot_scaling_protocol_contrast.py`. Existing experiment
+artifacts are retained; moving them does not constitute new validation.
 
 The self-contained simulation can be rerun separately with numpy and scikit-learn:
 

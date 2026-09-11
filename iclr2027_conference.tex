@@ -67,24 +67,24 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell aptamer profiling offers a blood-derived molecular input for
-immune-cell identification, but evaluating it requires separating performance
-on additional cells from generalization to new patients. We introduce
-APT-Bench, a benchmark of 361{,}792 cells with 293 aptamer measurements from
-40 participants across five cancer groups and healthy controls. Paired
-transcriptomic annotations define five lineages and 27 subtypes. Five fixed
-patient-disjoint folds and subject-balanced evaluation compare linear,
-tree-based, and Transformer references on the same APT-only tasks. We describe
-a Soft-cascade Transformer reference that combines global subtype prediction
-with softly routed lineage experts, without assuming a model-specific
-advantage. The benchmark exposes substantial remaining difficulty in fine
-typing; a separate matched-input RNA diagnostic contextualizes, rather than
-replaces, the APT comparison. As a downstream case study, nested cell-output
-aggregation recovers patient subtype composition better than a training-mean
-reference, while incremental disease-prediction value remains unresolved.
-APT-Bench establishes a framework for comparing models of this measurement
-modality and studying their patient-level use, with clinical interpretation
-requiring acquisition-aware external validation.
+Evaluation of single-cell aptamer cell typing must distinguish additional
+cells from additional patients. We introduce APT-Bench, a patient-disjoint
+benchmark specification and reference evaluation comprising 361{,}792 cells,
+293 aptamer measurements, and paired-transcriptomic annotations for five
+lineages and 27 subtypes from 40 participants. Five fixed outer patient folds
+and subject-balanced pooled Macro-F1 define the new-patient evaluation
+contract. In the available XGBoost and Soft-cascade Transformer controls,
+cell-level splitting produces higher coarse and fine Macro-F1 in all four
+comparisons, with increases of 0.050--0.108 on the historical cell-weighted
+metric. These protocol contrasts show that held-out-cell performance can give
+an optimistic account of new-patient generalization, without isolating a
+causal leakage effect. Classical and Transformer references establish
+performance under the patient-disjoint contract; Soft-cascade is a
+hierarchy-aware baseline rather than a claimed algorithmic contribution.
+Paired RNA and patient aggregation provide secondary context, not independent
+clinical validation. APT-Bench centers the statistical unit of evaluation in
+this measurement modality, while complete data access and portable
+reproduction remain explicit release requirements.
 \end{abstract}
 
 
@@ -361,115 +361,6 @@ match the true lineage would select easier cases rather than provide this
 control. Thus the present diagnostic cannot attribute fine errors uniquely to
 lineage identification versus within-lineage discrimination.
 
-\subsection{Sequential Controls: Synthetic Mechanism Check}
-\label{sec:appendix:sequential_simulation}
-
-The real-data class-matched sampler fixes class quotas and spreads cells across
-donors within each class. To distinguish these operations, we implement four
-conditions with common random cell priorities and nested development subject
-sets: (A) uniform pooled-cell sampling; (B) restriction to the eight-subject
-reference class set, reserving one cell per class before uniform filling;
-(C) exact reference class quotas with uniform within-class sampling; and
-(D) the same quotas with capacity-constrained donor round robin in randomized
-donor order. At fixed total, exact class proportions and exact counts are
-equivalent constraints, not separate ablations. This A condition is not the
-legacy equal-cell-per-subject sampler. Sequential contrasts are order-dependent
-descriptions, not causal mediation estimates.
-
-We evaluate this implementation on synthetic data, not a semi-synthetic clinical
-cohort. Each of 20 seeds generates six class centers $\mu_k\sim
-\mathcal{N}(0,s^2I_{12})$ and 48 subjects with 400 cells each. Subject label
-probabilities are $\operatorname{softmax}(\eta_p)$, where
-$\eta_p\sim\mathcal{N}(0,m^2I_6)$, and features are
-$x_{pi}=\mu_{y_{pi}}+b_p+\epsilon_{pi}$, with
-$b_p\sim\mathcal{N}(0,a^2I_{12})$ and
-$\epsilon_{pi}\sim\mathcal{N}(0,I_{12})$ independently. We vary
-$a,m\in\{0,1.5\}$ and $s\in\{0.5,1.5\}$. The first 32 subjects form the
-development pool; the remaining 16 are untouched test subjects. An unweighted
-LR probe is refit with training-only standardization for each condition and
-$P\in\{8,32\}$ at total 1,600 training cells. All conditions reuse the same
-realization and test subjects within a seed.
-
-\input{tables/sequential_simulation}
-
-With exchangeable subjects ($a=m=0$), mean effects are near zero. With label
-mixture variation alone and $s=0.5$, the unmatched mean effect is $+0.0245$,
-compared with $-0.0011$ after quota matching. Conversely, with subject offsets
-alone and $s=0.5$, quota matching retains a mean effect of $+0.0280$, compared
-with unmatched $+0.0281$. Thus matching does not invariably eliminate a breadth
-benefit in this generator. Seed variability is substantial; these results do
-not establish interval coverage, a universal correction, or the mechanism in
-APT, COMBAT, or OneK1K. Support is complete in these simulations, so they do not
-test missing-class recovery. Separate real-cohort A--D results are not included
-in this version; the existing class-matched tables must not be interpreted as
-that decomposition.
-
-\subsection{Known-Null and Independent-Target Validation}
-\label{sec:appendix:known_target}
-
-Known generator parameters are not themselves a known learning effect.
-We therefore define the target explicitly as
-\begin{equation}
-\theta_C=\mathbb{E}\!\left[S_C(32,Q_8)-S_C(8,Q_8)\right],
-\end{equation}
-where $S$ is subject-balanced pooled six-subtype Macro-F1 on untouched test
-subjects, and $Q_8$ is the development-only eight-subject class-quota reference.
-The expectation integrates over generated cohorts and sampling. This
-overlap-quota policy target excludes gains from acquiring labels absent at
-$P=8$; it is not the total practical value of recruiting more subjects.
-
-We generate a hierarchy of three lineages with two sibling subtypes each in
-eight dimensions. Fixed class centers are $\mu_k=2e_{\lfloor k/2\rfloor}
-+(-1)^{k+1}s e_{3+\lfloor k/2\rfloor}$ for $k=0,\ldots,5$ (zero-indexed axes).
-Features follow $x_{pi}=\mu_{y_{pi}}+b_p+u_{p,g(i)}+v_{h(p)}+\epsilon_{pi}$,
-with independent isotropic Gaussian effects: donor standard deviation $a$,
-ten-cell block standard deviation $c$, four-donor batch standard deviation
-$b$, and residual standard deviation 1. Within-subject correlation can thus
-arise at donor or cell-block level; these covariance components should not be
-interpreted as independent empirical estimates of biological heterogeneity.
-Subject label probabilities are softmax-normal with logit standard deviation
-1.5, and the sixth subtype is available in only 10\% of subjects. Each cohort
-contains 32 development and 40 test subjects, with 120 cells per subject.
-The training total is 480 at both $P=8$ and $P=32$; preprocessing and LR fitting
-follow the preceding synthetic probe. Train and test subjects and batches are
-disjoint. All tasks retain the fixed six-class scoring ontology.
-
-The base setting is $(a,c,b,s)=(0,0,0,0.8)$. Conditional on the label-only
-quota reference, training features in each class are iid with the same
-distribution for both subject budgets. Consequently, the C fitted-model
-distribution, and hence expected test score, is identical: $\theta_C=0$
-exactly. This argument does not require balanced natural class proportions or
-complete support. Additional settings change only $a$ to 0.5 or 1.5; stress
-settings start from $a=0.5$ and set $c=0.7$, $s=0.3$, or $b=1$, respectively.
-In the batch setting, increased subject breadth also increases batch coverage;
-the target remains a policy contrast rather than a separate donor effect.
-
-For every non-null setting we estimate $\theta_C$ using 512 independent
-reference cohorts, with a direct uniform-without-replacement index sampler
-separate from the evaluated priority-sampling implementation. Another 100
-independent cohorts evaluate A/B/C using paired subject pools, cell priorities,
-and test sets. Reference and evaluation random-seed ranges are disjoint.
-We report reference Monte Carlo standard errors (MCSE), estimator bias, and
-RMSE. Normal Monte Carlo intervals for bias combine evaluation-mean variance
-and independent reference-mean variance; these are not patient-bootstrap
-coverage measurements or multiplicity-adjusted tests.
-
-\input{tables/scaling_ground_truth}
-
-Under the exact null, A and B yield mean effects $+0.0202$ and $+0.0119$,
-whereas C yields $+0.0004$ (bias interval $[-0.0017,0.0026]$). The independent
-reference check is $+0.00043$ with MCSE $0.00053$, consistent with the analytic
-null. Mild and strong donor shifts have reference effects $+0.0110$ and
-$+0.0135$; C estimates $+0.0102$ and $+0.0168$, respectively, rather than
-mechanically forcing both to zero. Higher shift variance does not guarantee
-a proportionally larger learning benefit. Across all six settings, C has lower
-RMSE against this target than A or B. Nevertheless, A/B differences can be
-legitimate benefits of their own allocation policies: their error relative to
-$\theta_C$ demonstrates estimand mismatch, not that all observed breadth gains
-are spurious. Non-null targets remain Monte Carlo approximations. This
-validation neither identifies real-cohort causal mediation nor establishes
-coverage of the joint uncertainty procedure used on real data.
-
 \subsection{Benchmark Interface and Release Contract}
 \label{sec:appendix:benchmark_release}
 
@@ -727,7 +618,9 @@ neither equal-cell subsampling nor averaging per-subject Macro-F1. Released
 files retain the legacy column name \texttt{patient\_balanced\_macro\_f1} for
 $F_1^{\mathrm{SB}}$, but no different patient-balanced statistic is used.
 
-\input{tables/protocol_sensitivity}
+The numerical split comparison appears in the main results
+(Table~\ref{tab:protocol_sensitivity}). Its historical scores are cell-weighted
+in both columns, rather than the subject-balanced leaderboard metric.
 
 \paragraph{Equal-cell evaluation sensitivity.}
 Patient-disjoint evaluation prevents leakage but does not make a cell-weighted
@@ -743,293 +636,6 @@ uses exact subject-normalized confusion pooling rather than this Monte Carlo
 subsampling approximation.
 
 \input{tables/patient_balanced_cell_sensitivity}
-
-\subsection{Supporting Subject--Cell Sampling Audit}
-\label{sec:appendix:scaling_support}
-
-The following analyses address sampling-policy sensitivity, not the clinical
-validity of disease prediction. They preserve the completed cross-cohort
-evidence as support for the cell-to-patient evaluation.
-\input{main/scaling_estimands}
-\input{main/scaling_support}
-
-\subsection{Fair Fixed-Total and Matched-Scale Analysis}
-\label{sec:appendix:fair_scaling}
-
-The supporting scaling design uses $P\in\{8,16,32\}$ and
-$C\in\{100,200,400,800,1600\}$, with 20 nested subset seeds for every outer
-fold. Because every retained patient has at least 1{,}929 cells, all finite caps
-are feasible without replacement. Disease-stratified patient orderings are
-nested across $P$, uniform cell permutations are nested across $C$, no subtype
-label enters sampling, and preprocessing is refit on each sampled training set.
-The fixed-total diagonals satisfy $PC\in\{3200,6400,12800\}$ exactly.
-
-\input{tables/fixed_total_scaling}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.92\textwidth]{figures/fixed_total_scaling.pdf}
-\caption{APT-only fixed-total response curves underlying the unmatched
-cross-cohort diagnostic in Table~\ref{tab:cross_cohort_scaling}. Points are pooled OOF
-macro-F1 means over 20 matched subset seeds; bars are empirical 95\% seed
-intervals. Patient-balanced and patient-bootstrap results are provided in the
-machine-readable artifacts.}
-\label{fig:apt_fixed_total_scaling}
-\end{figure}
-
-Table~\ref{tab:fixed_total_scaling} reports variability across subset seeds.
-Separately, paired patient-clustered bootstraps over the same 40 pooled OOF
-patients compare $P=8$ with $P=32$ after averaging seed-level sufficient
-statistics. All 12 intervals exclude zero; their lower endpoints range from
-0.0002 to 0.0084 and upper endpoints from 0.0090 to 0.0314. These intervals
-quantify uncertainty over patients, whereas the empirical seed intervals
-quantify sensitivity to which development patients and cells are sampled.
-
-Matched doubling effects average patient versus cell gains of
-0.011/0.005 (LR coarse), 0.007/0.003 (LR fine), 0.016/0.008 (XGBoost coarse),
-and 0.009/0.006 (XGBoost fine). In the descriptive fold-fixed-effect response
-surface, the corresponding per-doubling $\beta_P/\beta_C$ coefficients are
-0.017/0.008, 0.008/0.004, 0.016/0.007, and 0.009/0.006. Complete pairwise
-effects, patient intervals, seed intervals, and response-surface uncertainty
-are stored in the machine-readable scaling artifacts. The coefficients are
-associations over this grid, not causal or universal scaling laws.
-
-\subsection{External COMBAT and OneK1K Scaling Replications}
-\label{sec:appendix:combat_scaling}
-
-We downloaded the author-released COMBAT CITE-seq object
-\citep{combat2022blood} (836{,}148 cells and 124 donor identifiers; SHA-256
-\texttt{f628a15f25b9ca2f7cdefeab271fd9d007c8d5e47eb80c4b807d5f65e86ff53d}).
-We removed cells without a resolved major or fine immune annotation and cells
-flagged as GEX-region doublets. Ten donors were frozen as a calibration-only
-set and excluded from every model fit and test fold. Among the remaining
-donors, requiring at least 1{,}600 eligible cells leaves 105 donors and
-700{,}706 cells. We construct five disjoint folds of 21 test donors, stratified
-by the released sample-source field, and freeze these folds across all models,
-budgets, seeds, and modalities.
-
-The RNA replication uses 293 protein-coding genes with highest variance on the
-10 calibration donors after excluding mitochondrial and ribosomal genes. This
-matches the APT input dimension without selecting features on any evaluation
-donor. The ADT sensitivity uses all 192 released antibody features. Both inputs
-use the released five-class major annotation and 39-class fine annotation.
-They share the exact $P$, $C$, and fixed-total grids, 20 nested source-stratified
-donor/cell seeds, training-only standardization, LR configuration, and paired
-donor-bootstrap procedure used in APT-Bench. The RNA analysis additionally
-uses the frozen 400-tree XGBoost baseline. Every fit is evaluated on all cells
-of the 21 untouched test donors; the ADT analysis is an LR-only modality
-sensitivity rather than an additional model-comparison family. Dataset hashes,
-folds, features, sampling manifests, and per-donor sufficient statistics are
-included in the release artifacts.
-
-OneK1K provides a second independent scRNA-seq replication in a much larger
-healthy PBMC cohort \citep{yazar2022onek1k}. We use the current author-deposited
-CELLxGENE object (1{,}248{,}980 cells and 981 donor identifiers; SHA-256
-\texttt{14c5e9e70007a5e7dc047f7b29405773305e1a7b9791d0789af70649cf6f46ec}),
-remove released doublet calls, and reserve one complete multiplexing pool for
-calibration. Requiring at least 800 eligible cells leaves 925 evaluation donors
-and 1{,}199{,}468 cells. Five folds are disjoint in both donor and multiplexing
-pool. We select 293 protein-coding, non-mitochondrial, non-ribosomal genes by
-variance on ten calibration-pool donors only, and use the released 30-class
-Azimuth-derived fine labels with a deterministic five-lineage mapping.
-
-OneK1K uses the same models, 20 nested subset seeds, training-only
-standardization, untouched-test-donor evaluation, subject-balanced pooled metric, and
-2{,}000 paired donor bootstraps. Its grid is
-$P\in\{8,16,32\}$ and $C\in\{100,200,400,800\}$, yielding the two common exact
-budgets $T\in\{3200,6400\}$. We prespecified the lower depth ceiling because
-only 116 of the 981 raw donors have at least 1{,}600 eligible cells; enforcing
-the full APT grid would discard most donors and condition the replication on
-high cell recovery. OneK1K tests scaling portability in a healthy cohort, not
-disease generalization or absolute accuracy across different feature spaces
-and label-generation procedures.
-
-\input{tables/cross_cohort_scaling}
-
-\subsection{Label-Distribution Audit and Matched Control}
-\label{sec:appendix:class_matched_scaling}
-
-The label-agnostic grid samples cells uniformly within subjects and therefore
-allows the full marginal label distribution to vary. Machine-readable audit tables report the
-observed class count, unseen-at-training class count, cell count, and donor
-count for every class at every fold, seed, and scaling point. The main text
-reports the common fixed-total diagonals, where fine-class coverage increases
-slightly with $P$ despite fixed $T$; this coverage statistic is only one
-observable component of the broader label-distribution effect.
-
-The class-matched control fixes the marginal label distribution. The $P=8$ subset defines the
-observed labels and a proportional integer quota $T_k$ with a one-cell floor;
-capacity violations are deterministically redistributed. The same quota vector
-is then used at $P=8,16,32$. Within each class, a capacity-constrained
-round-robin sampler distributes cells across selected subjects before assigning
-a second cell from the same subject, so increasing $P$ changes realized donor
-coverage rather than class counts. Sampling is without replacement,
-standardization is refit on each training subset, and all immutable outer-test
-cells are retained. All three runs complete 1{,}200/1{,}200 jobs and pass checks
-for exact total cells, identical paired class counts, non-overlapping test
-subjects, and contribution by every nominal training subject.
-These primary Logistic Regression runs use 20 matched subset seeds at both
-$T=3{,}200$ and $T=6{,}400$. To test whether the matched-policy direction is specific
-to a linear classifier, we repeat the identical control with the frozen XGBoost
-configuration at $T=6{,}400$ using 10 matched seeds. Each dataset completes
-300/300 additional jobs and passes the same checks; final production fits use
-the CPU histogram backend throughout to avoid mixing computational backends.
-It does not separately identify changes in disease--subtype composition,
-within-class allocation across subjects, or within-class subject heterogeneity;
-these remain bundled with the subject-breadth intervention.
-
-\input{tables/class_matched_scaling}
-
-\begin{figure}[tbp]
-\centering
-\includegraphics[width=0.80\columnwidth]{figures/class_matched_scaling.pdf}
-\caption{Joint stability for the completed class-matched protocol at
-$T=6{,}400$. Points are mean changes in subject-balanced pooled OOF macro-F1
-from 8 to 32 subjects. The 95\% joint stability intervals select one training-subset seed
-and bootstrap paired held-out subjects; all 12 span zero. Unlike the seed-only
-bars in Figure~\ref{fig:class_matched_scaling}, these intervals include test-subject
-variability. They are not confidence intervals for the seed-averaged effect;
-zero inclusion does not test a zero mean or establish equivalence.}
-\label{fig:class_matched_joint}
-\end{figure}
-
-The primary stability diagnostic combines both variation sources. In each of 2{,}000
-replicates, we sample one completed training-subset seed uniformly, resample
-outer-test subjects with replacement, use the same subject draw for $P=8$ and
-$P=32$, and recompute the paired difference. All 18 joint 95\% stability intervals
-include zero, and the table reports the empirical positive-replicate fraction. For
-decomposition, empirical seed-only intervals include zero in 16 of 18 rows;
-the exceptions are the two negative APT fine results at $T=6{,}400$.
-Subject-only intervals condition on the seed-averaged prediction matrix and can
-exclude zero even when the joint stability interval does not. The constructions
-answer different questions: the joint range retains variation between fitted
-training subsets rather than estimating uncertainty of their average. Neither
-zero inclusion nor the positive-replicate fraction is a test of the mean effect.
-These ranges also lack a demonstrated coverage guarantee for a future training
-cohort; they are conditional resampling diagnostics.
-
-\subsection{Extended External Subject Frontier}
-\label{sec:appendix:extended_subject_frontier}
-
-The common $P\leq32$ grid is imposed by the 40-patient APT cohort, not by the
-capacity of the external datasets. We therefore extend the class-matched LR
-control to $P=64$ for COMBAT and to $P\in\{64,128\}$ for OneK1K at
-$T\in\{3{,}200,6{,}400\}$. The original $P=8$ subset freezes the class set and
-integer per-class quotas for every fold, seed, task, and total; only the number
-of selected subjects allowed to contribute those cells changes. Each new point
-uses 10 nested subset seeds, all immutable outer-test subjects, and the same
-joint resampling of training-subset seed and held-out subjects used in the
-primary matched control. This extension is an external-cohort allocation
-sensitivity rather than a claim that its largest tested $P$ is globally
-optimal.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.86\textwidth]{figures/extended_subject_frontier.pdf}
-\caption{Class-matched LR frontier beyond 32 training subjects. Points are
-mean subject-balanced pooled OOF macro-F1 over 10 matched training-subset seeds; bars
-are empirical 95\% seed intervals and therefore visualize subset sensitivity,
-not uncertainty of the mean. The paired joint stability intervals are
-reported in Table~\ref{tab:extended_subject_frontier}.}
-\label{fig:extended_subject_frontier}
-\end{figure}
-
-\input{tables/extended_subject_frontier}
-
-All 12 adjacent frontier effects are small: their means range from $-0.00065$
-to $+0.00123$, and every joint stability interval includes zero. The four direct OneK1K
-$32\rightarrow128$ contrasts likewise span zero under joint resampling. This does not
-establish a plateau or exclude practically meaningful changes. The explicit
-margin sensitivity below assesses interval width separately from zero inclusion.
-Because the intervention remains tied to these tasks, budgets, features, and LR
-configuration, it does not locate a universal saturation point or optimal allocation.
-
-\subsection{Post-Hoc Stability-Band Sensitivity}
-\label{sec:appendix:equivalence}
-
-Failure to detect a difference is not evidence of equivalence
-\citep{lakens2017equivalence}. After inspecting the existing results, we add an
-\emph{exploratory} smallest-effect sensitivity bound $\epsilon=0.01$ absolute
-subject-balanced pooled Macro-F1 (one percentage point), with $0.005$ and $0.02$
-as sensitivity values. This is a reporting tolerance, not a validated clinical
-threshold, and was not prespecified for the completed experiments. It must not
-be conflated with the separate compact-panel tolerance $\delta=0.02$.
-
-For each released joint 95\% stability interval $[L,U]$, we report zero inclusion
-($L\leq0\leq U$) and strict containment ($-\epsilon<L$ and $U<\epsilon$)
-separately. Containment describes concentration of this conditional resampling
-distribution inside the chosen band, not equivalence of the mean allocation
-effects. Intervals with $L\leq-\epsilon$ and $U\geq\epsilon$ span changes of
-the stated magnitude in both directions. These diagnostics neither quantify
-statistical power nor provide a calibrated future-cohort guarantee.
-
-\input{tables/equivalence_sensitivity}
-
-At $T=6{,}400$, only 4 of 12 main comparison intervals meet the $\pm0.01$
-containment criterion; none of the four APT intervals does. The APT coarse
-XGBoost interval spans both meaningful directions. Among adjacent external LR
-frontier comparisons, 11 of 12 intervals meet this criterion; the exception is
-OneK1K coarse $32\rightarrow64$ at $T=3{,}200$. With the tighter $\pm0.005$
-margin, no main interval and only 4 of 12 adjacent frontier intervals are
-contained. Descriptive stability is therefore margin-dependent; these counts
-do not establish that the sampling policies are equivalent or subjects have no value.
-
-We do not report formal TOST $p$-values. Conventional level-0.05 TOST is linked
-to a corresponding 90\% confidence interval, whereas this analysis retains the
-released joint 95\% stability intervals. More fundamentally, those intervals sample one completed
-training-subset seed and then test subjects, combining between-fit variability
-with test uncertainty rather than estimating only a seed-averaged mean effect.
-Containment is therefore an exploratory joint-interval screen, not a calibrated
-confirmatory equivalence test. Results are pointwise, without a simultaneous
-equivalence guarantee across rows, and do not establish a continuous plateau
-between or beyond the tested budgets. This audit concerns the completed legacy
-controls, not the ongoing A--D GPU rerun.
-
-\subsection{Secondary Descriptive Patient--Cell Scaling Surface}
-\label{sec:appendix:patient_cell_scaling}
-
-This historical $4\times4$ surface fixes eight outer-test patients and varies only the training
-set. For each outer fold and each of 20 seeds, we generate one approximately
-proportional disease-stratified ordering of the 32 development patients, giving
-nested sets $S_8\subset S_{16}\subset S_{24}\subset S_{32}$. Each selected
-patient receives one uniform random cell ordering, giving nested prefixes of
-100, 500, and 2{,}000 cells and the complete available set. Patients with fewer
-than a requested cap contribute all available cells. No cell is selected using
-its subtype, and every model is evaluated on all cells from the untouched test
-patients. The full-data endpoint is fitted once per fold rather than duplicated
-across seeds. All 6{,}020 model--task jobs completed, and the deterministic
-endpoint exactly reproduces the frozen pooled OOF baselines within absolute
-tolerance $5\times10^{-4}$. Because $P{=}8\rightarrow32$ is a fourfold change
-whereas $C{=}100\rightarrow\mathrm{all}$ is a larger and patient-dependent
-change, this surface is descriptive only. All direct comparisons between the
-two axes use the fixed-total and matched-doubling analysis in the main paper.
-
-\input{tables/patient_cell_scaling_full}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/patient_cell_scaling_heatmaps.pdf}
-\caption{Cell-weighted pooled patient-disjoint Macro-F1 over the complete training-patient
-and per-patient training-cell grid. Values average 20 nested subset seeds except
-for the deterministic full-data endpoint. Color scales are shared across
-models within each task.}
-\label{fig:patient_cell_scaling_heatmaps}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/patient_scaling_curves.pdf}
-\caption{Patient-budget curves at each fixed per-patient cell cap. Intervals
-show subset-resampling variability; they do not represent uncertainty over a
-new patient population. Non-monotonic local changes are retained rather than
-smoothed.}
-\label{fig:patient_scaling_curves}
-\end{figure}
-
-The surface is cohort- and range-specific. We do not compare its unequal
-endpoints or use it to establish a patient- or cell-dominant scaling law, and it
-cannot estimate the benefit of patients drawn from new sites or acquisition
-batches.
 
 \subsection{Coarse--Fine Consistency Diagnostic}
 \label{sec:appendix:consistency}

@@ -11,21 +11,20 @@ Paired RNA supplies reference annotations
 \end{minipage}}
 \hfill$\longrightarrow$\hfill
 \fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
-\textbf{Cell identity}\\[4pt]
-5 lineages / 27 subtypes\\[3pt]
-APT-only prediction in held-out patients
+\textbf{Split by patient}\\[4pt]
+Five fixed outer folds\\[3pt]
+No patient shared between development and test
 \end{minipage}}
 \hfill$\longrightarrow$\hfill
 \fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
-\textbf{Secondary readout}\\[4pt]
-Nested cell-output summaries\\[3pt]
-Compare with direct APT and recorded QC
+\textbf{Evaluate cell typing}\\[4pt]
+5 lineages / 27 subtypes\\[3pt]
+Equal patient weight; frozen APT-only references
 \end{minipage}}
-\caption{From cell identity to patient characterization. The cell-to-patient
-route uses nested cross-fitting; a parallel direct-APT route summarizes
-measurements without requiring cell labels. Patient-disjoint splits prevent
-identity overlap, while centering and QC controls assess alternative sources
-of disease association. Neither route constitutes validated clinical diagnosis.}
+\caption{The primary APT-Bench contract. Patient-disjoint outer folds evaluate
+cell typing in new individuals; subject-normalized confusion pooling assigns
+equal total scoring weight to each patient. Cell-random splitting is a separate
+diagnostic, not a substitute for this generalization target.}
 \label{fig:cell_patient_overview}
 \end{figure}
 
@@ -56,7 +55,7 @@ the analyzed data do not establish a validated one-drop input-volume
 requirement. The scope here is characterization from the profiled blood cells,
 not end-to-end validation of a small-volume diagnostic assay.
 
-\subsection{From Cell Identity to Patient State}
+\subsection{Patient-Disjoint Cell-Typing Contract}
 \label{sec:data:contract}
 \label{sec:data:protocols}
 
@@ -129,10 +128,7 @@ alternative explanations for disease association. Feature-panel and
 inference-cell subsampling are secondary redundancy diagnostics, not evidence
 of reduced training requirements or clinically efficient assays.
 
-Subject--cell sampling controls are reported separately in
-Appendix~\ref{sec:appendix:scaling_support}. They compare natural fixed-total
-allocation with class-quota-matched allocation and distinguish stability
-across training subsets from confidence intervals for mean effects.
-COMBAT CITE-seq and OneK1K provide external sampling evaluations
-\citep{combat2022blood,yazar2022onek1k}, not external disease validation of the
-APT assay. Their RNA experiments use restricted 293-gene representations.
+Subject--cell allocation experiments are preserved in a standalone supporting
+report (\texttt{sampling\_report.tex}), not included as a contribution of the
+present paper. Their external RNA cohorts do not validate APT cell typing or
+APT disease prediction.

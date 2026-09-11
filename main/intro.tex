@@ -1,61 +1,53 @@
 \section{Introduction}
 
-A blood sample contains information about its constituent immune cells and
-variation associated with the person from whom it was collected. A single-cell
-assay can therefore be asked two connected questions: which cells are present,
-and what do their measurements reveal about the patient's disease state?
-Single-cell aptamer profiling offers a setting in which to evaluate both
-questions using the same molecular measurements. The long-term motivation is
-minimally invasive blood-based characterization; reliable diagnosis from a
-specified small blood volume is an eventual validation target, not an outcome
-established by this study.
+Single-cell aptamer profiling creates a targeted molecular representation of
+blood-derived immune cells. To assess whether this representation supports
+cell typing, a model must be evaluated on patients absent from training, not
+merely on additional cells from familiar patients. The distinction matters
+because a large cell count does not create an equally large set of independent
+biological samples.
 
-The primary aim of this paper is a benchmark for APT-only cell typing in new
-patients, with a documented hierarchy-aware reference model. Patient-level
-disease characterization is a secondary application, not an equally validated
-clinical endpoint. Moving from the motivation to an evaluation requires separating cell identity
-from patient state. A model can distinguish broad immune lineages without
-reconstructing transcriptome-defined subtypes. Conversely, a disease classifier
-can exploit patient-level measurement offsets without learning cell composition.
-High performance at one level therefore need not validate the other. Correlated
-cells also cannot substitute for independent patients when estimating disease
-generalization. These distinctions motivate a benchmark that connects the two
-levels while testing the limits of their interpretation.
+APT-Bench addresses this evaluation problem with 361{,}792 cells from 40
+participants, 293 aptamer measurements per cell, and paired-transcriptomic
+annotations defining five lineages and 27 subtypes. Its central contribution
+is a patient-disjoint cell-typing benchmark specification and empirical
+evaluation for the APT modality. We fix the outer patient folds, state the
+label ontology and input contract, and report subject-balanced pooled
+Macro-F1 so that highly sampled patients do not dominate the score.
 
-We introduce APT-Bench, comprising 361{,}792 labeled single-cell profiles from
-40 participants in five cancer groups and healthy controls. Each cell has 293
-aptamer measurements and paired-transcriptome-derived labels in a five-lineage,
-27-subtype ontology. The benchmark evaluates APT-only cell typing and
-within-cohort patient characterization under fixed patient-disjoint folds.
-A Soft-cascade Transformer combines global subtype prediction with softly
-routed lineage experts as one reference alongside linear, tree-based, and
-other Transformer models. Benchmark validity does not depend on that model
-winning, and the current comparisons do not isolate its component effects.
-A separate paired-RNA diagnostic asks how reconstructability depends on the input
-modality, while strictly nested cross-fitting connects predicted cell profiles
-to patient-level disease labels without exposing test patients during either
-learning stage (Figure~\ref{fig:cell_patient_overview}).
+The central empirical finding concerns the evaluation protocol. In the
+available XGBoost and Soft-cascade comparisons, cell-level splitting gives
+higher coarse and fine Macro-F1 than patient-disjoint evaluation in all four
+model--resolution comparisons. The increases range from 0.050 to 0.108 on
+the historical cell-weighted metric. Thus evaluation on held-out cells from
+known patients can give a substantially more favorable picture than evaluation
+on new patients. These protocol comparisons are not a matched causal estimate
+of leakage alone; they nevertheless show why the intended generalization unit
+must be fixed before interpreting performance.
 
-The results establish reference performance for a targeted molecular input
-rather than a diagnostic success claim. Fine typing remains difficult under
-the evaluated models. A matched-input probe reconstructs the RNA-derived
-labels more strongly from RNA; that modality contrast is not evidence of
-algorithm superiority on identical inputs. In the secondary application,
-predicted subtype summaries improve reference-composition recovery over a
-training-mean baseline. Disease association remains a distinct question, with
-unresolved incremental subtype value and acquisition-related explanations.
+Classical and Transformer models provide reference performance under that
+contract. Soft-cascade Transformer is one hierarchy-aware reference, not a
+separate algorithmic contribution or the basis for a superiority claim.
+We retain an internal paired-RNA reconstruction diagnostic and a short
+patient-level application study to contextualize the benchmark, rather than
+treating them as additional headline contributions. Subject--cell sampling
+experiments are preserved in a separate supporting report.
 
-Reliability is therefore part of the biological question, not an independent
-promise of clinical validity. Patient-disjoint splits, subject-balanced metrics,
-and acquisition-sensitivity controls delimit what can be concluded from this
-cohort. Supporting sampling experiments on APT, COMBAT, and OneK1K further show
-why subject count, cell count, and training label distribution must be
-distinguished. These external datasets evaluate sampling behavior; they do not
-independently validate APT disease prediction.
-
-Our contributions are:
+The paper makes one contribution with three concrete components:
 \begin{itemize}
-    \item \textbf{An APT cell-typing benchmark.} We specify a paired-annotation dataset, fixed patient partitions, ontology, and patient-aware evaluation for a 293-channel single-cell aptamer input.
-    \item \textbf{A reference-model suite.} Classical and Transformer recipes, including a documented Soft-cascade reference, establish APT-only comparison points; a separate paired-input diagnostic assesses modality dependence.
-    \item \textbf{A cell-to-patient application study.} Nested aggregation tests reference-composition recovery and exploratory disease association, with explicit controls for alternative sources of predictive signal.
+    \item \textbf{A specified evaluation contract:} APT-only lineage and subtype
+    prediction with a fixed ontology, patient-disjoint folds, and explicit
+    cell-weighted versus subject-balanced metrics.
+    \item \textbf{Evidence that the split changes the conclusion:} the evaluated
+    cell-level split controls consistently overstate performance relative to
+    the new-patient protocol, motivating patient-disjoint reporting.
+    \item \textbf{Reference results and an auditable interface:} classical and
+    neural predictions, metric code, split manifests, and documented artifact
+    checks establish comparison points for subsequent APT models.
 \end{itemize}
+
+A complete public benchmark also requires accessible data, verified permissions,
+and portable reproduction. Those release requirements remain explicit where
+unfinished; a public source repository alone does not establish their completion.
+The study does not claim validated blood-based diagnosis, a universal sampling
+law, or priority over all prior aptamer evaluation resources.

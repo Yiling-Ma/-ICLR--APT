@@ -40,7 +40,7 @@ intervals of the mean. Unmatched runs and matched LR use 20 seeds; matched
 XGBoost uses 10. APT and COMBAT fine point estimates change sign for both models.
 Cross-panel changes are descriptive, not paired attenuation tests. The matched
 joint stability intervals, which additionally resample held-out subjects, all span zero
-(Appendix Figure~\ref{fig:class_matched_joint}).}
+(Figure~\ref{fig:class_matched_joint}).}
 \label{fig:class_matched_scaling}
 \end{figure}
 
@@ -56,13 +56,13 @@ joint sampling-protocol contrast: the implementation fixes observed labels,
 class counts, and proportions and also uses within-class donor round robin.
 The attenuation cannot therefore be assigned solely to label distribution.
 An independently controlled synthetic check separates quota matching from donor
-allocation (Appendix~\ref{sec:appendix:sequential_simulation}); it does not
+allocation (Section~\ref{sec:appendix:sequential_simulation}); it does not
 replace this separation on the real cohorts. A complementary known-null
 validation yields mean effects $+0.0202$, $+0.0119$, and $+0.0004$ for unmatched,
 support-matched, and exact-quota sampling against an exactly zero overlap-quota
 target. Independent Monte Carlo references under donor shifts remain positive
 and are not mechanically removed by matching
-(Appendix~\ref{sec:appendix:known_target}). This checks recovery of a specified
+(Section~\ref{sec:appendix:known_target}). This checks recovery of a specified
 allocation target, not interval coverage or a universal causal effect of subject breadth.
 
 Beyond the common 32-subject grid, class-matched LR
@@ -71,9 +71,9 @@ mean effects between $-0.00065$ and $+0.00123$, with every joint stability inter
 spanning zero. These ranges do not test mean equivalence or a plateau. A post-hoc
 $\pm0.01$ sensitivity band contains 11 of 12 adjacent frontier stability intervals,
 but only 4 of 12 main $T=6{,}400$ intervals and none of the four APT intervals
-(Appendix~\ref{sec:appendix:equivalence}). These are pointwise interval-containment
+(Section~\ref{sec:appendix:equivalence}). These are pointwise interval-containment
 diagnostics, not equivalence tests or an optimal-allocation result. Complete unmatched
 grids, class-support audits, matched doublings, extended frontiers, and
 uncertainty decompositions appear in
-Appendix~\ref{sec:appendix:fair_scaling}--
+Section~\ref{sec:appendix:fair_scaling}--
 \ref{sec:appendix:extended_subject_frontier}.
