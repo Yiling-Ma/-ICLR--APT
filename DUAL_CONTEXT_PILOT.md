@@ -135,3 +135,53 @@ Six unit tests cover support matching, context permutation invariance, centered
 representation shift invariance, two constraint identities, and finite outputs
 for every variant. These tests establish implementation properties, not
 scientific efficacy.
+
+## Completed Results
+
+All 18 fits completed; six unit tests passed. The independent audit checked
+all 12,000 scheduled patient episodes, query/support isolation, composition
+support matching, outer-patient exclusion, and all four conditions' prediction
+normalization and reconstructed confusion matrices.
+
+| Variant | Natural fine | Composition fine | Shift fine | Both fine |
+| --- | ---: | ---: | ---: | ---: |
+| Raw | 0.0895 | 0.0895 | 0.0891 | 0.0891 |
+| Learned context | 0.0914 | 0.0907 | 0.0882 | 0.0867 |
+| Unconstrained correction | 0.0958 | 0.0951 | 0.0943 | 0.0933 |
+| Composition constraint | 0.0965 | 0.0960 | 0.0945 | 0.0937 |
+| Equivariance constraint | 0.0981 | 0.0969 | 0.0949 | 0.0935 |
+| Dual constraints | 0.0986 | 0.0982 | 0.0949 | 0.0941 |
+
+On natural validation, dual minus learned context is +0.0072, with a pointwise
+95% paired seed/patient-bootstrap interval [0.00008, 0.0136]. However, dual
+minus unconstrained correction is +0.0027 [-0.0006, 0.0042], and dual minus
+equivariance-only is +0.0005 [-0.0013, 0.0025]. There is no established incremental
+benefit of the two-constraint combination. These are screened development
+comparisons, not multiplicity-adjusted or independent confirmation.
+
+Mechanism diagnostics are more cautionary. Averaged across patients and seeds:
+
+| Correction variant | Composition offset MSE | Shift-increment MSE |
+| --- | ---: | ---: |
+| Unconstrained | 0.001922 | 0.280245 |
+| Composition-only | 0.000773 | 0.279602 |
+| Equivariance-only | 0.002110 | 0.277953 |
+| Dual | 0.000815 | 0.277643 |
+
+An estimator that always predicts zero offset increment has MSE **0.276732**
+on these exact diagnostic shifts. Thus none of the correction variants improves
+on this trivial baseline for the stipulated offset-recovery metric. Lower
+composition sensitivity alone cannot establish useful offset correction; it can
+also arise from a weakly responsive estimator. The observed classification
+change does not validate the proposed equivariance mechanism.
+
+Decision: retain as a completed development screen, not as the paper's core
+algorithm or evidence of biological/technical disentanglement. A further
+architectural or objective revision must first pass a known-shift recovery
+check against the zero-increment baseline before scaling up. No outer-fold
+or external evaluation has been launched for this implementation.
+
+Small results and audit: `outputs/dual_context_pilot_v1/`. Predictions and full
+episode schedules remain on SSD. Comparisons with earlier pilots' scores are
+not matched because query sets, architecture, augmentation, and training
+exposure differ.

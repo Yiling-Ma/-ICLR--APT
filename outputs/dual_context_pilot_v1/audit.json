@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "outer patients excluded",
+    "queries excluded from supports",
+    "same subtype support in composition views",
+    "validation pool disjoint from every query",
+    "all condition probabilities and confusion matrices independently reconstructed"
+  ],
+  "fits_audited": 18,
+  "protocol_hash": "171873c8d99bcd844bfb0cb79e65e107e312bfbceac4cde974032c54c29646fc",
+  "status": "PASS",
+  "training_episodes_audited": 12000,
+  "zero_offset_increment_baseline_mse": 0.2767318785190582
+}

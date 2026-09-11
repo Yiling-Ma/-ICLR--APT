@@ -57,6 +57,7 @@ def audit(out):
                     np.testing.assert_array_equal(cms[task], fit[condition+"_"+task])
             fits += 1
     result = dict(status="PASS", fits_audited=fits, training_episodes_audited=episodes,
+        zero_offset_increment_baseline_mse=float(np.mean(data["shift"]**2)),
         protocol_hash=cfg["protocol_hash"], checks=["outer patients excluded", "queries excluded from supports",
         "same subtype support in composition views", "validation pool disjoint from every query",
         "all condition probabilities and confusion matrices independently reconstructed"])

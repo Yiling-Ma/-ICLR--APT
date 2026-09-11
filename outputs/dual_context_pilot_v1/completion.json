@@ -1,0 +1,13 @@
+{
+  "fits": 18,
+  "limitations": [
+    "development only, pointwise intervals",
+    "fixed support and synthetic diagnostic shift seeds",
+    "composition stress uses validation labels to construct views",
+    "offset biological/technical origin not identifiable",
+    "nominal architecture matched, active branches differ"
+  ],
+  "protocol_hash": "171873c8d99bcd844bfb0cb79e65e107e312bfbceac4cde974032c54c29646fc",
+  "status": "PASS",
+  "validation_patients": 8
+}
