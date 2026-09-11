@@ -1,16 +1,24 @@
 \begin{table}[H]
 \centering
 \small
-\setlength{\tabcolsep}{7pt}
-\begin{tabular}{lccc}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llcc}
 \toprule
-Input & Coarse Macro-F1 & Fine Macro-F1 & Granularity gap \\
+Probe & Input & Coarse Macro-F1 & Fine Macro-F1 \\
 \midrule
-APT only & 0.288 [0.267, 0.308] & 0.104 [0.086, 0.115] & 0.184 \\
-Paired RNA only & 0.790 [0.775, 0.801] & 0.442 [0.399, 0.467] & 0.348 \\
-APT + paired RNA & 0.794 [0.777, 0.807] & 0.473 [0.428, 0.499] & 0.321 \\
+SGD & APT only & 0.277 [0.254, 0.296] & 0.090 [0.076, 0.098] \\
+SGD & RNA only & 0.742 [0.731, 0.750] & 0.431 [0.387, 0.453] \\
+SGD & APT + RNA & 0.751 [0.740, 0.762] & 0.458 [0.413, 0.483] \\
+SGD & RNA + noise & 0.742 [0.732, 0.751] & 0.409 [0.371, 0.430] \\
+SGD & RNA + shuffled APT & 0.747 [0.732, 0.760] & 0.448 [0.405, 0.471] \\
+\midrule
+MLP & APT only & 0.310 [0.292, 0.325] & 0.094 [0.081, 0.103] \\
+MLP & RNA only & 0.871 [0.854, 0.883] & 0.584 [0.529, 0.610] \\
+MLP & APT + RNA & 0.873 [0.858, 0.884] & 0.606 [0.551, 0.635] \\
+MLP & RNA + noise & 0.870 [0.855, 0.880] & 0.571 [0.525, 0.593] \\
+MLP & RNA + shuffled APT & 0.876 [0.862, 0.887] & 0.596 [0.544, 0.622] \\
 \bottomrule
 \end{tabular}
-\caption{Paired-RNA internal reconstructability oracle under the five fixed patient-disjoint folds. All inputs use the same patient- and class-weighted linear probe, up to 2{,}000 identically sampled training cells per development patient, training-fold standardization, and all held-out cells. Scores are subject-balanced pooled Macro-F1; brackets are patient-bootstrap 95\% intervals, and the granularity gap is coarse minus fine Macro-F1. This diagnostic uses the transcriptomic modality from which the annotations were constructed and a fixed 2{,}000-HVG representation selected during data development, so it is neither independent label validation nor a leakage-free benchmark baseline.}
+\caption{Paired-RNA internal reconstructability diagnostic under the five fixed patient-disjoint folds. Each input uses the same deterministic sample of up to 1{,}000 training cells per development patient, training-fold standardization, all held-out cells, patient- and class-weighted training, and one inner patient-disjoint validation fold for regularization. Brackets are 2{,}000 paired patient-bootstrap intervals for subject-balanced pooled Macro-F1. RNA features are selected within each training fold, but the transcriptomic modality also underlies the operational annotations, so this diagnostic is neither independent label validation nor a leakage-free benchmark baseline.}
 \label{tab:paired_rna_oracle}
 \end{table}

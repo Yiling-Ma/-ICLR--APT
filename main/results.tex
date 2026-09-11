@@ -25,24 +25,31 @@ Appendix~\ref{sec:appendix:subtype_audit}.
 
 \subsection{What the Paired Transcriptome Adds}
 
-Under the same patient-disjoint linear-probe diagnostic, paired RNA achieves
-subject-balanced pooled coarse/fine macro-F1 of 0.790/0.442, compared with
-0.288/0.104 for APT. Combining the two inputs reaches 0.794/0.473; the fine
-increment over RNA is $+0.031$ (95\% paired patient-bootstrap CI
-$[0.016,0.046]$). These are matched-probe results, not scores directly comparable
-with the cell-weighted full-training models in Table~\ref{tab:main}.
+Under the same patient-disjoint paired-input diagnostic, a small MLP probe
+achieves subject-balanced pooled coarse/fine macro-F1 of 0.871/0.584 from
+paired RNA, compared with 0.310/0.094 from APT alone. Concatenating APT with
+RNA reaches 0.873/0.606; the fine increment over RNA alone is $+0.022$
+(95\% paired patient-bootstrap CI $[0.013,0.037]$). A weighted linear SGD
+probe gives the same qualitative pattern: RNA is much more reconstructive
+than APT, and the RNA+APT fine increment is $+0.028$ ($[0.013,0.041]$).
+These are matched-probe results, not scores directly comparable with the
+cell-weighted full-training models in Table~\ref{tab:main}.
 
 The input-dependent reconstruction difference is informative, but its scope
 is internal. The reference labels were constructed from RNA, and the fixed
 HVG representation was selected during data development. RNA is consequently
 not independent ground truth validation or a leakage-free benchmark baseline.
 The combined-input result motivates further study of complementary measurements,
-without demonstrating an intrinsic information limit or clinical benefit.
+but the controls are cautious: for the MLP probe, RNA+APT exceeds a
+within-patient shuffled-APT control by $+0.010$ ($[0.002,0.017]$), while the
+same contrast is unresolved for SGD. The experiment therefore supports
+complementary association, not a standalone claim about intrinsic information
+limits or clinical benefit.
 
 A marginal-chance adjustment reduces the APT coarse-minus-fine difference
-from 0.184 to 0.051 (95\% interval $[0.030,0.080]$). Even that residual does
-not match task cardinality or within-lineage difficulty. Complete input and
-resolution diagnostics appear in
+from 0.216 to 0.085 for the MLP probe and from 0.187 to 0.054 for the SGD
+probe. Even these residuals do not match task cardinality or within-lineage
+difficulty. Complete input and resolution diagnostics appear in
 Appendix~\ref{sec:appendix:paired_rna_oracle} and
 Appendix~\ref{sec:appendix:granularity_chance}.
 

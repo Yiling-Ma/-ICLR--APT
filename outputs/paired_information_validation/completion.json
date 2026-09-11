@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "outer_fits": 100,
+  "inner_fits": 200,
+  "unique_test_patients": 40,
+  "paired_patient_alignment": true
+}

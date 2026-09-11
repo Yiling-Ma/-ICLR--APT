@@ -267,29 +267,33 @@ feature representation and the manual labels arise from the same transcriptomic
 pipeline, the oracle is circular with respect to label construction and cannot
 serve as independent validation or a leakage-free model comparison.
 
-Within each of the five fixed patient-disjoint folds, we compare APT only,
-paired RNA only, and their feature concatenation. The three inputs use the
-identical deterministic sample of up to 2{,}000 training cells per development
-patient and all cells from the eight untouched test patients. Features are
-standardized using training-fold statistics. We fit the same 30-epoch
-patient- and class-weighted linear SGD probe at both resolutions; the fixed
-optimization budget avoids modality-specific tuning. Scores use
-subject-normalized OOF confusion matrices, and 2{,}000 paired patient-bootstrap
-replicates quantify modality contrasts. This matched-budget probe is not
-directly comparable to the full-training model ladder in
+Within each of the five fixed patient-disjoint folds, we compare five inputs:
+APT only, paired RNA only, APT+RNA, RNA plus random 293-dimensional noise, and
+RNA plus APT vectors shuffled within patient. The noise control checks feature
+dimension, while the within-patient shuffle preserves patient-level APT
+structure but breaks cell-level RNA--APT pairing. All inputs use the identical
+deterministic sample of up to 1{,}000 training cells per development patient
+and all cells from the eight untouched test patients. RNA features are selected
+as 2{,}000 highly variable genes using only the current training fold; all
+features are standardized using training-fold statistics. We fit patient- and
+class-weighted linear SGD and one-hidden-layer MLP probes for 40 epochs at both
+resolutions, using one inner patient-disjoint validation fold to select the
+regularization strength. Scores use subject-normalized OOF confusion matrices,
+and 2{,}000 paired patient-bootstrap replicates quantify modality contrasts.
+This matched-budget probe is not directly comparable to the full-training model ladder in
 Table~\ref{tab:main}.
 
 \input{tables/paired_rna_oracle}
 
-Paired RNA improves coarse/fine macro-F1 over APT by $+0.502$
-($95\%$ CI $[0.478,0.527]$) and $+0.338$ ($[0.300,0.365]$). The concatenated
-representation improves fine macro-F1 over RNA alone by $+0.031$
-($[0.016,0.046]$), whereas its coarse change of $+0.004$
-($[-0.001,0.009]$) is unresolved. RNA therefore reconstructs the operational
-taxonomy far better than APT, but its own coarse--fine gap remains 0.348 and
-the complementary APT fine signal is nonzero. The experiment supports a mixed
-interpretation involving modality resolution and the difficulty of the
-patient-disjoint taxonomy; it does not estimate annotation accuracy.
+For the MLP probe, paired RNA improves coarse/fine macro-F1 over APT by
+$+0.562$ and $+0.490$. The concatenated representation improves fine macro-F1
+over RNA alone by $+0.022$ ($[0.013,0.037]$), and exceeds RNA plus shuffled APT
+by $+0.010$ ($[0.002,0.017]$). The linear SGD probe shows the same direction
+for RNA+APT versus RNA ($+0.028$; $[0.013,0.041]$), but its shuffled-APT
+contrast is unresolved ($+0.010$; $[-0.005,0.025]$). RNA therefore reconstructs
+the operational taxonomy far better than APT, while the small combined-input
+gain should be read as internal complementary association rather than an
+estimate of annotation accuracy or a clinical claim.
 
 \begin{itemize}
     \item \todo{Report recruiting site(s) and dates, prospective versus retrospective
@@ -323,7 +327,7 @@ Raw coarse and fine Macro-F1 compare five-class and 27-class tasks with differen
 label frequencies and decision boundaries. We therefore treat their difference
 as descriptive, not evidence of a resolution deficit beyond task cardinality.
 Using the released 40 patient-specific OOF confusion matrices from the matched
-linear-probe RNA diagnostic, we normalize each matrix to unit mass and average
+paired-input diagnostic, we normalize each matrix to unit mass and average
 over patients to obtain $M$. Let $p_k=\sum_j M_{kj}$ and
 $q_k=\sum_i M_{ik}$. The independence reference $M^0_{ij}=p_iq_j$ retains both
 true and predicted marginals while breaking their association. We report
@@ -339,13 +343,11 @@ intervals condition on the fitted models and do not include retraining variation
 
 \input{tables/granularity_chance}
 
-For APT, the raw coarse/fine scores 0.288/0.104 have chance references
-0.186/0.033 and adjusted scores 0.125/0.074. The difference shrinks from 0.184
-to 0.051 (95\% interval $[0.030,0.080]$). Adjusted RNA and APT+RNA differences
-are 0.316 ($[0.293,0.356]$) and 0.289 ($[0.264,0.329]$), respectively.
-The subject-balanced true-label entropies are 1.253 and 2.488 nats, corresponding
-to effective class counts $\exp(H)$ of 3.50 and 12.03. These describe rather
-than match class imbalance. The adjustment accounts for marginal chance
+For APT, the MLP raw coarse/fine scores 0.310/0.094 have chance references
+0.186/0.029 and adjusted scores 0.152/0.067. The difference shrinks from 0.216
+to 0.085 (95\% interval $[0.068,0.104]$). The corresponding SGD adjusted gap
+is 0.054 ($[0.034,0.078]$). Adjusted RNA and APT+RNA differences remain larger
+for both probes, around 0.25--0.27. The adjustment accounts for marginal chance
 agreement, but does not control label boundaries, class count, annotation
 reliability, or within-lineage separability; none of these residual differences
 establishes a cardinality-independent biological granularity effect.

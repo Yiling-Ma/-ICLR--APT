@@ -1,17 +1,25 @@
 \begin{table}[htbp]
 \centering\small
-\begin{tabular}{llrrr}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lllrrr}
 \toprule
-Input & Resolution & Raw F1 & Chance reference & Adjusted F1 [95\% interval] \\
+Probe & Input & Resolution & Raw F1 & Chance ref. & Adjusted F1 [95\% interval] \\
 \midrule
-APT & coarse & 0.288 & 0.186 & 0.125 [0.103, 0.147] \\
-APT & fine & 0.104 & 0.033 & 0.074 [0.056, 0.085] \\
-RNA & coarse & 0.790 & 0.198 & 0.738 [0.719, 0.752] \\
-RNA & fine & 0.442 & 0.035 & 0.422 [0.374, 0.446] \\
-APT + RNA & coarse & 0.794 & 0.199 & 0.743 [0.722, 0.760] \\
-APT + RNA & fine & 0.473 & 0.035 & 0.454 [0.403, 0.481] \\
+SGD & APT & coarse & 0.277 & 0.185 & 0.113 [0.093, 0.134] \\
+SGD & APT & fine & 0.090 & 0.033 & 0.059 [0.046, 0.067] \\
+SGD & RNA & coarse & 0.742 & 0.197 & 0.678 [0.666, 0.689] \\
+SGD & RNA & fine & 0.431 & 0.035 & 0.410 [0.367, 0.433] \\
+SGD & APT + RNA & coarse & 0.751 & 0.198 & 0.690 [0.676, 0.702] \\
+SGD & APT + RNA & fine & 0.458 & 0.035 & 0.438 [0.393, 0.463] \\
+\midrule
+MLP & APT & coarse & 0.310 & 0.186 & 0.152 [0.134, 0.171] \\
+MLP & APT & fine & 0.094 & 0.029 & 0.067 [0.055, 0.076] \\
+MLP & RNA & coarse & 0.871 & 0.200 & 0.839 [0.819, 0.854] \\
+MLP & RNA & fine & 0.584 & 0.037 & 0.568 [0.512, 0.596] \\
+MLP & APT + RNA & coarse & 0.873 & 0.200 & 0.842 [0.824, 0.855] \\
+MLP & APT + RNA & fine & 0.606 & 0.037 & 0.591 [0.535, 0.621] \\
 \bottomrule
 \end{tabular}
-\caption{Marginal-chance adjustment for the matched linear-probe RNA diagnostic. Scores use subject-balanced pooled confusion matrices from the same 40 OOF patients. Each of 2,000 paired patient-bootstrap draws recomputes the observed score and both null marginals. This is an association-breaking reference, not a task-cardinality or annotation-quality control.}
+\caption{Marginal-chance adjustment for the paired-input reconstructability diagnostic. Scores use subject-balanced pooled confusion matrices from the same 40 OOF patients. Each of 2{,}000 paired patient-bootstrap draws recomputes the observed score and null marginals. This is an association-breaking reference, not a task-cardinality, annotation-quality, or within-lineage difficulty control.}
 \label{tab:granularity_chance}
 \end{table}
