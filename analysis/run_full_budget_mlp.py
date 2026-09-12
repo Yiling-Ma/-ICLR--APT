@@ -96,7 +96,7 @@ def run(args):
     assert len(meta) == 361792 and meta.cell_id.is_unique and np.isfinite(x).all()
     enc = core.fit_label_encoders(meta)
     folds = core.load_folds()
-    ids = meta.sample_id.astype(str).to_numpy()
+    ids = meta.sample_id.to_numpy(dtype=str)
     device = torch.device(args.device)
     pairs = meta[['cell_subtype','coarse_subtype']].drop_duplicates()
     assert pairs.cell_subtype.is_unique
@@ -154,18 +154,48 @@ def run(args):
 def aggregate(args):
     rows=[]
     rng=np.random.default_rng(20260912)
+    meta, _, _ = core.load_data()
+    enc = core.fit_label_encoders(meta)
+    folds = core.load_folds()
+    index = pd.Index(meta.cell_id.astype(str))
+    assert index.is_unique
     for task in core.TASKS:
         all_cm, all_oracle=[],[]
         order=None
         for seed in SEEDS:
             blocks=[np.load(args.output/f's{seed}_f{f}_{task}.npz') for f in range(5)]
-            ids=np.concatenate([b['patients'] for b in blocks])
+            # Legacy NPZ string arrays used object dtype. Recover IDs from the
+            # JSON sidecar, then validate them against keyed cell metadata and CMs.
+            patient_blocks=[]
+            for f,b in enumerate(blocks):
+                audit=json.loads((args.output/f's{seed}_f{f}_{task}.json').read_text())
+                patients=np.asarray(audit['test_patients'],dtype=str)
+                assert np.array_equal(patients,sorted(folds[f]))
+                position=index.get_indexer(b['cell_ids'].astype(str))
+                assert (position>=0).all()
+                sample_ids=meta.sample_id.iloc[position].to_numpy(dtype=str)
+                truth=enc[task].transform(meta[core.TASKS[task]].iloc[position].astype(str))
+                np.testing.assert_array_equal(truth,b['truth'])
+                np.testing.assert_array_equal(enc[task].classes_.astype(str),b['classes'])
+                assert np.allclose(b['prob'].sum(1),1,atol=1e-5)
+                recovered,cm=matrices(truth,b['prob'].argmax(1),sample_ids,len(enc[task].classes_))
+                np.testing.assert_array_equal(recovered,patients)
+                np.testing.assert_array_equal(cm,b['cm'])
+                if task=='fine':
+                    mapping=meta[['cell_subtype','coarse_subtype']].drop_duplicates().set_index('cell_subtype')
+                    parent=enc['coarse'].transform(mapping.loc[enc['fine'].classes_,'coarse_subtype'])
+                    np.testing.assert_array_equal(parent,b['parent'])
+                    _,ocm=matrices(truth,oracle(b['prob'],truth,parent),sample_ids,len(enc[task].classes_))
+                    np.testing.assert_array_equal(ocm,b['oracle_cm'])
+                patient_blocks.append(patients)
+            ids=np.concatenate(patient_blocks)
             cell_ids=np.concatenate([b['cell_ids'] for b in blocks])
             assert len(ids)==40 and len(set(ids))==40 and len(set(cell_ids))==361792
             if order is None: order=ids
             assert np.array_equal(ids,order)
             all_cm.append(np.concatenate([b['cm'] for b in blocks]))
             if task=='fine': all_oracle.append(np.concatenate([b['oracle_cm'] for b in blocks]))
+            for block in blocks: block.close()
         a=np.stack(all_cm)
         for name,b in [('unconstrained',a)]+([('true_lineage_oracle',np.stack(all_oracle))] if all_oracle else []):
             values=[score(cm) for cm in b]
@@ -181,7 +211,10 @@ def aggregate(args):
                 delta_low=np.quantile(diff,.025),delta_high=np.quantile(diff,.975)))
     pd.DataFrame(rows).to_csv(args.output/'summary.csv',index=False)
     atomic_json(args.output/'completion.json',dict(status='PASS',outer_fits=30,
-        seed_count=3,patients=40,cells=361792,oracle_scope='privileged-label diagnostic, not deployable'))
+        seed_count=3,patients=40,cells=361792,keyed_cell_label_alignment=True,
+        confusion_reconstruction=True,oracle_confusion_reconstruction=True,
+        patient_ids_source='JSON sidecars checked against keyed cell metadata; pickle never enabled',
+        oracle_scope='privileged-label diagnostic, not deployable'))
 
 
 if __name__=='__main__':

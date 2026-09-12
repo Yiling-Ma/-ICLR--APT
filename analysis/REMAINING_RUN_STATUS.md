@@ -30,6 +30,26 @@ to outputs/remaining_oracle_v1. Flat/HCE/Soft-cascade ordinary SB fine
 The completed diagnostic is now added to the paper; remaining training jobs
 must still complete before their results are added.
 
+2026-09-12 02:02 UTC check: all30 MLP fits completed, but aggregation stopped
+because legacy NPZ patient IDs had object dtype. Training is not repeated.
+The repair reads string IDs from each existing JSON sidecar, verifies each
+cell against keyed original metadata, and reconstructs both ordinary and
+oracle confusion matrices from saved probabilities before joint resampling.
+No pickle loading is enabled and no original predictions are overwritten.
+Recovery log: mlp_aggregate_recovery.log; completion.json must still pass.
+At this check HVG2000 had88/300 complete fits; HVG5000 remained queued.
+
+Recovery completed successfully: full_mlp completion.json is PASS for all30
+fits, including keyed cell/label alignment and exact reconstruction of stored
+ordinary/oracle CMs. Coarse/fine mean-over-three-seed SB-Macro-F1 is
+0.33358/0.14098, with joint seed/patient95% intervals [0.31053,0.35545] and
+[0.12496,0.15516]. These are not paired superiority tests against other models.
+Aggregate-only exports are under outputs/remaining_full_mlp_v1. The original
+mlp.log failure is historical and resolved; do not restart training because it
+still contains that traceback. At recovery verification HVG2000 was93/300;
+HVG5000 remained queued. Paper integration of the remaining training results
+will follow completion of the modality grid.
+
 Commands (run on vllab11):
 
 ```sh

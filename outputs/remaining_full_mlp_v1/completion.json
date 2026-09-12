@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "outer_fits": 30,
+  "seed_count": 3,
+  "patients": 40,
+  "cells": 361792,
+  "keyed_cell_label_alignment": true,
+  "confusion_reconstruction": true,
+  "oracle_confusion_reconstruction": true,
+  "patient_ids_source": "JSON sidecars checked against keyed cell metadata; pickle never enabled",
+  "oracle_scope": "privileged-label diagnostic, not deployable"
+}
