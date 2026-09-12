@@ -37,15 +37,11 @@ Supplying paired RNA would change the input contract. This distinguishes an
 undefined direct APT input from an adaptable but unevaluated model; it does
 not justify claiming superiority over transcriptomic annotation methods.
 
-\paragraph{Matched-input diagnostics and application.}
+\paragraph{Matched-input diagnostics.}
 A separate matched-input probe varies APT and RNA while holding its training
 budget and patient folds fixed. Training-only subtype priors and true-lineage
 masking provide candidate-set controls. APT shuffling within patient, or within
 patient and true lineage, is a privileged diagnostic rather than a deployable
-model input (Appendix~\ref{sec:appendix:identity_questions}). The patient-level case study uses
-disease-label-free XGBoost cell predictions and nested cross-fitting:
-disease-training compositions come from inner held-out patients, and
-disease-test compositions come from the untouched outer fold. Downstream LR
-selection remains within development patients. These analyses contextualize
-APT typing; they are not additional primary benchmark tasks or validated
-clinical endpoints.
+model input (Appendix~\ref{sec:appendix:identity_questions}). A separate
+appendix case study compares nested cell-output composition with direct
+patient-level ridge regression; it is not a disease-classification endpoint.

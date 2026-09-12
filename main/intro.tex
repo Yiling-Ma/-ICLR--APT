@@ -1,61 +1,49 @@
 \section{Introduction}
 
-Single-cell aptamer profiling measures targeted binding patterns alongside
-transcriptomic annotations. Apt-seq established joint aptamer and transcriptome
-sequencing \citep{delley2018combined}; the measurement principle is not new.
-We ask two empirical questions: which levels of cell identity can APT recover
-in patients absent from training, and does paired APT add typing information
-for cells that an RNA-only reference struggles to distinguish?
-Neither question presupposes a positive answer. General single-cell benchmarks provide reusable
-task definitions \citep{luecken2025open}, but gene-expression inputs do not
-directly define an evaluation contract for a fixed aptamer panel. A
-modality-specific reference task must distinguish additional cells from
-additional independent patients.
+Single-cell aptamer profiling links cell-surface binding measurements to
+transcriptomic annotations. Apt-seq demonstrated this principle in cell-line
+mixtures \citep{delley2018combined}, and subsequent Aptomics work extended
+molecular profiling to clinical specimens \citep{wu2025aptomics}.
+These capabilities motivate a distinct evaluation question: in patients
+absent from training, which annotated identities can APT recover, and does
+paired APT improve on a specified RNA-only reference?
 
-Clinical single-cell collections can contain hundreds of thousands of cells
-from only tens of people. APT profiles may encode both cell identity and
-patient-associated shifts; cell-random evaluation can reward the latter
-without establishing cross-patient typing. Low fine-subtype scores alone
-cannot distinguish limited APT information from annotation ambiguity,
-imbalance, preprocessing, or model limitations. A useful benchmark therefore
-needs explicit statistical units, reference models, and error diagnostics,
-rather than interpreting a leaderboard as an assay information limit.
+Two comparisons are needed to answer this question. First, low fine-subtype
+performance does not establish a lack of APT information: parent-lineage
+errors, candidate-set size, annotation ambiguity and the fitted model all
+affect reconstruction. True-lineage decoding must therefore be compared
+with a training-only prior given the same privileged lineage. Second, an
+RNA+APT gain can reflect patient structure or coarse-lineage correspondence
+rather than finer cell pairing. Shuffling APT within patient and then within
+patient and lineage provides progressively more specific controls.
 
-APT-Bench specifies this task with 361{,}792 cells from 40 participants,
-293 APT measurements, and RNA-derived labels for five lineages and 27
-subtypes. Five fixed patient-disjoint folds and subject-balanced pooled
-Macro-F1 define the primary comparison. Classical and neural recipes establish
-reference performance; Soft-cascade is one hierarchy-aware reference, not a
-separate algorithmic contribution. A true-lineage decoding diagnostic, compared
-with training-only conditional priors, separates the benefit of narrowing the
-candidate set from evidence of within-lineage discrimination. A matched-budget
-RNA probe tests incremental information, with patient- and lineage-conditioned
-pairing controls. Patient-disjoint evaluation underpins both questions; it is
-not presented as a new statistical principle. Sampling analyses remain in a
-separate report, and composition recovery is a short application case study.
-
-The study combines one benchmark with two empirical investigations:
+APT-Bench brings these comparisons into one clinical PBMC evaluation
+setting: 361{,}792 paired cells from 40 participants, 293 APT measurements,
+and a fixed five-lineage/27-subtype ontology. Five patient-disjoint folds
+and subject-balanced pooled Macro-F1 define a common new-patient target.
+Classical and neural APT-only models establish reference performance;
+Soft-cascade is one hierarchy-aware reference rather than a separate
+algorithmic contribution. Our contributions are:
 \begin{itemize}
-    \item \textbf{A specified evaluation contract:} APT-only lineage and subtype
-    prediction with a fixed ontology, patient-disjoint folds, and explicit
-    cell-weighted versus subject-balanced metrics.
-    \item \textbf{Hierarchical recoverability:} ordinary and true-lineage
-    decoding, training-prior controls, and results for every lineage probe
-    where reference-model errors occur, without treating their scores as an
-    intrinsic information limit of APT.
-    \item \textbf{Incremental paired information:} matched RNA/APT probes
-    and targeted negative controls distinguish a possible cell-pairing
-    contribution from patient structure, lineage correspondence, and added
-    input dimensions. Repeated probes show an increment over the tested RNA
-    references, but do not resolve the overall patient-by-lineage-shuffle
-    contrast; these findings support different levels of claim.
+    \item \textbf{An APT cell-typing evaluation resource.}
+    A fixed input panel, operational hierarchy, patient folds, explicit scoring
+    units and reference predictions support comparisons on the same target.
+    Complete data access and portable reproduction remain release requirements.
+    \item \textbf{Within-lineage discrimination beyond a candidate-set prior.}
+    The full-budget MLP reaches oracle fine F1 of 0.385 versus 0.180 for a
+    conditional-proportion baseline. Matched-budget APT/RNA results reveal
+    heterogeneous recoverability across lineages, rather than a uniform
+    assay-resolution deficit inferred from coarse/fine scores.
+    \item \textbf{An RNA-reference increment with a bounded interpretation.}
+    Paired APT improves MLP fine F1 by 0.018 and 0.016 at two RNA widths.
+    Its overall patient-by-lineage-shuffle contrast remains unresolved:
+    improvement over these RNA references does not yet establish finer-grained
+    pairing specificity.
 \end{itemize}
 
-A complete public benchmark also requires accessible data, verified permissions,
-and portable reproduction. Those release requirements remain explicit where
-unfinished; a public source repository alone does not establish their completion.
-The study does not claim validated blood-based diagnosis, a universal sampling
-law, or priority over all prior aptamer evaluation resources.
-RNA-derived annotations favor reconstruction from their source modality;
-any APT increment is relative to the tested RNA representation and model,
-not evidence that RNA intrinsically lacks the corresponding information.
+The resulting findings concern recoverability under a specified cohort,
+taxonomy and training recipe. RNA-derived annotations are not independent
+biological truth, and an increment over a restricted RNA representation is
+not evidence that RNA intrinsically lacks that information. Patient-disjoint
+testing supplies the evaluation foundation; neither blood-based diagnostic
+validity nor a universal sampling law is claimed.

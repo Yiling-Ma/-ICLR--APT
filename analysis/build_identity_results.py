@@ -41,8 +41,9 @@ Model & Scope & APT & APT oracle & RNA oracle & Prior MAP & Prior expected CM \\
 \end{tabular}
 \caption{Matched-budget hierarchy diagnostics: mean over three training seeds,
 2,000 training-selected RNA HVGs, identical capped training subsets and patient
-folds. All rows use SB-Macro-F1; lineage rows average over their fixed child
-classes. Oracle and prior controls receive true lineage. Expected-CM F1 is not
+folds. All-cell rows normalize each patient's complete confusion matrix;
+lineage rows instead normalize within that lineage and score its fixed
+children. Their scores cannot be averaged to recover all-cell SB-Macro-F1. Oracle and prior controls receive true lineage. Expected-CM F1 is not
 expected finite-sample F1. Other has 38 eligible patients; other scopes have 40.
 These are descriptive point estimates, not paired APT--RNA superiority tests.}
 \label{tab:matched_identity}
@@ -67,8 +68,7 @@ HVGs & Task & Model & RNA & Paired & Noise & Patient shuffle & Paired minus RNA 
 '''+ '\n'.join(rows)+r'''
 \bottomrule
 \end{tabular}
-\caption{Completed RNA-width reference grids: three training seeds, five folds,
-300 outer fits per width. Point estimates average seed-specific SB-Macro-F1;
+\caption{RNA-width reference sensitivity: three training seeds and five patient folds. Point estimates average seed-specific SB-Macro-F1;
 paired differences have joint seed/patient 95\% intervals. Patient shuffle
 uses one draw per seed in this grid; the targeted 2,000-HVG experiment uses
 three draws per seed for each shuffle type. All normalization and HVG selection

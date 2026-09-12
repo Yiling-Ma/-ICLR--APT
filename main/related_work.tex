@@ -1,31 +1,40 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Aptamer profiling and paired measurements.}
-Apt-seq combines aptamer surface-binding measurements with transcriptomes
-using shared cellular barcodes \citep{delley2018combined}. APT-Bench builds on
-that concept rather than claiming its invention. Its focus is a clinical PBMC
-reference task with a fixed APT panel, RNA-derived labels, and patient-disjoint
-evaluation. The paired-RNA probe asks how these annotations are reconstructed
-under matched training budgets, not whether joint profiling itself is novel.
+\paragraph{From aptamer profiling to a typing evaluation.}
+Apt-seq jointly measured aptamer binding and RNA and used Ramos/3T3 mixtures
+to demonstrate cell discrimination \citep{delley2018combined}.
+Aptomics subsequently profiled proteins, glycans and RNA in cell lines and
+clinical specimens, including tumor heterogeneity and T-cell differentiation
+\citep{wu2025aptomics}. SPARK-seq integrates CRISPR perturbations with aptamer
+and RNA sequencing to identify binding targets and kinetics
+\citep{luo2026spark}. These studies establish measurement and molecular
+profiling capabilities. The complementary question addressed here is how
+a fixed clinical APT panel reconstructs an annotated hierarchy in unseen
+patients, separating a restricted candidate set from within-lineage
+discrimination and an RNA-reference increment from conditional pairing
+specificity. We evaluate these distinctions jointly without claiming
+priority for paired profiling or all aptamer-based cell classification.
 
-\paragraph{Single-cell representations and hierarchy.}
-Geneformer, scGPT, and scFoundation motivate large transcriptomic
-representations, while controlled studies show that simple baselines can remain
-competitive \citep{theodoris2023transfer,cui2024scgpt,hao2024large,kedzierska2025zero}.
-Cell annotation also motivates hierarchical losses and architectures
-\citep{jia2025schdeepinsight,cultrera2026improving}. We use flat, HCE, and
-soft-cascade Transformers alongside classical models as APT references. Because their
-complete objectives are not matched, this ladder illustrates the evaluation
-setting rather than constituting a new learning algorithm or component ablation.
+\paragraph{Multimodal annotation and reference models.}
+Integrated RNA/protein analysis makes complementary measurements useful for
+cell-state characterization \citep{hao2021integrated}; hierarchical annotation
+methods exploit relationships among labels
+\citep{jia2025schdeepinsight,cultrera2026improving}.
+Large transcriptomic representations offer another axis of comparison, but
+their value depends on the task and baseline
+\citep{theodoris2023transfer,cui2024scgpt,kedzierska2025zero}.
+Here, input-compatible classical and neural models anchor APT-only performance,
+while a separate, budget-matched RNA experiment addresses complementarity.
+Its oracle and prior controls are diagnostic comparisons, not deployable
+models or independent validation of RNA-derived labels.
 
-\paragraph{Evaluation across cells and subjects.}
-Open Problems separates datasets, methods, and metrics
-\citep{luecken2025open}; multimodal benchmarks additionally compare input
-configurations \citep{liu2025multitask}. Neither a coarse/fine ontology nor
-subject-disjoint evaluation is individually a new principle.
-APT-Bench makes the statistical unit explicit for APT cell typing and contrasts
-new-patient evaluation with cell-level split controls. Gradient-boosted trees provide strong
-tabular references \citep{grinsztajn2022tree,erickson2026tabarena}.
-Separate sampling and feature-budget reports do not constitute additional
-primary contributions or resolve biological versus technical confounding.
+\paragraph{Reusable single-cell evaluation.}
+Open Problems separates tasks, datasets and metrics
+\citep{luecken2025open}; multimodal benchmarks compare input configurations
+\citep{liu2025multitask}. APT-Bench specializes this approach to a fixed
+aptamer panel and clinical hierarchy. Its resource value is the common
+new-patient target and explicit controls for interpreting reconstruction,
+not a new principle of subject splitting. This scope also motivates strong
+tabular references rather than relying solely on architectural complexity
+\citep{grinsztajn2022tree,erickson2026tabarena}.

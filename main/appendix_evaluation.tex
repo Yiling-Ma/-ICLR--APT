@@ -1,0 +1,288 @@
+\section{Dataset and Evaluation Details}
+
+\subsection{Dataset Construction and Documentation Checklist}
+\label{sec:appendix:dataset_documentation}
+
+The available study workflow establishes the high-level sequence used to construct
+APT-Bench: clinical peripheral-blood specimens from five cancer groups and healthy
+controls are converted to single-cell suspensions; cell-profile and viability quality
+control precedes a paired single-cell transcriptome and 293-aptamer assay; separate
+transcriptome and aptamer-barcode libraries are linked at the cell level; and
+transcriptome-derived clusters and annotations provide the cell labels. For a
+benchmark release, this overview must be accompanied by the following provenance
+and protocol fields.
+
+\paragraph{Outstanding disease-confounding validation.}
+\todo{Obtain a sample-linked acquisition manifest from the data owner: patient
+and sample IDs, collection and processing dates, APT assay batch, plate/pool,
+reagent lot, library-preparation batch, sequencing run, site, and available
+fresh/frozen and handling records. Audit disease-by-batch overlap before
+choosing a validation design. Where disease groups have adequate cross-batch
+support, evaluate patient-disjoint, held-out-batch generalization with all
+preprocessing and selection restricted to training data. If disease and batch
+are inseparable, obtain crossed-batch samples or an independent APT cohort;
+statistical adjustment alone cannot identify their separate contributions.
+The NC matrices must not be treated as external validation if they are the
+healthy subset of this cohort. These validations are pending, not completed.}
+Expression and QC matrices alone do not establish acquisition provenance;
+archived disease analyses cannot establish disease-specific biological effects.
+
+\paragraph{Transcriptomic preprocessing and cell quality control.}
+The transcriptomic count matrix was processed with Seurat following its standard
+workflow of normalization, feature selection, dimensionality reduction,
+neighborhood-graph construction, and clustering \citep{hao2021integrated}.
+DoubletFinder was used to identify and remove predicted doublets
+\citep{mcginnis2019doubletfinder}. Low-quality cells were additionally filtered
+using per-cell UMI count, detected-gene count, and mitochondrial-transcript
+fraction. These steps preceded cluster annotation and construction of the linked
+APT benchmark cohort. \todo{Report the Seurat and DoubletFinder versions, every
+parameter and random seed, the exact UMI/gene/mitochondrial thresholds, and cell
+counts before and after each filter.}
+
+\paragraph{Manual annotation and reference-label reliability.}
+After Seurat clustering, investigators manually assigned lineage and subtype
+names by inspecting canonical marker-gene expression reported in prior PBMC and
+pan-cancer studies \citep{zhang2024pan,yang2024pan}. No quantitative annotation
+confidence, inter-annotator agreement, or external reference-transfer score is
+available. Accordingly, these labels are operational reference annotations, not
+error-free biological ground truth, and benchmark scores are conditional on this
+manual taxonomy. The \emph{Unknown} label was assigned when a cluster did not show
+a coherent canonical marker pattern for the expected PBMC subtypes; this was a
+manual reject decision rather than a calibrated confidence threshold. Unknown
+cells are excluded from the primary 27-subtype benchmark. \todo{Provide the full
+subtype-by-marker citation table, the number and expertise of annotators, whether
+they were blinded to disease, the adjudication procedure, and the explicit rule
+used to assign Unknown.}
+
+\paragraph{Cross-disease semantics and hierarchy mapping.}
+The same 27 subtype labels and definitions were applied across all six disease
+groups; no subtype was renamed or redefined for a particular disease. This gives
+the labels a consistent operational meaning, but it does not prove that marker
+expression or biological state is invariant across diseases. Each subtype is
+assigned to one of five parent lineages by a manually curated lookup.
+The exported lookup and structural audit are available under
+\texttt{benchmark/release\_audit/}: the existing subtype summary has 27 unique
+subtypes, five parents, and 361{,}792 cells, and the fold manifest has five
+disjoint groups of eight patients. These checks establish internal bookkeeping
+consistency, not independent biological validity.
+\todo{Document independent validation of the subtype-to-lineage mapping, including
+reviewers, disagreements, adjudication, and any marker-based checks.}
+
+\begin{itemize}
+    \item \todo{Report recruiting site(s) and dates, prospective versus retrospective
+    collection, exact patient count per group, inclusion/exclusion and diagnostic
+    criteria, and whether each participant contributed exactly one specimen.}
+    \item \todo{Report available demographics and clinical covariates, including age,
+    sex, disease stage, treatment status, and comorbidities; summarize missingness and
+    state which fields cannot be released.}
+    \item \todo{Report blood volume, collection tubes, time to processing, cell-isolation
+    and cryopreservation procedures, quality-control thresholds, and sample/cell
+    exclusion counts.}
+    \item \todo{Report assay/platform and reagent versions, sequencing instruments and
+    depth, 293-probe panel design, and a verified protein-target manifest or explicitly
+    state why only anonymized probe identifiers can be released.}
+    \item \todo{Report barcode-matching rates, APT normalization and filtering,
+    all remaining software versions and parameters, and whether annotation was
+    performed before investigators examined APT profiles or disease labels.}
+    \item The documented final cell-flow accounting is
+    $374{,}854\ \text{linked post-QC cells}
+    -13{,}062\ \text{Unknown cells}=361{,}792\ \text{benchmark cells}$.
+    \todo{Data owners: provide participant and cell counts at all earlier
+    collection/QC exclusions before a complete cohort-flow diagram can be
+    drawn. Supply the approval, consent, access, and licensing evidence listed
+    in the Ethics and Reproducibility Statements.}
+\end{itemize}
+
+
+\subsection{Benchmark Interface and Release Contract}
+\label{sec:appendix:benchmark_release}
+
+The cell-typing interface records pseudonymous cell and patient IDs, fixed
+folds, feature IDs, reference and predicted labels, and ontology columns.
+A complete release requires the processed paired matrices, permissions and
+access procedure, reference configurations, and a raw-data-to-evaluator
+command. The current split manifest, selected artifact checksums and rebuild
+commands cover only part of that release.
+\todo{Finalize anonymous data/code access, licenses, original training
+environment locks, archival versioning, and the portable end-to-end command.
+Where access is controlled, provide the complete schema and access procedure.}
+
+\input{tables/benchmark_comparison}
+
+\input{main/identity_questions_appendix}
+
+\subsection{Full-Budget Hierarchy Support}
+\label{sec:appendix:full_budget_hierarchy}
+
+The full-budget 256/128-unit MLP uses all development cells and a different
+optimization recipe from the capped 64-unit matched-input MLP. Its overall
+ordinary/oracle/expected-prior scores are 0.141/0.385/0.180.
+The oracle-minus-prior difference is $+0.205$ ($[0.174,0.217]$).
+Figure~\ref{fig:lineage_structure} reports every lineage. Differences from the
+matched-input experiment cannot be attributed to training-cell budget alone,
+because architecture, optimization and selection also differ.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{outputs/cell_identity_questions_v1/full_mlp_lineages/lineage_structure.pdf}
+\caption{Full-budget MLP support: three-seed means and pointwise joint
+seed/patient 95\% intervals. Each eligible patient's matrix is normalized
+within the displayed lineage, then pooled before Macro-F1 is computed over
+its fixed children. Outside-lineage predictions remain false negatives.
+These scores cannot be averaged across lineages to reconstruct Table~\ref{tab:main}.
+The conditional-proportion baseline is F1 of an expected confusion matrix,
+not expected F1. Oracle information is privileged. This is not the capped-budget
+APT--RNA comparison in Figure~\ref{fig:matched_lineage_identity}.}
+\label{fig:lineage_structure}
+\end{figure}
+
+\subsection{True-Lineage Restricted Decoding}
+\label{sec:appendix:true_lineage_oracle}
+
+We replay the 15 frozen final checkpoints (three neural references, five
+patient-disjoint folds), retain explicit cell IDs and ontology columns,
+and require exact reconstruction of their original coarse and fine predictions
+before computing this diagnostic. For each of the same 361{,}792 held-out cells,
+we mask the fine score vector to subtypes whose parent is the true lineage,
+then take its argmax. We do not change Soft-cascade routing or condition the
+evaluation set on a correct coarse prediction. The diagnostic therefore uses
+privileged test-label information and cannot be placed on the deployable
+leaderboard. Table~\ref{tab:true_lineage_oracle} reports subject-balanced pooled
+Macro-F1 and paired patient-bootstrap differences, conditional on these frozen
+models. Reduced candidate-set size contributes to the gain; neither the gain
+nor the remaining error identifies an assay-specific information ceiling.
+
+\input{tables/true_lineage_oracle}
+
+
+\subsection{Complete Per-Subtype Reporting}
+\label{sec:appendix:subtype_audit}
+
+Table~\ref{tab:subtype_per_class} retains all 27 subtypes, cell counts,
+patient coverage, and historical cell-weighted per-class F1 with 2,000
+patient-bootstrap intervals. These are not the subject-balanced main metric.
+They support transparent class-level inspection, not a biological
+interpretation of marginal support--performance correlations.
+\input{tables/subtype_per_class}
+
+\subsection{Scoring Units and Supporting Split Comparison}
+\label{sec:appendix:protocol_sensitivity}
+\label{sec:results:protocol}
+
+\paragraph{Metric definitions.}
+Let $C^{(p)}\in\mathbb{R}^{K\times K}$ be the confusion matrix for held-out
+subject $p$ and $n_p=\sum_{ij}C^{(p)}_{ij}$. We distinguish
+\begin{align}
+C^{\mathrm{CW}} &= \sum_p C^{(p)},
+&F_1^{\mathrm{CW}} &= \operatorname{MacroF1}(C^{\mathrm{CW}}),\\
+C^{\mathrm{SB}} &= \frac{1}{P}\sum_p\frac{C^{(p)}}{n_p},
+&F_1^{\mathrm{SB}} &= \operatorname{MacroF1}(C^{\mathrm{SB}}),\\
+F_1^{\mathrm{within}} &= \frac{1}{P}\sum_p
+\operatorname{MacroF1}(C^{(p)}). &&
+\end{align}
+We call these \emph{cell-weighted pooled Macro-F1}, \emph{subject-balanced
+pooled Macro-F1}, and \emph{mean within-subject Macro-F1}. Subject balancing
+normalizes each subject confusion matrix to unit mass before pooling; it is
+neither equal-cell subsampling nor averaging per-subject Macro-F1. Released
+files retain the legacy column name \texttt{patient\_balanced\_macro\_f1} for
+$F_1^{\mathrm{SB}}$, but no different patient-balanced statistic is used.
+
+The numerical split comparison appears in this appendix
+(Table~\ref{tab:protocol_sensitivity}). Its historical scores are cell-weighted
+in both columns, rather than the subject-balanced leaderboard metric.
+
+Exact subject-normalized pooling is primary. The older equal-cell Monte
+Carlo sensitivity remains archived, rather than occupying a separate table.
+
+
+Cell-level splitting raises cell-weighted coarse/fine Macro-F1 by
+0.050/0.069 for XGBoost and 0.090/0.108 for Soft-cascade.
+Training/test allocations also differ: this is a descriptive protocol
+comparison rather than an isolated causal estimate of leakage.
+\input{tables/protocol_sensitivity}
+
+\subsection{Additional Reference Inventory}
+\label{sec:appendix:consistency}
+
+Table~\ref{tab:hierarchy_sb_all} includes auxiliary classical references and
+the full-budget MLP. Interval types are labeled as in the main table.
+Historical cell-weighted leaderboards, auxiliary path metrics and their
+original testing family are retained in the versioned source archive, not
+duplicated as another primary comparison.
+\input{tables/hierarchy_subject_balanced_all}
+
+\subsection{Patient Composition Recovery}
+\label{sec:appendix:composition_recovery}
+For each of the 40 outer-test patients, we compare the mean soft cell-type
+probabilities with reference cell fractions. The constant baseline is the
+equal-patient mean reference composition of the 32 outer-development patients
+in that fold; no test-patient annotations enter its construction. For $K$
+classes and $N$ test patients, the recovery error is
+\[
+ E=\frac{1}{N}\sum_{p=1}^{N}\frac{1}{K}\sum_{k=1}^{K}
+ |\widehat{\pi}_{pk}-\pi_{pk}|.
+\]
+We report $E_{\mathrm{baseline}}-E_{\mathrm{model}}$, so positive values favor
+predicted compositions. All five lineages or all 27 subtypes are included,
+without selecting well-recovered classes. Absolute errors across these two
+resolutions are not directly comparable because their denominators differ.
+Using 2,000 disease-stratified paired patient-bootstrap replicates, subtype
+error decreases from 0.02314 to 0.01478, a reduction of 0.00836
+($[0.00648,0.01010]$). Lineage error changes from 0.05495 to 0.05827, a
+reduction of $-0.00332$ ($[-0.01389,0.00670]$). Intervals are pointwise and
+conditional on the completed cross-fitted cell models; they do not include
+training-subset or model-fitting uncertainty. The accompanying per-class
+audit reports error, signed bias, and rank correlation for every class.
+Disease-adjusted rank correlations residualize both ranked fractions on
+disease-group indicators and are descriptive, not evidence of biological
+specificity or causal independence from disease. Reference recovery does not
+validate the annotation itself or imply improved disease characterization.
+
+\paragraph{Total variation and direct regression.}
+For probability vectors, $\mathrm{TV}(\widehat\pi,\pi)=
+\tfrac12\sum_k|\widehat\pi_k-\pi_k|$, so mean TV is exactly $KE/2$.
+For subtypes, baseline/model mean TV is 0.312/0.200; this is the same
+information as MAE, not a second validation endpoint. Per-class bias and
+centered recovery errors include every class, including rare subtypes.
+
+We additionally fit patient-median APT directly to reference composition using
+multioutput ridge regression. Each outer fold uses the remaining four frozen
+patient folds to select $\alpha\in\{0.1,1,10,100,1000\}$ by MAE after
+Euclidean projection onto the probability simplex. Standardization is fitted
+within each training split. This control uses provided APT expression values,
+not a newly selected normalization, and no disease labels enter fitting.
+Table~\ref{tab:direct_composition} reports all three methods. The soft-minus-direct
+subtype MAE difference is $+0.00057$ ($[-0.00092,0.00211]$), so there is no
+resolved advantage of cell-output aggregation over direct regression.
+Intervals use 2,000 disease-stratified paired patient draws with seed
+20260912. Full per-class MAE, bias, and centered-error outputs are
+provided with the analysis, without selecting favorable classes.
+\input{tables/direct_composition}
+
+
+\subsection{Archived Analyses}
+\label{sec:appendix:minimal_panel}
+\label{sec:appendix:sampler}
+
+The original single-seed paired-input pilot, chance adjustment, disease
+classification audits, marginal support correlations and redundant
+cell-weighted metrics are retained in the source archive and their analysis
+outputs. They are not additional evidence for the present two cell-identity
+findings. Disease-classification point estimates are not reported in this
+manuscript; acquisition validation remains outstanding in the dataset
+documentation. The archive index records the old sections and their replacements.
+
+\subsection{Exploratory Leave-One-Disease-Out Stress Test}
+\label{sec:appendix:novelty}
+
+For each leave-one-disease-out (LODO) run, all patients from one group are
+withheld from training. The available table contains five cancer-group
+summaries. A numerical Normal-held-out artifact and row-level support counts
+have not been verified, so the sixth row is explicitly unavailable rather
+than omitted. These cell-weighted group summaries are not averaged or
+subtracted from pooled five-fold scores, since their evaluation populations
+and training protocols differ. This is an incomplete descriptive stress test;
+cross-disease generalization requires external, patient-clustered validation.
+Unmatched detector rankings are omitted.
+
+\input{tables/LOD}

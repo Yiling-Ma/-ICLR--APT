@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llcc}
+\toprule
+RNA HVGs & Comparator to paired RNA+APT & SGD $\Delta$ [95\% CI] & MLP $\Delta$ [95\% CI] \\
+\midrule
+2,000 & RNA & \makecell{$+0.0185$\\$[0.0034, 0.0332]$} & \makecell{$+0.0180$\\$[0.0092, 0.0297]$} \\
+2,000 & RNA + noise & \makecell{$+0.0394$\\$[0.0240, 0.0537]$} & \makecell{$+0.0341$\\$[0.0208, 0.0448]$} \\
+2,000 & Patient shuffle & \makecell{$+0.0059$\\$[-0.0049, 0.0165]$} & \makecell{$+0.0088$\\$[0.0014, 0.0145]$} \\
+2,000 & Patient $\times$ lineage shuffle & \makecell{$+0.0064$\\$[-0.00437, 0.01657]$} & \makecell{$+0.0064$\\$[-0.00018, 0.01180]$} \\
+\midrule
+5,000 & RNA (width sensitivity) & \makecell{$+0.0217$\\$[0.0104, 0.0339]$} & \makecell{$+0.0165$\\$[0.0093, 0.0289]$} \\
+\bottomrule
+\end{tabular}
+\caption{Overall fine SB-Macro-F1 differences, positive favoring paired
+RNA+APT. Shuffle comparators append shuffled APT to RNA.
+All 2,000-HVG contrasts use the same targeted experiment: three
+training seeds and three realizations per seed for each shuffle type.
+The 5,000-HVG row is the separate matched-width RNA comparison, not a
+conditional-shuffle test. Scores are computed per fit before averaging;
+2,000 paired seed/patient bootstrap replicates additionally resample shuffle
+realizations where applicable. Intervals are pointwise and exploratory.
+Both patient-by-lineage-shuffle intervals include zero.}
+\label{tab:paired_increment_main}
+\end{table}

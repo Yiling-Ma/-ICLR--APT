@@ -3,18 +3,19 @@
 \setlength{\tabcolsep}{6pt}
 \begin{tabular}{llcc}
 \toprule
-Model & Input & Coarse SB-Macro-F1 $\uparrow$ & Fine SB-Macro-F1 $\uparrow$ \\
+Model & CI & Coarse SB-Macro-F1 $\uparrow$ & Fine SB-Macro-F1 $\uparrow$ \\
 \midrule
-\ourmethod{} & APT & 0.332 [0.306, 0.354] & 0.145 [0.122, 0.160] \\
-Flat Transformer & APT & 0.326 [0.300, 0.348] & 0.139 [0.114, 0.155] \\
-HCE Transformer & APT & 0.335 [0.310, 0.356] & 0.143 [0.121, 0.160] \\
-XGBoost & APT & 0.325 [0.302, 0.345] & 0.137 [0.120, 0.149] \\
-Linear SVM & APT & 0.309 [0.292, 0.324] & 0.105 [0.089, 0.118] \\
-Logistic Regression & APT & 0.298 [0.281, 0.315] & 0.126 [0.107, 0.139] \\
-Random Forest & APT & 0.253 [0.227, 0.277] & 0.089 [0.079, 0.097] \\
-Reference Correlation & APT & 0.171 [0.147, 0.192] & 0.068 [0.050, 0.078] \\
+Plain MLP (3 seeds) & SP & 0.334 [0.311, 0.355] & 0.141 [0.125, 0.155] \\
+\ourmethod{} & P & 0.332 [0.306, 0.354] & 0.145 [0.122, 0.160] \\
+Flat Transformer & P & 0.326 [0.300, 0.348] & 0.139 [0.114, 0.155] \\
+HCE Transformer & P & 0.335 [0.310, 0.356] & 0.143 [0.121, 0.160] \\
+XGBoost & P & 0.325 [0.302, 0.345] & 0.137 [0.120, 0.149] \\
+Linear SVM & P & 0.309 [0.292, 0.324] & 0.105 [0.089, 0.118] \\
+Logistic Regression & P & 0.298 [0.281, 0.315] & 0.126 [0.107, 0.139] \\
+Random Forest & P & 0.253 [0.227, 0.277] & 0.089 [0.079, 0.097] \\
+Reference Correlation & P & 0.171 [0.147, 0.192] & 0.068 [0.050, 0.078] \\
 \bottomrule
 \end{tabular}
-\caption{Complete subject-balanced pooled Macro-F1 reference inventory, including auxiliary classical baselines. Definitions, resampling, and scope match Table~\ref{tab:main}.}
+\caption{Subject-balanced reference inventory, including the full-budget MLP and auxiliary classical baselines. P: patient bootstrap conditional on frozen fits. SP: joint training-seed/patient bootstrap for the three-seed mean. Entries are pointwise 95\% intervals, as in Table~\ref{tab:main}; interval targets differ.}
 \label{tab:hierarchy_sb_all}
 \end{table}

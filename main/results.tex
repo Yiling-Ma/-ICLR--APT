@@ -1,127 +1,101 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Reference Performance Under the Patient-Disjoint Contract}
+\subsection{Reference Performance in New Patients}
 \label{sec:results:subtype_audit}
 
-Table~\ref{tab:main} compares APT-only reference predictions using
-subject-balanced pooled Macro-F1 on the same 40 held-out patients.
-Coarse/fine scores are 0.298/0.126 for LR and 0.325/0.137 for XGBoost.
-Flat, HCE, and Soft-cascade Transformers reach 0.326/0.139,
-0.335/0.143, and 0.332/0.145. These point estimates establish reference
-performance, not a statistically demonstrated cascade advantage.
-The completed full-cell-budget plain MLP reaches 0.334/0.141, averaged over
-three training seeds; its joint uncertainty includes training-seed variation.
+Table~\ref{tab:main} reports APT-only typing on the same 40 held-out patients.
+LR and XGBoost reach coarse/fine SB-Macro-F1 of 0.298/0.126 and 0.325/0.137;
+the full-budget MLP reaches 0.334/0.141. The Transformer references achieve
+fine scores of 0.139--0.145 without an established Soft-cascade advantage.
+These are reference-recipe comparisons, not objective-matched ablations.
+The interval labels distinguish conditional patient uncertainty from the
+MLP's joint seed/patient uncertainty.
 
 \input{tables/main_result}
 
-The complete inventory and historical cell-weighted scores are in
-Tables~\ref{tab:hierarchy_sb_all} and \ref{tab:hierarchy_cell_weighted}.
-Fine prediction remains difficult across references. However, five-lineage
-and 27-subtype tasks differ in class count, prevalence, and annotation
-boundaries; their score difference is not an isolated assay-resolution
-effect. Full class-level and hierarchy diagnostics are in
-Appendix~\ref{sec:appendix:subtype_audit}. Objective and optimization differences
-between reference recipes limit conclusions about architecture choice.
+Five-lineage and 27-subtype tasks differ in cardinality, prevalence and label
+boundaries. Their raw F1 difference alone does not identify an APT resolution
+limit. The following prior-controlled comparisons instead ask what remains
+recoverable within a known lineage. Full subtype reporting and the supporting
+split-protocol comparison are retained in
+Appendices~\ref{sec:appendix:subtype_audit} and
+\ref{sec:appendix:protocol_sensitivity}.
 
-As a supporting protocol audit, historical cell-level splitting yields higher
-cell-weighted Macro-F1 for both evaluated model families at both resolutions
-(Appendix~\ref{sec:results:protocol}). This motivates the new-patient target,
-but does not independently explain the hierarchy of typing errors.
+\subsection{Within-Lineage Identity Is Recoverable, but Heterogeneous}
 
-\subsection{Where Do Hierarchical Typing Errors Occur?}
-
-A privileged-label diagnostic masks each frozen fine score vector to the
-children of the true lineage, without retraining or changing routing.
-Fine SB-Macro-F1 increases to 0.366/0.361/0.358 for Flat/HCE/Soft-cascade
-(Appendix~\ref{sec:appendix:true_lineage_oracle}). This measures the benefit
-of knowing the correct parent; it is not deployable performance or evidence
-that remaining errors reflect an intrinsic APT information limit.
-
-Narrowing the candidate set can itself improve prediction. We therefore add
-training-only subtype priors conditional on the same true lineage to the
-three-seed, full-cell-budget MLP diagnostic. Ordinary fine SB-Macro-F1 is
-0.141; true-lineage decoding reaches 0.385, versus 0.148 for the conditional
-majority-prior decoder and 0.180 for the conditional-proportion expected
-confusion baseline. The paired oracle-minus-expected-prior difference is
-$+0.205$ (joint 95\% CI $[0.174,0.217]$).
-This comparison shows usable within-lineage discrimination beyond these
-candidate-set controls under the tested recipe; it is not a measurement of
-all biological information in APT.
+True-lineage decoding masks each frozen fine score vector to the correct
+parent's children. Both the model and the training-only conditional priors
+receive this privileged label. For the full-budget MLP, ordinary fine F1 is
+0.141 and oracle F1 is 0.385, versus 0.148 for conditional majority decoding
+and 0.180 for the conditional-proportion expected-confusion baseline.
+The oracle-minus-expected-prior difference is $+0.205$
+(joint 95\% CI $[0.174,0.217]$).
+Thus APT supports discrimination beyond these candidate-set controls under
+this recipe; the comparison does not measure all information in the assay.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{outputs/cell_identity_questions_v1/full_mlp_lineages/lineage_structure.pdf}
-\caption{Hierarchical error structure for the full-cell-budget MLP across all
-five lineages. Scores macro-average over the fixed child subtypes after
-normalizing each patient's within-lineage confusion matrix. Ordinary
-predictions outside the true lineage remain false negatives. The conditional
-training-proportion baseline is scored from its expected confusion matrix,
-not the expected F1 of a sampled predictor. Points average three training
-seeds; bars are pointwise joint seed/patient 95\% intervals. True-lineage
-information is privileged. This full-budget panel is not a matched-budget
-APT--RNA comparison.}
-\label{fig:lineage_structure}
+\includegraphics[width=\linewidth]{figures/matched_lineage_identity.pdf}
+\caption{Matched-budget within-lineage reconstruction with 2,000
+training-selected RNA HVGs. APT oracle, RNA oracle and conditional priors use
+the same capped training subsets, patient folds and true-lineage information.
+Points are means of three seed-specific scores, not F1 of seed-pooled
+predictions; lines only connect methods within a lineage. Each patient's
+matrix is normalized within the displayed lineage before pooling over
+eligible patients and scoring its fixed children (38 patients for Other;
+40 elsewhere). Consequently, these lineage scores cannot be averaged to
+reconstruct the all-cell score in Table~\ref{tab:main}.
+These are descriptive point estimates, not superiority tests.
+Expected-prior F1 is computed from an expected confusion matrix.}
+\label{fig:matched_lineage_identity}
 \end{figure}
 
-Figure~\ref{fig:lineage_structure} reports every lineage, including the
-heterogeneous \texttt{Other} category. Improvements from ordinary to oracle
-decoding differ across lineages: eliminating parent errors is not equally
-helpful everywhere. The completed matched-budget MLP probe gives APT
-ordinary/oracle scores of 0.093/0.309, RNA oracle 0.672, and conditional
-MAP/expected-prior scores of 0.148/0.182
-(Table~\ref{tab:matched_identity}). Thus APT exceeds these candidate-set
-controls, but knowing the lineage does not close the overall RNA gap.
-The pattern is not uniform: conditional APT/RNA scores are 0.849/0.839
-for NK and 0.191/0.535 for T cells. These descriptive within-lineage
-comparisons are conditional on this taxonomy and recipe, not an intrinsic
-modality ranking; all lineages and both models are reported.
+The matched-input probe holds budget and recipe fixed across modalities
+(Figure~\ref{fig:matched_lineage_identity}). MLP ordinary/oracle APT scores
+are 0.093/0.309, RNA oracle is 0.672, and the expected prior is 0.182.
+The APT oracle-minus-prior difference is $+0.127$ ($[0.101,0.139]$).
+Within-lineage APT/RNA oracle scores vary substantially: 0.849/0.839 for NK
+but 0.191/0.535 for T cells. Knowledge of the parent therefore does not
+uniformly resolve the RNA reconstruction gap. All lineages and both model
+families are shown, without asserting an intrinsic modality ranking.
 
-\subsection{Does Paired APT Add Information Beyond RNA?}
+\paragraph{Budget and recipe matter.}
+The full-budget MLP uses all development cells, a 256/128-unit network and
+AdamW with selected stopping; the matched probe caps training at 1,000 cells
+per patient and uses a 64-unit MLP for 40 epochs. Other has oracle F1 of
+0.886 in the former but 0.497 in the latter (conditional expected priors
+0.490/0.487). These settings do not isolate the effect of budget alone.
+Neither result justifies declaring Other universally identifiable or
+unidentifiable. The full-budget lineage plot and neural-reference replays
+are supporting evidence in Appendix~\ref{sec:appendix:full_budget_hierarchy}.
 
-The matched-input probe uses a capped training budget, separately from the
-main leaderboard. Over three training seeds, MLP fine SB-Macro-F1 is 0.589
-for RNA and 0.607 for RNA+APT: $+0.018$ (joint 95\% CI $[0.009,0.030]$).
-At 5{,}000 rather than 2{,}000 training-selected HVGs, the corresponding
-scores are 0.596 and 0.612: $+0.016$ ($[0.009,0.029]$).
-SGD also has positive fine increments at both widths
-(Table~\ref{tab:rna_width_repeats}). Thus the overall increment is not
-specific to 2{,}000 HVGs, although both RNA representations remain limited
-and RNA supplies the operational annotations.
+\subsection{Paired APT Improves on RNA, without Resolved Pairing Specificity}
 
-\paragraph{Increment versus pairing specificity.}
-With three shuffle draws per training seed at 2{,}000 HVGs, MLP exceeds
-RNA+noise by 0.034 and patient-shuffled APT by 0.0088
-($[0.0014,0.0145]$). However, paired minus patient-by-lineage-shuffled APT
-is only $+0.0064$ ($[-0.00018,0.01180]$), despite positive effects in all
-three seeds. SGD's corresponding difference is likewise unresolved
-($+0.0064$; $[-0.0044,0.0166]$). Figure~\ref{fig:matched_identity_controls}
-reports all lineage contrasts. These results do not establish that the
-overall gain depends on finer-than-lineage cell pairing, nor do they show
-equivalence or absence of such information.
+Under the matched probe, MLP fine SB-Macro-F1 increases from 0.589 for RNA
+to 0.607 for RNA+APT: $+0.018$ (joint 95\% CI $[0.009,0.030]$).
+At 5,000 training-selected HVGs, it increases from 0.596 to 0.612:
+$+0.016$ ($[0.009,0.029]$). SGD also improves at both widths
+(Table~\ref{tab:paired_increment_main}). The increment is therefore not
+specific to the 2,000-HVG setting, but remains relative to the tested RNA
+representations and models.
 
-\paragraph{RNA-defined difficulty.}
-Using the frozen inner-validation RNA margin threshold, MLP gains 0.085
-fine SB-Macro-F1 on low-margin cells over RNA, but only 0.011 over the
-conditional shuffle ($[-0.004,0.022]$). Retrospectively, it corrects 31.1\%
-of RNA errors while misclassifying 10.2\% of previously correct cells,
-averaged within eligible patients. These differently conditioned rates must
-not be subtracted. The low-margin and error/correct strata describe this
-RNA model, not intrinsic biological ambiguity; Appendix~\ref{sec:appendix:identity_questions}
-reports both rescue and damage and the unresolved primary contrast.
+\input{tables/paired_increment_main}
 
-\subsection{A Limited Patient-Composition Case Study}
+\paragraph{What the controls establish.}
+In the targeted 2,000-HVG experiment, MLP exceeds RNA+noise by 0.0341 and
+patient-shuffled APT by 0.0088. The latter uses three shuffle draws per
+training seed, as does the more restrictive patient-by-lineage control.
+Paired minus patient-by-lineage-shuffled APT is $+0.0064$
+($[-0.00018,0.01180]$); SGD's corresponding interval also includes zero.
+This is an unresolved overall contrast, not equivalence or evidence of no
+pairing information. All control contrasts in the table come from the same
+targeted experiment; the separate one-shuffle-per-seed width grid is labeled
+as a sensitivity analysis in the appendix.
+Lineage and RNA-difficulty breakdowns remain exploratory supporting analyses
+(Appendix~\ref{sec:appendix:identity_questions}).
 
-As a limited aggregation case study, nested subtype summaries reduce mean
-absolute reference-composition error from 0.02314 for a training-patient-mean
-baseline to 0.01478 (paired reduction 0.00836; 95\% CI
-$[0.00648,0.01010]$). This corresponds to mean total variation decreasing
-from 0.312 to 0.200, a rescaling of the same error rather than independent
-evidence. Lineage error instead changes from 0.05495 to 0.05827, with no
-resolved improvement. Appendix~\ref{sec:appendix:composition_recovery}
-reports all classes and a direct median-APT ridge control (subtype MAE 0.01421).
-The soft-minus-direct difference is unresolved ($+0.00057$;
-$[-0.00092,0.00211]$), so aggregation has no demonstrated advantage over
-direct patient regression. Disease association
-and recorded-QC conditional comparisons are confined to
-Appendix~\ref{sec:appendix:disease_patient_level}.
+A separate composition-recovery case study is retained in
+Appendix~\ref{sec:appendix:composition_recovery}. It shows no resolved advantage
+over direct median-APT ridge regression and no resolved lineage improvement;
+it does not support an additional disease-characterization claim.

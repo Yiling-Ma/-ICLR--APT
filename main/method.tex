@@ -4,8 +4,7 @@
 This appendix gives the implementation details for the hierarchy-aware
 reference ladder introduced in Section~\ref{sec:method_summary}: a flat
 Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses on the
-cell-level hierarchy, lineage $\rightarrow$ subtype, while disease-association
-audits use separate tabular baselines and patient-level aggregation. The
+cell-level hierarchy, lineage $\rightarrow$ subtype. The
 reference recipes differ in auxiliary supervision as well as hierarchy
 structure; their comparison does not isolate individual components.
 
@@ -91,7 +90,7 @@ w_{\text{contrast}}(t)\mathcal{L}_{\text{contrast}},
 \end{equation}
 where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-entropy losses with $\lambda_{\text{fine}}=1.0$ and $\lambda_{\text{coarse}}=0.5$. The contrastive weight increases to 0.2 according to the schedule in \S\ref{sec:method:contrastive}.
 
-We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling because it underperformed natural sampling after matching the number of optimization steps; the single-split development diagnostic is provided in Appendix~\ref{sec:appendix:sampler}.
+We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling because it underperformed natural sampling after matching the number of optimization steps; the development-only variant was not retained.
 
 \paragraph{Backbone-matched Transformer references.}
 \label{sec:method:baselines}
@@ -124,32 +123,13 @@ soft routing, hierarchical loss, or contrastive regularization in isolation.
 
 \input{tables/transformer_reference_components}
 
-Disease recognition is not handled by a dedicated head inside \ourmethod{}. The reference recipe addresses cell-level hierarchy prediction; disease-source prediction is evaluated separately as a within-cohort audit. High disease-source scores do not establish biological attribution or external clinical validity.
-
-\paragraph{Strictly nested cell-output transfer audit.}
+\paragraph{Composition-recovery inputs.}
 \label{sec:appendix:composition_bridge}
-For each disease outer fold $f$, we train a disease-label-free XGBoost subtype
-classifier on all 32 outer-development patients and predict the cells of the
-eight untouched patients in $f$. Disease-training features require a second
-cross-fit: for each of the other four fixed folds $g$, a separate subtype model
-is trained on the 24 patients outside $f\cup g$ and predicts fold $g$. We average
-the resulting 27-class probability vectors within patient to obtain soft subtype
-composition; soft lineage composition sums subtype probabilities under the
-frozen subtype-to-lineage map. A standardized, class-weighted multinomial LR is
-fit to the 32 inner-OOF patient vectors, with
-$C\in\{0.01,0.1,1,10,100\}$ selected by patient-level inner CV, and evaluated
-once on the eight outer-test vectors. Raw proportions are primary; CLR with a
-prespecified $10^{-6}$ pseudocount is a sensitivity analysis. All uncertainty
-and permutation analyses resample or shuffle patients, never cells.
-The outer-test fold is excluded from base fitting and downstream selection.
-Within the development set, however, meta-level selection reuses cached
-inner-OOF features: base models producing some meta-training features may
-have seen subtype labels from the meta-validation fold. This creates
-inner-selection cross-dependence, not exposure to the outer-test patients.
-A fully isolated meta-inner comparison would require another level of base
-refitting; it has not been performed.
-To test conditional rather than marginal subtype value, we additionally compare
-three nested feature sets under the same folds and inner selection:
-recorded-QC summaries alone, QC plus the five predicted lineage proportions,
-and QC plus the 27 predicted subtype proportions. The last representation
-contains lineage implicitly because child probabilities sum to their parents.
+For each outer fold, a disease-label-free XGBoost subtype classifier trained
+on the 32 development patients predicts the eight held-out patients.
+Patient-mean subtype probabilities define soft composition; summing children
+gives lineage composition. The retained appendix case study compares these
+predictions with reference fractions, a training-patient-mean baseline and
+direct median-APT ridge regression. Disease-classification models and
+permutation diagnostics are archived separately and are not part of the
+present inference.

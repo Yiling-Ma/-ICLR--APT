@@ -1,0 +1,725 @@
+
+\documentclass{article} % For LaTeX2e
+\usepackage{iclr2027_conference,times}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{makecell}
+
+
+\title{APT-Bench: Patient-Disjoint Cell Typing from \mbox{Single-Cell} Aptamer Profiles}
+% Global paper constants
+
+\newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
+
+\newcommand{\numsubtypes}{27}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the \iclrfinalcopy macro remains commented out below.
+% Non-anonymous submissions will be rejected without review.
+
+\author{Antiquus S.~Hippocampus, Natalia Cerebro \& Amelie P. Amygdale \thanks{ Use footnote for providing further information
+about author (webpage, alternative address)---\emph{not} for acknowledging
+funding agencies.  Funding acknowledgements go at the end of the paper.} \\
+Department of Computer Science\\
+Cranberry-Lemon University\\
+Pittsburgh, PA 15213, USA \\
+\texttt{\{hippo,brain,jen\}@cs.cranberry-lemon.edu} \\
+\And
+Ji Q. Ren \& Yevgeny LeNet \\
+Department of Computational Neuroscience \\
+University of the Witwatersrand \\
+Joburg, South Africa \\
+\texttt{\{robot,net\}@wits.ac.za} \\
+\AND
+Coauthor \\
+Affiliation \\
+Address \\
+\texttt{email}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+\raggedbottom
+
+
+\maketitle
+
+\begin{abstract}
+Which levels of cell identity can single-cell aptamer profiles recover in new
+patients, and do they add typing information beyond an RNA-only reference?
+We introduce APT-Bench, a benchmark
+specification and reference evaluation of 361{,}792 cells from 40 participants,
+with 293 aptamer measurements and RNA-derived labels for five lineages and
+27 subtypes. The benchmark combines five fixed patient-disjoint folds,
+subject-balanced pooled Macro-F1, and classical and neural reference models.
+Under this contract, reference models achieve
+coarse/fine subject-balanced Macro-F1 of 0.298--0.335/0.126--0.145,
+establishing an operational hierarchy of reconstruction difficulty, rather
+than an assay information limit. True-lineage decoding with training-prior
+controls probes within-lineage recoverability. Across three training seeds,
+paired RNA+APT improves fine reconstruction over RNA at both 2{,}000 and
+5{,}000 training-selected genes. However, its overall advantage over
+patient-by-lineage-shuffled APT remains statistically unresolved in the
+targeted 2{,}000-gene control. The benchmark distinguishes an increment over
+a specified RNA reference from evidence of finer-grained pairing specificity,
+and organizes these questions around a fixed
+new-patient target; complete data access and portable reproduction remain
+requirements for its public release.
+\end{abstract}
+
+
+\input{main/intro}
+
+\input{main/related_work}
+
+\input{main/task}
+
+\input{main/method_summary}
+
+\input{main/results}
+
+\input{main/discussion}
+
+\subsection*{AI use statement}
+
+% (This section is \textbf{required} and does not count toward the page limit.)
+Generative-AI assistance through ChatGPT and Codex was used in the revision
+workflow for research-design suggestions, literature search, manuscript editing,
+analysis-code development, debugging, experiment orchestration, and scientific
+figure preparation. AI-generated suggestions were not themselves experimental
+evidence; reported computational results are tied to saved run artifacts.
+\todo{Authors: confirm the complete tool/model inventory and versions, describe
+the human checks actually performed on code, citations, figures, and statistical
+claims, and affirm responsibility for the final submission. Automated checks
+do not substitute for this author verification.}
+
+% In this work, we used generative AI tools for [tasks with required disclosure].
+% We have not used generative AI tools for [other tasks with required disclosure],
+% and [the rest of the required disclosure tasks] are not applicable to this work.
+% Additionally, we used generative AI tools for [tasks with recommended
+% disclosure]. We have reviewed all AI-assisted work. [Elaborate. For example, “we
+% checked LLM-generated research ideas for potential plagiarism through a manual
+% literature survey”, “LLM-generated code was verified and tested for correctness
+% by 2 authors”, etc.]. We take responsibility for the final content of this work,
+% including text, claims or artifacts produced with the aid of generative AI.
+
+% See the ICLR 2027 AI Policy for Authors for more details. This statement should
+% not be more than 1 page.
+
+\subsection*{Ethics statement}
+
+% (This section is \textbf{recommended} and does not count toward the page limit.)
+APT-Bench is intended for research evaluation, not clinical decision-making.
+The small single-cohort sample and unresolved acquisition effects preclude
+claims of clinical validity or demographic fairness. Strong patient-specific
+signals also create a privacy concern: removing direct identifiers alone does
+not establish that cell profiles cannot be linked to their source individuals.
+Any data release must respect participant consent and applicable access terms.
+\todo{Data owners: supply the actual ethics approval or exemption and consent
+terms; confirm de-identification procedures, permitted sharing/access controls,
+and conflicts of interest. These facts have not been verified from the available
+analysis artifacts; preserve reviewer anonymity when providing documentation.}
+
+% If authors feel that their paper submission raises questions regarding the Code
+% of Ethics, they are encouraged to include a paragraph of Ethics Statement (at
+% the end of the main text before references) to address potential concerns where
+% appropriate. Topics include, but are not limited to, studies that involve human
+% subjects, practices to data set releases, potentially harmful insights,
+% methodologies and applications, potential conflicts of interest and sponsorship,
+% discrimination/bias/fairness concerns, privacy and security issues, legal
+% compliance, and research integrity issues (e.g., IRB, documentation, research
+% ethics). This statement should not be more than 1 page.
+
+\subsection*{Reproducibility statement}
+
+The repository records the fixed five-fold partition in
+\path{benchmark/splits/patient_folds.json}, selected artifact checksums and
+structural audits in \texttt{benchmark/release\_audit/}, and artifact-level
+reproduction commands in \texttt{REPRODUCIBILITY.md}. The latter distinguishes
+rebuilding figures/PDFs from rerunning models. Per-experiment protocol files
+record sampling settings and seeds; the controlled simulation includes
+per-replicate results and source hashes. A snapshot of the local analysis
+environment is provided, but is not a lockfile for all historical training runs.
+\todo{Finalize anonymous reviewer access, data permissions and licenses,
+archival versioning, original training environments, and a portable
+raw-data-to-results evaluator. The present repository is not yet a complete
+independently reproducible benchmark release.}
+
+\subsubsection*{Author Contributions}
+
+\noindent\todo{Add author contributions using CRediT roles (for example: conceptualization, methodology, software, validation, formal analysis, data curation, visualization, writing, supervision, and funding acquisition). Preserve anonymity in the review version if required.}
+
+\subsubsection*{Acknowledgments}
+
+\noindent\todo{Add funding sources and grant numbers, computational resources, data or clinical contributors, and non-author assistance; verify whether any acknowledgment must be omitted or anonymized during double-blind review.}
+
+\bibliography{iclr2027_conference}
+\bibliographystyle{iclr2027_conference}
+
+\appendix
+\input{main/method}
+
+The main cell-identity results are reported in Table~\ref{tab:main}; the
+following sections supply their implementation and diagnostic details.
+
+\section{Dataset and Evaluation Details}
+
+\subsection{Dataset Construction and Documentation Checklist}
+\label{sec:appendix:dataset_documentation}
+
+The available study workflow establishes the high-level sequence used to construct
+APT-Bench: clinical peripheral-blood specimens from five cancer groups and healthy
+controls are converted to single-cell suspensions; cell-profile and viability quality
+control precedes a paired single-cell transcriptome and 293-aptamer assay; separate
+transcriptome and aptamer-barcode libraries are linked at the cell level; and
+transcriptome-derived clusters and annotations provide the cell labels. For a
+benchmark release, this overview must be accompanied by the following provenance
+and protocol fields.
+
+\paragraph{Outstanding disease-confounding validation.}
+\todo{Obtain a sample-linked acquisition manifest from the data owner: patient
+and sample IDs, collection and processing dates, APT assay batch, plate/pool,
+reagent lot, library-preparation batch, sequencing run, site, and available
+fresh/frozen and handling records. Audit disease-by-batch overlap before
+choosing a validation design. Where disease groups have adequate cross-batch
+support, evaluate patient-disjoint, held-out-batch generalization with all
+preprocessing and selection restricted to training data. If disease and batch
+are inseparable, obtain crossed-batch samples or an independent APT cohort;
+statistical adjustment alone cannot identify their separate contributions.
+The NC matrices must not be treated as external validation if they are the
+healthy subset of this cohort. These validations are pending, not completed.}
+Expression and QC matrices alone do not establish acquisition provenance;
+current disease results remain within-cohort associations.
+
+\paragraph{Transcriptomic preprocessing and cell quality control.}
+The transcriptomic count matrix was processed with Seurat following its standard
+workflow of normalization, feature selection, dimensionality reduction,
+neighborhood-graph construction, and clustering \citep{hao2021integrated}.
+DoubletFinder was used to identify and remove predicted doublets
+\citep{mcginnis2019doubletfinder}. Low-quality cells were additionally filtered
+using per-cell UMI count, detected-gene count, and mitochondrial-transcript
+fraction. These steps preceded cluster annotation and construction of the linked
+APT benchmark cohort. \todo{Report the Seurat and DoubletFinder versions, every
+parameter and random seed, the exact UMI/gene/mitochondrial thresholds, and cell
+counts before and after each filter.}
+
+\paragraph{Manual annotation and reference-label reliability.}
+After Seurat clustering, investigators manually assigned lineage and subtype
+names by inspecting canonical marker-gene expression reported in prior PBMC and
+pan-cancer studies \citep{zhang2024pan,yang2024pan}. No quantitative annotation
+confidence, inter-annotator agreement, or external reference-transfer score is
+available. Accordingly, these labels are operational reference annotations, not
+error-free biological ground truth, and benchmark scores are conditional on this
+manual taxonomy. The \emph{Unknown} label was assigned when a cluster did not show
+a coherent canonical marker pattern for the expected PBMC subtypes; this was a
+manual reject decision rather than a calibrated confidence threshold. Unknown
+cells are excluded from the primary 27-subtype benchmark. \todo{Provide the full
+subtype-by-marker citation table, the number and expertise of annotators, whether
+they were blinded to disease, the adjudication procedure, and the explicit rule
+used to assign Unknown.}
+
+\paragraph{Cross-disease semantics and hierarchy mapping.}
+The same 27 subtype labels and definitions were applied across all six disease
+groups; no subtype was renamed or redefined for a particular disease. This gives
+the labels a consistent operational meaning, but it does not prove that marker
+expression or biological state is invariant across diseases. Each subtype is
+assigned to one of five parent lineages by a manually curated lookup.
+The exported lookup and structural audit are available under
+\texttt{benchmark/release\_audit/}: the existing subtype summary has 27 unique
+subtypes, five parents, and 361{,}792 cells, and the fold manifest has five
+disjoint groups of eight patients. These checks establish internal bookkeeping
+consistency, not independent biological validity.
+\todo{Document independent validation of the subtype-to-lineage mapping, including
+reviewers, disagreements, adjudication, and any marker-based checks.}
+
+\subsection{Paired-Input Internal Reconstruction Reference}
+\label{sec:appendix:paired_rna_oracle}
+
+We use paired RNA as an internal label-reconstruction reference, separate from
+the primary APT-only model comparison. The current matched-input experiment
+replaces the earlier data-development HVG representation: 2{,}000 features
+are selected by mean-binned log-count dispersion within each inner or outer
+training subset, using the original RNA count matrix. All 361{,}792 benchmark
+cells are aligned by barcode. This controls feature-selection exposure to
+evaluation patients, but the transcriptomic modality also underlies the manual
+annotations. Stronger RNA reconstruction therefore does not independently
+validate those annotations or establish an intrinsic APT information limit.
+
+Within each of the five fixed patient-disjoint folds, we compare five inputs:
+APT only, paired RNA only, APT+RNA, RNA plus random 293-dimensional noise, and
+RNA plus APT vectors shuffled within patient. The noise control checks feature
+dimension, while the within-patient shuffle preserves patient-level APT
+structure but breaks cell-level RNA--APT pairing. All inputs use the identical
+deterministic sample of up to 1{,}000 training cells per development patient
+and all cells from the eight untouched test patients. RNA features are selected
+as 2{,}000 highly variable genes using only the current training fold; all
+features are standardized using training-fold statistics. We fit patient- and
+class-weighted linear SGD and one-hidden-layer MLP probes for 40 epochs at both
+resolutions, using one inner patient-disjoint validation fold to select the
+regularization strength. Scores use subject-normalized OOF confusion matrices,
+and 2{,}000 paired patient-bootstrap replicates quantify modality contrasts.
+This matched-budget probe uses the main subject-balanced metric, but is not
+an architecture comparison with the full-training model ladder in
+Table~\ref{tab:main}.
+
+The following table and paragraph retain the original single-seed pilot for
+provenance; the completed repeated and wider-RNA results in
+Appendix~\ref{sec:appendix:identity_questions} supersede it for inference.
+\input{tables/paired_rna_oracle}
+
+For the original MLP probe, paired RNA improves coarse/fine macro-F1 over APT by
+$+0.562$ and $+0.490$. The concatenated representation improves fine macro-F1
+over RNA alone by $+0.022$ ($[0.013,0.037]$), and exceeds RNA plus shuffled APT
+by $+0.010$ ($[0.002,0.017]$). The linear SGD probe shows the same direction
+for RNA+APT versus RNA ($+0.028$; $[0.013,0.041]$), but its shuffled-APT
+contrast is unresolved ($+0.010$; $[-0.005,0.025]$). RNA therefore reconstructs
+the operational taxonomy far better than APT, while the small combined-input
+gain should be read as internal complementary association rather than an
+estimate of annotation accuracy or a clinical claim.
+
+\begin{itemize}
+    \item \todo{Report recruiting site(s) and dates, prospective versus retrospective
+    collection, exact patient count per group, inclusion/exclusion and diagnostic
+    criteria, and whether each participant contributed exactly one specimen.}
+    \item \todo{Report available demographics and clinical covariates, including age,
+    sex, disease stage, treatment status, and comorbidities; summarize missingness and
+    state which fields cannot be released.}
+    \item \todo{Report blood volume, collection tubes, time to processing, cell-isolation
+    and cryopreservation procedures, quality-control thresholds, and sample/cell
+    exclusion counts.}
+    \item \todo{Report assay/platform and reagent versions, sequencing instruments and
+    depth, 293-probe panel design, and a verified protein-target manifest or explicitly
+    state why only anonymized probe identifiers can be released.}
+    \item \todo{Report barcode-matching rates, APT normalization and filtering,
+    all remaining software versions and parameters, and whether annotation was
+    performed before investigators examined APT profiles or disease labels.}
+    \item The documented final cell-flow accounting is
+    $374{,}854\ \text{linked post-QC cells}
+    -13{,}062\ \text{Unknown cells}=361{,}792\ \text{benchmark cells}$.
+    \todo{Data owners: provide participant and cell counts at all earlier
+    collection/QC exclusions before a complete cohort-flow diagram can be
+    drawn. Supply the approval, consent, access, and licensing evidence listed
+    in the Ethics and Reproducibility Statements.}
+\end{itemize}
+
+\subsection{Chance-Adjusted Resolution Diagnostic}
+\label{sec:appendix:granularity_chance}
+
+Raw coarse and fine Macro-F1 compare five-class and 27-class tasks with different
+label frequencies and decision boundaries. We therefore treat their difference
+as descriptive, not evidence of a resolution deficit beyond task cardinality.
+Using the released 40 patient-specific OOF confusion matrices from the matched
+paired-input diagnostic, we normalize each matrix to unit mass and average
+over patients to obtain $M$. Let $p_k=\sum_j M_{kj}$ and
+$q_k=\sum_i M_{ik}$. The independence reference $M^0_{ij}=p_iq_j$ retains both
+true and predicted marginals while breaking their association. We report
+\begin{equation}
+S_0=\frac{1}{K}\sum_k\frac{2p_kq_k}{p_k+q_k},\qquad
+S_{\mathrm{adj}}=\frac{\operatorname{MacroF1}(M)-S_0}{1-S_0},
+\end{equation}
+with zero contribution when $p_k+q_k=0$. This is F1 of an independence matrix,
+not the exact expectation of finite-sample permutation F1. Each of 2,000 paired
+patient-bootstrap draws recomputes $M$, both marginals, and the adjustment; the
+same patient draw is used for both resolutions and all modalities. These
+intervals condition on the fitted models and do not include retraining variation.
+
+\input{tables/granularity_chance}
+
+For APT, the MLP raw coarse/fine scores 0.310/0.094 have chance references
+0.186/0.029 and adjusted scores 0.152/0.067. The difference shrinks from 0.216
+to 0.085 (95\% interval $[0.068,0.104]$). The corresponding SGD adjusted gap
+is 0.054 ($[0.034,0.078]$). Adjusted RNA and APT+RNA differences remain larger
+for both probes, around 0.25--0.27. The adjustment accounts for marginal chance
+agreement, but does not control label boundaries, class count, annotation
+reliability, or within-lineage separability; none of these residual differences
+establishes a cardinality-independent biological granularity effect.
+
+The separate frozen APT-only neural references additionally undergo
+true-lineage restricted decoding in Appendix~\ref{sec:appendix:true_lineage_oracle}.
+It retains every held-out cell rather than selecting the easier subset whose
+coarse prediction is correct; it is not a conditional classifier trained anew.
+
+\subsection{Benchmark Interface and Release Contract}
+\label{sec:appendix:benchmark_release}
+
+The primary hierarchy submission interface contains pseudonymous cell and patient IDs,
+true and predicted lineage, and true and predicted subtype. The disease interface
+contains one row per patient with the true disease and six class scores. The
+secondary budget diagnostic additionally records the aptamer measurement budget, inference-time cell budget, selection
+seed, and the development-only feature ranking. These common interfaces permit
+new models to be scored without reproducing their internal training pipelines.
+
+The evaluation layer is portable to other clinical single-cell datasets. It
+implements group-disjoint out-of-fold prediction; patient-clustered bootstrap
+uncertainty; subject-balanced and cell-weighted pooled coarse and fine Macro-F1,
+exact-path accuracy, root-excluded hierarchical F1, subtype-tree distance,
+the descriptive coarse-minus-fine difference, and sibling versus cross-lineage error;
+patient-level aggregation versus cell-level
+pseudoreplication; patient-centering and identity diagnostics; and nested feature-
+and cell-budget curves. A future dataset can replace the assay features,
+hierarchy, or clinical endpoint while retaining these interfaces. This modular
+task--dataset--metric separation follows recent living single-cell benchmarks
+\citep{luecken2025open}; standardized metadata and programmatic access similarly
+enable cross-study reuse in CZ CELLxGENE \citep{czi2025cellxgene}.
+
+A complete release must contain the processed APT matrix; pseudonymous cell and
+patient identifiers; disease and cell labels; hierarchy and feature metadata;
+the immutable fold manifest; metric implementations; baseline configurations;
+and a single command that regenerates the headline tables from model predictions.
+The fold manifest, exported hierarchy, selected checksums, and artifact-rebuild
+instructions are now recorded in \texttt{benchmark/release\_audit/} and
+\texttt{REPRODUCIBILITY.md}; these cover selected results, not the complete
+dataset or training pipeline.
+\todo{Before submission, finalize anonymous data/code access, explicit licenses,
+original training environment locks, an archival DOI, and the end-to-end command.
+If participant-level data require controlled access, release the complete schema,
+all labels permitted by consent, the split manifest, evaluator, and access
+procedure.}
+
+\input{tables/benchmark_comparison}
+
+\subsection{Confounding Audit of Within-Cohort Disease Association}
+\label{sec:appendix:disease_patient_level}
+
+\input{tables/disease}
+
+\paragraph{Exploratory scope and independent sample size.}
+All disease analyses reuse one cohort of 40 independent patients across six
+groups (6--8 patients per group); the 361{,}792 cells are repeated observations,
+not additional independent disease outcomes. Outer-fold disease models are
+developed on only 32 patients. Nested cross-fitting separates training from
+evaluation but does not increase the number of independent subjects, remove
+unmeasured confounding, or turn repeated analyses into independent replications.
+Regularization and inner validation mitigate model-selection risk without
+eliminating the uncertainty associated with this small development sample.
+The representation comparisons and post-hoc sensitivities below are exploratory,
+not confirmatory evidence of incremental subtype value or clinical utility.
+Reported patient-bootstrap intervals do not account for the full adaptive
+history of analysis choices. Clinical validation would require an independent
+APT cohort with recorded acquisition covariates and a frozen preprocessing,
+feature-selection, and prediction pipeline; the external scaling experiments
+do not supply that disease-validation cohort.
+
+Table~\ref{tab:disease} summarizes the patient-representation comparison
+within this appendix.
+
+The multi-model cell-level disease ranking is archived, not a patient-level
+endpoint. The representative centering and patient-ID diagnostics below
+retain the evidence of patient-associated signal.
+
+\paragraph{Non-identifiability of disease and acquisition effects.}
+Every participant contributes one acquisition, so patient identity is nested
+within both disease group and any unrecorded processing batch. The released
+metadata contain disease and patient identifiers plus transcriptomic UMI and
+detected-gene counts, but no plate, run, date, library, operator, or site field.
+Consequently, neither patient-disjoint prediction nor label permutation can
+identify whether a patient-associated APT offset is biological, technical, or
+mixed. No analysis below is interpreted as disease biology, biomarker
+validation, or clinical performance.
+
+\paragraph{Recorded nuisance-only baselines.}
+We aggregate the only available per-cell QC fields to each patient: recovered
+cell count; medians of $\log(1+\mathrm{UMI})$ and
+$\log(1+\mathrm{detected\ genes})$; median detected-gene/UMI ratio; and the
+interquartile ranges of the two log-count variables. Each feature set uses the
+same outer folds as the composition bridge, four-fold inner patient CV on the
+32 outer-development patients to select LR regularization, refitting on all 32,
+and one evaluation on the sealed eight patients. Table~\ref{tab:technical_covariate_audit}
+shows that these recorded QC proxies alone approach the predicted-composition
+result. They remain proxies rather than measured batch labels, so this analysis
+detects known nuisance structure but cannot rule out unrecorded acquisition
+effects.
+
+We also test conditional subtype value rather than comparing each representation
+in isolation. Under the same nested folds and inner regularization selection,
+recorded QC plus predicted lineage reaches macro-F1 0.583 and AUROC 0.875;
+recorded QC plus the full predicted subtype vector reaches 0.599 and 0.825. The
+subtype-minus-lineage macro-F1 increment is $+0.016$ with 95\% paired
+patient-bootstrap CI $[-0.120,0.169]$ (10{,}000 resamples). Thus subtype detail
+does not provide a resolved conditional increment in this cohort.
+
+\input{tables/technical_covariate_audit}
+
+
+\paragraph{Patient-wise centering sensitivity.}
+To test whether disease prediction relies on each patient's absolute expression level rather than only on within-patient relative structure, we repeated Logistic Regression training and evaluation after subtracting each patient's own per-aptamer median from every cell in both training and test data. This transformation preserves within-patient cell-to-cell variation while removing a patient-specific location shift. Cell-level accuracy drops from $0.991$ to $0.401$ (macro-F1 $0.989 \to 0.348$), and patient-level majority-vote accuracy drops from $40/40$ to $26/40$. This collapse shows that disease recognition depends substantially on patient-level absolute-expression structure, but it does not by itself determine whether that structure is biological, technical, or a mixture of both.
+
+\paragraph{Patient-fingerprint diagnostic.}
+We additionally trained a 40-way classifier to predict patient identity from individual cells, using a within-patient 50/50 cell split for this diagnostic only. The classifier identifies the correct patient from a single held-out cell with $88.4\%$ accuracy (macro-F1 $0.862$), against a $2.5\%$ chance level. Individual cells therefore carry a strong and easily recoverable patient-specific signature, consistent with the centering sensitivity above.
+
+\paragraph{Patient-level summary-feature control.}
+Finally, to confirm that the disease signal does not rely only on cell-level pseudo-replication, we trained a genuinely patient-level classifier using each patient's median 293-dimensional APT profile. This summary-feature model reaches patient accuracy $0.950$, patient macro-F1 $0.948$, and macro-AUROC $1.000$. Together with the sensitivity analyses above, this indicates that disease information is present at the patient level but strongly entangled with absolute-expression offsets that cannot be cleanly separated without acquisition-batch metadata.
+
+\paragraph{Strict nested cell-output transfer audit.}
+Ordinary pooled OOF predictions are insufficient for stacking because a base
+model used to create a disease-training feature may have seen the eventual
+disease outer-test patients. We therefore use the nested protocol defined in
+Methods: within each outer fold, four XGBoost models trained on 24 patients
+generate inner-OOF features for the 32 disease-training patients, and a fifth
+model trained on all 32 predicts the eight outer-test patients. XGBoost receives
+subtype labels but no disease labels. Soft subtype composition reaches
+accuracy/macro-F1/AUROC $0.600/0.593/0.854$ and soft lineage composition reaches
+$0.475/0.477/0.766$. The paired macro-F1 difference is $+0.116$ (95\%
+patient-bootstrap CI $[-0.015,0.262]$). Gold subtype and lineage compositions
+reach macro-F1 0.516 and 0.301, respectively. The apparently stronger predicted
+than gold point estimate is not statistically resolved and warns that predicted
+probabilities may encode model-confidence or technical structure beyond true
+cell abundance.
+
+This experiment is therefore a representation-transfer audit, not an error-
+propagation analysis. It does not establish that the transferred signal
+originates from subtype abundance, that fine subtype is more useful than coarse
+lineage, that better typing improves patient characterization, or that the
+signal is independent of confidence and technical structure. Consistent with
+this distinction, the soft-minus-hard subtype macro-F1 difference is only
+$+0.069$ (95\% patient-bootstrap CI $[-0.077,0.221]$), and the
+predicted-minus-gold subtype difference is $+0.077$ (95\% CI
+$[-0.100,0.256]$).
+
+Across 10{,}000 patient-label permutations, predicted subtype and
+lineage composition have plus-one $p=0.00010$ and $p=0.00020$. However, log cell
+count alone reaches macro-F1 0.531 ($p=0.00010$), and the predicted-subtype minus
+cell-count difference is $+0.062$ (95\% CI $[-0.087,0.218]$). Equal-cell
+subsampling at 100, 500, and 2{,}000 cells per patient preserves the qualitative
+result over 50 seeds. A 50-repeat global-multinomial composition control averages
+macro-F1 0.170, and fold-ID prediction from global OOF composition is below
+chance. The permutation code reruns downstream LR selection for each relabeling;
+the disease-label-free cell models remain fixed. However, the original folds
+were constructed using disease strata and are kept fixed. Unconditional
+exchangeability given this design has not been established, so the reported
+tail fractions are exploratory randomization diagnostics, not confirmatory
+biological tests. These controls support a predictive and associational bridge, not causal
+mediation or independent biological validation.
+
+\subsection{Patient Composition Recovery}
+\label{sec:appendix:composition_recovery}
+For each of the 40 outer-test patients, we compare the mean soft cell-type
+probabilities with reference cell fractions. The constant baseline is the
+equal-patient mean reference composition of the 32 outer-development patients
+in that fold; no test-patient annotations enter its construction. For $K$
+classes and $N$ test patients, the recovery error is
+\[
+ E=\frac{1}{N}\sum_{p=1}^{N}\frac{1}{K}\sum_{k=1}^{K}
+ |\widehat{\pi}_{pk}-\pi_{pk}|.
+\]
+We report $E_{\mathrm{baseline}}-E_{\mathrm{model}}$, so positive values favor
+predicted compositions. All five lineages or all 27 subtypes are included,
+without selecting well-recovered classes. Absolute errors across these two
+resolutions are not directly comparable because their denominators differ.
+Using 2,000 disease-stratified paired patient-bootstrap replicates, subtype
+error decreases from 0.02314 to 0.01478, a reduction of 0.00836
+($[0.00648,0.01010]$). Lineage error changes from 0.05495 to 0.05827, a
+reduction of $-0.00332$ ($[-0.01389,0.00670]$). Intervals are pointwise and
+conditional on the completed cross-fitted cell models; they do not include
+training-subset or model-fitting uncertainty. The accompanying per-class
+audit reports error, signed bias, and rank correlation for every class.
+Disease-adjusted rank correlations residualize both ranked fractions on
+disease-group indicators and are descriptive, not evidence of biological
+specificity or causal independence from disease. Reference recovery does not
+validate the annotation itself or imply improved disease characterization.
+
+\paragraph{Total variation and direct regression.}
+For probability vectors, $\mathrm{TV}(\widehat\pi,\pi)=
+\tfrac12\sum_k|\widehat\pi_k-\pi_k|$, so mean TV is exactly $KE/2$.
+For subtypes, baseline/model mean TV is 0.312/0.200; this is the same
+information as MAE, not a second validation endpoint. Per-class bias and
+centered recovery errors include every class, including rare subtypes.
+
+We additionally fit patient-median APT directly to reference composition using
+multioutput ridge regression. Each outer fold uses the remaining four frozen
+patient folds to select $\alpha\in\{0.1,1,10,100,1000\}$ by MAE after
+Euclidean projection onto the probability simplex. Standardization is fitted
+within each training split. This control uses provided APT expression values,
+not a newly selected normalization, and no disease labels enter fitting.
+Table~\ref{tab:direct_composition} reports all three methods. The soft-minus-direct
+subtype MAE difference is $+0.00057$ ($[-0.00092,0.00211]$), so there is no
+resolved advantage of cell-output aggregation over direct regression.
+The new intervals use 2,000 disease-stratified paired patient draws with seed
+20260912; their Monte Carlo endpoints differ slightly from the earlier audit.
+All point estimates for the existing soft and constant methods reproduce
+their saved results. Full per-class MAE, bias, and centered-error outputs are
+provided with the analysis, without selecting favorable classes.
+\input{tables/direct_composition}
+
+\paragraph{Patient-label permutation control.}
+This is a disease-classification diagnostic, not a composition-recovery test.
+Because the frozen folds were originally disease-stratified, unrestricted
+label permutations need not preserve the original fold-construction mechanism;
+the following tail fraction is conditional on the retained protocol rather
+than a design-exact test of biological disease specificity.
+We evaluated the same patient-level median-profile classifier under 1,000 label permutations. Disease labels were permuted across the 40 patients as indivisible units, preserving the disease-group counts $(6,8,7,7,6,6)$; labels were never shuffled across cells. We retained the original five patient folds rather than restratifying after permutation. No permuted dataset reached the observed accuracy of $0.950$ or macro-F1 of $0.948$, giving plus-one permutation $p=(0+1)/(1000+1)=0.000999$ for both statistics. The null accuracy mean was $0.137$, with empirical 95\% interval $[0.025,0.275]$. This rejects a random patient-label explanation under the fixed protocol, but does not distinguish biological signal from patient-associated technical structure.
+
+\subsection{True-Lineage Restricted Decoding}
+\label{sec:appendix:true_lineage_oracle}
+
+We replay the 15 frozen final checkpoints (three neural references, five
+patient-disjoint folds), retain explicit cell IDs and ontology columns,
+and require exact reconstruction of their original coarse and fine predictions
+before computing this diagnostic. For each of the same 361{,}792 held-out cells,
+we mask the fine score vector to subtypes whose parent is the true lineage,
+then take its argmax. We do not change Soft-cascade routing or condition the
+evaluation set on a correct coarse prediction. The diagnostic therefore uses
+privileged test-label information and cannot be placed on the deployable
+leaderboard. Table~\ref{tab:true_lineage_oracle} reports subject-balanced pooled
+Macro-F1 and paired patient-bootstrap differences, conditional on these frozen
+models. Reduced candidate-set size contributes to the gain; neither the gain
+nor the remaining error identifies an assay-specific information ceiling.
+
+\input{tables/true_lineage_oracle}
+
+\subsection{Per-Subtype Support and Performance Audit}
+\label{sec:appendix:subtype_audit}
+
+Figure~\ref{fig:subtype_support} visualizes the two marginal support--F1
+associations for \ourmethod{} and XGBoost. The vertical stack at 40 patients
+makes the coverage ceiling explicit. These plots and the partial correlations
+are exploratory: they neither establish causality nor test whether two dependent
+correlations differ significantly.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\columnwidth]{figures/subtype_support_associations.png}
+\caption{Per-subtype pooled out-of-fold F1 versus cell abundance (left) and
+patient coverage (right). Each marker is one of 27 subtypes; both models use the
+same ground-truth support values. Spearman correlations are marginal, and 16 of
+27 subtypes occur in all 40 patients.}
+\label{fig:subtype_support}
+\end{figure}
+
+\input{tables/subtype_diagnostics}
+
+Table~\ref{tab:subtype_per_class} gives all subtype-level quantities and 95\%
+percentile intervals from 2{,}000 patient-clustered bootstrap resamples. Counts
+and coverage use pooled ground truth, while F1 uses the same patient-disjoint OOF
+predictions as Table~\ref{tab:main}, but uses cell-weighted per-class F1 rather
+than subject-balanced scoring.
+
+\input{tables/subtype_per_class}
+
+Abundance does not alone explain the errors: Plasma has 2,173 cells and
+Soft-cascade CW-F1 0.611, whereas Memory B-1 has 23,722 cells and F1 0.034,
+and CD8+CTL-1 has 7,303 cells and F1 0.009. These examples complement the
+complete table; they do not establish the cause of subtype separability.
+
+\paragraph{Cross-lineage error relative to an error-conditioned null.}
+Table~\ref{tab:hierarchy_error_null} uses the wrong-conditioned null as the
+primary reference: after excluding the true subtype, it renormalizes the
+predicted-subtype marginal so every randomized outcome remains an error. For the
+four main models, observed cross-lineage rates are 0.743--0.757 versus
+wrong-conditioned expectations of 0.741--0.745. The corresponding differences
+are only +0.002 to +0.013, and all four patient-bootstrap 95\% intervals include
+zero. Thus the raw approximately 75\% rate is largely explained by the available
+wrong-class distribution and does not independently demonstrate either
+hierarchy preservation or hierarchy failure. The unconditional permutation,
+which can create chance exact matches and therefore uses a different sample
+space, is retained only as a sensitivity analysis.
+
+\input{tables/hierarchy_error_null}
+
+\subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
+\label{sec:appendix:protocol_sensitivity}
+
+The main-text Table~\ref{tab:protocol_sensitivity} compares patient-disjoint
+and cell-level split protocols. This section defines their scoring units;
+the contrast does not isolate leakage from all training-allocation changes.
+
+\paragraph{Metric definitions.}
+Let $C^{(p)}\in\mathbb{R}^{K\times K}$ be the confusion matrix for held-out
+subject $p$ and $n_p=\sum_{ij}C^{(p)}_{ij}$. We distinguish
+\begin{align}
+C^{\mathrm{CW}} &= \sum_p C^{(p)},
+&F_1^{\mathrm{CW}} &= \operatorname{MacroF1}(C^{\mathrm{CW}}),\\
+C^{\mathrm{SB}} &= \frac{1}{P}\sum_p\frac{C^{(p)}}{n_p},
+&F_1^{\mathrm{SB}} &= \operatorname{MacroF1}(C^{\mathrm{SB}}),\\
+F_1^{\mathrm{within}} &= \frac{1}{P}\sum_p
+\operatorname{MacroF1}(C^{(p)}). &&
+\end{align}
+We call these \emph{cell-weighted pooled Macro-F1}, \emph{subject-balanced
+pooled Macro-F1}, and \emph{mean within-subject Macro-F1}. Subject balancing
+normalizes each subject confusion matrix to unit mass before pooling; it is
+neither equal-cell subsampling nor averaging per-subject Macro-F1. Released
+files retain the legacy column name \texttt{patient\_balanced\_macro\_f1} for
+$F_1^{\mathrm{SB}}$, but no different patient-balanced statistic is used.
+
+The numerical split comparison appears in the main results
+(Table~\ref{tab:protocol_sensitivity}). Its historical scores are cell-weighted
+in both columns, rather than the subject-balanced leaderboard metric.
+
+Exact subject-normalized pooling is primary. The older equal-cell Monte
+Carlo sensitivity remains archived, rather than occupying a separate table.
+
+\subsection{Coarse--Fine Consistency Diagnostic}
+\label{sec:appendix:consistency}
+
+Independent coarse and fine classifiers can disagree about the hierarchy even
+when each prediction is plausible in isolation. Table~\ref{tab:consistency}
+reports their natural agreement on the same frozen OOF predictions as the
+main results. These auxiliary path metrics remain cell-weighted averages,
+whereas the main Macro-F1 table now balances patient contributions.
+
+\input{tables/hierarchy_subject_balanced_all}
+\input{tables/hierarchy_cell_weighted}
+
+The main reporting metric was revised retrospectively without retraining,
+retuning, or reselecting checkpoints. The historical cell-weighted comparison
+family contrasted Soft-cascade with HCE and XGBoost at coarse and fine
+resolution, using 2{,}000 paired patient bootstrap resamples and Holm correction
+over four tests; none reached adjusted significance. Those tests do not apply
+to the subject-balanced results. Flat and auxiliary classical comparisons
+remain descriptive. The saved re-evaluation script reproduces the old point
+estimates before generating the new table, and records source-artifact hashes.
+
+\input{tables/consistency}
+
+\subsection{Archived Supporting Analyses}
+\label{sec:appendix:minimal_panel}
+
+Feature-panel diagnostics, version comparisons, and equal-cell sensitivity
+are indexed in the repository pruning manifest; original artifacts are retained.
+
+\paragraph{Development-only sampling choice.}
+\label{sec:appendix:sampler}
+
+A development-only class-balanced-sampling variant did not outperform natural sampling after matching optimization steps and was not retained.
+
+\subsection{Exploratory Leave-One-Disease-Out Stress Test}
+\label{sec:appendix:novelty}
+
+For each leave-one-disease-out (LODO) run, all patients from one group are
+withheld from training. The available table contains five cancer-group
+summaries. A numerical Normal-held-out artifact and row-level support counts
+have not been verified, so the sixth row is explicitly unavailable rather
+than omitted. These cell-weighted group summaries are not averaged or
+subtracted from pooled five-fold scores, since their evaluation populations
+and training protocols differ. This is an incomplete descriptive stress test;
+cross-disease generalization requires external, patient-clustered validation.
+Unmatched detector rankings are omitted.
+
+\input{tables/LOD}
+
+\input{main/identity_questions_appendix}
+
+\end{document}
+
