@@ -46,6 +46,13 @@ Appendix~\ref{sec:appendix:subtype_audit}. Missing full-budget MLP coverage
 and objective differences between Transformer recipes limit conclusions
 about architecture choice.
 
+A privileged-label diagnostic masks each frozen fine score vector to the
+children of the true lineage, without retraining or changing routing.
+Fine SB-Macro-F1 increases to 0.366/0.361/0.358 for Flat/HCE/Soft-cascade
+(Appendix~\ref{sec:appendix:true_lineage_oracle}). This measures the benefit
+of knowing the correct parent; it is not deployable performance or evidence
+that remaining errors reflect an intrinsic APT information limit.
+
 \subsection{Secondary Context: RNA and Patient Summaries}
 
 The paired-input diagnostic uses a capped budget, separately from the main

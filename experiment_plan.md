@@ -23,7 +23,9 @@
 weight decay 内层选择，取代旧计划中尚未实现的 alpha runner。
 E1 已产生首个完整 outer-fold artifact；E2 首个 Flat fold 已通过普通预测
 逐项完全重建；E3 已开始三 seed 重复。5000-HVG 敏感性排在2000-HVG后执行。
-全部完成前不修改论文数值或称其已完成。
+各项通过验收前不修改对应论文数值或称其已完成。
+E2 随后完成全部15个 checkpoint 的精确普通预测重建与 oracle 计算，
+已写入主文诊断段落及附录表。E1 与 E3 仍在运行。
 
 E3 已完成并通过 QA；aggregate 在 `outputs/revision_composition_control_v1/`。远程运行额外使用 `--reference-summary /tmp/summary.csv`，该文件来自已有 composition recovery summary，仅用于验证旧 soft MAE 重建，不参与拟合或选择。
 

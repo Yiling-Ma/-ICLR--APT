@@ -24,3 +24,8 @@ E1、E2、重复shuffle、更宽RNA representation没有完成；见experiment_p
 文献与官方指南来源见review_before.md及analysis/reviewer_revision_code_audit.md。复审见review_after.md，未自动上调主观评分。
 
 最终 PDF 为24页，主文6页。已渲染检查全篇，修复附录强制分页导致的大块空白，检查跨页27类表的表头和续页；LaTeX日志无overfull、undefined reference或warning。本地数值保留检查、Python编译检查和git diff --check通过。
+
+后续执行更新：E2 true-lineage oracle 已完成15个checkpoint，普通预测精确重建，
+数值与原主表SB fine一致。结果新增至正文及附录；该控制使用真实lineage，
+不是可部署性能。E1多seed全预算MLP与E3重复模态控制已启动，未提前写结果。
+新增诊断并清理末页孤立段落后，PDF为23页，主文仍6页，编译与视觉检查通过。

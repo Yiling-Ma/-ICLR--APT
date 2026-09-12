@@ -23,6 +23,13 @@ predictions, without relaxing the check. The failed attempt log is preserved as
 oracle_batch64_attempt.log. Its successful retry must be verified in completion
 metadata, not inferred from this code change.
 
+Update: all15 oracle checkpoints subsequently passed exact ordinary prediction
+reconstruction at completion. summary.csv and completion.json have been fetched
+to outputs/remaining_oracle_v1. Flat/HCE/Soft-cascade ordinary SB fine
+0.139/0.143/0.145 becomes0.366/0.361/0.358 with privileged parent restriction.
+The completed diagnostic is now added to the paper; remaining training jobs
+must still complete before their results are added.
+
 Commands (run on vllab11):
 
 ```sh

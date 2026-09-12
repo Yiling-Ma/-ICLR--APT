@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccc}
+\toprule
+Model & Ordinary fine & True-lineage oracle & Paired gain [95\% CI] \\
+\midrule
+Flat Transformer & 0.139 & 0.366 & +0.227 [0.202, 0.238] \\
+HCE Transformer & 0.143 & 0.361 & +0.218 [0.196, 0.231] \\
+Soft-cascade Transformer & 0.145 & 0.358 & +0.214 [0.194, 0.230] \\
+\bottomrule
+\end{tabular}
+\caption{Privileged true-lineage restricted decoding on the same frozen
+predictions. Scores are subject-balanced pooled Macro-F1; gains use 2{,}000
+paired patient-bootstrap resamples and pointwise intervals, conditional on
+fitted models. The oracle knows the true parent and is not a deployable method.}
+\label{tab:true_lineage_oracle}
+\end{table}

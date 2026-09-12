@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "checkpoints": 15,
+  "cells_per_model": 361792,
+  "patients": 40,
+  "ordinary_prediction_reconstruction": "exact",
+  "uncertainty": "paired patient bootstrap conditional on frozen models"
+}

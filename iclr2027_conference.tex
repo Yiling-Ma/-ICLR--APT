@@ -350,13 +350,10 @@ agreement, but does not control label boundaries, class count, annotation
 reliability, or within-lineage separability; none of these residual differences
 establishes a cardinality-independent biological granularity effect.
 
-True-lineage-conditioned subtype decoding is not evaluated here. It requires
-OOF subtype scores restricted to the children of the true lineage (or separately
-trained conditional classifiers); hard predictions and confusion matrices cannot
-recover that decision. In particular, filtering to predictions that already
-match the true lineage would select easier cases rather than provide this
-control. Thus the present diagnostic cannot attribute fine errors uniquely to
-lineage identification versus within-lineage discrimination.
+The separate frozen APT-only neural references additionally undergo
+true-lineage restricted decoding in Appendix~\ref{sec:appendix:true_lineage_oracle}.
+It retains every held-out cell rather than selecting the easier subset whose
+coarse prediction is correct; it is not a conditional classifier trained anew.
 
 \subsection{Benchmark Interface and Release Contract}
 \label{sec:appendix:benchmark_release}
@@ -568,6 +565,24 @@ the following tail fraction is conditional on the retained protocol rather
 than a design-exact test of biological disease specificity.
 We evaluated the same patient-level median-profile classifier under 1,000 label permutations. Disease labels were permuted across the 40 patients as indivisible units, preserving the disease-group counts $(6,8,7,7,6,6)$; labels were never shuffled across cells. We retained the original five patient folds rather than restratifying after permutation. No permuted dataset reached the observed accuracy of $0.950$ or macro-F1 of $0.948$, giving plus-one permutation $p=(0+1)/(1000+1)=0.000999$ for both statistics. The null accuracy mean was $0.137$, with empirical 95\% interval $[0.025,0.275]$. This rejects a random patient-label explanation under the fixed protocol, but does not distinguish biological signal from patient-associated technical structure.
 
+\subsection{True-Lineage Restricted Decoding}
+\label{sec:appendix:true_lineage_oracle}
+
+We replay the 15 frozen final checkpoints (three neural references, five
+patient-disjoint folds), retain explicit cell IDs and ontology columns,
+and require exact reconstruction of their original coarse and fine predictions
+before computing this diagnostic. For each of the same 361{,}792 held-out cells,
+we mask the fine score vector to subtypes whose parent is the true lineage,
+then take its argmax. We do not change Soft-cascade routing or condition the
+evaluation set on a correct coarse prediction. The diagnostic therefore uses
+privileged test-label information and cannot be placed on the deployable
+leaderboard. Table~\ref{tab:true_lineage_oracle} reports subject-balanced pooled
+Macro-F1 and paired patient-bootstrap differences, conditional on these frozen
+models. Reduced candidate-set size contributes to the gain; neither the gain
+nor the remaining error identifies an assay-specific information ceiling.
+
+\input{tables/true_lineage_oracle}
+
 \subsection{Per-Subtype Support and Performance Audit}
 \label{sec:appendix:subtype_audit}
 
@@ -692,10 +707,10 @@ summaries. A numerical Normal-held-out artifact and row-level support counts
 have not been verified, so the sixth row is explicitly unavailable rather
 than omitted. These cell-weighted group summaries are not averaged or
 subtracted from pooled five-fold scores, since their evaluation populations
-and training protocols differ. This is an incomplete descriptive stress test.
+and training protocols differ. This is an incomplete descriptive stress test;
+cross-disease generalization requires external, patient-clustered validation.
+Unmatched detector rankings are omitted.
 
 \input{tables/LOD}
-
-We omit unmatched detector rankings. Cross-disease generalization remains unresolved and requires external cohorts with prespecified distribution shifts and patient-clustered uncertainty.
 
 \end{document}
