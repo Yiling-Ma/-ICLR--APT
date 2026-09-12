@@ -1,5 +1,10 @@
 # Benchmark-first manuscript revision
 
+Historical revision record, superseded by the current prior-controlled
+hierarchy and paired APT/RNA findings. The split comparison is now descriptive
+appendix background only; see `analysis/SPLIT_AUDIT_RESOLUTION.md`.
+The positioning statements below describe an earlier version, not current claims.
+
 ## Further focus revision
 
 The paper now centers one contribution: patient-disjoint evaluation for APT

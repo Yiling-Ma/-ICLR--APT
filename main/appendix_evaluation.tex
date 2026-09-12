@@ -196,10 +196,17 @@ Exact subject-normalized pooling is primary. The older equal-cell Monte
 Carlo sensitivity remains archived, rather than occupying a separate table.
 
 
-Cell-level splitting raises cell-weighted coarse/fine Macro-F1 by
-0.050/0.069 for XGBoost and 0.090/0.108 for Soft-cascade.
-Training/test allocations also differ: this is a descriptive protocol
-comparison rather than an isolated causal estimate of leakage.
+The historical patient-disjoint XGBoost run uses 32 training and eight test
+patients per fold, without a validation partition; Soft-cascade uses 24/8/8
+training/validation/test patients. Both cell-split runs instead use
+253,254/54,269/54,269 cells, with all 40 patients represented in each partition
+but no cell shared across partitions. Patient-disjoint scores pool 361,792
+OOF cells; cell-split scores use 54,269 cells, not a common test set across
+protocols. XGBoost predictions retain cell IDs; neural predictions retain
+patient and label fields but not independently checkable cell barcodes.
+The split-audit reproducibility record reports full counts, source hashes
+and historical training-record limitations. This is a descriptive comparison,
+not an estimate of a pure leakage effect.
 \input{tables/protocol_sensitivity}
 
 \subsection{Additional Reference Inventory}

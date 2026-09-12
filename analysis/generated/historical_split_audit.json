@@ -1,0 +1,1062 @@
+{
+  "route": "A",
+  "new_training_runs": 0,
+  "source_root": "/home/mayiling/projs/apt_agent/cell_JEPA",
+  "sources": {
+    "outputs/classical_baselines_kfold5/fine/xgboost/pooled_oof_predictions.csv": {
+      "sha256": "a73eb5df8cbaa4a8061d14d36d603e8a208dbeedd69ee0e0c5f5d14c913ec820",
+      "bytes": 18365069
+    },
+    "outputs/classical_baselines_kfold5/fold_assignment.json": {
+      "sha256": "be59d383b203ca749f288cfe6b578d7f0322a6cf1995c4aefc78d94b6856908e",
+      "bytes": 638
+    },
+    "outputs/classical_baselines_cell/cell_split_seed42.csv": {
+      "sha256": "e7dbbf7c447942ad748408ee6f1cf89d875b3b4ee35c00e28a607f8cb7d0aab6",
+      "bytes": 13144392
+    },
+    "outputs/soft_lineage_cascade_cell_matched/split.csv": {
+      "sha256": "e7dbbf7c447942ad748408ee6f1cf89d875b3b4ee35c00e28a607f8cb7d0aab6",
+      "bytes": 13144392
+    },
+    "outputs/dropcascade_kfold5/fold0/split.csv": {
+      "sha256": "0ad7af85d837c7e380751a41165586a65762cc54eec7d4212f9d94e09c377ca6",
+      "bytes": 696
+    },
+    "outputs/dropcascade_kfold5/fold1/split.csv": {
+      "sha256": "40b71643a659b8f3ff8e60b6bfcc7b3b6e4e38e457294c862ec086b5680ed413",
+      "bytes": 696
+    },
+    "outputs/dropcascade_kfold5/fold2/split.csv": {
+      "sha256": "43a9b4b2b058c9948d678c111c8ceb94240f28c7cf359c6e16c5593cb5ee2190",
+      "bytes": 696
+    },
+    "outputs/dropcascade_kfold5/fold3/split.csv": {
+      "sha256": "026276d6acb6a0a073964c9ecfa0cc7f9abedfe2d58b26ad1e18be7bc0c06def",
+      "bytes": 696
+    },
+    "outputs/dropcascade_kfold5/fold4/split.csv": {
+      "sha256": "8040efb2ca882b74ca06b286d190957ca62637d59345ce7e7ceb9ea47f967902",
+      "bytes": 696
+    },
+    "outputs/dropcascade_kfold5/pooled_oof_predictions.csv": {
+      "sha256": "892dccbf1c674a7093838cbb0c8d29ca02d49f588d7de5c96012db945ac0d2e0",
+      "bytes": 31983172
+    },
+    "outputs/soft_lineage_cascade_cell_matched/test_predictions.csv": {
+      "sha256": "f8a71e38f6eac3ec584d4b22a3aad669c27aca7bfc00f4b8a0dd81e1f09818f5",
+      "bytes": 1957571
+    },
+    "outputs/classical_baselines_kfold5/coarse/xgboost/pooled_oof_predictions.csv": {
+      "sha256": "eb05b0561697a8b110602ed3690c5466b30274156562b6a4272fc92197ebaa05",
+      "bytes": 12978030
+    },
+    "outputs/classical_baselines_cell/coarse/xgboost/test_predictions.csv": {
+      "sha256": "2f38b3819151eb648af932eecb91bab774512785f17a50b3f0b523f768d0780f",
+      "bytes": 1830170
+    },
+    "outputs/classical_baselines_cell/coarse/xgboost/test_metrics.json": {
+      "sha256": "803660e768e0e5f7ff0e361830922f532943ff7acbb837659979f82ad3cc4a36",
+      "bytes": 235
+    },
+    "outputs/soft_lineage_cascade_cell_matched/test_metrics.json": {
+      "sha256": "b541fc377258907a32e001d942d390f41d4e0ee073ffe0a56f6ff148d426c12a",
+      "bytes": 1295
+    },
+    "outputs/classical_baselines_cell/fine/xgboost/test_predictions.csv": {
+      "sha256": "3da5b1adb9f67fa26e2fb556f85436158ad71c31f0fec1f962fc24cc80b439a8",
+      "bytes": 2634221
+    },
+    "outputs/classical_baselines_cell/fine/xgboost/test_metrics.json": {
+      "sha256": "b8cb5abfab1a5f8f27a1a23c3255d238ed27200da375a6454f3df99e64a0cfee",
+      "bytes": 238
+    },
+    "outputs/soft_lineage_cascade_cell_matched/resolved_config.json": {
+      "sha256": "bb5806beffa99adaec3ec3302905307d4b1eded89c8b2c23f34e7ed5e85a2811",
+      "bytes": 1725
+    },
+    "outputs/soft_lineage_cascade_cell_matched/training_log.csv": {
+      "sha256": "036f619036780a7c81748355fd10af0b04a7b8c80121685d7fb3e202d8a8979b",
+      "bytes": 21362
+    },
+    "outputs/dropcascade_kfold5/fold0/resolved_config.json": {
+      "sha256": "c544412d4ac11ab532ce57ce414dc4f913debfaa225cb3277aa49817fd4ecd66",
+      "bytes": 1809
+    },
+    "outputs/dropcascade_kfold5/fold0/training_log.csv": {
+      "sha256": "ff9b634b9a992659ae34858271ac746299c05aa2063d13ece96d97a5e2ef8dd8",
+      "bytes": 15399
+    },
+    "outputs/dropcascade_kfold5/fold1/resolved_config.json": {
+      "sha256": "f767998da132866b4084706e3c335b4741cceac8f7b25660cdb5f91e801d502c",
+      "bytes": 1809
+    },
+    "outputs/dropcascade_kfold5/fold1/training_log.csv": {
+      "sha256": "46cd845763d550be60a55556b01d8752912bdee29e8c42e232dfb680a765da07",
+      "bytes": 17267
+    },
+    "outputs/dropcascade_kfold5/fold2/resolved_config.json": {
+      "sha256": "f66d9356aa8fc447b21f46c78b1e754869b48fc5d728735649ea14f6af9de7e4",
+      "bytes": 1809
+    },
+    "outputs/dropcascade_kfold5/fold2/training_log.csv": {
+      "sha256": "6f40c23623afaf0a960b0597b2edb188e3bcf2fbd84af2f8706a34a138c413df",
+      "bytes": 18590
+    },
+    "outputs/dropcascade_kfold5/fold3/resolved_config.json": {
+      "sha256": "de730c5200621f57bad5dafba578e75130c751b3397b149f859b8244119d2d09",
+      "bytes": 1809
+    },
+    "outputs/dropcascade_kfold5/fold3/training_log.csv": {
+      "sha256": "517fbe80281714db7abb598ad8450c6b57355ab31819b56856071020f3c80a37",
+      "bytes": 11287
+    },
+    "outputs/dropcascade_kfold5/fold4/resolved_config.json": {
+      "sha256": "6a61cbc5f534305a389dc3030b5fb2128e96c881578bcc9891cfc5c5b8ddaad7",
+      "bytes": 1809
+    },
+    "outputs/dropcascade_kfold5/fold4/training_log.csv": {
+      "sha256": "329155fdd0d4c0166bd5d5e7c70dd4f4dd5f9b1546b183a41191d6038bfbfbef",
+      "bytes": 19577
+    },
+    "apt_jepa/scripts/train_classical_baselines.py": {
+      "sha256": "ac966558bb2b6c224f161864f6ebbb2d3f540d1b392cbf1e773e7d0ea9fe69c6",
+      "bytes": 12223
+    },
+    "apt_jepa/scripts/train_classical_baselines_kfold.py": {
+      "sha256": "421ef01fce9f904dbc73df46b07078fbafe8d857a176ae86715619a4f809470d",
+      "bytes": 10419
+    },
+    "apt_jepa/scripts/train_soft_lineage_cascade.py": {
+      "sha256": "f35f18b5f5505fadc5db1325ce0d1f826b01d2e7442b3b30f37b060cc212dd62",
+      "bytes": 28965
+    },
+    "apt_jepa/data/dataset.py": {
+      "sha256": "c9d26322efc8b2662d33211b5b488681e21dd3243a5afebcde49567d5a445c6d",
+      "bytes": 8813
+    },
+    "apt_jepa/data/preprocessing.py": {
+      "sha256": "594e708c69259b1056d0eee1fed080956409ba6302c8a4e4dcb5588faf42adc5",
+      "bytes": 1453
+    },
+    "apt_jepa/data/split.py": {
+      "sha256": "99b24fb9dc5385f4ae54e8c7a5c735a357ca098c3f3d3159fb7358b87cbf93b7",
+      "bytes": 6567
+    },
+    "apt_jepa/configs/classical_baselines_cell.yaml": {
+      "sha256": "556a1d564422472d348ad7f31ae9eaa5ce61e36110197b3dd2eda7a51f8edce1",
+      "bytes": 480
+    },
+    "../classical_baselines_cell.log": {
+      "sha256": "b6873ef3b17d85bb56ff56b8b2b1076594969ddeab7edf38c9c960c9109aa51e",
+      "bytes": 1558
+    },
+    "../soft_lineage_cascade_cell_matched.log": {
+      "sha256": "d0ab5e4dbff854783229f991330b66e478159ead30f9962237650c41e877fa8a",
+      "bytes": 2044812
+    },
+    "../dropcascade_cell_best_eval.log": {
+      "sha256": "d10d376b2ace97f4735f2f09fdba568ede580b91d3b2e635269550a569f9ea30",
+      "bytes": 9377
+    }
+  },
+  "splits": {
+    "cell_both_models": {
+      "parts": {
+        "train": {
+          "cells": 253254,
+          "patients": 40,
+          "cell_set_sha256": "142879896fee14bffcc50affef1931c4e3641f13b8e1d8a977b27cd4a024e13b"
+        },
+        "val": {
+          "cells": 54269,
+          "patients": 40,
+          "cell_set_sha256": "ee72dc6f87f616d2e353111a132833d983ec27b07c66c614f23d6673e6681550"
+        },
+        "test": {
+          "cells": 54269,
+          "patients": 40,
+          "cell_set_sha256": "734804d4ab4540d3ba08751f0aa8b5b9a4e7407e07c6ae37db921d6ec0d74efa"
+        }
+      },
+      "patient_intersections": {
+        "train/val": 40,
+        "train/test": 40,
+        "val/test": 40
+      },
+      "cell_intersections": {
+        "train/val": 0,
+        "train/test": 0,
+        "val/test": 0
+      }
+    },
+    "xgb_patient": [
+      {
+        "fold": 0,
+        "parts": {
+          "train": {
+            "cells": 294812,
+            "patients": 32,
+            "cell_set_sha256": "5514b934b71565488eb560ce2bfe9c22f442a58351bd0e954ab88d4b2fd696c8"
+          },
+          "val": {
+            "cells": 0,
+            "patients": 0,
+            "cell_set_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "test": {
+            "cells": 66980,
+            "patients": 8,
+            "cell_set_sha256": "3decd6a99691aa85b91d863c2db2471da212525ee8acd07a04d499b2bd2dc8b5"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 1,
+        "parts": {
+          "train": {
+            "cells": 293411,
+            "patients": 32,
+            "cell_set_sha256": "eb787a370bb4a1cd3e4308ba208f6e0cb9a1a68cb04449b9def0e5d601c0e42c"
+          },
+          "val": {
+            "cells": 0,
+            "patients": 0,
+            "cell_set_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "test": {
+            "cells": 68381,
+            "patients": 8,
+            "cell_set_sha256": "e8ef0fce27a7a869d541c33254766fd9a8dbd5c5c165c875b810297e868ca95b"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 2,
+        "parts": {
+          "train": {
+            "cells": 275553,
+            "patients": 32,
+            "cell_set_sha256": "e66bb02a115dfa3e0b9ebcca72ba835f479e784544103dffb3d26ee3e47f1a53"
+          },
+          "val": {
+            "cells": 0,
+            "patients": 0,
+            "cell_set_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "test": {
+            "cells": 86239,
+            "patients": 8,
+            "cell_set_sha256": "bef7e5e43c9b22a784356b97a6ea5fb756b393c89af7f53c6ab974b289400ab2"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 3,
+        "parts": {
+          "train": {
+            "cells": 292943,
+            "patients": 32,
+            "cell_set_sha256": "a3925cfd70d623c05fd3000371f335a3036cc84e2f632c20f7035ff69593f777"
+          },
+          "val": {
+            "cells": 0,
+            "patients": 0,
+            "cell_set_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "test": {
+            "cells": 68849,
+            "patients": 8,
+            "cell_set_sha256": "f2dad7f651cddf1e7ac32b74f7096e5aaa68ee771d4da5a9019744ccbc9d515d"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 4,
+        "parts": {
+          "train": {
+            "cells": 290449,
+            "patients": 32,
+            "cell_set_sha256": "725277df59f85a71b2d4087131dbe89faee0538daec8d891e691a737b3213300"
+          },
+          "val": {
+            "cells": 0,
+            "patients": 0,
+            "cell_set_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "test": {
+            "cells": 71343,
+            "patients": 8,
+            "cell_set_sha256": "6718d697b17019383008dbebc95366b7bb82b8b9e29b004774f42efaee686023"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      }
+    ],
+    "soft_patient": [
+      {
+        "fold": 0,
+        "parts": {
+          "train": {
+            "cells": 226431,
+            "patients": 24,
+            "cell_set_sha256": "b8ea9da1d74a8904a4b052a05230d30e0786fc76db0bd28c4012968cb6f0e6da"
+          },
+          "val": {
+            "cells": 68381,
+            "patients": 8,
+            "cell_set_sha256": "e8ef0fce27a7a869d541c33254766fd9a8dbd5c5c165c875b810297e868ca95b"
+          },
+          "test": {
+            "cells": 66980,
+            "patients": 8,
+            "cell_set_sha256": "3decd6a99691aa85b91d863c2db2471da212525ee8acd07a04d499b2bd2dc8b5"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 1,
+        "parts": {
+          "train": {
+            "cells": 207172,
+            "patients": 24,
+            "cell_set_sha256": "2ff61a52246c677bbbd1ff997d42fa98c4623c2f539377f55a1320bd2ae1a4d2"
+          },
+          "val": {
+            "cells": 86239,
+            "patients": 8,
+            "cell_set_sha256": "bef7e5e43c9b22a784356b97a6ea5fb756b393c89af7f53c6ab974b289400ab2"
+          },
+          "test": {
+            "cells": 68381,
+            "patients": 8,
+            "cell_set_sha256": "e8ef0fce27a7a869d541c33254766fd9a8dbd5c5c165c875b810297e868ca95b"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 2,
+        "parts": {
+          "train": {
+            "cells": 206704,
+            "patients": 24,
+            "cell_set_sha256": "0d6345a6ffdf845b3b0ce57106310ee7ee7478581297e9cc08735636a5d1ad3c"
+          },
+          "val": {
+            "cells": 68849,
+            "patients": 8,
+            "cell_set_sha256": "f2dad7f651cddf1e7ac32b74f7096e5aaa68ee771d4da5a9019744ccbc9d515d"
+          },
+          "test": {
+            "cells": 86239,
+            "patients": 8,
+            "cell_set_sha256": "bef7e5e43c9b22a784356b97a6ea5fb756b393c89af7f53c6ab974b289400ab2"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 3,
+        "parts": {
+          "train": {
+            "cells": 221600,
+            "patients": 24,
+            "cell_set_sha256": "9220be846306c0e066ac54fa26bf6f78cc36d57990ccb2445bc5e82396536265"
+          },
+          "val": {
+            "cells": 71343,
+            "patients": 8,
+            "cell_set_sha256": "6718d697b17019383008dbebc95366b7bb82b8b9e29b004774f42efaee686023"
+          },
+          "test": {
+            "cells": 68849,
+            "patients": 8,
+            "cell_set_sha256": "f2dad7f651cddf1e7ac32b74f7096e5aaa68ee771d4da5a9019744ccbc9d515d"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      },
+      {
+        "fold": 4,
+        "parts": {
+          "train": {
+            "cells": 223469,
+            "patients": 24,
+            "cell_set_sha256": "cfa086c7aa9c779dcd8eb9bfe17e4d3e7516df13db4f3e02836397c2b3338418"
+          },
+          "val": {
+            "cells": 66980,
+            "patients": 8,
+            "cell_set_sha256": "3decd6a99691aa85b91d863c2db2471da212525ee8acd07a04d499b2bd2dc8b5"
+          },
+          "test": {
+            "cells": 71343,
+            "patients": 8,
+            "cell_set_sha256": "6718d697b17019383008dbebc95366b7bb82b8b9e29b004774f42efaee686023"
+          }
+        },
+        "patient_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        },
+        "cell_intersections": {
+          "train/val": 0,
+          "train/test": 0,
+          "val/test": 0
+        }
+      }
+    ]
+  },
+  "contrasts": [
+    {
+      "model": "XGBoost",
+      "task": "coarse",
+      "classes": 5,
+      "patient": 0.32204425863573916,
+      "cell": 0.3715577728673055,
+      "difference": 0.04951351423156636,
+      "patient_source": "outputs/classical_baselines_kfold5/coarse/xgboost/pooled_oof_predictions.csv",
+      "cell_source": "outputs/classical_baselines_cell/coarse/xgboost/test_predictions.csv"
+    },
+    {
+      "model": "Soft-cascade",
+      "task": "coarse",
+      "classes": 5,
+      "patient": 0.32649451937506957,
+      "cell": 0.4168739525617857,
+      "difference": 0.09037943318671615,
+      "patient_source": "outputs/dropcascade_kfold5/pooled_oof_predictions.csv",
+      "cell_source": "outputs/soft_lineage_cascade_cell_matched/test_predictions.csv"
+    },
+    {
+      "model": "XGBoost",
+      "task": "fine",
+      "classes": 27,
+      "patient": 0.14344618335716552,
+      "cell": 0.21249910211544856,
+      "difference": 0.06905291875828304,
+      "patient_source": "outputs/classical_baselines_kfold5/fine/xgboost/pooled_oof_predictions.csv",
+      "cell_source": "outputs/classical_baselines_cell/fine/xgboost/test_predictions.csv"
+    },
+    {
+      "model": "Soft-cascade",
+      "task": "fine",
+      "classes": 27,
+      "patient": 0.15219459584616507,
+      "cell": 0.26041526328055903,
+      "difference": 0.10822066743439396,
+      "patient_source": "outputs/dropcascade_kfold5/pooled_oof_predictions.csv",
+      "cell_source": "outputs/soft_lineage_cascade_cell_matched/test_predictions.csv"
+    }
+  ],
+  "soft_configs": {
+    "soft_lineage_cascade_cell_matched": {
+      "data": {
+        "data_dir": "data",
+        "metadata_path": "data/metadata.csv",
+        "annotation_path": "data/cell_annotation.csv",
+        "subtype_col_in_annotation": "Celltypes_new",
+        "coarse_mapping_config": "cell_JEPA/apt_jepa/configs/coarse_lineage_explicit.yaml",
+        "drop_missing_subtype": true,
+        "drop_unknown": true,
+        "use_quantile_binning": false
+      },
+      "split": {
+        "mode": "cell",
+        "held_out_disease": null,
+        "seed": 42,
+        "ratios": {
+          "train": 0.7,
+          "val": 0.15,
+          "test": 0.15
+        }
+      },
+      "model": {
+        "num_features": 293,
+        "hidden_dim": 256,
+        "n_layers": 4,
+        "n_heads": 8,
+        "ff_dim": 512,
+        "dropout": 0.1,
+        "projection_dim": 128,
+        "routing_temperature": 1.0,
+        "routing_epsilon": 0.1,
+        "expert_scale": 1.0,
+        "routing_strength": 0.5,
+        "pretrained_checkpoint": null
+      },
+      "sampler": {
+        "enabled": false,
+        "subtypes_per_batch": 14,
+        "diseases_per_subtype": 2,
+        "cells_per_domain": 4,
+        "steps_per_epoch": null
+      },
+      "loss": {
+        "lambda_fine": 1.0,
+        "lambda_coarse": 0.5,
+        "lambda_contrast": 0.2,
+        "contrast_temperature": 0.1,
+        "same_lineage_negative_weight": 1.0,
+        "fine_weighting": "none",
+        "effective_number_beta": 0.999,
+        "detach_router_for_fine": false
+      },
+      "schedule": {
+        "warmup_epochs": 5,
+        "contrast_ramp_epochs": 10,
+        "routing_ramp_epochs": 10,
+        "calibration_epochs": 0,
+        "calibration_lr": 0.0003
+      },
+      "train": {
+        "output_dir": "cell_JEPA/outputs/soft_lineage_cascade_cell_matched",
+        "seed": 42,
+        "batch_size": 512,
+        "num_workers": 4,
+        "epochs": 0,
+        "patience": 10,
+        "lr": 0.0001,
+        "weight_decay": 1e-05,
+        "grad_clip_norm": 1.0,
+        "use_amp": true
+      }
+    },
+    "dropcascade_kfold5/fold0": {
+      "data": {
+        "data_dir": "data",
+        "metadata_path": "data/metadata.csv",
+        "annotation_path": "data/cell_annotation.csv",
+        "subtype_col_in_annotation": "Celltypes_new",
+        "coarse_mapping_config": "cell_JEPA/apt_jepa/configs/coarse_lineage_explicit.yaml",
+        "drop_missing_subtype": true,
+        "drop_unknown": true,
+        "use_quantile_binning": false
+      },
+      "split": {
+        "mode": "external",
+        "held_out_disease": null,
+        "seed": 42,
+        "ratios": {
+          "train": 0.7,
+          "val": 0.15,
+          "test": 0.15
+        },
+        "external_split_csv": "cell_JEPA/outputs/dropcascade_kfold5_splits/fold0_split.csv"
+      },
+      "model": {
+        "num_features": 293,
+        "hidden_dim": 256,
+        "n_layers": 4,
+        "n_heads": 8,
+        "ff_dim": 512,
+        "dropout": 0.1,
+        "projection_dim": 128,
+        "routing_temperature": 1.0,
+        "routing_epsilon": 0.1,
+        "expert_scale": 1.0,
+        "routing_strength": 0.5,
+        "pretrained_checkpoint": null
+      },
+      "sampler": {
+        "enabled": false,
+        "subtypes_per_batch": 14,
+        "diseases_per_subtype": 2,
+        "cells_per_domain": 4,
+        "steps_per_epoch": null
+      },
+      "loss": {
+        "lambda_fine": 1.0,
+        "lambda_coarse": 0.5,
+        "lambda_contrast": 0.2,
+        "contrast_temperature": 0.1,
+        "same_lineage_negative_weight": 1.0,
+        "fine_weighting": "none",
+        "effective_number_beta": 0.999,
+        "detach_router_for_fine": false
+      },
+      "schedule": {
+        "warmup_epochs": 5,
+        "contrast_ramp_epochs": 10,
+        "routing_ramp_epochs": 10,
+        "calibration_epochs": 0,
+        "calibration_lr": 0.0003
+      },
+      "train": {
+        "output_dir": "cell_JEPA/outputs/dropcascade_kfold5/fold0",
+        "seed": 42,
+        "batch_size": 512,
+        "num_workers": 4,
+        "epochs": 0,
+        "patience": 10,
+        "lr": 0.0001,
+        "weight_decay": 1e-05,
+        "grad_clip_norm": 1.0,
+        "use_amp": true
+      }
+    },
+    "dropcascade_kfold5/fold1": {
+      "data": {
+        "data_dir": "data",
+        "metadata_path": "data/metadata.csv",
+        "annotation_path": "data/cell_annotation.csv",
+        "subtype_col_in_annotation": "Celltypes_new",
+        "coarse_mapping_config": "cell_JEPA/apt_jepa/configs/coarse_lineage_explicit.yaml",
+        "drop_missing_subtype": true,
+        "drop_unknown": true,
+        "use_quantile_binning": false
+      },
+      "split": {
+        "mode": "external",
+        "held_out_disease": null,
+        "seed": 42,
+        "ratios": {
+          "train": 0.7,
+          "val": 0.15,
+          "test": 0.15
+        },
+        "external_split_csv": "cell_JEPA/outputs/dropcascade_kfold5_splits/fold1_split.csv"
+      },
+      "model": {
+        "num_features": 293,
+        "hidden_dim": 256,
+        "n_layers": 4,
+        "n_heads": 8,
+        "ff_dim": 512,
+        "dropout": 0.1,
+        "projection_dim": 128,
+        "routing_temperature": 1.0,
+        "routing_epsilon": 0.1,
+        "expert_scale": 1.0,
+        "routing_strength": 0.5,
+        "pretrained_checkpoint": null
+      },
+      "sampler": {
+        "enabled": false,
+        "subtypes_per_batch": 14,
+        "diseases_per_subtype": 2,
+        "cells_per_domain": 4,
+        "steps_per_epoch": null
+      },
+      "loss": {
+        "lambda_fine": 1.0,
+        "lambda_coarse": 0.5,
+        "lambda_contrast": 0.2,
+        "contrast_temperature": 0.1,
+        "same_lineage_negative_weight": 1.0,
+        "fine_weighting": "none",
+        "effective_number_beta": 0.999,
+        "detach_router_for_fine": false
+      },
+      "schedule": {
+        "warmup_epochs": 5,
+        "contrast_ramp_epochs": 10,
+        "routing_ramp_epochs": 10,
+        "calibration_epochs": 0,
+        "calibration_lr": 0.0003
+      },
+      "train": {
+        "output_dir": "cell_JEPA/outputs/dropcascade_kfold5/fold1",
+        "seed": 42,
+        "batch_size": 512,
+        "num_workers": 4,
+        "epochs": 0,
+        "patience": 10,
+        "lr": 0.0001,
+        "weight_decay": 1e-05,
+        "grad_clip_norm": 1.0,
+        "use_amp": true
+      }
+    },
+    "dropcascade_kfold5/fold2": {
+      "data": {
+        "data_dir": "data",
+        "metadata_path": "data/metadata.csv",
+        "annotation_path": "data/cell_annotation.csv",
+        "subtype_col_in_annotation": "Celltypes_new",
+        "coarse_mapping_config": "cell_JEPA/apt_jepa/configs/coarse_lineage_explicit.yaml",
+        "drop_missing_subtype": true,
+        "drop_unknown": true,
+        "use_quantile_binning": false
+      },
+      "split": {
+        "mode": "external",
+        "held_out_disease": null,
+        "seed": 42,
+        "ratios": {
+          "train": 0.7,
+          "val": 0.15,
+          "test": 0.15
+        },
+        "external_split_csv": "cell_JEPA/outputs/dropcascade_kfold5_splits/fold2_split.csv"
+      },
+      "model": {
+        "num_features": 293,
+        "hidden_dim": 256,
+        "n_layers": 4,
+        "n_heads": 8,
+        "ff_dim": 512,
+        "dropout": 0.1,
+        "projection_dim": 128,
+        "routing_temperature": 1.0,
+        "routing_epsilon": 0.1,
+        "expert_scale": 1.0,
+        "routing_strength": 0.5,
+        "pretrained_checkpoint": null
+      },
+      "sampler": {
+        "enabled": false,
+        "subtypes_per_batch": 14,
+        "diseases_per_subtype": 2,
+        "cells_per_domain": 4,
+        "steps_per_epoch": null
+      },
+      "loss": {
+        "lambda_fine": 1.0,
+        "lambda_coarse": 0.5,
+        "lambda_contrast": 0.2,
+        "contrast_temperature": 0.1,
+        "same_lineage_negative_weight": 1.0,
+        "fine_weighting": "none",
+        "effective_number_beta": 0.999,
+        "detach_router_for_fine": false
+      },
+      "schedule": {
+        "warmup_epochs": 5,
+        "contrast_ramp_epochs": 10,
+        "routing_ramp_epochs": 10,
+        "calibration_epochs": 0,
+        "calibration_lr": 0.0003
+      },
+      "train": {
+        "output_dir": "cell_JEPA/outputs/dropcascade_kfold5/fold2",
+        "seed": 42,
+        "batch_size": 512,
+        "num_workers": 4,
+        "epochs": 0,
+        "patience": 10,
+        "lr": 0.0001,
+        "weight_decay": 1e-05,
+        "grad_clip_norm": 1.0,
+        "use_amp": true
+      }
+    },
+    "dropcascade_kfold5/fold3": {
+      "data": {
+        "data_dir": "data",
+        "metadata_path": "data/metadata.csv",
+        "annotation_path": "data/cell_annotation.csv",
+        "subtype_col_in_annotation": "Celltypes_new",
+        "coarse_mapping_config": "cell_JEPA/apt_jepa/configs/coarse_lineage_explicit.yaml",
+        "drop_missing_subtype": true,
+        "drop_unknown": true,
+        "use_quantile_binning": false
+      },
+      "split": {
+        "mode": "external",
+        "held_out_disease": null,
+        "seed": 42,
+        "ratios": {
+          "train": 0.7,
+          "val": 0.15,
+          "test": 0.15
+        },
+        "external_split_csv": "cell_JEPA/outputs/dropcascade_kfold5_splits/fold3_split.csv"
+      },
+      "model": {
+        "num_features": 293,
+        "hidden_dim": 256,
+        "n_layers": 4,
+        "n_heads": 8,
+        "ff_dim": 512,
+        "dropout": 0.1,
+        "projection_dim": 128,
+        "routing_temperature": 1.0,
+        "routing_epsilon": 0.1,
+        "expert_scale": 1.0,
+        "routing_strength": 0.5,
+        "pretrained_checkpoint": null
+      },
+      "sampler": {
+        "enabled": false,
+        "subtypes_per_batch": 14,
+        "diseases_per_subtype": 2,
+        "cells_per_domain": 4,
+        "steps_per_epoch": null
+      },
+      "loss": {
+        "lambda_fine": 1.0,
+        "lambda_coarse": 0.5,
+        "lambda_contrast": 0.2,
+        "contrast_temperature": 0.1,
+        "same_lineage_negative_weight": 1.0,
+        "fine_weighting": "none",
+        "effective_number_beta": 0.999,
+        "detach_router_for_fine": false
+      },
+      "schedule": {
+        "warmup_epochs": 5,
+        "contrast_ramp_epochs": 10,
+        "routing_ramp_epochs": 10,
+        "calibration_epochs": 0,
+        "calibration_lr": 0.0003
+      },
+      "train": {
+        "output_dir": "cell_JEPA/outputs/dropcascade_kfold5/fold3",
+        "seed": 42,
+        "batch_size": 512,
+        "num_workers": 4,
+        "epochs": 0,
+        "patience": 10,
+        "lr": 0.0001,
+        "weight_decay": 1e-05,
+        "grad_clip_norm": 1.0,
+        "use_amp": true
+      }
+    },
+    "dropcascade_kfold5/fold4": {
+      "data": {
+        "data_dir": "data",
+        "metadata_path": "data/metadata.csv",
+        "annotation_path": "data/cell_annotation.csv",
+        "subtype_col_in_annotation": "Celltypes_new",
+        "coarse_mapping_config": "cell_JEPA/apt_jepa/configs/coarse_lineage_explicit.yaml",
+        "drop_missing_subtype": true,
+        "drop_unknown": true,
+        "use_quantile_binning": false
+      },
+      "split": {
+        "mode": "external",
+        "held_out_disease": null,
+        "seed": 42,
+        "ratios": {
+          "train": 0.7,
+          "val": 0.15,
+          "test": 0.15
+        },
+        "external_split_csv": "cell_JEPA/outputs/dropcascade_kfold5_splits/fold4_split.csv"
+      },
+      "model": {
+        "num_features": 293,
+        "hidden_dim": 256,
+        "n_layers": 4,
+        "n_heads": 8,
+        "ff_dim": 512,
+        "dropout": 0.1,
+        "projection_dim": 128,
+        "routing_temperature": 1.0,
+        "routing_epsilon": 0.1,
+        "expert_scale": 1.0,
+        "routing_strength": 0.5,
+        "pretrained_checkpoint": null
+      },
+      "sampler": {
+        "enabled": false,
+        "subtypes_per_batch": 14,
+        "diseases_per_subtype": 2,
+        "cells_per_domain": 4,
+        "steps_per_epoch": null
+      },
+      "loss": {
+        "lambda_fine": 1.0,
+        "lambda_coarse": 0.5,
+        "lambda_contrast": 0.2,
+        "contrast_temperature": 0.1,
+        "same_lineage_negative_weight": 1.0,
+        "fine_weighting": "none",
+        "effective_number_beta": 0.999,
+        "detach_router_for_fine": false
+      },
+      "schedule": {
+        "warmup_epochs": 5,
+        "contrast_ramp_epochs": 10,
+        "routing_ramp_epochs": 10,
+        "calibration_epochs": 0,
+        "calibration_lr": 0.0003
+      },
+      "train": {
+        "output_dir": "cell_JEPA/outputs/dropcascade_kfold5/fold4",
+        "seed": 42,
+        "batch_size": 512,
+        "num_workers": 4,
+        "epochs": 0,
+        "patience": 10,
+        "lr": 0.0001,
+        "weight_decay": 1e-05,
+        "grad_clip_norm": 1.0,
+        "use_amp": true
+      }
+    }
+  },
+  "soft_training_logs": {
+    "soft_lineage_cascade_cell_matched": {
+      "epochs_logged": 45,
+      "last_epoch": 45,
+      "validation_best_epoch": 35,
+      "validation_best_fine_cw": 0.2638338834571757,
+      "resolved_epoch_budget": 0
+    },
+    "dropcascade_kfold5/fold0": {
+      "epochs_logged": 32,
+      "last_epoch": 32,
+      "validation_best_epoch": 22,
+      "validation_best_fine_cw": 0.15191576767843415,
+      "resolved_epoch_budget": 0
+    },
+    "dropcascade_kfold5/fold1": {
+      "epochs_logged": 36,
+      "last_epoch": 36,
+      "validation_best_epoch": 26,
+      "validation_best_fine_cw": 0.146742636352669,
+      "resolved_epoch_budget": 0
+    },
+    "dropcascade_kfold5/fold2": {
+      "epochs_logged": 39,
+      "last_epoch": 39,
+      "validation_best_epoch": 29,
+      "validation_best_fine_cw": 0.17309248255396387,
+      "resolved_epoch_budget": 0
+    },
+    "dropcascade_kfold5/fold3": {
+      "epochs_logged": 23,
+      "last_epoch": 23,
+      "validation_best_epoch": 13,
+      "validation_best_fine_cw": 0.15193441908455482,
+      "resolved_epoch_budget": 0
+    },
+    "dropcascade_kfold5/fold4": {
+      "epochs_logged": 41,
+      "last_epoch": 41,
+      "validation_best_epoch": 31,
+      "validation_best_fine_cw": 0.15895887165527847,
+      "resolved_epoch_budget": 0
+    }
+  },
+  "neural_prediction_headers": {
+    "patient": [
+      "sample_id",
+      "disease",
+      "subtype_true",
+      "fine_true_id",
+      "fine_pred_id",
+      "coarse_true_id",
+      "coarse_pred_id",
+      "fine_hard_pred_id",
+      "fine_oracle_pred_id",
+      "fold",
+      "fine_true",
+      "fine_pred",
+      "fine_hard_pred",
+      "fine_oracle_pred",
+      "coarse_true",
+      "coarse_pred"
+    ],
+    "cell": [
+      "sample_id",
+      "disease",
+      "subtype_true",
+      "fine_true_id",
+      "fine_pred_id",
+      "coarse_true_id",
+      "coarse_pred_id",
+      "fine_hard_pred_id",
+      "fine_oracle_pred_id"
+    ]
+  },
+  "neural_cell_order_patient_truth_matches_xgb": true,
+  "test_cell_identity": {
+    "xgb": "explicit IDs checked against manifests",
+    "soft": "unavailable in predictions; split-implied sets and patient counts verified, not barcode linkage"
+  },
+  "intervals": "Protocol-difference uncertainty not estimated",
+  "source_version_limit": "Current source and surviving records, not immutable original environment or CLI snapshot",
+  "metric": "CW pooled Macro-F1, all 5/27 classes supported; zero denominator contributes zero"
+}

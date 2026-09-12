@@ -29,8 +29,10 @@
 | Patient-label permutation | `analysis/results/patient_permutation_n1000/patient_label_permutation_summary.json` | `analysis/run_patient_label_permutation.py` | Disease audit appendix |
 | Patient-lineage attribution | `analysis/results/patient_lineage_attribution.csv`, `patient_lineage_attribution_summary.csv` | `analysis/plot_patient_lineage_attribution.py` | Appendix figures |
 
-The revised abstract centers patient-disjoint APT cell typing and split-protocol
-sensitivity, not scaling. The split-control evidence is in
+The current abstract centers prior-controlled hierarchy reconstruction and
+the paired APT increment over RNA references. Split sensitivity is historical
+appendix background only; its Route A audit and artifact limitations are in
+`analysis/SPLIT_AUDIT_RESOLUTION.md`. The split-control evidence is in
 `tables/protocol_sensitivity.tex` and is historical cell-weighted Macro-F1,
 not the subject-balanced leaderboard or a matched causal leakage estimate.
 The sampling rows above describe historical locations: fixed-total, doubling,

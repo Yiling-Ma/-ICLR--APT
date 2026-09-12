@@ -1,35 +1,26 @@
 \begin{table}[!htbp]
 \centering
 \small
-\setlength{\tabcolsep}{6pt}
+\setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.10}
-
 \begin{tabular}{llccc}
 \toprule
-\textbf{Task} & \textbf{Model} & \textbf{Patient-disjoint} & \textbf{Cell split} & \textbf{Inflation} \\
+\textbf{Task} & \textbf{Model} & \textbf{Patient-disjoint} & \textbf{Cell split} & \textbf{Observed difference} \\
 \midrule
-
-\multirow{2}{*}{Coarse lineage}
-& XGBoost      & 0.322 & 0.372 & $+0.050$ \\
-& \ourmethod{} & 0.326 & 0.417 & $+0.090$ \\
-\midrule
-
-\multirow{2}{*}{Fine subtype}
-& XGBoost      & 0.143 & 0.212 & $+0.069$ \\
-& \ourmethod{} & 0.152 & 0.260 & $+0.108$ \\
-
+Coarse lineage & XGBoost & 0.322 & 0.372 & $+0.050$ \\
+Coarse lineage & \ourmethod{} & 0.326 & 0.417 & $+0.090$ \\
+Fine subtype & XGBoost & 0.143 & 0.212 & $+0.069$ \\
+Fine subtype & \ourmethod{} & 0.152 & 0.260 & $+0.108$ \\
 \bottomrule
 \end{tabular}
-
-\caption{
-Historical cell-weighted pooled Macro-F1 under patient-disjoint evaluation
-versus the available cell-level split controls. All four model--resolution
-comparisons are higher under cell splitting. These are protocol comparisons,
-not matched-seed causal estimates of leakage alone; no uncertainty for the
-protocol difference is asserted. Differences were computed before rounding.
-The separate APT-only leaderboard (Table~\ref{tab:main}) reweights patients
-and therefore uses a different metric.
-}
+\caption{Historical descriptive protocol comparison. Both score columns are
+cell-weighted pooled Macro-F1 (CW), not the subject-balanced metric of
+Table~\ref{tab:main}. Observed difference is cell split minus patient-disjoint,
+computed from unrounded saved predictions before display rounding.
+Training, validation and test allocations were not matched; the patient-disjoint
+column pools five outer folds, whereas cell split evaluates one subset of cells
+from already-seen patients. Protocol-difference uncertainty was not estimated.
+These related model/resolution contrasts are not independent replications or
+causal estimates of leakage.}
 \label{tab:protocol_sensitivity}
-
 \end{table}

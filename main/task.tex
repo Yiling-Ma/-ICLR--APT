@@ -23,8 +23,7 @@ Equal patient weight; frozen APT-only references
 \end{minipage}}
 \caption{The primary APT-Bench contract. Patient-disjoint outer folds evaluate
 cell typing in new individuals; subject-normalized confusion pooling assigns
-equal total scoring weight to each patient. Cell-random splitting is a separate
-diagnostic, not a substitute for this generalization target.}
+equal total scoring weight to each patient.}
 \label{fig:cell_patient_overview}
 \end{figure}
 
@@ -65,8 +64,7 @@ use the fixed five-lineage/27-subtype ontology.
 Five frozen disease-stratified folds each hold out eight patients. All cells
 from a patient remain together; preprocessing, model selection, and fitting
 are restricted to development patients. We pool predictions across the five
-out-of-fold (OOF) partitions. A cell-random split is retained only as a leakage
-diagnostic, not as evidence of generalization to new patients. The release
+out-of-fold (OOF) partitions. The release
 interface records cell and patient IDs, ontology, folds, predictions, and
 metrics (Appendix~\ref{sec:appendix:benchmark_release}). Full data access and a
 portable end-to-end evaluator remain release requirements.
