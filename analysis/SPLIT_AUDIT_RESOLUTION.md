@@ -45,11 +45,35 @@ matched protocol comparison. Neither folds nor the four related contrasts
 are independent biological replications.
 
 XGBoost prediction cell IDs were checked against the corresponding manifests
-and OOF universe. Neural outputs have patient and true/predicted label fields,
-but **no cell barcode**. Patient counts agree with the manifests; the cell-split
+and OOF universe. Specifically, the two historical Soft-cascade CSV exports
+used here are `outputs/dropcascade_kfold5/pooled_oof_predictions.csv` and
+`outputs/soft_lineage_cascade_cell_matched/test_predictions.csv`.
+Both have patient and true/predicted label fields but **no cell barcode**.
+This statement does not apply to all neural predictions or later oracle
+replay exports. Patient counts agree with the manifests; the cell-split
 ordered patient/true-label sequence also agrees with XGBoost. This does not
 independently establish neural prediction-to-barcode linkage. Split-implied
 cell sets are recoverable; exact neural prediction cell identities are not.
+
+The zero cell-intersection finding is an actual check of saved cell-ID sets in
+`outputs/classical_baselines_cell/cell_split_seed42.csv` and
+`outputs/soft_lineage_cascade_cell_matched/split.csv`, not merely a requirement
+of the split program. The audit also verified those two manifests agree.
+It does not establish barcode linkage for the two old neural CSV exports;
+their missing identifiers are not evidence of actual partition overlap.
+
+The separate B.5 oracle replay writes `cell_ids` in its 15 per-fold NPZ files
+under `/ssd3/mayiling/apt_agent_runtime/remaining_v1/oracle` on vllab11.
+Its implementation is `analysis/export_lineage_oracle.py`; completion metadata
+is retained locally in `outputs/remaining_oracle_v1/completion.json`.
+These are different artifacts from the historical split-audit CSVs. The
+follow-up audit inspected all 15 remote NPZ member lists and confirmed
+`cell_ids.npy` is present in each, and read the saved PASS completion record;
+no checkpoint was replayed or model retrained in this clarification.
+The
+replay recovers IDs from the keyed test loader and verifies the original
+patient/label/prediction sequence; it does not retroactively add independent
+barcodes to the old CSVs. This clarification changes no scores or experiments.
 
 ## Training provenance and limits
 

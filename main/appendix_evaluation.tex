@@ -199,11 +199,17 @@ Carlo sensitivity remains archived, rather than occupying a separate table.
 The historical patient-disjoint XGBoost run uses 32 training and eight test
 patients per fold, without a validation partition; Soft-cascade uses 24/8/8
 training/validation/test patients. Both cell-split runs instead use
-253,254/54,269/54,269 cells, with all 40 patients represented in each partition
-but no cell shared across partitions. Patient-disjoint scores pool 361,792
+253,254/54,269/54,269 cells, with all 40 patients represented in each partition.
+An audit of the two saved cell-level split manifests verified pairwise-disjoint
+training, validation and test cell-ID sets. Patient-disjoint scores pool 361,792
 OOF cells; cell-split scores use 54,269 cells, not a common test set across
-protocols. XGBoost predictions retain cell IDs; neural predictions retain
-patient and label fields but not independently checkable cell barcodes.
+protocols. The historical Soft-cascade CSV exports used in this split audit,
+both patient-disjoint pooled OOF and cell-split test predictions, retain
+patient and label fields but not cell IDs. This limits independent barcode
+linkage for those exports, not the manifest-based partition check, and does
+not imply actual cell overlap. The separate frozen-checkpoint oracle replay
+in Appendix~\ref{sec:appendix:true_lineage_oracle} retains explicit cell IDs;
+XGBoost prediction IDs were checked against the historical manifests.
 The split-audit reproducibility record reports full counts, source hashes
 and historical training-record limitations. This is a descriptive comparison,
 not an estimate of a pure leakage effect.
