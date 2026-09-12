@@ -7,9 +7,10 @@ paired APT beyond a specified RNA reference. The completed MLP oracle and
 training-prior comparison shows within-lineage discrimination beyond simply
 narrowing the candidate set. Its heterogeneity across lineages cautions
 against summarizing APT as uniformly informative or uninformative. The
-preliminary paired-input increment asks a different question; it requires
-conditional shuffling and repeated training before being interpreted as
-finer-grained complementary information. Patient-disjoint testing and
+paired-input increment asks a different question. It persists over the two
+tested RNA widths, but the repeated patient-by-lineage-shuffle contrast
+remains unresolved overall. Improvements over RNA alone therefore do not
+establish finer-grained pairing specificity. Patient-disjoint testing and
 subject-balanced scoring provide the common evaluation foundation, not an
 additional claim of methodological novelty.
 
@@ -31,7 +32,7 @@ assess broader generalization. Patient-disjoint testing does not remove
 disease-correlated acquisition effects, so the secondary disease study is
 not clinical validation. RNA supplies the reference labels, and its apparent
 difficulty depends on features, preprocessing, and the fitted reference.
-An APT increment over 2{,}000 HVGs may reflect restricted RNA representation;
+An APT increment over either 2{,}000 or 5{,}000 HVGs may reflect restricted RNA representation;
 it is not evidence of irreducible information absent from RNA. True-lineage
 masking and shuffling are privileged diagnostics, and the latter does not
 identify a causal or molecular mechanism. Three training seeds and
@@ -49,8 +50,8 @@ subject-balanced scoring, and classical and neural reference results.
 It asks which hierarchy levels are recoverable in new patients and whether
 APT contributes additional typing information beyond an RNA reference.
 Training-prior-controlled oracle decoding reveals usable but heterogeneous
-within-lineage discrimination under the tested model. Establishing the
-specificity and robustness of the preliminary paired-input increment
-remains contingent on the ongoing repeated conditional controls and wider
-RNA sensitivity analysis. This distinction between a research question and
-an established finding is central to the benchmark's interpretation.
+within-lineage discrimination under the tested model. The repeated paired
+probe improves over the tested RNA-only references at both widths, while
+its overall advantage over patient-by-lineage-shuffled APT remains
+unresolved. Distinguishing these findings avoids equating improved reference
+reconstruction with established subtype-specific complementarity.

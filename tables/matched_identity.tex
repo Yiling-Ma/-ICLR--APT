@@ -1,0 +1,28 @@
+\begin{table}[!htbp]
+\centering\small
+\begin{tabular}{llccccc}
+\toprule
+Model & Scope & APT & APT oracle & RNA oracle & Prior MAP & Prior expected CM \\
+\midrule
+SGD & All & 0.089 & 0.289 & 0.542 & 0.148 & 0.182 \\
+SGD & B & 0.133 & 0.334 & 0.556 & 0.176 & 0.199 \\
+SGD & Myeloid & 0.147 & 0.201 & 0.661 & 0.072 & 0.124 \\
+SGD & NK & 0.220 & 0.840 & 0.791 & 0.434 & 0.494 \\
+SGD & Other & 0.018 & 0.470 & 0.603 & 0.496 & 0.487 \\
+SGD & T & 0.119 & 0.184 & 0.379 & 0.067 & 0.098 \\
+MLP & All & 0.093 & 0.309 & 0.672 & 0.148 & 0.182 \\
+MLP & B & 0.212 & 0.405 & 0.750 & 0.176 & 0.199 \\
+MLP & Myeloid & 0.162 & 0.211 & 0.774 & 0.072 & 0.124 \\
+MLP & NK & 0.241 & 0.849 & 0.839 & 0.434 & 0.494 \\
+MLP & Other & 0.076 & 0.497 & 0.652 & 0.496 & 0.487 \\
+MLP & T & 0.119 & 0.191 & 0.535 & 0.067 & 0.098 \\
+\bottomrule
+\end{tabular}
+\caption{Matched-budget hierarchy diagnostics: mean over three training seeds,
+2,000 training-selected RNA HVGs, identical capped training subsets and patient
+folds. All rows use SB-Macro-F1; lineage rows average over their fixed child
+classes. Oracle and prior controls receive true lineage. Expected-CM F1 is not
+expected finite-sample F1. Other has 38 eligible patients; other scopes have 40.
+These are descriptive point estimates, not paired APT--RNA superiority tests.}
+\label{tab:matched_identity}
+\end{table}

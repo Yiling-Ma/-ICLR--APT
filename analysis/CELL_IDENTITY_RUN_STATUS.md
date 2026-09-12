@@ -1,5 +1,23 @@
 # Cell-identity questions: implementation and running status
 
+## Final update: 2026-09-12
+
+All required experiments for this extension are complete and audited:
+full-budget MLP 30/30, frozen neural oracle 15/15, reference modality grids
+300/300 at each RNA width, and targeted conditional controls 30/30 blocks.
+The targeted 5000-HVG conditional-shuffle extension was not triggered under
+the frozen rule; it is intentionally not run, not an unfinished job.
+The independent 5000-HVG grid gives MLP fine RNA 0.595669 versus paired
+0.612135, delta +0.016467, joint95% interval [0.009308,0.028904].
+The overall conditional-shuffle conclusion remains unresolved as documented
+below. No scope or bootstrap seed was changed to obtain significance.
+The final cross-artifact audit and six unit tests passed. Main results,
+abstract, discussion, matched hierarchy table, width table, all-lineage
+contrast figure, and retrospective rescue/damage interpretation are updated.
+Paper-release/annotation/clinical metadata TODOs are not resolved by these
+experiments and remain explicit. Historical progress sections below are
+retained for provenance.
+
 ## Update: 2026-09-12 05:17 UTC
 
 The targeted 2000-HVG extension is complete: 30/30 final blocks and PASS.

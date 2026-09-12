@@ -29,7 +29,7 @@ Within each lineage, eligible patients' confusion matrices are normalized
 before pooling and macro-averaging fixed child classes. Zero-support patients
 are excluded and counted; outside-lineage predictions retain false negatives.
 
-\paragraph{Matched-input follow-up (running).}
+\paragraph{Completed matched-input follow-up.}
 SGD and MLP retain the existing folds, 1{,}000-cell-per-training-patient cap,
 40 epochs, and inner-patient selection over their two-value regularization
 grids. Three training seeds each have three patient-shuffle and three
@@ -59,4 +59,36 @@ if MLP paired-minus-RNA and paired-minus-patient-by-lineage-shuffle effects
 are positive in all three seeds and both joint intervals exclude zero.
 SGD and all negative contrasts remain reported. This computational gate is
 not robustness evidence; an increment can still depend on restricted RNA
-representation rather than uniquely aptamer-specific biology.
+representation rather than uniquely aptamer-specific biology. The trigger
+was not met: the overall conditional-shuffle interval includes zero.
+Accordingly, no targeted 5{,}000-HVG conditional shuffle was run; the
+independent 5{,}000-HVG reference grid was completed in full.
+
+\input{tables/matched_identity}
+\input{tables/rna_width_repeats}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{outputs/cell_identity_questions_v1/hvg2000/matched_identity_controls.pdf}
+\caption{Two distinct questions under the matched 2,000-HVG probe. Left:
+APT oracle minus the conditional training-proportion expected-CM baseline.
+Right: paired RNA+APT minus patient-by-lineage-shuffled APT. All lineages
+are retained, with fixed child classes and subject-balanced scoring.
+Bars are exploratory pointwise joint seed/patient intervals, also resampling
+shuffle draws within seed on the right. Axes use different scales; no
+cross-panel effect-size equivalence is implied. Oracle information is
+privileged and the overall right-panel intervals include zero.}
+\label{fig:matched_identity_controls}
+\end{figure}
+
+\paragraph{Retrospective rescue and damage.}
+For MLP, mean patient accuracy on RNA-error cells improves by 0.311
+($[0.291,0.331]$), while accuracy on RNA-correct cells falls by 0.102
+($[-0.115,-0.091]$). Against the conditional shuffle, the corresponding
+differences are 0.0077 ($[0.0032,0.0124]$) and approximately zero
+($[-0.0035,0.0033]$). These exploratory stratum contrasts do not override
+the unresolved overall fine-F1 contrast or the unmet follow-up gate.
+Complete scores, scope coverage, all seeds, and 288 contrast/metric rows
+are retained in the aggregate release. All 30 targeted blocks, 300 fits at
+each RNA width, 30 full-budget MLP fits, and 15 frozen neural oracle replays
+completed their artifact checks. Six unit tests cover the diagnostic evaluator.

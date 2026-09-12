@@ -1,0 +1,24 @@
+\begin{table}[!htbp]
+\centering\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lllccccc}
+\toprule
+HVGs & Task & Model & RNA & Paired & Noise & Patient shuffle & Paired minus RNA \\
+\midrule
+2,000 & Coarse & SGD & 0.745 & 0.751 & 0.745 & 0.750 & +0.006 [0.000, 0.013] \\
+2,000 & Coarse & MLP & 0.871 & 0.872 & 0.868 & 0.874 & +0.001 [-0.006, 0.007] \\
+2,000 & Fine & SGD & 0.432 & 0.450 & 0.411 & 0.442 & +0.018 [0.003, 0.033] \\
+2,000 & Fine & MLP & 0.589 & 0.607 & 0.573 & 0.597 & +0.018 [0.009, 0.030] \\
+5,000 & Coarse & SGD & 0.772 & 0.777 & 0.773 & 0.777 & +0.005 [0.002, 0.008] \\
+5,000 & Coarse & MLP & 0.873 & 0.881 & 0.876 & 0.878 & +0.009 [0.004, 0.014] \\
+5,000 & Fine & SGD & 0.456 & 0.478 & 0.437 & 0.468 & +0.022 [0.010, 0.034] \\
+5,000 & Fine & MLP & 0.596 & 0.612 & 0.586 & 0.606 & +0.016 [0.009, 0.029] \\
+\bottomrule
+\end{tabular}
+\caption{Completed RNA-width reference grids: three training seeds, five folds,
+300 outer fits per width. Point estimates average seed-specific SB-Macro-F1;
+paired differences have joint seed/patient 95\% intervals. Patient shuffle
+uses one draw per seed in this grid; the targeted 2,000-HVG experiment uses
+three draws per seed for each shuffle type. All normalization and HVG selection
+are training-partition-only. Noise adds 293 dimensions.}
+\label{tab:rna_width_repeats}
+\end{table}

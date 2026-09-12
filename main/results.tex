@@ -67,33 +67,48 @@ APT--RNA comparison.}
 Figure~\ref{fig:lineage_structure} reports every lineage, including the
 heterogeneous \texttt{Other} category. Improvements from ordinary to oracle
 decoding differ across lineages: eliminating parent errors is not equally
-helpful everywhere. Within-lineage scores also remain heterogeneous. A
-matched-budget RNA oracle is needed to contextualize this pattern under the
-same label system; that repeated diagnostic is in progress rather than
-inferred from RNA scores obtained under another budget.
+helpful everywhere. The completed matched-budget MLP probe gives APT
+ordinary/oracle scores of 0.093/0.309, RNA oracle 0.672, and conditional
+MAP/expected-prior scores of 0.148/0.182
+(Table~\ref{tab:matched_identity}). Thus APT exceeds these candidate-set
+controls, but knowing the lineage does not close the overall RNA gap.
+The pattern is not uniform: conditional APT/RNA scores are 0.849/0.839
+for NK and 0.191/0.535 for T cells. These descriptive within-lineage
+comparisons are conditional on this taxonomy and recipe, not an intrinsic
+modality ranking; all lineages and both models are reported.
 
 \subsection{Does Paired APT Add Information Beyond RNA?}
 
-The paired-input diagnostic uses a capped budget, separately from the main
-leaderboard. MLP fine SB-Macro-F1 is 0.584 for RNA and 0.606 for RNA+APT
-(paired difference $+0.022$; 95\% CI $[0.013,0.037]$).
-RNA+APT also exceeds RNA+noise and RNA+within-patient-shuffled APT; the latter
-difference is $+0.010$ ($[0.002,0.017]$). The corresponding SGD shuffled
-contrast is unresolved. These single-seed controls motivate, but do not settle,
-the incremental-information question. A within-patient shuffle destroys both
-lineage correspondence and finer cell pairing; its contrast cannot establish
-within-lineage subtype complementarity. RNA supplies the annotations, so this is internal
-label reconstruction (Appendix~\ref{sec:appendix:paired_rna_oracle}).
+The matched-input probe uses a capped training budget, separately from the
+main leaderboard. Over three training seeds, MLP fine SB-Macro-F1 is 0.589
+for RNA and 0.607 for RNA+APT: $+0.018$ (joint 95\% CI $[0.009,0.030]$).
+At 5{,}000 rather than 2{,}000 training-selected HVGs, the corresponding
+scores are 0.596 and 0.612: $+0.016$ ($[0.009,0.029]$).
+SGD also has positive fine increments at both widths
+(Table~\ref{tab:rna_width_repeats}). Thus the overall increment is not
+specific to 2{,}000 HVGs, although both RNA representations remain limited
+and RNA supplies the operational annotations.
 
-The ongoing extension repeats training seeds and shuffles, adds APT
-permutation within patient and true lineage, and evaluates all lineages and
-RNA-defined difficulty strata. The RNA-only inner-validation margin fixes
-the low-confidence threshold before outer evaluation. Test-set RNA errors
-are separately labeled retrospective strata, with both correction and harm
-reported. These are reference-model difficulties, not intrinsic RNA
-ambiguity. Appendix~\ref{sec:appendix:identity_questions} specifies the frozen
-controls and the wider-RNA sensitivity gate. No repeated conditional-pairing
-or representation-robustness claim is made while these results are pending.
+\paragraph{Increment versus pairing specificity.}
+With three shuffle draws per training seed at 2{,}000 HVGs, MLP exceeds
+RNA+noise by 0.034 and patient-shuffled APT by 0.0088
+($[0.0014,0.0145]$). However, paired minus patient-by-lineage-shuffled APT
+is only $+0.0064$ ($[-0.00018,0.01180]$), despite positive effects in all
+three seeds. SGD's corresponding difference is likewise unresolved
+($+0.0064$; $[-0.0044,0.0166]$). Figure~\ref{fig:matched_identity_controls}
+reports all lineage contrasts. These results do not establish that the
+overall gain depends on finer-than-lineage cell pairing, nor do they show
+equivalence or absence of such information.
+
+\paragraph{RNA-defined difficulty.}
+Using the frozen inner-validation RNA margin threshold, MLP gains 0.085
+fine SB-Macro-F1 on low-margin cells over RNA, but only 0.011 over the
+conditional shuffle ($[-0.004,0.022]$). Retrospectively, it corrects 31.1\%
+of RNA errors while misclassifying 10.2\% of previously correct cells,
+averaged within eligible patients. These differently conditioned rates must
+not be subtracted. The low-margin and error/correct strata describe this
+RNA model, not intrinsic biological ambiguity; Appendix~\ref{sec:appendix:identity_questions}
+reports both rescue and damage and the unresolved primary contrast.
 
 \subsection{A Limited Patient-Composition Case Study}
 

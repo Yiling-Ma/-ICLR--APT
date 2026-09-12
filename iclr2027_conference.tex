@@ -78,10 +78,13 @@ Under this contract, reference models achieve
 coarse/fine subject-balanced Macro-F1 of 0.298--0.335/0.126--0.145,
 establishing an operational hierarchy of reconstruction difficulty, rather
 than an assay information limit. True-lineage decoding with training-prior
-controls probes within-lineage recoverability. A matched-input RNA/APT probe
-shows a preliminary paired-input increment, but repeated lineage-conditioned
-shuffling and wider RNA features remain needed to establish its specificity
-and robustness. The benchmark organizes these questions around a fixed
+controls probes within-lineage recoverability. Across three training seeds,
+paired RNA+APT improves fine reconstruction over RNA at both 2{,}000 and
+5{,}000 training-selected genes. However, its overall advantage over
+patient-by-lineage-shuffled APT remains statistically unresolved in the
+targeted 2{,}000-gene control. The benchmark distinguishes an increment over
+a specified RNA reference from evidence of finer-grained pairing specificity,
+and organizes these questions around a fixed
 new-patient target; complete data access and portable reproduction remain
 requirements for its public release.
 \end{abstract}
@@ -281,9 +284,12 @@ This matched-budget probe uses the main subject-balanced metric, but is not
 an architecture comparison with the full-training model ladder in
 Table~\ref{tab:main}.
 
+The following table and paragraph retain the original single-seed pilot for
+provenance; the completed repeated and wider-RNA results in
+Appendix~\ref{sec:appendix:identity_questions} supersede it for inference.
 \input{tables/paired_rna_oracle}
 
-For the MLP probe, paired RNA improves coarse/fine macro-F1 over APT by
+For the original MLP probe, paired RNA improves coarse/fine macro-F1 over APT by
 $+0.562$ and $+0.490$. The concatenated representation improves fine macro-F1
 over RNA alone by $+0.022$ ($[0.013,0.037]$), and exceeds RNA plus shuffled APT
 by $+0.010$ ($[0.002,0.017]$). The linear SGD probe shows the same direction

@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "reference_outer_fits": 600,
+  "targeted_blocks": 30,
+  "checked": [
+    "cross-width barcodes/truth/classes/patient order",
+    "patient-disjoint preprocessing partitions",
+    "unique per-stage HVG count",
+    "stored confusion mass",
+    "targeted source-prediction agreement",
+    "oracle parent constraints",
+    "complete OOF cell and patient coverage"
+  ],
+  "limitation": "HVG computation is additionally documented by the train-only preparation implementation; this audit does not independently reconstruct raw gene matrices."
+}
