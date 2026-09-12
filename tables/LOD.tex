@@ -25,25 +25,19 @@ HCC
 PC
 & 0.057 & 0.253 & 0.221 & 0.482 & 0.037 \\
 \midrule
-\textbf{Macro-average}
-& \textbf{0.075}
-& \textbf{0.272}
-& \textbf{0.277}
-& \textbf{0.470}
-& \textbf{0.070} \\
+Normal
+& --- & --- & --- & --- & --- \\
 \bottomrule
 \end{tabular}
 }
 
 \caption{
-Leave-one-disease-out generalization for \ourmethod{} over the five
-malignant held-out diseases. Each row withholds all patients of the named
-disease from training. The in-distribution reference using the same model
-under the standard patient-disjoint 5-fold protocol is fine Macro-F1
-0.152 and coarse Macro-F1 0.326. A separate Normal-held-out run produces
-near-chance fine performance. LODO is reported only as an exploratory
-appendix stress test, not as proof that the model already solves
-cross-disease generalization.
+Available cell-weighted LODO summaries for \ourmethod{}.
+Each numerical row withholds all patients of that disease. Dashes indicate
+that the numerical Normal-held-out artifact has not been verified, not zero
+performance. Per-row patient/cell/class supports are also unavailable in this
+summary; no six-group aggregate or comparison with pooled five-fold scores
+is made. A same-protocol simple baseline remains unevaluated.
 }
 \label{tab:lodo}
 

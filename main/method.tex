@@ -6,10 +6,8 @@ reference ladder introduced in Section~\ref{sec:method_summary}: a flat
 Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses on the
 cell-level hierarchy, lineage $\rightarrow$ subtype, while disease-association
 audits use separate tabular baselines and patient-level aggregation. The
-released code retains the historical identifier \texttt{DropCascade} for
-artifact compatibility. That identifier denotes a reproducible benchmark
-baseline, not a claim that its global path, auxiliary coarse objective, soft
-routing, or contrastive construction independently improves performance.
+reference recipes differ in auxiliary supervision as well as hierarchy
+structure; their comparison does not isolate individual components.
 
 \subsection{Cell Encoder}
 \label{sec:method:backbone}
@@ -61,7 +59,22 @@ The reference model includes a cross-disease supervised contrastive term. Let
 \begin{equation}
 u = \frac{\mathrm{Proj}(z)}{\lVert \mathrm{Proj}(z) \rVert_2}
 \end{equation}
-be a normalized projection of the encoder representation. For anchor cell $i$, positives are cells with the same subtype but a different disease label. Same-subtype cells from the same disease are excluded by construction. Cells from different subtypes are treated as negatives, with additional emphasis on negatives that share the same coarse lineage. The contrastive loss weight is ramped from 0 to 0.2 after the early warmup period. Because we do not compare this construction with standard supervised contrastive learning across all five folds, we make no claim that the cross-disease positive rule independently improves generalization.
+be a normalized projection. For anchor $i$, $P_i$ contains same-subtype,
+different-disease cells, and $N_i$ contains different-subtype cells. Self-pairs
+and same-subtype/same-disease pairs are excluded. The implementation uses
+positive probability mass, rather than the standard average of individual
+positive log-probabilities:
+\begin{equation}
+\mathcal L_{\rm contrast}=-\frac{1}{|V|}\sum_{i\in V}
+\log\frac{\sum_{j\in P_i}\exp(u_i^\top u_j/0.1)}
+{\sum_{j\in P_i\cup N_i}w_{ij}\exp(u_i^\top u_j/0.1)},
+\end{equation}
+where $V=\{i:|P_i|>0\}$. Anchors without positives are excluded; a batch
+with no valid anchor returns zero loss. Although the code permits extra
+weight on same-lineage negatives, the inspected resolved configuration uses
+$w_{ij}=1$ for every included pair. The contrastive multiplier is zero through
+epoch 5 and then $0.2\min(1,(t-5)/10)$. This disease-supervised objective is
+not used by Flat or HCE and is not an independently validated mechanism.
 
 \subsection{Optimization and Model Scope}
 \label{sec:method:training}
@@ -97,6 +110,8 @@ observed subtype $k$ and lineage $m$. Because every fine label here is a leaf, t
 fine HCE term alone would reduce to ordinary CE; including the simultaneously
 observed parent label makes this a stated two-level adaptation rather than an
 unqualified reproduction of the mixed-granularity setting in the original work.
+Coarse HCE decoding maximizes subtree scores $s_m$, not raw internal-node
+logits; fine decoding maximizes leaf logits.
 All three Transformer models are evaluated from the checkpoint selected by
 patient-validation fine macro-F1, without an additional post-selection calibration
 stage. Table~\ref{tab:transformer_components} makes the remaining objective
@@ -126,6 +141,13 @@ $C\in\{0.01,0.1,1,10,100\}$ selected by patient-level inner CV, and evaluated
 once on the eight outer-test vectors. Raw proportions are primary; CLR with a
 prespecified $10^{-6}$ pseudocount is a sensitivity analysis. All uncertainty
 and permutation analyses resample or shuffle patients, never cells.
+The outer-test fold is excluded from base fitting and downstream selection.
+Within the development set, however, meta-level selection reuses cached
+inner-OOF features: base models producing some meta-training features may
+have seen subtype labels from the meta-validation fold. This creates
+inner-selection cross-dependence, not exposure to the outer-test patients.
+A fully isolated meta-inner comparison would require another level of base
+refitting; it has not been performed.
 To test conditional rather than marginal subtype value, we additionally compare
 three nested feature sets under the same folds and inner selection:
 recorded-QC summaries alone, QC plus the five predicted lineage proportions,

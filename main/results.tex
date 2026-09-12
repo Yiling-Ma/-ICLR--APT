@@ -48,24 +48,26 @@ about architecture choice.
 
 \subsection{Secondary Context: RNA and Patient Summaries}
 
-The paired-input diagnostic is not an extension of the APT-only leaderboard.
-Under its capped matched-probe protocol, an MLP reaches coarse/fine
-SB-Macro-F1 0.310/0.094 from APT and 0.871/0.584 from RNA; APT+RNA reaches
-0.873/0.606. Training-subset-only HVG selection avoids feature-selection
-exposure, but RNA also supplies the reference annotations. The comparison
-therefore concerns internal label reconstruction, not independent biological
-validation or APT algorithm superiority
-(Appendix~\ref{sec:appendix:paired_rna_oracle}).
+The paired-input diagnostic uses a capped budget, separately from the main
+leaderboard. MLP fine SB-Macro-F1 is 0.584 for RNA and 0.606 for RNA+APT
+(paired difference $+0.022$; 95\% CI $[0.013,0.037]$).
+RNA+APT also exceeds RNA+noise and RNA+within-patient-shuffled APT; the latter
+difference is $+0.010$ ($[0.002,0.017]$). The corresponding SGD shuffled
+contrast is unresolved. These single-seed controls support a limited
+cell-pairing association; repeated shuffles and a wider RNA representation
+have not been evaluated. RNA supplies the annotations, so this is internal
+label reconstruction (Appendix~\ref{sec:appendix:paired_rna_oracle}).
 
-As a secondary patient-level case study, nested subtype summaries reduce
-reference-composition error from 0.0231 for a training-mean baseline to
-0.0148 (paired reduction 0.0084; 95\% patient-bootstrap CI
-$[0.0065,0.0101]$). Their disease Macro-F1 is 0.593 versus 0.477 for
-lineage summaries, but the difference is unresolved
-($+0.116$; $[-0.015,0.262]$). Strong direct APT disease association is
-sensitive to patient-wise centering and cannot be separated from acquisition
-effects with the available metadata. Forty patients do not establish clinical
-validity. The complete case study and controls remain in
-Appendices~\ref{sec:appendix:composition_recovery} and
-\ref{sec:appendix:disease_patient_level}, rather than forming a second
-headline contribution.
+As a limited aggregation case study, nested subtype summaries reduce mean
+absolute reference-composition error from 0.02314 for a training-patient-mean
+baseline to 0.01478 (paired reduction 0.00836; 95\% CI
+$[0.00648,0.01010]$). This corresponds to mean total variation decreasing
+from 0.312 to 0.200, a rescaling of the same error rather than independent
+evidence. Lineage error instead changes from 0.05495 to 0.05827, with no
+resolved improvement. Appendix~\ref{sec:appendix:composition_recovery}
+reports all classes and a direct median-APT ridge control (subtype MAE 0.01421).
+The soft-minus-direct difference is unresolved ($+0.00057$;
+$[-0.00092,0.00211]$), so aggregation has no demonstrated advantage over
+direct patient regression. Disease association
+and recorded-QC conditional comparisons are confined to
+Appendix~\ref{sec:appendix:disease_patient_level}.

@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "patients": 40,
+  "cells": 361792,
+  "alignment": "one-to-one cell-key merges and patient-key median alignment",
+  "existing_soft_mae_reproduced": true,
+  "source_sha256": "bcbf12ad0d70da3043e4a41077cbabbadd8c0fd1218ed95e80b746fa1f08cce3",
+  "scope": "fixed outer folds; direct inner preprocessing and fitting exclude validation patients; no new cell model"
+}

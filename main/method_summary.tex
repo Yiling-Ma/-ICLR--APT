@@ -12,16 +12,10 @@ appendix inventory. A full-budget plain MLP/ResNet evaluation is not available;
 its absence is a coverage limitation, not evidence of incompatibility.
 
 \paragraph{Hierarchy-aware reference.}
-Soft-cascade Transformer embeds aptamer identities and values, and uses the
-final \texttt{[CLS]} representation $z$ for cell prediction. A coarse head
-provides probabilities $p(m\mid x)$ for the five lineages. For subtype $k$
-with parent $m(k)$, its logit combines a global prediction with a softly
-weighted lineage expert:
-\begin{equation}
-s_k(x)=g_k(z)+\alpha p(m(k)\mid x)e_{m(k),k}(z)
-+\gamma\log\{\epsilon+(1-\epsilon)p(m(k)\mid x)\}.
-\label{eq:main_soft_cascade}
-\end{equation}
+Soft-cascade Transformer embeds aptamer identities and values and combines
+a global subtype head with lineage-specific experts weighted by coarse
+probabilities. Appendix~\ref{sec:method} specifies the routing equation and
+training objective.
 The independent coarse and fine heads are evaluated without constrained
 decoding. Flat removes the cascade; HCE instead uses a two-level hierarchical
 loss adaptation \citep{cultrera2026improving}. Only Soft-cascade uses

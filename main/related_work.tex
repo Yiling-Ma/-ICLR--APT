@@ -1,14 +1,13 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Blood-based characterization.}
-Multi-cancer detection commonly uses circulating DNA, methylation,
-fragmentomics, or bulk proteins
-\citep{cohen2018detection,zeng2026pan,wan2025promises,kahwati2025multicancer}.
-APT-Bench addresses the complementary evaluation question of identifying
-immune cells from single-cell aptamer measurements in new patients. Its
-disease-associated case study is secondary; within-cohort classification is
-not prospective screening.
+\paragraph{Aptamer profiling and paired measurements.}
+Apt-seq combines aptamer surface-binding measurements with transcriptomes
+using shared cellular barcodes \citep{delley2018combined}. APT-Bench builds on
+that concept rather than claiming its invention. Its focus is a clinical PBMC
+reference task with a fixed APT panel, RNA-derived labels, and patient-disjoint
+evaluation. The paired-RNA probe asks how these annotations are reconstructed
+under matched training budgets, not whether joint profiling itself is novel.
 
 \paragraph{Single-cell representations and hierarchy.}
 Geneformer, scGPT, and scFoundation motivate large transcriptomic
@@ -21,9 +20,10 @@ complete objectives are not matched, this ladder illustrates the evaluation
 setting rather than constituting a new learning algorithm or component ablation.
 
 \paragraph{Evaluation across cells and subjects.}
-Reusable single-cell benchmarks separate datasets, models, and metrics and
-adopt sample- or study-disjoint evaluation
-\citep{luecken2025open,liu2025multitask,shitov2025spare,liu2026pascient}.
+Open Problems separates datasets, methods, and metrics
+\citep{luecken2025open}; multimodal benchmarks additionally compare input
+configurations \citep{liu2025multitask}. Neither a coarse/fine ontology nor
+subject-disjoint evaluation is individually a new principle.
 APT-Bench makes the statistical unit explicit for APT cell typing and contrasts
 new-patient evaluation with cell-level split controls. Gradient-boosted trees provide strong
 tabular references \citep{grinsztajn2022tree,erickson2026tabarena}.

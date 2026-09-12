@@ -60,7 +60,9 @@ not end-to-end validation of a small-volume diagnostic assay.
 \label{sec:data:protocols}
 
 The evaluation has a primary task and a secondary application.
-\textbf{Cell identity} predicts lineage and subtype from APT alone.
+\textbf{Cell identity} predicts lineage and subtype using APT alone at inference.
+Training supervision is recipe-specific: only Soft-cascade additionally uses
+development-patient disease labels for contrastive pairing.
 \textbf{Patient characterization}
 predicts disease-group membership from patient summaries of measurements or
 cell-model outputs. The latter is an exploratory association task: with one

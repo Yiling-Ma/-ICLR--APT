@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{Lineage} & \multicolumn{2}{c}{Subtype} \\
+Method & MAE & TV & MAE & TV \\
+\midrule
+Training-patient mean & 0.05495 & 0.137 & 0.02314 & 0.312 \\
+Soft cell-output mean & 0.05827 & 0.146 & 0.01478 & 0.200 \\
+Median APT ridge & 0.05324 & 0.133 & 0.01421 & 0.192 \\
+\bottomrule
+\end{tabular}
+\caption{Patient-composition recovery on the same 40 outer-test patients.
+Lower is better. Mean TV equals $K\,\mathrm{MAE}/2$ and is not independent
+evidence. Direct regression uses inner-selected ridge and simplex projection;
+soft composition uses frozen nested XGBoost predictions. Soft-minus-direct
+MAE differences are $+0.00503$ ($[-0.00415,0.01469]$) for lineage and
+$+0.00057$ ($[-0.00092,0.00211]$) for subtype (pointwise paired 95\%
+patient-bootstrap intervals). Neither contrast establishes equivalence.}
+\label{tab:direct_composition}
+\end{table}

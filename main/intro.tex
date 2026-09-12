@@ -1,37 +1,34 @@
 \section{Introduction}
 
-Single-cell aptamer profiling creates a targeted molecular representation of
-blood-derived immune cells. To assess whether this representation supports
-cell typing, a model must be evaluated on patients absent from training, not
-merely on additional cells from familiar patients. The distinction matters
-because a large cell count does not create an equally large set of independent
-biological samples.
+Single-cell aptamer profiling measures targeted binding patterns alongside
+transcriptomic annotations. Apt-seq established joint aptamer and transcriptome
+sequencing \citep{delley2018combined}; the measurement principle is not new.
+The question here is whether these profiles support immune-cell typing in
+patients absent from training. General single-cell benchmarks provide reusable
+task definitions \citep{luecken2025open}, but gene-expression inputs do not
+directly define an evaluation contract for a fixed aptamer panel. A
+modality-specific reference task must distinguish additional cells from
+additional independent patients.
 
-APT-Bench addresses this evaluation problem with 361{,}792 cells from 40
-participants, 293 aptamer measurements per cell, and paired-transcriptomic
-annotations defining five lineages and 27 subtypes. Its central contribution
-is a patient-disjoint cell-typing benchmark specification and empirical
-evaluation for the APT modality. We fix the outer patient folds, state the
-label ontology and input contract, and report subject-balanced pooled
-Macro-F1 so that highly sampled patients do not dominate the score.
+Clinical single-cell collections can contain hundreds of thousands of cells
+from only tens of people. APT profiles may encode both cell identity and
+patient-associated shifts; cell-random evaluation can reward the latter
+without establishing cross-patient typing. Low fine-subtype scores alone
+cannot distinguish limited APT information from annotation ambiguity,
+imbalance, preprocessing, or model limitations. A useful benchmark therefore
+needs explicit statistical units, reference models, and error diagnostics,
+rather than interpreting a leaderboard as an assay information limit.
 
-The central empirical finding concerns the evaluation protocol. In the
-available XGBoost and Soft-cascade comparisons, cell-level splitting gives
-higher coarse and fine Macro-F1 than patient-disjoint evaluation in all four
-model--resolution comparisons. The increases range from 0.050 to 0.108 on
-the historical cell-weighted metric. Thus evaluation on held-out cells from
-known patients can give a substantially more favorable picture than evaluation
-on new patients. These protocol comparisons are not a matched causal estimate
-of leakage alone; they nevertheless show why the intended generalization unit
-must be fixed before interpreting performance.
-
-Classical and Transformer models provide reference performance under that
-contract. Soft-cascade Transformer is one hierarchy-aware reference, not a
-separate algorithmic contribution or the basis for a superiority claim.
-We retain an internal paired-RNA reconstruction diagnostic and a short
-patient-level application study to contextualize the benchmark, rather than
-treating them as additional headline contributions. Subject--cell sampling
-experiments are preserved in a separate supporting report.
+APT-Bench specifies this task with 361{,}792 cells from 40 participants,
+293 APT measurements, and RNA-derived labels for five lineages and 27
+subtypes. Five fixed patient-disjoint folds and subject-balanced pooled
+Macro-F1 define the primary comparison. Classical and neural recipes establish
+reference performance; Soft-cascade is one hierarchy-aware reference, not a
+separate algorithmic contribution. Split controls reveal protocol-dependent
+optimism, while paired-RNA reconstruction and patient-composition recovery
+contextualize the cell-level results. The contribution is this clinical APT
+task and its auditable interface, not the invention of paired profiling or
+subject-disjoint evaluation. Sampling analyses remain in a separate report.
 
 The paper makes one contribution with three concrete components:
 \begin{itemize}

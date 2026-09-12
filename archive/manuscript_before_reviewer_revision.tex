@@ -176,6 +176,8 @@ independently reproducible benchmark release.}
 \bibliographystyle{iclr2027_conference}
 
 \appendix
+\section{Appendix}
+
 \input{main/method}
 
 The main cell-identity results are reported in Table~\ref{tab:main}; the
@@ -419,12 +421,17 @@ APT cohort with recorded acquisition covariates and a frozen preprocessing,
 feature-selection, and prediction pipeline; the external scaling experiments
 do not supply that disease-validation cohort.
 
-Table~\ref{tab:disease} summarizes the patient-representation comparison
-within this appendix.
+Table~\ref{tab:disease} in the main text summarizes the patient-representation
+comparison; this section supplies its controls and interpretation limits.
 
-The multi-model cell-level disease ranking is archived, not a patient-level
-endpoint. The representative centering and patient-ID diagnostics below
-retain the evidence of patient-associated signal.
+\paragraph{Cell-level prediction of the disease source of a held-out patient.}
+Table~\ref{tab:disease} reports the exploratory patient-characterization
+audit. For completeness, Table~\ref{tab:disease_cell_level} reports the pooled
+\emph{cell-level} source-prediction metric, in which every held-out cell is
+treated as a target and pooled across all 361{,}792 cells. This is an easier and
+statistically different task than patient-level characterization, since cells
+from the same patient are correlated and patients with more cells contribute
+more weight. We report it only as a confounding diagnostic.
 
 \paragraph{Non-identifiability of disease and acquisition effects.}
 Every participant contributes one acquisition, so patient identity is nested
@@ -459,6 +466,7 @@ does not provide a resolved conditional increment in this cohort.
 
 \input{tables/technical_covariate_audit}
 
+\input{tables/disease_cell_level}
 
 \paragraph{Patient-wise centering sensitivity.}
 To test whether disease prediction relies on each patient's absolute expression level rather than only on within-patient relative structure, we repeated Logistic Regression training and evaluation after subtracting each patient's own per-aptamer median from every cell in both training and test data. This transformation preserves within-patient cell-to-cell variation while removing a patient-specific location shift. Cell-level accuracy drops from $0.991$ to $0.401$ (macro-F1 $0.989 \to 0.348$), and patient-level majority-vote accuracy drops from $40/40$ to $26/40$. This collapse shows that disease recognition depends substantially on patient-level absolute-expression structure, but it does not by itself determine whether that structure is biological, technical, or a mixture of both.
@@ -495,19 +503,14 @@ $+0.069$ (95\% patient-bootstrap CI $[-0.077,0.221]$), and the
 predicted-minus-gold subtype difference is $+0.077$ (95\% CI
 $[-0.100,0.256]$).
 
-Across 10{,}000 patient-label permutations, predicted subtype and
+Across 10{,}000 complete patient-label permutations, predicted subtype and
 lineage composition have plus-one $p=0.00010$ and $p=0.00020$. However, log cell
 count alone reaches macro-F1 0.531 ($p=0.00010$), and the predicted-subtype minus
 cell-count difference is $+0.062$ (95\% CI $[-0.087,0.218]$). Equal-cell
 subsampling at 100, 500, and 2{,}000 cells per patient preserves the qualitative
 result over 50 seeds. A 50-repeat global-multinomial composition control averages
 macro-F1 0.170, and fold-ID prediction from global OOF composition is below
-chance. The permutation code reruns downstream LR selection for each relabeling;
-the disease-label-free cell models remain fixed. However, the original folds
-were constructed using disease strata and are kept fixed. Unconditional
-exchangeability given this design has not been established, so the reported
-tail fractions are exploratory randomization diagnostics, not confirmatory
-biological tests. These controls support a predictive and associational bridge, not causal
+chance. These controls support a predictive and associational bridge, not causal
 mediation or independent biological validation.
 
 \subsection{Patient Composition Recovery}
@@ -537,35 +540,9 @@ disease-group indicators and are descriptive, not evidence of biological
 specificity or causal independence from disease. Reference recovery does not
 validate the annotation itself or imply improved disease characterization.
 
-\paragraph{Total variation and direct regression.}
-For probability vectors, $\mathrm{TV}(\widehat\pi,\pi)=
-\tfrac12\sum_k|\widehat\pi_k-\pi_k|$, so mean TV is exactly $KE/2$.
-For subtypes, baseline/model mean TV is 0.312/0.200; this is the same
-information as MAE, not a second validation endpoint. Per-class bias and
-centered recovery errors include every class, including rare subtypes.
-
-We additionally fit patient-median APT directly to reference composition using
-multioutput ridge regression. Each outer fold uses the remaining four frozen
-patient folds to select $\alpha\in\{0.1,1,10,100,1000\}$ by MAE after
-Euclidean projection onto the probability simplex. Standardization is fitted
-within each training split. This control uses provided APT expression values,
-not a newly selected normalization, and no disease labels enter fitting.
-Table~\ref{tab:direct_composition} reports all three methods. The soft-minus-direct
-subtype MAE difference is $+0.00057$ ($[-0.00092,0.00211]$), so there is no
-resolved advantage of cell-output aggregation over direct regression.
-The new intervals use 2,000 disease-stratified paired patient draws with seed
-20260912; their Monte Carlo endpoints differ slightly from the earlier audit.
-All point estimates for the existing soft and constant methods reproduce
-their saved results. Full per-class MAE, bias, and centered-error outputs are
-provided with the analysis, without selecting favorable classes.
-\input{tables/direct_composition}
+\input{outputs/oof_composition_bridge/legacy_vs_nested_audit}
 
 \paragraph{Patient-label permutation control.}
-This is a disease-classification diagnostic, not a composition-recovery test.
-Because the frozen folds were originally disease-stratified, unrestricted
-label permutations need not preserve the original fold-construction mechanism;
-the following tail fraction is conditional on the retained protocol rather
-than a design-exact test of biological disease specificity.
 We evaluated the same patient-level median-profile classifier under 1,000 label permutations. Disease labels were permuted across the 40 patients as indivisible units, preserving the disease-group counts $(6,8,7,7,6,6)$; labels were never shuffled across cells. We retained the original five patient folds rather than restratifying after permutation. No permuted dataset reached the observed accuracy of $0.950$ or macro-F1 of $0.948$, giving plus-one permutation $p=(0+1)/(1000+1)=0.000999$ for both statistics. The null accuracy mean was $0.137$, with empirical 95\% interval $[0.025,0.275]$. This rejects a random patient-label explanation under the fixed protocol, but does not distinguish biological signal from patient-associated technical structure.
 
 \subsection{Per-Subtype Support and Performance Audit}
@@ -592,15 +569,15 @@ same ground-truth support values. Spearman correlations are marginal, and 16 of
 Table~\ref{tab:subtype_per_class} gives all subtype-level quantities and 95\%
 percentile intervals from 2{,}000 patient-clustered bootstrap resamples. Counts
 and coverage use pooled ground truth, while F1 uses the same patient-disjoint OOF
-predictions as Table~\ref{tab:main}, but uses cell-weighted per-class F1 rather
-than subject-balanced scoring.
+predictions as Table~\ref{tab:main}. Mean cells per patient averages only over
+patients in which the subtype is observed.
 
+\clearpage
 \input{tables/subtype_per_class}
 
-Abundance does not alone explain the errors: Plasma has 2,173 cells and
-Soft-cascade CW-F1 0.611, whereas Memory B-1 has 23,722 cells and F1 0.034,
-and CD8+CTL-1 has 7,303 cells and F1 0.009. These examples complement the
-complete table; they do not establish the cause of subtype separability.
+For continuity with common long-tail reporting, Table~\ref{tab:tail_head} aggregates the seven least and seven most abundant subtypes. This summary is secondary to the per-class audit because individual subtypes can depart sharply from the abundance trend.
+
+\input{tables/tail_head}
 
 \paragraph{Cross-lineage error relative to an error-conditioned null.}
 Table~\ref{tab:hierarchy_error_null} uses the wrong-conditioned null as the
@@ -620,9 +597,7 @@ space, is retained only as a sensitivity analysis.
 \subsection{Protocol Sensitivity: Patient-Level versus Cell-Level Splitting}
 \label{sec:appendix:protocol_sensitivity}
 
-The main-text Table~\ref{tab:protocol_sensitivity} compares patient-disjoint
-and cell-level split protocols. This section defines their scoring units;
-the contrast does not isolate leakage from all training-allocation changes.
+Table~\ref{tab:protocol_sensitivity} compares the primary patient-disjoint protocol with a leakage-prone cell-level split control. It is placed in the appendix because the central result uses patient-disjoint evaluation throughout; the control quantifies how much the easier protocol would inflate both absolute performance and the apparent advantage of a model family.
 
 \paragraph{Metric definitions.}
 Let $C^{(p)}\in\mathbb{R}^{K\times K}$ be the confusion matrix for held-out
@@ -646,8 +621,20 @@ The numerical split comparison appears in the main results
 (Table~\ref{tab:protocol_sensitivity}). Its historical scores are cell-weighted
 in both columns, rather than the subject-balanced leaderboard metric.
 
-Exact subject-normalized pooling is primary. The older equal-cell Monte
-Carlo sensitivity remains archived, rather than occupying a separate table.
+\paragraph{Equal-cell evaluation sensitivity.}
+Patient-disjoint evaluation prevents leakage but does not make a cell-weighted
+pooled point estimate subject-balanced; patient cell counts range from
+1{,}929 to 22{,}627. Table~\ref{tab:patient_balanced_cell_sensitivity} therefore
+recomputes both hierarchy endpoints after sampling 1{,}900 cells without
+replacement from every patient for each of 50 seeds. Coarse macro-F1 changes by
+at most $+0.005$, while fine macro-F1 changes by $-0.007$ to $-0.009$; the
+qualitative ordering in this sensitivity is unchanged. These small changes
+describe robustness of the historical cell-weighted scores to equal-cell
+sampling; they do not prove absence of patient influence. The main table now
+uses exact subject-normalized confusion pooling rather than this Monte Carlo
+subsampling approximation.
+
+\input{tables/patient_balanced_cell_sensitivity}
 
 \subsection{Coarse--Fine Consistency Diagnostic}
 \label{sec:appendix:consistency}
@@ -672,13 +659,31 @@ estimates before generating the new table, and records source-artifact hashes.
 
 \input{tables/consistency}
 
-\subsection{Archived Supporting Analyses}
+\subsection{Archived Feature-Redundancy Diagnostic}
 \label{sec:appendix:minimal_panel}
 
-Feature-panel diagnostics, version comparisons, and equal-cell sensitivity
-are indexed in the repository pruning manifest; original artifacts are retained.
+We retain this audit only to document how easily the unresolved within-cohort
+signal can be compressed. Development-selected ten-feature panels reproduced
+the observed full-panel result on the same 40 patients, but random panels also
+performed strongly. This is neither biomarker discovery nor evidence that a
+reduced assay or low-cell clinical workflow is valid. Feature overlap across
+folds cannot distinguish a reproducible biological signature from a shared
+acquisition signature.
 
-\paragraph{Development-only sampling choice.}
+The complete historical protocol, curve, and random-panel, TreeSHAP, and
+cell-subsampling tables are preserved in the repository at
+\texttt{archive/compact\_panel\_audit.tex}; they are omitted from this PDF to
+avoid giving a secondary diagnostic the appearance of an assay-efficiency
+contribution. The archive records the cell-weighted LR ranker, conditional
+inner budget selection, foldwise refitting, and random-panel construction.
+Feature restriction involved refitting; inference-cell caps instead sampled
+cached held-out predictions after training on all development cells. Neither
+feature stability nor a 100-cell aggregation result establishes molecular
+specificity, training-data efficiency, or clinical validity. Such claims would
+require acquisition metadata and independent APT validation with a frozen
+pipeline.
+
+\subsection{Balanced Sampling Ablation}
 \label{sec:appendix:sampler}
 
 A development-only class-balanced-sampling variant did not outperform natural sampling after matching optimization steps and was not retained.
@@ -686,13 +691,7 @@ A development-only class-balanced-sampling variant did not outperform natural sa
 \subsection{Exploratory Leave-One-Disease-Out Stress Test}
 \label{sec:appendix:novelty}
 
-For each leave-one-disease-out (LODO) run, all patients from one group are
-withheld from training. The available table contains five cancer-group
-summaries. A numerical Normal-held-out artifact and row-level support counts
-have not been verified, so the sixth row is explicitly unavailable rather
-than omitted. These cell-weighted group summaries are not averaged or
-subtracted from pooled five-fold scores, since their evaluation populations
-and training protocols differ. This is an incomplete descriptive stress test.
+We retain only a leave-one-disease-out (LODO) representation stress test. For each run, all patients from one disease category are withheld from training and used only for evaluation. Table~\ref{tab:lodo} shows that generalization weakens substantially relative to the standard patient-disjoint folds, especially for fine subtypes. Because there are only six disease groups and no external cohort, LODO is descriptive rather than an estimate of deployment robustness.
 
 \input{tables/LOD}
 
