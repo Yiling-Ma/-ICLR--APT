@@ -3,23 +3,24 @@
 \label{sec:appendix:paired_rna_oracle}
 
 \paragraph{Design and training conditions.}
-This follow-up was specified after inspecting an earlier single-seed pilot;
-it is exploratory rather than preregistered. The repeated results below
-replace that pilot, which remains in the version archive but not this PDF.
+This analysis is exploratory: its design followed inspection of a single-seed pilot.
 At both RNA widths, log-count normalization and mean-binned dispersion
 selection use only the current inner or outer training partition.
 All 361,792 cells are barcode-aligned. RNA is an internal reconstruction
 reference because it also supplies the operational labels.
 
-The matched probe uses the same deterministic subset of up to 1,000 cells
-per training patient, all cells of the eight test patients in each fold,
-and three training seeds. SGD and the 64-unit MLP use patient/class-weighted
-training for 40 epochs. One fixed inner patient fold selects regularization
-from two values per model; the selected recipe is refitted on the 32 outer
-development patients. RNA, APT, paired RNA+APT, 293-dimensional noise
-augmentation and shuffled APT use the same selection rule within each
-comparison. These recipes differ from the unweighted, full-cell-budget
-256/128-unit MLP with dropout, AdamW and selected stopping.
+Table~\ref{tab:identity_training_config} specifies both training recipes.
+For the matched probe, weights use only the current training subset.
+Writing $N$ for its cell count, $n_{p(i)}$ for the count from the patient of
+cell $i$, and $n_{y_i}$ for its class count, the implemented weights are
+\[
+ a_i=\frac{1}{n_{p(i)}n_{y_i}},\qquad
+ w_i=\frac{a_i}{N^{-1}\sum_{j\in\mathrm{train}}a_j}.
+\]
+This is the mean-normalized product of inverse patient frequency and
+balanced-class weights. The product does not ensure equal total weight
+per patient or per class. The full-budget MLP instead uses unweighted CE.
+\input{tables/identity_training_config}
 
 \paragraph{Oracle and prior controls.}
 Oracle decoding masks frozen fine scores to children of the true parent
@@ -99,7 +100,7 @@ selection rule are documented in the reproducibility protocol.
 \input{tables/matched_identity}
 \input{tables/rna_width_repeats}
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{outputs/cell_identity_questions_v1/hvg2000/matched_identity_controls.pdf}
 \caption{Exploratory scope-specific contrasts at the matched 2,000-HVG budget.
@@ -111,16 +112,3 @@ patient-normalization populations. Axes differ across panels. Overall
 right-panel intervals include zero; subgroup contrasts do not override that result.}
 \label{fig:matched_identity_controls}
 \end{figure}
-
-\paragraph{RNA difficulty, rescue and damage.}
-The RNA probability-margin threshold is the inner-validation 20th percentile,
-frozen before outer testing. On low-margin cells MLP gains 0.085 fine F1 over
-RNA, but only 0.011 over the conditional shuffle ($[-0.004,0.022]$).
-Retrospective mean within-scope patient accuracy shows correction of 31.1\%
-of RNA errors ($[29.1,33.1]\%$) and misclassification of 10.2\% of previously
-correct cells (accuracy change $[-0.115,-0.091]$).
-The denominators differ and these rates cannot be subtracted.
-Against conditional shuffle the respective accuracy differences are 0.0077
-($[0.0032,0.0124]$) and approximately zero ($[-0.0035,0.0033]$).
-These strata describe a fitted RNA reference, not intrinsic biological
-ambiguity or independent confirmation of pairing specificity.

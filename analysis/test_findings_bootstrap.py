@@ -50,6 +50,19 @@ class BootstrapContractTests(unittest.TestCase):
                   for r in range(3)]) for j in range(3)]) for b in range(B)]
         np.testing.assert_allclose(vector,direct)
 
+    def test_display_values_and_child_counts(self):
+        df=pd.read_csv(ROOT/'outputs/remaining_modality_hvg5000_v1/summary.csv')
+        value=df[(df.model=='mlp')&(df.task=='fine')&
+                 (df.comparison=='rna_apt-minus-rna')]['estimate'].item()
+        macros=(ROOT/'tables/paired_effect_values.tex').read_text()
+        self.assertIn(r'\newcommand{\pairedMLPGainFiveK}{'+f'{value:.4f}'+'}',macros)
+        for file in ['iclr2027_conference.tex','main/intro.tex','main/results.tex']:
+            self.assertIn(r'\pairedMLPGainFiveK{}',(ROOT/file).read_text())
+        mapping=pd.read_csv(ROOT/'outputs/oof_composition_bridge/subtype_to_lineage_mapping.csv')
+        self.assertTrue(mapping.fine_subtype.is_unique)
+        self.assertEqual(mapping.groupby('coarse_lineage').size().to_dict(),
+                         {'B':5,'Myeloid':8,'NK':2,'Other':2,'T':10})
+
     def test_saved_primary_contrast_and_unresolved_interval(self):
         df=pd.read_csv(ROOT/'outputs/cell_identity_questions_v1/hvg2000/paired_contrasts.csv')
         df=df[(df.model=='mlp')&(df.scope=='all')&(df.metric=='sb_f1')].set_index('comparison')

@@ -30,7 +30,7 @@ for model in ['sgd','mlp']:
     for scope in lineages:
         sub=scores[(scores.model==model)&(scores.scope==scope)].set_index('method')['mean']
         rows.append(f"{model.upper()} & {'All' if scope=='all' else scope} & "+' & '.join(f'{sub[m]:.3f}' for m in ['apt','apt_oracle','rna_oracle','prior_oracle','prior_expected_cm'])+r' \\')
-table=r'''\begin{table}[!htbp]
+table=r'''\begin{table}[H]
 \centering\small
 \begin{tabular}{llccccc}
 \toprule
@@ -59,7 +59,7 @@ for width in [2000,5000]:
             delta=sub.loc['rna_apt-minus-rna']
             vals=' & '.join(f"{sub.loc[m,'estimate']:.3f}" for m in ['rna','rna_apt','rna_noise','rna_shuffled_apt'])
             rows.append(f"{width:,} & {task.title()} & {model.upper()} & {vals} & {delta.estimate:+.3f} [{delta.low:.3f}, {delta.high:.3f}]"+r' \\')
-table=r'''\begin{table}[!htbp]
+table=r'''\begin{table}[H]
 \centering\small\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lllccccc}
 \toprule

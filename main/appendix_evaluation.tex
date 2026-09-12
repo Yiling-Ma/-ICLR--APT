@@ -107,7 +107,6 @@ commands cover only part of that release.
 environment locks, archival versioning, and the portable end-to-end command.
 Where access is controlled, provide the complete schema and access procedure.}
 
-\input{tables/benchmark_comparison}
 
 \input{main/identity_questions_appendix}
 
@@ -204,85 +203,18 @@ comparison rather than an isolated causal estimate of leakage.
 \subsection{Additional Reference Inventory}
 \label{sec:appendix:consistency}
 
-Table~\ref{tab:hierarchy_sb_all} includes auxiliary classical references and
-the full-budget MLP. Interval types are labeled as in the main table.
-Historical cell-weighted leaderboards, auxiliary path metrics and their
-original testing family are retained in the versioned source archive, not
-duplicated as another primary comparison.
+Table~\ref{tab:hierarchy_sb_all} supplies the three additional classical
+references; Table~\ref{tab:main} contains the primary models.
 \input{tables/hierarchy_subject_balanced_all}
 
-\subsection{Patient Composition Recovery}
-\label{sec:appendix:composition_recovery}
-For each of the 40 outer-test patients, we compare the mean soft cell-type
-probabilities with reference cell fractions. The constant baseline is the
-equal-patient mean reference composition of the 32 outer-development patients
-in that fold; no test-patient annotations enter its construction. For $K$
-classes and $N$ test patients, the recovery error is
-\[
- E=\frac{1}{N}\sum_{p=1}^{N}\frac{1}{K}\sum_{k=1}^{K}
- |\widehat{\pi}_{pk}-\pi_{pk}|.
-\]
-We report $E_{\mathrm{baseline}}-E_{\mathrm{model}}$, so positive values favor
-predicted compositions. All five lineages or all 27 subtypes are included,
-without selecting well-recovered classes. Absolute errors across these two
-resolutions are not directly comparable because their denominators differ.
-Using 2,000 disease-stratified paired patient-bootstrap replicates, subtype
-error decreases from 0.02314 to 0.01478, a reduction of 0.00836
-($[0.00648,0.01010]$). Lineage error changes from 0.05495 to 0.05827, a
-reduction of $-0.00332$ ($[-0.01389,0.00670]$). Intervals are pointwise and
-conditional on the completed cross-fitted cell models; they do not include
-training-subset or model-fitting uncertainty. The accompanying per-class
-audit reports error, signed bias, and rank correlation for every class.
-Disease-adjusted rank correlations residualize both ranked fractions on
-disease-group indicators and are descriptive, not evidence of biological
-specificity or causal independence from disease. Reference recovery does not
-validate the annotation itself or imply improved disease characterization.
-
-\paragraph{Total variation and direct regression.}
-For probability vectors, $\mathrm{TV}(\widehat\pi,\pi)=
-\tfrac12\sum_k|\widehat\pi_k-\pi_k|$, so mean TV is exactly $KE/2$.
-For subtypes, baseline/model mean TV is 0.312/0.200; this is the same
-information as MAE, not a second validation endpoint. Per-class bias and
-centered recovery errors include every class, including rare subtypes.
-
-We additionally fit patient-median APT directly to reference composition using
-multioutput ridge regression. Each outer fold uses the remaining four frozen
-patient folds to select $\alpha\in\{0.1,1,10,100,1000\}$ by MAE after
-Euclidean projection onto the probability simplex. Standardization is fitted
-within each training split. This control uses provided APT expression values,
-not a newly selected normalization, and no disease labels enter fitting.
-Table~\ref{tab:direct_composition} reports all three methods. The soft-minus-direct
-subtype MAE difference is $+0.00057$ ($[-0.00092,0.00211]$), so there is no
-resolved advantage of cell-output aggregation over direct regression.
-Intervals use 2,000 disease-stratified paired patient draws with seed
-20260912. Full per-class MAE, bias, and centered-error outputs are
-provided with the analysis, without selecting favorable classes.
-\input{tables/direct_composition}
-
-
 \subsection{Archived Analyses}
-\label{sec:appendix:minimal_panel}
-\label{sec:appendix:sampler}
 
-The original single-seed paired-input pilot, chance adjustment, disease
-classification audits, marginal support correlations and redundant
-cell-weighted metrics are retained in the source archive and their analysis
-outputs. They are not additional evidence for the present two cell-identity
-findings. Disease-classification point estimates are not reported in this
-manuscript; acquisition validation remains outstanding in the dataset
-documentation. The archive index records the old sections and their replacements.
-
-\subsection{Exploratory Leave-One-Disease-Out Stress Test}
-\label{sec:appendix:novelty}
-
-For each leave-one-disease-out (LODO) run, all patients from one group are
-withheld from training. The available table contains five cancer-group
-summaries. A numerical Normal-held-out artifact and row-level support counts
-have not been verified, so the sixth row is explicitly unavailable rather
-than omitted. These cell-weighted group summaries are not averaged or
-subtracted from pooled five-fold scores, since their evaluation populations
-and training protocols differ. This is an incomplete descriptive stress test;
-cross-disease generalization requires external, patient-clustered validation.
-Unmatched detector rankings are omitted.
-
-\input{tables/LOD}
+The version archive retains the earlier resource-comparison table,
+single-seed paired-input pilot, chance adjustment, disease-classification
+audits, subject--cell allocation and assay-budget analyses, marginal support
+correlations, and redundant cell-weighted metrics. Composition recovery
+(including direct ridge and the unresolved lineage result), the incomplete
+LODO stress test, and RNA-difficulty/rescue/damage analyses are archived in
+full rather than selectively reported. These analyses do not support the
+two core cell-identity findings reported here. The revision index identifies
+the source versions and retained outputs.

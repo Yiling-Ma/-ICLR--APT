@@ -7,8 +7,8 @@ Transformers and a Soft-cascade Transformer provide backbone-matched neural
 recipes. All use APT at inference and the same outer patient partitions.
 Training and validation follow each recipe's documented protocol; identical
 outer folds do not imply identical training-set sizes or fully matched tuning.
-Linear SVM, Random Forest, and reference correlation remain in the full
-appendix inventory. A plain MLP uses all development cells in each outer fold,
+Linear SVM, Random Forest, and reference correlation are additional
+appendix references. A plain MLP uses all development cells in each outer fold,
 with three fixed training seeds, inner-patient selection, and outer refitting.
 Its 256/128-unit ReLU network uses dropout 0.1, AdamW, and training-fold
 standardization; the inner fold selects weight decay and epoch (at most 50).
@@ -42,6 +42,9 @@ A separate matched-input probe varies APT and RNA while holding its training
 budget and patient folds fixed. Training-only subtype priors and true-lineage
 masking provide candidate-set controls. APT shuffling within patient, or within
 patient and true lineage, is a privileged diagnostic rather than a deployable
-model input (Appendix~\ref{sec:appendix:identity_questions}). A separate
-appendix case study compares nested cell-output composition with direct
-patient-level ridge regression; it is not a disease-classification endpoint.
+model input (Appendix~\ref{sec:appendix:identity_questions}).
+RNA also supplies the reference annotations, so this is an internal
+reconstruction comparison, not independent label validation. HVG selection
+and scaling are fitted separately within each inner and outer training
+partition. Table~\ref{tab:identity_training_config} gives the input transforms,
+training weights, optimization settings and selection grids.

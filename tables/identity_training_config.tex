@@ -1,0 +1,31 @@
+\begin{table}[!htbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.13}
+\begin{tabular}{p{0.18\linewidth}p{0.24\linewidth}p{0.24\linewidth}p{0.24\linewidth}}
+\toprule
+Setting & Matched SGD & Matched MLP & Full-budget MLP \\
+\midrule
+Model / loss & One-vs-rest logistic; weighted log loss & 64-unit ReLU; weighted cross-entropy & 256/128-unit ReLU; dropout 0.1; unweighted cross-entropy \\
+Training cells & \multicolumn{2}{p{0.49\linewidth}}{Same fixed subset, at most 1,000 cells per training patient} & All available training cells \\
+Optimizer / rate & Averaged SGD; optimal schedule $\eta_t=1/[\alpha(t+t_0)]$ & Adam; initial rate $10^{-3}$ & AdamW; rate $10^{-3}$ \\
+Update size / epochs & One cell per update; 40 passes; no tolerance stopping & Batch 512; 40 epochs; no early stopping & Batch 1,024; select epoch 1--50 on inner validation \\
+Regularization grid & L2 $\alpha\in\{10^{-4},10^{-3}\}$ & L2 $\alpha\in\{10^{-3},10^{-1}\}$ & Weight decay $\{10^{-5},10^{-3}\}$ \\
+APT input & \multicolumn{2}{p{0.49\linewidth}}{$\log(1+\text{raw APT count})$, then featurewise training mean/SD standardization} & Provided \texttt{apt\_expression}, then training mean/SD standardization; no added log transform \\
+RNA input & \multicolumn{2}{p{0.49\linewidth}}{Per-cell counts scaled to $10^4$, log1p; training-selected 2,000/5,000 HVGs; training SD scaling without centering} & Not used \\
+Noise control & \multicolumn{2}{p{0.49\linewidth}}{293 independent $\mathcal N(0,1)$ features appended to scaled RNA; no further noise scaling; separate train/test draws} & Not used \\
+\bottomrule
+\end{tabular}
+\caption{Core experiment configurations read from the implemented recipes.
+The SGD offset $t_0$ follows the library's optimal-schedule heuristic.
+Regularization parameters have estimator-specific meanings, not a shared
+penalty scale. Each outer fold uses the next frozen patient fold for inner
+validation; highest validation SB-Macro-F1 selects the grid value (and
+full-budget epoch), retaining the first candidate/earliest epoch on ties.
+Refits reinitialize on the outer development partition. Transform statistics,
+HVG selection and sample weights use only the current training partition;
+per-cell RNA library normalization does not estimate population parameters.
+The upstream transform underlying provided APT expression remains a
+provenance requirement, not an assumed raw-count equivalence.}
+\label{tab:identity_training_config}
+\end{table}

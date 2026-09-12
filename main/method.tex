@@ -122,14 +122,3 @@ objective-matched component ablation. We do not attribute any score difference t
 soft routing, hierarchical loss, or contrastive regularization in isolation.
 
 \input{tables/transformer_reference_components}
-
-\paragraph{Composition-recovery inputs.}
-\label{sec:appendix:composition_bridge}
-For each outer fold, a disease-label-free XGBoost subtype classifier trained
-on the 32 development patients predicts the eight held-out patients.
-Patient-mean subtype probabilities define soft composition; summing children
-gives lineage composition. The retained appendix case study compares these
-predictions with reference fractions, a training-patient-mean baseline and
-direct median-APT ridge regression. Disease-classification models and
-permutation diagnostics are archived separately and are not part of the
-present inference.

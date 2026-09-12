@@ -46,15 +46,10 @@ The linked post-QC cohort contains 374{,}854 cells. Excluding the uncertain
 \emph{Unknown} subtype leaves 361{,}792 benchmark cells. Each subtype has one
 fixed parent lineage. Disease is a six-class patient attribute, not the root of
 the cell hierarchy: any given lineage can occur in multiple disease groups.
-We therefore evaluate the lineage-to-subtype hierarchy without imposing a
-disease-to-lineage-to-subtype label tree; a secondary composition-recovery
-example is confined to the appendix.
-
-The construction checklist and unresolved acquisition and annotation fields
-are recorded in Appendix~\ref{sec:appendix:dataset_documentation}. In particular,
-the analyzed data do not establish a validated one-drop input-volume
-requirement. The scope here is characterization from the profiled blood cells,
-not end-to-end validation of a small-volume diagnostic assay.
+We evaluate the lineage-to-subtype hierarchy without imposing a
+disease-to-lineage-to-subtype label tree. The construction checklist and
+unresolved acquisition and annotation fields are recorded in
+Appendix~\ref{sec:appendix:dataset_documentation}.
 
 \subsection{Patient-Disjoint Cell-Typing Contract}
 \label{sec:data:contract}
@@ -64,9 +59,6 @@ The primary task is cell typing in new patients.
 \textbf{Cell identity} predicts lineage and subtype using APT alone at inference.
 Training supervision is recipe-specific: only Soft-cascade additionally uses
 development-patient disease labels for contrastive pairing.
-Disease-group prediction is outside the present result set. With one
-acquisition per participant and incomplete acquisition metadata, disease
-biology and technical structure cannot be identified separately.
 Open-set subtype discovery is outside the contract; all primary cell tasks
 use the fixed five-lineage/27-subtype ontology.
 
@@ -95,7 +87,7 @@ A zero denominator contributes zero. Each patient's entire matrix, not each
 class row, is normalized to unit mass. This differs from cell-weighted pooled
 Macro-F1 and from mean within-subject Macro-F1. We retrospectively re-score the
 frozen OOF predictions under this primary reporting convention; checkpoints
-are not reselected. Historical cell-weighted leaderboards are archived.
+are not reselected.
 
 Main-table intervals use 2{,}000 resamples and explicitly label their target:
 P denotes patient uncertainty conditional on frozen fits, and SP additionally
@@ -109,20 +101,5 @@ Appendix~\ref{sec:appendix:identity_questions}.
 The paired-RNA probe also uses subject-balanced pooled Macro-F1, but has a
 different training budget and preprocessing protocol; its scores must not be
 interpreted as additional architecture rows in the main table.
-Appendix~\ref{sec:appendix:protocol_sensitivity} gives the definitions.
-
-\subsection{Supporting Reliability Analyses}
-
-The paired-RNA analysis is an internal reconstruction diagnostic, since RNA
-also supplies the reference annotations. In the current matched-input probe,
-HVG selection is fitted separately within inner and outer training subsets;
-this prevents feature-selection exposure to their evaluation patients, but
-does not make RNA an independent validation of RNA-derived labels.
-Disease-classification, feature-panel and inference-budget audits are
-retained outside this manuscript; no corresponding disease or assay-efficiency
-claim is made here.
-
-Subject--cell allocation experiments are preserved in a standalone supporting
-report (\texttt{sampling\_report.tex}), not included as a contribution of the
-present paper. Their external RNA cohorts do not validate APT cell typing or
-APT disease prediction.
+The experimental protocol is in Appendix~\ref{sec:appendix:identity_questions};
+scoring-unit comparisons are in Appendix~\ref{sec:appendix:protocol_sensitivity}.

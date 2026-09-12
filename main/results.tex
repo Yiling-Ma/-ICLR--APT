@@ -45,7 +45,8 @@ predictions; lines only connect methods within a lineage. Each patient's
 matrix is normalized within the displayed lineage before pooling over
 eligible patients and scoring its fixed children (38 patients for Other;
 40 elsewhere). Consequently, these lineage scores cannot be averaged to
-reconstruct the all-cell score in Table~\ref{tab:main}.
+reconstruct the All row of Table~\ref{tab:matched_identity} from this same probe.
+Row labels give the number of child subtypes.
 These are descriptive point estimates, not superiority tests.
 Expected-prior F1 is computed from an expected confusion matrix.}
 \label{fig:matched_lineage_identity}
@@ -55,7 +56,10 @@ The matched-input probe holds budget and recipe fixed across modalities
 (Figure~\ref{fig:matched_lineage_identity}). MLP ordinary/oracle APT scores
 are 0.093/0.309, RNA oracle is 0.672, and the expected prior is 0.182.
 The APT oracle-minus-prior difference is $+0.127$ ($[0.101,0.139]$).
-Within-lineage APT/RNA oracle scores vary substantially: 0.849/0.839 for NK
+Relative to each lineage's own conditional prior and RNA reference,
+APT reconstruction differs across lineages. Their absolute F1 values are
+not a common biological-resolution scale: child-class counts and prevalence
+also differ. For example, APT/RNA oracle scores are 0.849/0.839 for NK
 but 0.191/0.535 for T cells. Knowledge of the parent therefore does not
 uniformly resolve the RNA reconstruction gap. All lineages and both model
 families are shown, without asserting an intrinsic modality ranking.
@@ -68,14 +72,14 @@ per patient and uses a 64-unit MLP for 40 epochs. Other has oracle F1 of
 0.490/0.487). These settings do not isolate the effect of budget alone.
 Neither result justifies declaring Other universally identifiable or
 unidentifiable. The full-budget lineage plot and neural-reference replays
-are supporting evidence in Appendix~\ref{sec:appendix:full_budget_hierarchy}.
+are supporting evidence in Appendices~\ref{sec:appendix:full_budget_hierarchy}--\ref{sec:appendix:true_lineage_oracle}.
 
 \subsection{Paired APT Improves on RNA, without Resolved Pairing Specificity}
 
 Under the matched probe, MLP fine SB-Macro-F1 increases from 0.589 for RNA
-to 0.607 for RNA+APT: $+0.018$ (joint 95\% CI $[0.009,0.030]$).
+to 0.607 for RNA+APT: $+\pairedMLPGainTwoK{}$ (joint 95\% CI $[0.009,0.030]$).
 At 5,000 training-selected HVGs, it increases from 0.596 to 0.612:
-$+0.016$ ($[0.009,0.029]$). SGD also improves at both widths
+$+\pairedMLPGainFiveK{}$ ($[0.009,0.029]$). SGD also improves at both widths
 (Table~\ref{tab:paired_increment_main}). The increment is therefore not
 specific to the 2,000-HVG setting, but remains relative to the tested RNA
 representations and models.
@@ -92,10 +96,5 @@ This is an unresolved overall contrast, not equivalence or evidence of no
 pairing information. All control contrasts in the table come from the same
 targeted experiment; the separate one-shuffle-per-seed width grid is labeled
 as a sensitivity analysis in the appendix.
-Lineage and RNA-difficulty breakdowns remain exploratory supporting analyses
+Lineage-specific contrasts remain exploratory supporting analyses
 (Appendix~\ref{sec:appendix:identity_questions}).
-
-A separate composition-recovery case study is retained in
-Appendix~\ref{sec:appendix:composition_recovery}. It shows no resolved advantage
-over direct median-APT ridge regression and no resolved lineage improvement;
-it does not support an additional disease-characterization claim.

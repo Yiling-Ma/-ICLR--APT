@@ -26,6 +26,7 @@
 \newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
 
 \newcommand{\numsubtypes}{27}
+\input{tables/paired_effect_values}
 
 % Authors must not appear in the submitted version. They should be hidden
 % as long as the \iclrfinalcopy macro remains commented out below.
@@ -68,18 +69,16 @@ paired cells from 40 participants, 293 aptamer measurements, five lineages,
 27 RNA-derived subtypes, and fixed patient-disjoint folds. Two findings emerge.
 First, the full-training-budget MLP achieves fine subject-balanced Macro-F1
 of 0.385 with true-lineage decoding, versus 0.180 for a training-only
-conditional-proportion prior. This prior-controlled result demonstrates
-within-lineage discrimination beyond candidate-set restriction under the
-tested recipe; matched-budget APT/RNA comparisons reveal substantial lineage
+conditional-proportion prior. This comparison shows additional discrimination relative to the
+tested training-only lineage priors; matched-budget APT/RNA comparisons reveal substantial lineage
 heterogeneity. Second, adding paired APT improves MLP fine Macro-F1 by
-0.018 and 0.016 over RNA references using 2{,}000 and 5{,}000 training-selected
+\pairedMLPGainTwoK{} and \pairedMLPGainFiveK{} over RNA references using 2{,}000 and 5{,}000 training-selected
 genes, respectively. Yet the overall advantage over APT shuffled within
 patient and true lineage remains statistically unresolved. Thus an increment
 over these RNA references is established without establishing finer-grained
 pairing specificity. Classical and neural APT-only baselines anchor a reusable
 new-patient comparison, separating recoverable identity from claims of an
-intrinsic assay limit or a biological mechanism. Complete data access and
-portable reproduction remain requirements for public release.
+intrinsic assay limit or a biological mechanism.
 \end{abstract}
 
 
