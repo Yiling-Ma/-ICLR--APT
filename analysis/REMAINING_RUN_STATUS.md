@@ -1,0 +1,31 @@
+# Remaining experiment status
+
+Updated 2026-09-12 UTC. Source baseline 336e087; new implementation in this commit.
+
+Host: vllab11, reached through vllab7. Root:
+`/ssd3/mayiling/apt_agent_runtime/remaining_v1`.
+
+| Job | Hardware | Output | Expected completion artifacts | Observed startup |
+|---|---|---|---|---|
+| full-budget MLP | GPU 4 | full_mlp | 30 NPZ + completion.json | first coarse outer fold saved, 41.3 s |
+| frozen-model oracle | GPU 5 | oracle | 15 NPZ + completion.json | Flat fold0 passed exact prediction reconstruction |
+| modality repeats | CPU, four BLAS threads | modality_hvg2000 | 300 NPZ + completion.json | first SGD fits saved |
+| wider RNA sensitivity | same CPU queue | modality_hvg5000 | 300 NPZ + completion.json | queued after HVG2000 |
+
+Logs: mlp.log, oracle.log, modality.log in root. Wrappers hold distinct flock
+locks. Each completed fit is saved atomically; restarts skip completed fits.
+No old results were deleted. Three unit tests passed on the remote Python env.
+
+Commands (run on vllab11):
+
+```sh
+bash /home/mayiling/projs/apt_agent/analysis/run_remaining_v1.sh mlp
+bash /home/mayiling/projs/apt_agent/analysis/run_remaining_v1.sh oracle
+bash /home/mayiling/projs/apt_agent/analysis/run_remaining_v1.sh modality
+```
+
+Do not run duplicate commands while locks are held. These are three independent
+jobs; modality includes the two widths sequentially. No completion is claimed
+until the corresponding completion.json is PASS and numerical audits are read.
+Private predictions, IDs, and checkpoint tensors remain on remote SSD; only
+aggregate summaries, audit metadata, and final figures/tables go to GitHub.

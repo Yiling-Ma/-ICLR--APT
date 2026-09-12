@@ -15,6 +15,15 @@
 - 命令：`OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 python analysis/revision_composition_control.py --root /home/mayiling/projs/apt_agent --output /ssd3/mayiling/apt_agent_runtime/revision_composition_control_v1`。CPU，读取 expression 后数百个小规模 ridge fits；无 GPU 需求，预计内存 1--4GB，时间由数据读盘决定。
 
 ## E1：尚未执行
+## 执行状态更新（2026-09-12）
+
+下方“尚未执行”段落保留为上一轮审查时的状态，不再代表当前状态。
+已实现并在 vllab11 启动 E1、E2、E3；最新冻结方案见
+`analysis/REMAINING_EXPERIMENTS_V1.md`。新增 full-budget MLP 使用 AdamW
+weight decay 内层选择，取代旧计划中尚未实现的 alpha runner。
+E1 已产生首个完整 outer-fold artifact；E2 首个 Flat fold 已通过普通预测
+逐项完全重建；E3 已开始三 seed 重复。5000-HVG 敏感性排在2000-HVG后执行。
+全部完成前不修改论文数值或称其已完成。
 
 E3 已完成并通过 QA；aggregate 在 `outputs/revision_composition_control_v1/`。远程运行额外使用 `--reference-summary /tmp/summary.csv`，该文件来自已有 composition recovery summary，仅用于验证旧 soft MAE 重建，不参与拟合或选择。
 

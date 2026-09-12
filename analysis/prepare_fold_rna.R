@@ -2,6 +2,8 @@ suppressMessages(library(Matrix))
 args <- commandArgs(trailingOnly=TRUE)
 root <- args[1]
 out <- args[2]
+hvg <- as.integer(Sys.getenv("APT_RNA_HVG", "2000"))
+stopifnot(is.finite(hvg), hvg > 0)
 raw <- readRDS(file.path(root, "data/ALL_PBMC_Gene_Cell_matrix.rds"))
 stopifnot(inherits(raw, "sparseMatrix"), !anyDuplicated(rownames(raw)))
 meta <- read.csv(file.path(out, "cells.csv"), stringsAsFactors=FALSE)
@@ -28,7 +30,8 @@ for (fold in 0:4) for (stage in c("inner", "outer")) {
     s <- sd(v); if (!is.finite(s) || s==0) rep(0,length(v)) else (v-mean(v))/s
   })
   score[mu==0] <- -Inf
-  genes <- head(order(score, decreasing=TRUE), 2000)
+  stopifnot(sum(is.finite(score)) >= hvg)
+  genes <- head(order(score, decreasing=TRUE), hvg)
   writeMM(norm[tr,genes,drop=FALSE], paste0(prefix, "_train.mtx"))
   writeMM(norm[te,genes,drop=FALSE], paste0(prefix, "_test.mtx"))
   writeLines(colnames(norm)[genes], paste0(prefix, "_genes.txt"))
