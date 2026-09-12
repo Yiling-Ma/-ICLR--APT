@@ -45,7 +45,7 @@ def export(args):
             meta,_=apply_explicit_lineage_mapping(meta,str(resolve(d['coarse_mapping_config'])))
             split=pd.read_csv(directory/'split.csv')
             assert split.sample_id.is_unique
-            bundle=build_dataloaders(meta,x,split,batch_size=64,num_workers=0,
+            bundle=build_dataloaders(meta,x,split,batch_size=cfg['train'].get('batch_size',512),num_workers=0,
                 use_quantile_binning=d.get('use_quantile_binning',False),split_mode='sample')
             assert np.array_equal(bundle.merged_df.cell_id.to_numpy(),meta.cell_id.to_numpy())
             labels=json.loads((directory/'label_mapping.json').read_text())
@@ -89,6 +89,11 @@ def export(args):
                 'coarse_pred_id':a['coarse_pred']}
             for key,values in checks.items():
                 if not np.array_equal(old[key].to_numpy(),values):
+                    different=old[key].to_numpy()!=values
+                    atomic_json(args.output/f'{variant}_f{fold}_reconstruction_failure.json',
+                        dict(status='FAIL',field=key,mismatches=int(different.sum()),
+                            batch_size=cfg['train'].get('batch_size',512),
+                            checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest()))
                     raise ValueError(f'Frozen prediction reconstruction failed: {variant}/{fold}/{key}')
             op=oracle(a['prob'],a['truth'],parent)
             patients,cm=matrices(a['truth'],a['prob'].argmax(1),a['sample_ids'],k)
