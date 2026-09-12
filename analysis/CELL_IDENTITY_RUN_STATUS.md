@@ -1,5 +1,22 @@
 # Cell-identity questions: implementation and running status
 
+## Update: 2026-09-12 05:17 UTC
+
+The targeted 2000-HVG extension is complete: 30/30 final blocks and PASS.
+Aggregate CSVs are under outputs/cell_identity_questions_v1/hvg2000.
+MLP paired-minus-RNA is +0.017991, joint95% CI [0.009170,0.029660].
+MLP paired-minus-patient-by-lineage-shuffle is +0.006444, joint95% CI
+[-0.000182,0.011797]. All three seed effects are positive, but the latter
+interval includes zero. The frozen targeted wider-RNA gate is NOT TRIGGERED;
+do not reroll bootstrap seeds or replace the primary scope to pass it.
+This is unresolved evidence, not proof of no within-lineage information.
+The existing 5000-HVG reference grid continues (147/300 at this check).
+The 2000-HVG reference grid is also complete at 300/300 with PASS; its
+aggregates are in outputs/remaining_modality_hvg2000_v1.
+Paper/PDF numerical integration of these new completed controls is pending
+the remaining width comparison and final joint audit. Earlier sections below
+record the launch history, not the current completion status.
+
 ## Completed and integrated
 
 - Paper reorganized around one benchmark and two empirical questions, without

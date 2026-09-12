@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "blocks": 30,
+  "training_seeds": [
+    20260912,
+    20260913,
+    20260914
+  ],
+  "shuffle_draws_per_seed": 3,
+  "scope": "exploratory; true lineage controls are privileged"
+}

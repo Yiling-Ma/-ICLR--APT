@@ -1,0 +1,20 @@
+{
+  "decision": "NOT_TRIGGERED",
+  "scope": "MLP, all test cells, fine subject-balanced pooled Macro-F1",
+  "rule": "Both paired-minus-RNA and paired-minus-patient-by-lineage-shuffle must be positive in all three seeds and have joint 95% intervals excluding zero.",
+  "paired_minus_rna": {
+    "mean": 0.017991036042959412,
+    "low": 0.009169852486159374,
+    "high": 0.02965961865557473,
+    "all_three_seeds_positive": true
+  },
+  "paired_minus_lineage_shuffle": {
+    "mean": 0.006444070914453574,
+    "low": -0.00018245644316697274,
+    "high": 0.011797234628288944,
+    "all_three_seeds_positive": true
+  },
+  "reason": "The conditional-shuffle contrast interval includes zero. Do not change bootstrap draws, thresholds, or scope to trigger follow-up.",
+  "existing_5000_hvg_reference_grid": "CONTINUE",
+  "targeted_5000_hvg_conditional_shuffle": "DO_NOT_START"
+}
