@@ -57,7 +57,7 @@ def build():
             'bootstrap_seed','bootstrap_replicates','prediction_metric','artifact_source',
             'config_source','log_source','checkpoint_source','manifest_source','details']
     with (ROOT/'analysis/generated/main_training_protocols.csv').open('w',newline='') as stream:
-        writer=csv.DictWriter(stream,fieldnames=fields);writer.writeheader()
+        writer=csv.DictWriter(stream,fieldnames=fields,lineterminator='\n');writer.writeheader()
         for rec in a['records']:
             row={k:rec.get(k,'unavailable') for k in fields}
             if rec['seed'] is None: row['seed']='unavailable / not applicable; see details'
