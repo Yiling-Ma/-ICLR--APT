@@ -238,6 +238,11 @@ against the classical and MLP test sets without intersection filtering.
 
 The recipes use the provided 293-feature \texttt{apt\_expression} matrix,
 not the raw-count-plus-\texttt{log1p} input of the matched modality probes.
+The available audit does not recover the complete upstream transformation
+that produced this supplied expression. Verified training-partition scaling
+therefore does not independently establish that every upstream operation
+was cell-local or fitted without test patients. This is a provenance limitation,
+not evidence that test information was actually used.
 Historical loaders fit feature-wise mean/SD on the fit partition only;
 MLP fits a new StandardScaler in each inner fit and outer refit. Saved MLP
 feature IDs and outer-refit scaler statistics were verified against the

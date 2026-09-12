@@ -33,10 +33,20 @@ disease-correlated acquisition effects; this manuscript makes no disease
 classification or clinical-validation claim. RNA supplies the reference labels, and its apparent
 difficulty depends on features, preprocessing, and the fitted reference.
 An APT increment over either 2{,}000 or 5{,}000 HVGs may reflect restricted RNA representation;
-it is not evidence of irreducible information absent from RNA. True-lineage
+it is not evidence of irreducible information absent from RNA. The capped
+probe does not establish an increment over a full-cell-budget,
+capacity-controlled RNA reference. Likewise, oracle-versus-prior performance
+does not substitute for an APT-only, patient-by-lineage-shuffled control,
+or show that predicted-lineage decoding can realize the oracle gain.
+These are distinct unanswered comparisons, not conclusions from the existing
+multimodal shuffle experiment. True-lineage
 masking and shuffling are privileged diagnostics, and the latter does not
 identify a causal or molecular mechanism. Three training seeds and
 pointwise resampling intervals also provide limited uncertainty evidence.
+The outer folds have been examined repeatedly during this study; fixed
+follow-up analyses on them are not untouched confirmatory tests. Their
+overlapping development sets also limit interpreting OOF bootstrap intervals
+as uncertainty for a learning algorithm on an independently sampled cohort.
 
 \section{Conclusion}
 \label{sec:conclusion}

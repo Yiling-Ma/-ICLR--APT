@@ -33,7 +33,7 @@ equal total scoring weight to each patient.}
 APT-Bench is derived from peripheral-blood specimens from 40 participants in
 five cancer groups (CRC, GC, HCC, PC, and BTC) and healthy controls, with 6--8
 participants per group. The paired assay measures transcriptomic state and 293
-target-specific nucleic-acid aptamers on the same cells. Transcriptomic counts
+aptamer features on the same cells. Transcriptomic counts
 were processed with Seurat \citep{hao2021integrated}; predicted doublets and
 low-quality cells were removed, and clusters were manually annotated using
 canonical markers from prior PBMC and pan-cancer studies
@@ -62,8 +62,10 @@ Open-set subtype discovery is outside the contract; all primary cell tasks
 use the fixed five-lineage/27-subtype ontology.
 
 Five frozen disease-stratified folds each hold out eight patients. All cells
-from a patient remain together; preprocessing, model selection, and fitting
-are restricted to development patients. We pool predictions across the five
+from a patient remain together. Benchmark-fitted transforms, model selection,
+and fitting use development patients; the upstream provenance of the supplied
+APT expression remains incompletely recovered
+(Appendix~\ref{sec:appendix:main_protocols}). We pool predictions across the five
 out-of-fold (OOF) partitions. The release
 interface records cell and patient IDs, ontology, folds, predictions, and
 metrics (Appendix~\ref{sec:appendix:benchmark_release}). Full data access and a
