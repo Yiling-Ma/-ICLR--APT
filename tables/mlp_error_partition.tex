@@ -1,0 +1,18 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Scope & Patients & Correct & Cross-parent & Within-parent & Oracle correct & Cross repaired \\
+\midrule
+All & 40 & 33.4 & 49.4 & 17.3 & 64.2 & 63.2 \\
+B & 40 & 7.8 & 91.1 & 1.1 & 83.9 & 83.4 \\
+Myeloid & 40 & 27.2 & 47.0 & 25.8 & 45.6 & 38.8 \\
+NK & 40 & 39.3 & 57.0 & 3.8 & 90.9 & 89.2 \\
+Other & 38 & 1.2 & 98.8 & 0.0 & 99.4 & 99.4 \\
+T & 40 & 33.9 & 42.5 & 23.6 & 53.9 & 49.9 \\
+\bottomrule
+\end{tabular}
+\caption{Full-budget MLP error proportions (percent), averaged within patient and then across three seeds. The first three rates partition all cells in the scope and sum to 100\% before rounding. Cross-parent uses the parent of the predicted subtype, not the independent coarse head. Cross repaired is the within-patient fraction of cross-parent errors corrected by oracle, averaged over patients with such errors (all listed patients in each seed); it is not a ratio of the displayed averages. These are error rates, not additive contributions to Macro-F1.}
+\label{tab:mlp_error_partition}
+\end{table}

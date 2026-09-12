@@ -1,0 +1,43 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrr r l}
+\toprule
+Subtype & Cells & Patients & Ordinary & Oracle & Largest oracle error (row \%) \\
+\midrule
+Atypical Memory B & 781 & 34 & 0.001 & 0.347 & Memory B-1 (48.1) \\
+GCB & 3,283 & 31 & 0.050 & 0.405 & Memory B-1 (47.0) \\
+Memory B-1 & 23,722 & 40 & 0.046 & 0.905 & GCB (3.4) \\
+Memory B-2 & 2,130 & 33 & 0.001 & 0.084 & Memory B-1 (74.5) \\
+Plasma & 2,173 & 40 & 0.476 & 0.693 & Memory B-1 (35.6) \\
+\midrule
+CD14 Monocyte-1 & 29,871 & 40 & 0.458 & 0.610 & CD16 Monocyte-1 (20.3) \\
+CD14 Monocyte-2 & 3,931 & 40 & 0.107 & 0.211 & CD14 Monocyte-1 (61.3) \\
+CD14 Monocyte-3 & 2,977 & 32 & 0.248 & 0.341 & CD14 Monocyte-1 (46.5) \\
+CD16 Monocyte-1 & 14,678 & 40 & 0.148 & 0.425 & CD14 Monocyte-1 (39.4) \\
+CD16 Monocyte-2 & 5,142 & 40 & 0.090 & 0.193 & CD14 Monocyte-1 (49.5) \\
+CD4 Monocyte-4 & 1,405 & 35 & 0.006 & 0.008 & CD14 Monocyte-1 (60.7) \\
+cDC2 & 7,376 & 40 & 0.123 & 0.192 & CD16 Monocyte-1 (40.4) \\
+pDC & 2,615 & 40 & 0.012 & 0.125 & CD16 Monocyte-1 (46.4) \\
+\midrule
+CD16 NK & 58,507 & 40 & 0.393 & 0.939 & CD56 NK (5.1) \\
+CD56 NK & 38,442 & 40 & 0.426 & 0.814 & CD16 NK (21.3) \\
+\midrule
+Erythrocyte & 65 & 6 & 0.046 & 0.816 & platelet (30.0) \\
+platelet & 1,574 & 38 & 0.051 & 0.993 & Erythrocyte (0.0) \\
+\midrule
+CD4 + Tcm-1 & 70,653 & 40 & 0.429 & 0.721 & CD8 Tem-1 (11.9) \\
+CD4 + Tcm-2 & 16,861 & 39 & 0.184 & 0.394 & CD4 + Tcm-1 (18.9) \\
+CD8 + CTL-1 & 7,303 & 40 & 0.000 & 0.036 & CD4 + Tcm-2 (37.8) \\
+CD8 + CTL-2 & 4,049 & 33 & 0.100 & 0.216 & CD4 + Tcm-2 (34.8) \\
+CD8 + CTL-3 & 3,244 & 27 & 0.013 & 0.026 & CD4 + Tcm-2 (35.4) \\
+CD8 Tem-1 & 26,714 & 40 & 0.221 & 0.344 & CD4 + Tcm-1 (67.9) \\
+CD8 Tem-2 & 10,548 & 40 & 0.008 & 0.054 & CD4 + Tcm-1 (44.9) \\
+Cycling T & 3,667 & 40 & 0.022 & 0.192 & CD4 + Tcm-1 (72.3) \\
+Naive T & 17,960 & 40 & 0.144 & 0.308 & CD4 + Tcm-2 (29.3) \\
+Tcm & 2,121 & 36 & 0.005 & 0.010 & CD4 + Tcm-1 (51.2) \\
+\bottomrule
+\end{tabular}
+\caption{All 27 subtypes for the same full-budget MLP and three seeds. Ordinary/oracle entries average seed-specific per-class F1 derived from subject-normalized pooled confusion matrices. These are not the historical Soft-cascade CW values in Table~\ref{tab:subtype_per_class}. Destination percentages row-normalize the seed-mean oracle SB matrix; they are visual summaries, not per-patient conditional averages. Full matrices, per-seed F1 and every directed edge are retained.}
+\label{tab:mlp_subtype_errors}
+\end{table}

@@ -257,6 +257,97 @@ compute and search histories are unavailable, so shared epoch limits do not
 establish equal total tuning cost. The P/SP intervals in Table~\ref{tab:main}
 do not include repeated model selection.
 
+\clearpage
+\subsection{Full-Budget MLP Failure Structure}
+\label{sec:appendix:mlp_failures}
+
+This analysis uses the same 15 saved fine-task score arrays (three seeds,
+five folds), all 361,792 OOF cells, and the full-budget APT preprocessing
+recipe of Table~\ref{tab:main_training_protocols}. Cell IDs, patient membership,
+true labels, score-column ontology, parent mapping and saved ordinary/oracle
+confusion matrices are checked without filtering to an intersection. No
+model is retrained or replayed. The existing expected-CM prior is independently
+reconstructed from outer-development subtype counts (SB-Macro-F1 0.180).
+The prior-controlled result in \S\ref{sec:results:within_lineage} and the
+full-budget support plot remain distinct from the capped RNA/APT probe.
+
+\paragraph{Error categories and oracle transitions.}
+For true subtype $y$, ordinary subtype prediction $\hat y$ and fixed parent
+map $g$, correct means $\hat y=y$, cross-parent error means
+$g(\hat y)\ne g(y)$, and within-parent error means $\hat y\ne y$ with
+$g(\hat y)=g(y)$. These exhaust all cells and do not use the independent
+coarse head. Within each patient and scope we divide counts by that scope's
+cell count, then average eligible patients and seeds. The cross-error repair
+fraction instead divides corrected cross errors by cross errors within each
+patient, omitting patients with zero cross errors; all scope-eligible patients
+have cross errors in these runs. This is not a ratio of population-average
+rates. Other has 38 eligible patients; the other scopes have 40.
+
+Oracle masks the same saved score vector to the true parent's children,
+using the original column order and first-maximum tie rule. In all seeds,
+ordinary-correct cells remain correct and ordinary within-parent errors keep
+the same prediction. Cross-parent errors either become correct or remain
+wrong within the true parent. Patient-balanced ordinary correctness is 33.4\%,
+and unconditional repaired mass is 30.8\%, yielding 64.2\% oracle correctness
+before rounding. These are correctness rates, not Macro-F1 values or its
+additive decomposition. Oracle is a privileged diagnostic, not deployable
+performance or an information upper bound.
+
+\input{tables/mlp_error_partition}
+
+\paragraph{Residual confusion and support.}
+We rank directed off-diagonal edges by their seed-mean subject-balanced
+confusion mass, with fixed ontology order breaking ties, and report the top
+three descriptively. CD8 Tem-1 $\to$ CD4 + Tcm-1 accounts for 6.64\% of
+patient-balanced all-cell mass (seed range 6.50--6.82\%); the reverse accounts
+for 2.76\% (2.61--2.91\%). They rank first/second in each seed. Their supports
+are 26,714 and 70,653 cells, respectively, both across all 40 patients.
+CD16 Monocyte-1 $\to$ CD14 Monocyte-1 ranks third overall (per-seed ranks
+3/3/4), with 1.99\% mass (1.88--2.08\%); both appear in all patients
+(14,678 and 29,871 cells). These selected examples are not confined to rare
+classes, but abundance has not been causally controlled. Seed ranges are
+descriptive, not confidence intervals or subgroup significance tests.
+
+\paragraph{Matrix and score conventions.}
+For each seed we divide each patient's full $27\times27$ confusion matrix
+by their total test-cell count and sum over patients (total matrix mass 40).
+Per-class F1 is computed on each such matrix and then averaged across seeds.
+The heatmaps instead average the three matrices before row normalization;
+their row fractions must not be used to reconstruct the mean-seed SB-F1.
+All classes and edges are retained, with zero rows marked rather than dropped
+(none occur here). Oracle's zero cross-parent blocks are guaranteed by masking,
+not evidence that the model learned lineage identity. Remaining confusions
+cannot distinguish annotation instability, measurement, preprocessing,
+training budget or model limitations without further evidence.
+
+\input{tables/mlp_subtype_errors}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{analysis/hierarchy_failures/results/ordinary_confusion.pdf}
+\caption{All 27 subtypes under ordinary full-budget MLP decoding. Rows are true
+and columns predicted subtype, ordered by lineage then fixed subtype order;
+white lines separate lineages. Color uses the same 0--1 scale as
+Figure~\ref{fig:mlp_oracle_confusion}. Each patient first has unit total mass,
+then seed matrices are averaged and rows normalized for visualization.
+This is not mean within-patient subtype recall and not a Macro-F1 matrix.
+All zero rows would be gray; none are present.}
+\label{fig:mlp_ordinary_confusion}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{analysis/hierarchy_failures/results/oracle_confusion.pdf}
+\caption{Full-budget MLP true-lineage oracle, using exactly the same scores,
+cells, three seeds, ordering and color scale as
+Figure~\ref{fig:mlp_ordinary_confusion}. Cross-lineage blocks are zero by the
+decoding constraint, not a learned biological result. Within-lineage
+off-diagonal mass shows residual subtype confusion. The complete per-seed
+SB matrices, row-normalized matrices and directed edges are released with
+the analysis; heatmaps do not replace seed-specific scoring.}
+\label{fig:mlp_oracle_confusion}
+\end{figure}
+\clearpage
 \subsection{Archived Analyses}
 
 The version archive retains the earlier resource-comparison table,

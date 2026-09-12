@@ -27,6 +27,7 @@ Appendices~\ref{sec:appendix:subtype_audit} and
 \ref{sec:appendix:protocol_sensitivity}.
 
 \subsection{Within-Lineage Identity Is Recoverable, but Heterogeneous}
+\label{sec:results:within_lineage}
 
 True-lineage decoding masks each frozen fine score vector to the correct
 parent's children. Both the model and the training-only conditional priors
@@ -37,6 +38,16 @@ The oracle-minus-expected-prior difference is $+0.205$
 (joint 95\% CI $[0.174,0.217]$).
 Thus APT supports discrimination beyond these candidate-set controls under
 this recipe; the comparison does not measure all information in the assay.
+
+Saved-score diagnostics further locate the errors: in this full-budget MLP,
+cross-parent and within-parent subtype errors occupy 49.4\% and 17.3\% of
+patient-balanced cell mass, respectively. Oracle corrects 63.2\% of cross-parent
+errors when correction fractions are first computed within each patient.
+The two largest remaining directed confusions are CD8 Tem-1 to CD4 + Tcm-1
+and the reverse, ranked first and second in all three seeds. Both subtypes
+occur in all 40 patients. These error rates complement, rather than additively
+decompose, Macro-F1; complete diagnostics appear in
+Appendix~\ref{sec:appendix:mlp_failures}.
 
 \begin{figure}[t]
 \centering
