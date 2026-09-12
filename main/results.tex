@@ -95,7 +95,7 @@ are supporting evidence in Appendices~\ref{sec:appendix:full_budget_hierarchy}--
 
 \subsection{Paired APT Improves on RNA, without Resolved Pairing Specificity}
 
-Under the matched probe, MLP fine SB-Macro-F1 increases from 0.589 for RNA
+Across three training seeds under the matched probe, MLP fine SB-Macro-F1 increases from 0.589 for RNA
 to 0.607 for RNA+APT: $+\pairedMLPGainTwoK{}$ (joint 95\% CI $[0.009,0.030]$).
 At 5,000 training-selected HVGs, it increases from 0.596 to 0.612:
 $+\pairedMLPGainFiveK{}$ ($[0.009,0.029]$). SGD also improves at both widths
@@ -107,7 +107,10 @@ representations and models.
 
 \paragraph{What the controls establish.}
 In the targeted 2,000-HVG experiment, MLP exceeds RNA+noise by 0.0341 and
-patient-shuffled APT by 0.0088. The latter uses three shuffle draws per
+patient-shuffled APT by 0.0088 (joint 95\% CI $[0.0014,0.0145]$).
+This interval resamples patients, training seeds and shuffle realizations;
+it is not a patient-only interval conditional on one fitted model.
+The latter comparison uses three shuffle draws per
 training seed, as does the more restrictive patient-by-lineage control.
 Paired minus patient-by-lineage-shuffled APT is $+0.0064$
 ($[-0.00018,0.01180]$); SGD's corresponding interval also includes zero.
