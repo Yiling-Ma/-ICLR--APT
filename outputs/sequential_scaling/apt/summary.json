@@ -1,0 +1,317 @@
+{
+  "interpretation": "Sequential descriptive contrasts; not causal mediation. Bootstrap conditional on fixed folds and fitted runs.",
+  "results": [
+    {
+      "bootstrap": 2000,
+      "conditions": {
+        "A": {
+          "bootstrap_positive_fraction": 0.9975,
+          "estimate": 0.01327581371467676,
+          "lower": 0.0034103239730862776,
+          "upper": 0.025736891078227655
+        },
+        "B": {
+          "bootstrap_positive_fraction": 0.9975,
+          "estimate": 0.013271432022059776,
+          "lower": 0.0033819441281794592,
+          "upper": 0.025753653607550678
+        },
+        "C": {
+          "bootstrap_positive_fraction": 0.9965,
+          "estimate": 0.012904628600536993,
+          "lower": 0.0028030675861106984,
+          "upper": 0.02562752122004885
+        },
+        "D": {
+          "bootstrap_positive_fraction": 0.994,
+          "estimate": 0.009529743479951752,
+          "lower": 0.0020848407401881045,
+          "upper": 0.020050619196934526
+        }
+      },
+      "contrasts": {
+        "A-B": {
+          "bootstrap_positive_fraction": 0.5015,
+          "estimate": 4.381692616984081e-06,
+          "lower": -0.00018741394120912885,
+          "upper": 0.00020682729308987196
+        },
+        "B-C": {
+          "bootstrap_positive_fraction": 0.7405,
+          "estimate": 0.00036680342152278257,
+          "lower": -0.0008780808294557046,
+          "upper": 0.0016084561013291025
+        },
+        "C-D": {
+          "bootstrap_positive_fraction": 0.878,
+          "estimate": 0.003374885120585241,
+          "lower": -0.002321839515382284,
+          "upper": 0.00931391552582928
+        }
+      },
+      "model": "logistic_regression",
+      "subject_count": 40,
+      "task": "coarse"
+    },
+    {
+      "bootstrap": 2000,
+      "conditions": {
+        "A": {
+          "bootstrap_positive_fraction": 0.9965,
+          "estimate": 0.01619348806251935,
+          "lower": 0.004410543697844892,
+          "upper": 0.0294979708905217
+        },
+        "B": {
+          "bootstrap_positive_fraction": 0.996,
+          "estimate": 0.01596152452445293,
+          "lower": 0.004205826520473624,
+          "upper": 0.02927044608787653
+        },
+        "C": {
+          "bootstrap_positive_fraction": 0.9925,
+          "estimate": 0.014361275745412688,
+          "lower": 0.0027797063120754166,
+          "upper": 0.027732651100949086
+        },
+        "D": {
+          "bootstrap_positive_fraction": 0.934,
+          "estimate": 0.007349632779981408,
+          "lower": -0.001874162008233158,
+          "upper": 0.018287145902397682
+        }
+      },
+      "contrasts": {
+        "A-B": {
+          "bootstrap_positive_fraction": 0.623,
+          "estimate": 0.0002319635380664195,
+          "lower": -0.0011231232018906075,
+          "upper": 0.0016455313932010962
+        },
+        "B-C": {
+          "bootstrap_positive_fraction": 0.847,
+          "estimate": 0.0016002487790402423,
+          "lower": -0.0016921417865889989,
+          "upper": 0.004848233752580675
+        },
+        "C-D": {
+          "bootstrap_positive_fraction": 0.9895,
+          "estimate": 0.00701164296543128,
+          "lower": 0.0009069588182357293,
+          "upper": 0.01484916048466237
+        }
+      },
+      "model": "xgboost",
+      "subject_count": 40,
+      "task": "coarse"
+    },
+    {
+      "bootstrap": 2000,
+      "conditions": {
+        "A": {
+          "bootstrap_positive_fraction": 0.9935,
+          "estimate": 0.012709781822905797,
+          "lower": 0.0021134017718660533,
+          "upper": 0.025817770674489364
+        },
+        "B": {
+          "bootstrap_positive_fraction": 0.9915,
+          "estimate": 0.012151737271157126,
+          "lower": 0.0017471546008179708,
+          "upper": 0.02499564916329241
+        },
+        "C": {
+          "bootstrap_positive_fraction": 0.976,
+          "estimate": 0.011283729291874761,
+          "lower": 8.751980780616826e-05,
+          "upper": 0.024923651733095936
+        },
+        "D": {
+          "bootstrap_positive_fraction": 0.924,
+          "estimate": 0.007261822428295905,
+          "lower": -0.0021865461412255,
+          "upper": 0.02056611621003194
+        }
+      },
+      "contrasts": {
+        "A-B": {
+          "bootstrap_positive_fraction": 0.6505,
+          "estimate": 0.0005580445517486717,
+          "lower": -0.002501589212011776,
+          "upper": 0.0034069789209593563
+        },
+        "B-C": {
+          "bootstrap_positive_fraction": 0.696,
+          "estimate": 0.000868007979282364,
+          "lower": -0.0031472143828359775,
+          "upper": 0.00459414097086126
+        },
+        "C-D": {
+          "bootstrap_positive_fraction": 0.8605,
+          "estimate": 0.004021906863578856,
+          "lower": -0.003180539677212168,
+          "upper": 0.012981922952700663
+        }
+      },
+      "model": "mlp",
+      "subject_count": 40,
+      "task": "coarse"
+    },
+    {
+      "bootstrap": 2000,
+      "conditions": {
+        "A": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.009423993692560962,
+          "lower": 0.004761230065756043,
+          "upper": 0.013871202324966263
+        },
+        "B": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.009411876771078975,
+          "lower": 0.004744873580394333,
+          "upper": 0.013866172476270184
+        },
+        "C": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.00931006168773219,
+          "lower": 0.004903868856116284,
+          "upper": 0.014211783496506975
+        },
+        "D": {
+          "bootstrap_positive_fraction": 0.001,
+          "estimate": -0.004808704045562342,
+          "lower": -0.006934798267289876,
+          "upper": -0.0019230329454835552
+        }
+      },
+      "contrasts": {
+        "A-B": {
+          "bootstrap_positive_fraction": 0.6215,
+          "estimate": 1.2116921481987453e-05,
+          "lower": -9.095355854053764e-05,
+          "upper": 0.00012208574482812078
+        },
+        "B-C": {
+          "bootstrap_positive_fraction": 0.4955,
+          "estimate": 0.00010181508334678423,
+          "lower": -0.002773122809186991,
+          "upper": 0.001472926373828384
+        },
+        "C-D": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.014118765733294531,
+          "lower": 0.01025309714475622,
+          "upper": 0.01767707134119904
+        }
+      },
+      "model": "logistic_regression",
+      "subject_count": 40,
+      "task": "fine"
+    },
+    {
+      "bootstrap": 2000,
+      "conditions": {
+        "A": {
+          "bootstrap_positive_fraction": 0.986,
+          "estimate": 0.007698793943040082,
+          "lower": 0.0010878328293497052,
+          "upper": 0.014483734446507157
+        },
+        "B": {
+          "bootstrap_positive_fraction": 0.9965,
+          "estimate": 0.008626207323116825,
+          "lower": 0.0024217396052192324,
+          "upper": 0.015524800079660667
+        },
+        "C": {
+          "bootstrap_positive_fraction": 0.9935,
+          "estimate": 0.006519414825388094,
+          "lower": 0.0014540097074759912,
+          "upper": 0.01284440441390874
+        },
+        "D": {
+          "bootstrap_positive_fraction": 0.0245,
+          "estimate": -0.004445372090431597,
+          "lower": -0.007912471977964887,
+          "upper": -7.663004006765147e-05
+        }
+      },
+      "contrasts": {
+        "A-B": {
+          "bootstrap_positive_fraction": 0.0275,
+          "estimate": -0.0009274133800767437,
+          "lower": -0.0028293062695988413,
+          "upper": 2.652807732486039e-05
+        },
+        "B-C": {
+          "bootstrap_positive_fraction": 0.886,
+          "estimate": 0.002106792497728731,
+          "lower": -0.0013396535224134349,
+          "upper": 0.004838731912989123
+        },
+        "C-D": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.010964786915819692,
+          "lower": 0.006050956779648048,
+          "upper": 0.01622274687763016
+        }
+      },
+      "model": "xgboost",
+      "subject_count": 40,
+      "task": "fine"
+    },
+    {
+      "bootstrap": 2000,
+      "conditions": {
+        "A": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.010273480784884348,
+          "lower": 0.005018563511375651,
+          "upper": 0.015749262400861972
+        },
+        "B": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.009483450997227433,
+          "lower": 0.004408100071743182,
+          "upper": 0.014809219852579455
+        },
+        "C": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.008682223886132826,
+          "lower": 0.004111935001134736,
+          "upper": 0.013606049630896342
+        },
+        "D": {
+          "bootstrap_positive_fraction": 0.045,
+          "estimate": -0.003144714326709865,
+          "lower": -0.006062767441667894,
+          "upper": 0.000560624409600928
+        }
+      },
+      "contrasts": {
+        "A-B": {
+          "bootstrap_positive_fraction": 0.7365,
+          "estimate": 0.0007900297876569148,
+          "lower": -0.0016782968262844585,
+          "upper": 0.0032988485145879964
+        },
+        "B-C": {
+          "bootstrap_positive_fraction": 0.721,
+          "estimate": 0.0008012271110946073,
+          "lower": -0.0023403850998682937,
+          "upper": 0.003438846632622532
+        },
+        "C-D": {
+          "bootstrap_positive_fraction": 1.0,
+          "estimate": 0.011826938212842692,
+          "lower": 0.007146546990554263,
+          "upper": 0.016487601143201767
+        }
+      },
+      "model": "mlp",
+      "subject_count": 40,
+      "task": "fine"
+    }
+  ]
+}

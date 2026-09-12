@@ -1,0 +1,69 @@
+\section{Completed Sequential Controls on Three Cohorts}
+\label{sec:sequential_completed}
+
+\paragraph{Completion and audit.}
+The frozen sequential experiment is complete for APT, COMBAT RNA, and
+OneK1K: 2,400 fits per cohort and 7,200 in total. Each cohort crosses five
+patient-disjoint folds, ten paired subset seeds, two resolutions, three
+models (LR, XGBoost, MLP), two subject budgets ($P=8,32$), and four sampling
+policies at a fixed total of $T=6{,}400$ training cells. Independent metadata
+checks passed for completeness, fixed configurations, class quotas, paired
+training-manifest hashes across models, and summary consistency. All audited
+runs realized their nominal subject count. These checks do not independently
+revalidate training execution or every prediction; the frozen runner checks
+train/test subject separation and the aggregator checks OOF pairing and
+confusion matrices. Source hashes and audit scope accompany the summaries.
+
+\paragraph{Four distinct allocation policies.}
+A samples uniformly from pooled cells in the selected subject set. B fixes
+the class support observed in the eight-subject development reference, with
+a one-cell-per-class floor, but leaves remaining counts unconstrained. C
+fixes exact integer class quotas derived from that same development
+reference and samples uniformly within each class. D retains C's quotas
+but allocates cells by capacity-constrained round-robin sampling across
+randomly ordered donors within each class. Thus C and D have identical
+class counts and proportions but different donor allocation. Shared cell
+priorities and nested subject sets pair the comparisons. A is a pooled-cell
+policy, not the equal-cells-per-subject policy used in earlier unmatched
+tables; the historical results are not interchangeable with this experiment.
+Standardization is fitted on training cells only. The fixed external RNA
+representations and limited model budgets remain constraints on interpretation.
+
+\paragraph{Joint intervals for mean effects.}
+For each seed, subject confusion matrices are normalized to unit mass and
+pooled before computing Macro-F1 and the paired $32-8$ difference. The point
+estimate averages ten such differences. Each of 2,000 bootstrap replicates
+resamples ten seeds and held-out subjects with replacement, using shared
+multiplicities across budgets and policies. These are intervals for the
+mean over the fitted seed collection, conditional on the cohort and fixed
+folds, not single-seed stability ranges or uncertainty from retraining on
+new cohorts. They do not account fully for dependence induced by overlapping
+training folds. Intervals are pointwise, without multiplicity correction;
+bootstrap positive fractions are neither posterior probabilities nor
+calibrated hypothesis-test $p$-values.
+
+\paragraph{Exact quotas do not alone remove the fine-resolution gains.}
+All nine fine-resolution C estimates are positive, and their pointwise
+intervals exclude zero. For APT, the LR/XGBoost/MLP C effects are
+$+0.0093/+0.0065/+0.0087$, whereas D gives
+$-0.0048/-0.0044/-0.0031$. Across APT and COMBAT, all six fine D point
+estimates are negative, but only three intervals exclude zero. All three
+OneK1K fine D estimates remain positive with intervals spanning zero.
+The fine $\Delta_C-\Delta_D$ contrasts are positive in all nine cases;
+eight pointwise intervals exclude zero. Consequently, the reversal cannot
+be attributed solely to matching class support or proportions: within-class
+donor allocation materially changes the comparison. These completed results
+qualify interpretations based only on historical unmatched and fully matched
+endpoints. They do not establish that patient breadth is universally
+beneficial or unhelpful.
+
+\paragraph{Interpretation.}
+The sequential differences describe an ordered set of sampling-policy
+changes, not separately identified biological mechanisms or causal mediation.
+Their magnitudes need not be invariant to ordering, quota reference, or
+training budget. No equivalence or saturation claim follows from an interval
+containing zero, and no attenuation ratio is reported when its denominator
+may be near zero. The main APT-Bench paper remains centered on cell typing;
+these completed allocation experiments are documented only in this report.
+
+\input{tables/sequential_completed}

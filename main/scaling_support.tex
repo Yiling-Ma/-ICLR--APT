@@ -56,8 +56,10 @@ joint sampling-protocol contrast: the implementation fixes observed labels,
 class counts, and proportions and also uses within-class donor round robin.
 The attenuation cannot therefore be assigned solely to label distribution.
 An independently controlled synthetic check separates quota matching from donor
-allocation (Section~\ref{sec:appendix:sequential_simulation}); it does not
-replace this separation on the real cohorts. A complementary known-null
+allocation (Section~\ref{sec:appendix:sequential_simulation}). The completed
+real-cohort separation in Section~\ref{sec:sequential_completed} retains
+positive fine effects under exact quotas alone, demonstrating the importance
+of distinguishing quota matching from donor allocation. A complementary known-null
 validation yields mean effects $+0.0202$, $+0.0119$, and $+0.0004$ for unmatched,
 support-matched, and exact-quota sampling against an exactly zero overlap-quota
 target. Independent Monte Carlo references under donor shifts remain positive

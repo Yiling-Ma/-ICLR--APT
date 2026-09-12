@@ -1,3 +1,21 @@
+# Completed delivery (2026-09-12 UTC)
+
+All three cohorts are complete: APT, COMBAT RNA, and OneK1K each have
+2,400 fits, for 7,200 total. Final artifacts were inspected on vllab11 at
+`/ssd3/mayiling/apt_agent_runtime/sequential_scaling`. The independent metadata
+audit passed; source summary and protocol hashes match the downloaded files.
+See `outputs/sequential_scaling/completion_audit.json` for the precise scope.
+
+Results are delivered in `sampling_report.tex`, section "Completed Sequential
+Controls on Three Cohorts", not restored to the primary benchmark paper.
+Exact quotas alone retain positive fine effects in all nine model/cohort
+comparisons. Changing within-class donor allocation reduces these effects;
+the historical reversal cannot be attributed solely to label matching.
+Pointwise intervals are conditional on fixed folds and fitted models and
+are not causal mediation, multiplicity-controlled evidence, or equivalence tests.
+
+The following is historical launch documentation, not current run status.
+
 # Restart handoff (2026-09-09)
 
 At the user's explicit request, the old vllab7 sequential experiment was stopped

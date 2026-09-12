@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "datasets": {
+    "apt": {
+      "status": "PASS",
+      "fits": 2400,
+      "realized_subject_range": {
+        "8": [
+          8,
+          8
+        ],
+        "32": [
+          32,
+          32
+        ]
+      },
+      "summary_sha256": "e40e987861066523db7d422f5e09526fb8f4e78d03676d0137259f0c51ca4b30",
+      "protocol_sha256": "9ab86064f23abd35228f6f7fd33c72125a7e52de68b0ca6262090fce864c0ba0"
+    },
+    "combat_rna": {
+      "status": "PASS",
+      "fits": 2400,
+      "realized_subject_range": {
+        "8": [
+          8,
+          8
+        ],
+        "32": [
+          32,
+          32
+        ]
+      },
+      "summary_sha256": "57af30568b205caf08519a4c54995a9ab1bd3a9c3e5fdc92d32b9627ddbe87b6",
+      "protocol_sha256": "3ee935f74b5418dae3c509d89be8e0597efa2a01afa11192b208bc94dd6b22ec"
+    },
+    "onek1k": {
+      "status": "PASS",
+      "fits": 2400,
+      "realized_subject_range": {
+        "8": [
+          8,
+          8
+        ],
+        "32": [
+          32,
+          32
+        ]
+      },
+      "summary_sha256": "ca128705f4633c7016ab10e36e56d1bff46c51e550ac5227722f0fc9fb25f292",
+      "protocol_sha256": "86ea649e3ca27787d31b90b67bdf0e28b352ce41a043e8e4aebe49fee94366d0"
+    }
+  },
+  "fits": 7200,
+  "scope": "Independent metadata, quota, paired training-manifest, and summary audit. NPZ contents and training execution are not revalidated here; the frozen runner and aggregator enforce disjointness and OOF pairing."
+}

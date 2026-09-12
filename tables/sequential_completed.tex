@@ -1,0 +1,81 @@
+\clearpage
+\subsection{APT}
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
+\caption{APT: paired $P=32$ minus $P=8$ effects at $T=6{,}400$. Each entry gives the mean effect and its pointwise joint 95\% bootstrap interval.}
+\begin{tabular}{llrrrr}\toprule
+Task & Model & A: pooled & B: support & C: quotas & D: donors \\\midrule
+Coarse & LR & \makecell{+0.0133\\{[+0.0034, +0.0257]}} & \makecell{+0.0133\\{[+0.0034, +0.0258]}} & \makecell{+0.0129\\{[+0.0028, +0.0256]}} & \makecell{+0.0095\\{[+0.0021, +0.0201]}} \\
+Coarse & XGBoost & \makecell{+0.0162\\{[+0.0044, +0.0295]}} & \makecell{+0.0160\\{[+0.0042, +0.0293]}} & \makecell{+0.0144\\{[+0.0028, +0.0277]}} & \makecell{+0.0073\\{[-0.0019, +0.0183]}} \\
+Coarse & MLP & \makecell{+0.0127\\{[+0.0021, +0.0258]}} & \makecell{+0.0122\\{[+0.0017, +0.0250]}} & \makecell{+0.0113\\{[+0.0001, +0.0249]}} & \makecell{+0.0073\\{[-0.0022, +0.0206]}} \\
+Fine & LR & \makecell{+0.0094\\{[+0.0048, +0.0139]}} & \makecell{+0.0094\\{[+0.0047, +0.0139]}} & \makecell{+0.0093\\{[+0.0049, +0.0142]}} & \makecell{-0.0048\\{[-0.0069, -0.0019]}} \\
+Fine & XGBoost & \makecell{+0.0077\\{[+0.0011, +0.0145]}} & \makecell{+0.0086\\{[+0.0024, +0.0155]}} & \makecell{+0.0065\\{[+0.0015, +0.0128]}} & \makecell{-0.0044\\{[-0.0079, -0.0001]}} \\
+Fine & MLP & \makecell{+0.0103\\{[+0.0050, +0.0157]}} & \makecell{+0.0095\\{[+0.0044, +0.0148]}} & \makecell{+0.0087\\{[+0.0041, +0.0136]}} & \makecell{-0.0031\\{[-0.0061, +0.0006]}} \\
+\bottomrule\end{tabular}\end{table}
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.2}
+\caption{APT: paired sequential differences between allocation effects, with pointwise joint 95\% intervals. These are descriptive policy contrasts, not causal mediation estimates.}
+\begin{tabular}{llrrr}\toprule
+Task & Model & $\Delta_A-\Delta_B$ & $\Delta_B-\Delta_C$ & $\Delta_C-\Delta_D$ \\\midrule
+Coarse & LR & \makecell{+0.0000\\{[-0.0002, +0.0002]}} & \makecell{+0.0004\\{[-0.0009, +0.0016]}} & \makecell{+0.0034\\{[-0.0023, +0.0093]}} \\
+Coarse & XGBoost & \makecell{+0.0002\\{[-0.0011, +0.0016]}} & \makecell{+0.0016\\{[-0.0017, +0.0048]}} & \makecell{+0.0070\\{[+0.0009, +0.0148]}} \\
+Coarse & MLP & \makecell{+0.0006\\{[-0.0025, +0.0034]}} & \makecell{+0.0009\\{[-0.0031, +0.0046]}} & \makecell{+0.0040\\{[-0.0032, +0.0130]}} \\
+Fine & LR & \makecell{+0.0000\\{[-0.0001, +0.0001]}} & \makecell{+0.0001\\{[-0.0028, +0.0015]}} & \makecell{+0.0141\\{[+0.0103, +0.0177]}} \\
+Fine & XGBoost & \makecell{-0.0009\\{[-0.0028, +0.0000]}} & \makecell{+0.0021\\{[-0.0013, +0.0048]}} & \makecell{+0.0110\\{[+0.0061, +0.0162]}} \\
+Fine & MLP & \makecell{+0.0008\\{[-0.0017, +0.0033]}} & \makecell{+0.0008\\{[-0.0023, +0.0034]}} & \makecell{+0.0118\\{[+0.0071, +0.0165]}} \\
+\bottomrule\end{tabular}\end{table}
+Intervals condition on the fixed cohort, folds, and fitted models. Near-zero bounds may round to signed zero; full precision is retained in the released JSON summaries.
+\clearpage
+\subsection{COMBAT RNA}
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
+\caption{COMBAT RNA: paired $P=32$ minus $P=8$ effects at $T=6{,}400$. Each entry gives the mean effect and its pointwise joint 95\% bootstrap interval.}
+\begin{tabular}{llrrrr}\toprule
+Task & Model & A: pooled & B: support & C: quotas & D: donors \\\midrule
+Coarse & LR & \makecell{+0.0021\\{[+0.0004, +0.0041]}} & \makecell{+0.0021\\{[+0.0004, +0.0041]}} & \makecell{+0.0008\\{[-0.0007, +0.0025]}} & \makecell{+0.0004\\{[-0.0013, +0.0022]}} \\
+Coarse & XGBoost & \makecell{+0.0053\\{[+0.0021, +0.0089]}} & \makecell{+0.0054\\{[+0.0023, +0.0091]}} & \makecell{+0.0028\\{[-0.0000, +0.0058]}} & \makecell{+0.0013\\{[-0.0012, +0.0039]}} \\
+Coarse & MLP & \makecell{+0.0032\\{[+0.0014, +0.0053]}} & \makecell{+0.0031\\{[+0.0013, +0.0052]}} & \makecell{+0.0015\\{[-0.0005, +0.0037]}} & \makecell{+0.0000\\{[-0.0021, +0.0021]}} \\
+Fine & LR & \makecell{+0.0098\\{[+0.0049, +0.0148]}} & \makecell{+0.0064\\{[+0.0027, +0.0101]}} & \makecell{+0.0045\\{[+0.0009, +0.0077]}} & \makecell{-0.0043\\{[-0.0080, -0.0006]}} \\
+Fine & XGBoost & \makecell{+0.0151\\{[+0.0090, +0.0214]}} & \makecell{+0.0123\\{[+0.0083, +0.0171]}} & \makecell{+0.0059\\{[+0.0026, +0.0089]}} & \makecell{-0.0019\\{[-0.0052, +0.0019]}} \\
+Fine & MLP & \makecell{+0.0110\\{[+0.0071, +0.0153]}} & \makecell{+0.0093\\{[+0.0054, +0.0128]}} & \makecell{+0.0044\\{[+0.0003, +0.0081]}} & \makecell{-0.0012\\{[-0.0052, +0.0031]}} \\
+\bottomrule\end{tabular}\end{table}
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.2}
+\caption{COMBAT RNA: paired sequential differences between allocation effects, with pointwise joint 95\% intervals. These are descriptive policy contrasts, not causal mediation estimates.}
+\begin{tabular}{llrrr}\toprule
+Task & Model & $\Delta_A-\Delta_B$ & $\Delta_B-\Delta_C$ & $\Delta_C-\Delta_D$ \\\midrule
+Coarse & LR & \makecell{-0.0000\\{[-0.0000, +0.0000]}} & \makecell{+0.0013\\{[+0.0001, +0.0034]}} & \makecell{+0.0004\\{[-0.0009, +0.0018]}} \\
+Coarse & XGBoost & \makecell{-0.0001\\{[-0.0007, +0.0004]}} & \makecell{+0.0026\\{[-0.0008, +0.0073]}} & \makecell{+0.0015\\{[-0.0008, +0.0041]}} \\
+Coarse & MLP & \makecell{+0.0001\\{[-0.0001, +0.0003]}} & \makecell{+0.0016\\{[-0.0001, +0.0042]}} & \makecell{+0.0015\\{[+0.0004, +0.0029]}} \\
+Fine & LR & \makecell{+0.0034\\{[-0.0004, +0.0078]}} & \makecell{+0.0019\\{[-0.0014, +0.0054]}} & \makecell{+0.0088\\{[+0.0047, +0.0132]}} \\
+Fine & XGBoost & \makecell{+0.0028\\{[-0.0014, +0.0076]}} & \makecell{+0.0065\\{[+0.0024, +0.0109]}} & \makecell{+0.0078\\{[+0.0039, +0.0116]}} \\
+Fine & MLP & \makecell{+0.0017\\{[-0.0027, +0.0068]}} & \makecell{+0.0048\\{[+0.0006, +0.0099]}} & \makecell{+0.0056\\{[+0.0003, +0.0110]}} \\
+\bottomrule\end{tabular}\end{table}
+Intervals condition on the fixed cohort, folds, and fitted models. Near-zero bounds may round to signed zero; full precision is retained in the released JSON summaries.
+\clearpage
+\subsection{OneK1K}
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
+\caption{OneK1K: paired $P=32$ minus $P=8$ effects at $T=6{,}400$. Each entry gives the mean effect and its pointwise joint 95\% bootstrap interval.}
+\begin{tabular}{llrrrr}\toprule
+Task & Model & A: pooled & B: support & C: quotas & D: donors \\\midrule
+Coarse & LR & \makecell{+0.0042\\{[+0.0004, +0.0086]}} & \makecell{+0.0040\\{[+0.0001, +0.0085]}} & \makecell{+0.0015\\{[-0.0008, +0.0037]}} & \makecell{+0.0023\\{[-0.0009, +0.0055]}} \\
+Coarse & XGBoost & \makecell{+0.0090\\{[+0.0028, +0.0155]}} & \makecell{+0.0089\\{[+0.0031, +0.0149]}} & \makecell{+0.0022\\{[-0.0021, +0.0069]}} & \makecell{+0.0003\\{[-0.0029, +0.0038]}} \\
+Coarse & MLP & \makecell{+0.0069\\{[+0.0004, +0.0149]}} & \makecell{+0.0066\\{[-0.0000, +0.0146]}} & \makecell{+0.0023\\{[-0.0022, +0.0067]}} & \makecell{+0.0020\\{[-0.0028, +0.0067]}} \\
+Fine & LR & \makecell{+0.0051\\{[-0.0008, +0.0108]}} & \makecell{+0.0054\\{[+0.0001, +0.0109]}} & \makecell{+0.0074\\{[+0.0026, +0.0115]}} & \makecell{+0.0015\\{[-0.0030, +0.0058]}} \\
+Fine & XGBoost & \makecell{+0.0090\\{[+0.0040, +0.0147]}} & \makecell{+0.0078\\{[+0.0023, +0.0137]}} & \makecell{+0.0056\\{[+0.0027, +0.0083]}} & \makecell{+0.0025\\{[-0.0004, +0.0053]}} \\
+Fine & MLP & \makecell{+0.0025\\{[-0.0051, +0.0106]}} & \makecell{+0.0033\\{[-0.0037, +0.0114]}} & \makecell{+0.0051\\{[+0.0014, +0.0087]}} & \makecell{+0.0035\\{[-0.0013, +0.0084]}} \\
+\bottomrule\end{tabular}\end{table}
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.2}
+\caption{OneK1K: paired sequential differences between allocation effects, with pointwise joint 95\% intervals. These are descriptive policy contrasts, not causal mediation estimates.}
+\begin{tabular}{llrrr}\toprule
+Task & Model & $\Delta_A-\Delta_B$ & $\Delta_B-\Delta_C$ & $\Delta_C-\Delta_D$ \\\midrule
+Coarse & LR & \makecell{+0.0002\\{[-0.0004, +0.0008]}} & \makecell{+0.0025\\{[-0.0002, +0.0056]}} & \makecell{-0.0008\\{[-0.0040, +0.0024]}} \\
+Coarse & XGBoost & \makecell{+0.0001\\{[-0.0008, +0.0009]}} & \makecell{+0.0068\\{[+0.0001, +0.0144]}} & \makecell{+0.0019\\{[-0.0015, +0.0053]}} \\
+Coarse & MLP & \makecell{+0.0004\\{[-0.0002, +0.0009]}} & \makecell{+0.0042\\{[+0.0005, +0.0088]}} & \makecell{+0.0003\\{[-0.0030, +0.0033]}} \\
+Fine & LR & \makecell{-0.0003\\{[-0.0049, +0.0048]}} & \makecell{-0.0021\\{[-0.0067, +0.0031]}} & \makecell{+0.0059\\{[+0.0013, +0.0103]}} \\
+Fine & XGBoost & \makecell{+0.0012\\{[-0.0006, +0.0030]}} & \makecell{+0.0022\\{[-0.0037, +0.0082]}} & \makecell{+0.0030\\{[+0.0004, +0.0056]}} \\
+Fine & MLP & \makecell{-0.0008\\{[-0.0056, +0.0038]}} & \makecell{-0.0018\\{[-0.0075, +0.0050]}} & \makecell{+0.0016\\{[-0.0036, +0.0072]}} \\
+\bottomrule\end{tabular}\end{table}
+Intervals condition on the fixed cohort, folds, and fitted models. Near-zero bounds may round to signed zero; full precision is retained in the released JSON summaries.
