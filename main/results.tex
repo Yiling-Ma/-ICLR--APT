@@ -1,29 +1,6 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Cell-Level Splitting Gives an Optimistic Evaluation}
-\label{sec:results:protocol}
-
-The benchmark first asks whether evaluation on additional cells represents
-generalization to additional patients. Table~\ref{tab:protocol_sensitivity}
-contrasts the historical cell-level split controls with the frozen
-patient-disjoint evaluation. Cell-level splitting gives higher scores for
-both models at both resolutions: $+0.050/+0.069$ coarse/fine Macro-F1 for
-XGBoost and $+0.090/+0.108$ for Soft-cascade. The apparent fine advantage of
-Soft-cascade over XGBoost is also larger under cell splitting (0.048 versus
-approximately 0.009 under patient-disjoint evaluation).
-
-\input{tables/protocol_sensitivity}
-
-These comparisons use the historical cell-weighted metric in both columns;
-they must not be compared numerically with the subject-balanced main
-leaderboard below. They contrast evaluation protocols, including their
-training/test allocation, rather than estimating a causal leakage effect
-under a fully matched randomized design. They support a specific conclusion:
-held-out-cell performance should not be presented as evidence of new-patient
-generalization. They do not show that all model rankings reverse or quantify
-optimism for every possible cohort.
-
 \subsection{Reference Performance Under the Patient-Disjoint Contract}
 \label{sec:results:subtype_audit}
 
@@ -33,6 +10,8 @@ Coarse/fine scores are 0.298/0.126 for LR and 0.325/0.137 for XGBoost.
 Flat, HCE, and Soft-cascade Transformers reach 0.326/0.139,
 0.335/0.143, and 0.332/0.145. These point estimates establish reference
 performance, not a statistically demonstrated cascade advantage.
+The completed full-cell-budget plain MLP reaches 0.334/0.141, averaged over
+three training seeds; its joint uncertainty includes training-seed variation.
 
 \input{tables/main_result}
 
@@ -42,9 +21,15 @@ Fine prediction remains difficult across references. However, five-lineage
 and 27-subtype tasks differ in class count, prevalence, and annotation
 boundaries; their score difference is not an isolated assay-resolution
 effect. Full class-level and hierarchy diagnostics are in
-Appendix~\ref{sec:appendix:subtype_audit}. Missing full-budget MLP coverage
-and objective differences between Transformer recipes limit conclusions
-about architecture choice.
+Appendix~\ref{sec:appendix:subtype_audit}. Objective and optimization differences
+between reference recipes limit conclusions about architecture choice.
+
+As a supporting protocol audit, historical cell-level splitting yields higher
+cell-weighted Macro-F1 for both evaluated model families at both resolutions
+(Appendix~\ref{sec:results:protocol}). This motivates the new-patient target,
+but does not independently explain the hierarchy of typing errors.
+
+\subsection{Where Do Hierarchical Typing Errors Occur?}
 
 A privileged-label diagnostic masks each frozen fine score vector to the
 children of the true lineage, without retraining or changing routing.
@@ -53,17 +38,64 @@ Fine SB-Macro-F1 increases to 0.366/0.361/0.358 for Flat/HCE/Soft-cascade
 of knowing the correct parent; it is not deployable performance or evidence
 that remaining errors reflect an intrinsic APT information limit.
 
-\subsection{Secondary Context: RNA and Patient Summaries}
+Narrowing the candidate set can itself improve prediction. We therefore add
+training-only subtype priors conditional on the same true lineage to the
+three-seed, full-cell-budget MLP diagnostic. Ordinary fine SB-Macro-F1 is
+0.141; true-lineage decoding reaches 0.385, versus 0.148 for the conditional
+majority-prior decoder and 0.180 for the conditional-proportion expected
+confusion baseline. The paired oracle-minus-expected-prior difference is
+$+0.205$ (joint 95\% CI $[0.174,0.217]$).
+This comparison shows usable within-lineage discrimination beyond these
+candidate-set controls under the tested recipe; it is not a measurement of
+all biological information in APT.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{outputs/cell_identity_questions_v1/full_mlp_lineages/lineage_structure.pdf}
+\caption{Hierarchical error structure for the full-cell-budget MLP across all
+five lineages. Scores macro-average over the fixed child subtypes after
+normalizing each patient's within-lineage confusion matrix. Ordinary
+predictions outside the true lineage remain false negatives. The conditional
+training-proportion baseline is scored from its expected confusion matrix,
+not the expected F1 of a sampled predictor. Points average three training
+seeds; bars are pointwise joint seed/patient 95\% intervals. True-lineage
+information is privileged. This full-budget panel is not a matched-budget
+APT--RNA comparison.}
+\label{fig:lineage_structure}
+\end{figure}
+
+Figure~\ref{fig:lineage_structure} reports every lineage, including the
+heterogeneous \texttt{Other} category. Improvements from ordinary to oracle
+decoding differ across lineages: eliminating parent errors is not equally
+helpful everywhere. Within-lineage scores also remain heterogeneous. A
+matched-budget RNA oracle is needed to contextualize this pattern under the
+same label system; that repeated diagnostic is in progress rather than
+inferred from RNA scores obtained under another budget.
+
+\subsection{Does Paired APT Add Information Beyond RNA?}
 
 The paired-input diagnostic uses a capped budget, separately from the main
 leaderboard. MLP fine SB-Macro-F1 is 0.584 for RNA and 0.606 for RNA+APT
 (paired difference $+0.022$; 95\% CI $[0.013,0.037]$).
 RNA+APT also exceeds RNA+noise and RNA+within-patient-shuffled APT; the latter
 difference is $+0.010$ ($[0.002,0.017]$). The corresponding SGD shuffled
-contrast is unresolved. These single-seed controls support a limited
-cell-pairing association; repeated shuffles and a wider RNA representation
-have not been evaluated. RNA supplies the annotations, so this is internal
+contrast is unresolved. These single-seed controls motivate, but do not settle,
+the incremental-information question. A within-patient shuffle destroys both
+lineage correspondence and finer cell pairing; its contrast cannot establish
+within-lineage subtype complementarity. RNA supplies the annotations, so this is internal
 label reconstruction (Appendix~\ref{sec:appendix:paired_rna_oracle}).
+
+The ongoing extension repeats training seeds and shuffles, adds APT
+permutation within patient and true lineage, and evaluates all lineages and
+RNA-defined difficulty strata. The RNA-only inner-validation margin fixes
+the low-confidence threshold before outer evaluation. Test-set RNA errors
+are separately labeled retrospective strata, with both correction and harm
+reported. These are reference-model difficulties, not intrinsic RNA
+ambiguity. Appendix~\ref{sec:appendix:identity_questions} specifies the frozen
+controls and the wider-RNA sensitivity gate. No repeated conditional-pairing
+or representation-robustness claim is made while these results are pending.
+
+\subsection{A Limited Patient-Composition Case Study}
 
 As a limited aggregation case study, nested subtype summaries reduce mean
 absolute reference-composition error from 0.02314 for a training-patient-mean

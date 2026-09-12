@@ -67,22 +67,22 @@ Address \\
 \maketitle
 
 \begin{abstract}
-Single-cell aptamer profiles offer a targeted representation for immune-cell
-typing, but evaluating additional cells from known patients does not establish
-generalization to new patients. We introduce APT-Bench, a benchmark
+Which levels of cell identity can single-cell aptamer profiles recover in new
+patients, and do they add typing information beyond an RNA-only reference?
+We introduce APT-Bench, a benchmark
 specification and reference evaluation of 361{,}792 cells from 40 participants,
 with 293 aptamer measurements and RNA-derived labels for five lineages and
 27 subtypes. The benchmark combines five fixed patient-disjoint folds,
 subject-balanced pooled Macro-F1, and classical and neural reference models.
-Across the available XGBoost and Soft-cascade Transformer split controls,
-cell-level splitting yields higher coarse and fine Macro-F1 in all four
-comparisons, by 0.050--0.108 on the cell-weighted metric. These comparisons
-demonstrate protocol-dependent optimism, rather than isolating a causal
-leakage effect. Under the patient-disjoint contract, reference models achieve
+Under this contract, reference models achieve
 coarse/fine subject-balanced Macro-F1 of 0.298--0.335/0.126--0.145,
-establishing a challenging evaluation setting for subsequent APT models.
-APT-Bench makes the unit of generalization explicit when assessing this
-measurement modality; complete data access and portable reproduction remain
+establishing an operational hierarchy of reconstruction difficulty, rather
+than an assay information limit. True-lineage decoding with training-prior
+controls probes within-lineage recoverability. A matched-input RNA/APT probe
+shows a preliminary paired-input increment, but repeated lineage-conditioned
+shuffling and wider RNA features remain needed to establish its specificity
+and robustness. The benchmark organizes these questions around a fixed
+new-patient target; complete data access and portable reproduction remain
 requirements for its public release.
 \end{abstract}
 
@@ -712,5 +712,7 @@ cross-disease generalization requires external, patient-clustered validation.
 Unmatched detector rankings are omitted.
 
 \input{tables/LOD}
+
+\input{main/identity_questions_appendix}
 
 \end{document}

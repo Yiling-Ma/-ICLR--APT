@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "seeds": [
+    20260912,
+    20260913,
+    20260914
+  ],
+  "cells": 361792,
+  "patients": 40,
+  "all_lineages_reported": true,
+  "estimand": "subject-normalized confusion, fixed child classes; outside predictions remain false negatives",
+  "prior": "training-subset conditional proportions; expected CM is not expected finite-sample F1"
+}

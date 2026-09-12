@@ -8,8 +8,12 @@ recipes. All use APT at inference and the same outer patient partitions.
 Training and validation follow each recipe's documented protocol; identical
 outer folds do not imply identical training-set sizes or fully matched tuning.
 Linear SVM, Random Forest, and reference correlation remain in the full
-appendix inventory. A full-budget plain MLP/ResNet evaluation is not available;
-its absence is a coverage limitation, not evidence of incompatibility.
+appendix inventory. A plain MLP uses all development cells in each outer fold,
+with three fixed training seeds, inner-patient selection, and outer refitting.
+Its 256/128-unit ReLU network uses dropout 0.1, AdamW, and training-fold
+standardization; the inner fold selects weight decay and epoch (at most 50).
+This completes a full-cell-budget reference, not an objective- or
+optimizer-matched ablation of the Transformers.
 
 \paragraph{Hierarchy-aware reference.}
 Soft-cascade Transformer embeds aptamer identities and values and combines
@@ -33,9 +37,12 @@ Supplying paired RNA would change the input contract. This distinguishes an
 undefined direct APT input from an adaptable but unevaluated model; it does
 not justify claiming superiority over transcriptomic annotation methods.
 
-\paragraph{Secondary analyses.}
+\paragraph{Matched-input diagnostics and application.}
 A separate matched-input probe varies APT and RNA while holding its training
-budget and patient folds fixed. The patient-level case study uses
+budget and patient folds fixed. Training-only subtype priors and true-lineage
+masking provide candidate-set controls. APT shuffling within patient, or within
+patient and true lineage, is a privileged diagnostic rather than a deployable
+model input (Appendix~\ref{sec:appendix:identity_questions}). The patient-level case study uses
 disease-label-free XGBoost cell predictions and nested cross-fitting:
 disease-training compositions come from inner held-out patients, and
 disease-test compositions come from the untouched outer fold. Downstream LR

@@ -7,11 +7,12 @@ Model & Input & Coarse SB-Macro-F1 $\uparrow$ & Fine SB-Macro-F1 $\uparrow$ \\
 \midrule
 Logistic Regression & APT & 0.298 [0.281, 0.315] & 0.126 [0.107, 0.139] \\
 XGBoost & APT & 0.325 [0.302, 0.345] & 0.137 [0.120, 0.149] \\
+Plain MLP (3 seeds) & APT & 0.334 [0.311, 0.355] & 0.141 [0.125, 0.155] \\
 Flat Transformer & APT & 0.326 [0.300, 0.348] & 0.139 [0.114, 0.155] \\
 HCE Transformer & APT & 0.335 [0.310, 0.356] & 0.143 [0.121, 0.160] \\
 \ourmethod{} & APT & 0.332 [0.306, 0.354] & 0.145 [0.122, 0.160] \\
 \bottomrule
 \end{tabular}
-\caption{Primary APT-only cell-typing comparison: five patient-disjoint folds, 40 patients, 361{,}792 cells. Entries are subject-balanced pooled Macro-F1 with pointwise 95\% patient-bootstrap intervals (2{,}000 resamples). Frozen predictions are retrospectively re-scored with equal total patient weight; checkpoints are unchanged. Comparisons are descriptive, conditional on fitted models. Transformer auxiliary supervision differs (Table~\ref{tab:transformer_components}); full-budget MLP coverage remains unavailable.}
+\caption{Primary APT-only cell-typing comparison: five patient-disjoint folds, 40 patients, 361{,}792 cells. Entries are subject-balanced pooled Macro-F1 with pointwise 95\% intervals (2{,}000 resamples). MLP reports the mean of three training seeds and a joint seed/patient bootstrap; other rows use frozen predictions and a patient bootstrap conditional on fitted models. These uncertainty targets differ. Comparisons are descriptive: training recipes and Transformer auxiliary supervision differ (Table~\ref{tab:transformer_components}).}
 \label{tab:main}
 \end{table}

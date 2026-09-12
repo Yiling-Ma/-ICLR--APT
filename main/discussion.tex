@@ -1,13 +1,17 @@
 \section{Discussion}
 \label{sec:discussion}
 
-The central lesson of APT-Bench is that the unit of generalization must be
-part of the cell-typing benchmark. The observed cell-split optimism is
-consistent across the two evaluated model families and both resolutions,
-but its magnitude is specific to the available protocol comparisons.
-Patient-disjoint testing and subject-balanced scoring address different
-issues: the former separates people across training and test sets, while
-the latter limits unequal cell recovery from dominating the score.
+APT-Bench separates two empirical questions: the recoverability of cell
+identity at different hierarchy levels, and the incremental contribution of
+paired APT beyond a specified RNA reference. The completed MLP oracle and
+training-prior comparison shows within-lineage discrimination beyond simply
+narrowing the candidate set. Its heterogeneity across lineages cautions
+against summarizing APT as uniformly informative or uninformative. The
+preliminary paired-input increment asks a different question; it requires
+conditional shuffling and repeated training before being interpreted as
+finer-grained complementary information. Patient-disjoint testing and
+subject-balanced scoring provide the common evaluation foundation, not an
+additional claim of methodological novelty.
 
 \paragraph{A reusable comparison setting.}
 The resource specifies an APT input, operational ontology, fixed patient folds,
@@ -16,16 +20,23 @@ not a claimed algorithmic advance. These references establish comparison
 points for improving APT cell typing without changing the input modality,
 ontology, or held-out patient partitions. Complete data access, permissions,
 annotation provenance, and a portable evaluator remain necessary release
-requirements. Full-budget MLP coverage and more comprehensive APT-compatible
-annotation baselines also remain limitations.
+requirements. The completed full-cell-budget MLP adds a non-Transformer
+reference; more comprehensive APT-compatible annotation baselines and
+matched-objective comparisons remain useful extensions.
 
 \paragraph{Boundaries of the evidence.}
 The APT cohort contains 40 participants and RNA-derived reference labels.
 Independent annotation checks and additional APT cohorts are needed to
 assess broader generalization. Patient-disjoint testing does not remove
 disease-correlated acquisition effects, so the secondary disease study is
-not clinical validation. Paired RNA contextualizes label reconstruction
-rather than establishing an aptamer information limit. Subject--cell sampling
+not clinical validation. RNA supplies the reference labels, and its apparent
+difficulty depends on features, preprocessing, and the fitted reference.
+An APT increment over 2{,}000 HVGs may reflect restricted RNA representation;
+it is not evidence of irreducible information absent from RNA. True-lineage
+masking and shuffling are privileged diagnostics, and the latter does not
+identify a causal or molecular mechanism. Three training seeds and
+pointwise resampling intervals also provide limited uncertainty evidence.
+Subject--cell sampling
 analyses are preserved in a separate report; neither a scaling law nor a
 resource-allocation algorithm is a contribution of this paper.
 
@@ -35,9 +46,11 @@ resource-allocation algorithm is a contribution of this paper.
 APT-Bench establishes a patient-disjoint evaluation setting for cell typing
 from single-cell aptamer profiles, with a fixed label ontology, explicit
 subject-balanced scoring, and classical and neural reference results.
-Cell-level splitting produces higher scores in both evaluated model families
-at both resolutions, showing why held-out cells must not substitute for
-held-out patients in reporting generalization. The resulting comparison
-setting supports development of APT models against a clearly defined
-new-patient target. Complete reproducible release and independent APT cohorts
-are the next steps toward a broadly usable benchmark.
+It asks which hierarchy levels are recoverable in new patients and whether
+APT contributes additional typing information beyond an RNA reference.
+Training-prior-controlled oracle decoding reveals usable but heterogeneous
+within-lineage discrimination under the tested model. Establishing the
+specificity and robustness of the preliminary paired-input increment
+remains contingent on the ongoing repeated conditional controls and wider
+RNA sensitivity analysis. This distinction between a research question and
+an established finding is central to the benchmark's interpretation.

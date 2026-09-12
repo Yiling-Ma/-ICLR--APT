@@ -1,0 +1,64 @@
+\subsection{Supporting Split-Protocol Audit}
+\label{sec:results:protocol}
+
+Historical cell-level splitting increases cell-weighted coarse/fine
+Macro-F1 by 0.050/0.069 for XGBoost and 0.090/0.108 for Soft-cascade
+(Table~\ref{tab:protocol_sensitivity}). The apparent fine difference between
+the two models is 0.048 under cell splitting, versus approximately 0.009
+under patient-disjoint evaluation. Both columns use the historical
+cell-weighted metric, not the subject-balanced main leaderboard.
+The protocols also differ in training/test allocation, so this is not a
+fully matched causal estimate of leakage. The audit supports distinguishing
+held-out cells from new-patient generalization; it does not establish a new
+statistical principle or universal ranking reversal.
+
+\input{tables/protocol_sensitivity}
+
+\subsection{Hierarchy and Conditional-Pairing Diagnostic Protocol}
+\label{sec:appendix:identity_questions}
+
+This exploratory follow-up was specified after inspecting the original
+single-seed results, not preregistered. Its frozen implementation is
+\texttt{analysis/cell\_identity\_questions.py}; the associated protocol
+\texttt{CELL\_IDENTITY\_QUESTIONS\_V1.md} records the full specification.
+
+\paragraph{Completed full-budget hierarchy control.}
+The three-seed MLP uses every development cell in five patient-disjoint
+folds. Conditional priors use only actual outer-refit subtype counts:
+majority decoding and an expected-confusion baseline, not expected
+finite-sample F1. Oracle decoding masks scores to the true parent's children.
+Within each lineage, eligible patients' confusion matrices are normalized
+before pooling and macro-averaging fixed child classes. Zero-support patients
+are excluded and counted; outside-lineage predictions retain false negatives.
+
+\paragraph{Matched-input follow-up (running).}
+SGD and MLP retain the existing folds, 1{,}000-cell-per-training-patient cap,
+40 epochs, and inner-patient selection over their two-value regularization
+grids. Three training seeds each have three patient-shuffle and three
+patient-by-lineage-shuffle draws. RNA, APT, paired RNA+APT, and RNA+noise
+use the same selection rule. Whole APT vectors move only within the
+specified group, separately in train and evaluation partitions; singleton
+and unchanged-pair fractions are recorded. True test lineage is privileged,
+not deployable input. Oracle replays must exactly reconstruct stored
+ordinary predictions before acceptance.
+
+\paragraph{RNA difficulty and uncertainty.}
+The inner-validation 20th-percentile RNA probability-margin threshold is
+frozen for outer testing. All cells, every lineage, low-margin cells, and
+retrospective RNA-error/correct strata are reported with identical cells
+and class columns across controls. Error/correct strata jointly show rescue
+and damage, not independent validation. Scores are subject-balanced pooled
+Macro-F1 and mean within-scope patient accuracy. Joint resampling of training
+seeds, shuffles within seed, and paired patients gives 2{,}000 pointwise
+95\% intervals, not multiplicity-adjusted confirmation; three seeds provide
+limited training-uncertainty evidence.
+
+\paragraph{RNA representation sensitivity.}
+HVG selection and normalization use training partitions only. Beyond the
+2{,}000-HVG probe, the existing 5{,}000-HVG reference grid is retained
+regardless of outcome. Targeted 5{,}000-HVG conditional shuffling is triggered
+if MLP paired-minus-RNA and paired-minus-patient-by-lineage-shuffle effects
+are positive in all three seeds and both joint intervals exclude zero.
+SGD and all negative contrasts remain reported. This computational gate is
+not robustness evidence; an increment can still depend on restricted RNA
+representation rather than uniquely aptamer-specific biology.

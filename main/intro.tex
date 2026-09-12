@@ -3,8 +3,10 @@
 Single-cell aptamer profiling measures targeted binding patterns alongside
 transcriptomic annotations. Apt-seq established joint aptamer and transcriptome
 sequencing \citep{delley2018combined}; the measurement principle is not new.
-The question here is whether these profiles support immune-cell typing in
-patients absent from training. General single-cell benchmarks provide reusable
+We ask two empirical questions: which levels of cell identity can APT recover
+in patients absent from training, and does paired APT add typing information
+for cells that an RNA-only reference struggles to distinguish?
+Neither question presupposes a positive answer. General single-cell benchmarks provide reusable
 task definitions \citep{luecken2025open}, but gene-expression inputs do not
 directly define an evaluation contract for a fixed aptamer panel. A
 modality-specific reference task must distinguish additional cells from
@@ -24,24 +26,28 @@ APT-Bench specifies this task with 361{,}792 cells from 40 participants,
 subtypes. Five fixed patient-disjoint folds and subject-balanced pooled
 Macro-F1 define the primary comparison. Classical and neural recipes establish
 reference performance; Soft-cascade is one hierarchy-aware reference, not a
-separate algorithmic contribution. Split controls reveal protocol-dependent
-optimism, while paired-RNA reconstruction and patient-composition recovery
-contextualize the cell-level results. The contribution is this clinical APT
-task and its auditable interface, not the invention of paired profiling or
-subject-disjoint evaluation. Sampling analyses remain in a separate report.
+separate algorithmic contribution. A true-lineage decoding diagnostic, compared
+with training-only conditional priors, separates the benefit of narrowing the
+candidate set from evidence of within-lineage discrimination. A matched-budget
+RNA probe tests incremental information, with patient- and lineage-conditioned
+pairing controls. Patient-disjoint evaluation underpins both questions; it is
+not presented as a new statistical principle. Sampling analyses remain in a
+separate report, and composition recovery is a short application case study.
 
-The paper makes one contribution with three concrete components:
+The study combines one benchmark with two empirical investigations:
 \begin{itemize}
     \item \textbf{A specified evaluation contract:} APT-only lineage and subtype
     prediction with a fixed ontology, patient-disjoint folds, and explicit
     cell-weighted versus subject-balanced metrics.
-    \item \textbf{A split-protocol audit:} cell-level split controls yield higher
-    scores in both evaluated model families at both label resolutions,
-    demonstrating why held-out-cell and new-patient performance must be
-    distinguished.
-    \item \textbf{Reference results and an auditable interface:} classical and
-    neural predictions, metric code, split manifests, and documented artifact
-    checks establish comparison points for subsequent APT models.
+    \item \textbf{Hierarchical recoverability:} ordinary and true-lineage
+    decoding, training-prior controls, and results for every lineage probe
+    where reference-model errors occur, without treating their scores as an
+    intrinsic information limit of APT.
+    \item \textbf{Incremental paired information:} matched RNA/APT probes
+    and targeted negative controls distinguish a possible cell-pairing
+    contribution from patient structure, lineage correspondence, and added
+    input dimensions. Repeated conditional controls remain necessary before
+    drawing the corresponding substantive conclusion.
 \end{itemize}
 
 A complete public benchmark also requires accessible data, verified permissions,
@@ -49,3 +55,6 @@ and portable reproduction. Those release requirements remain explicit where
 unfinished; a public source repository alone does not establish their completion.
 The study does not claim validated blood-based diagnosis, a universal sampling
 law, or priority over all prior aptamer evaluation resources.
+RNA-derived annotations favor reconstruction from their source modality;
+any APT increment is relative to the tested RNA representation and model,
+not evidence that RNA intrinsically lacks the corresponding information.
