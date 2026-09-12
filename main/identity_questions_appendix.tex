@@ -1,16 +1,14 @@
 \subsection{Supporting Split-Protocol Audit}
 \label{sec:results:protocol}
 
-Historical cell-level splitting increases cell-weighted coarse/fine
-Macro-F1 by 0.050/0.069 for XGBoost and 0.090/0.108 for Soft-cascade
-(Table~\ref{tab:protocol_sensitivity}). The apparent fine difference between
-the two models is 0.048 under cell splitting, versus approximately 0.009
-under patient-disjoint evaluation. Both columns use the historical
-cell-weighted metric, not the subject-balanced main leaderboard.
-The protocols also differ in training/test allocation, so this is not a
-fully matched causal estimate of leakage. The audit supports distinguishing
-held-out cells from new-patient generalization; it does not establish a new
-statistical principle or universal ranking reversal.
+Cell-level splitting raises cell-weighted coarse/fine Macro-F1 by
+0.050/0.069 for XGBoost and 0.090/0.108 for Soft-cascade
+(Table~\ref{tab:protocol_sensitivity}). The apparent fine model difference
+is 0.048 under cell splitting versus approximately 0.009 under
+patient-disjoint evaluation. Training/test allocations also differ: this is
+a protocol comparison, not a matched causal estimate of leakage or evidence
+of universal ranking reversal. Neither column uses the subject-balanced
+main-leaderboard metric.
 
 \input{tables/protocol_sensitivity}
 
