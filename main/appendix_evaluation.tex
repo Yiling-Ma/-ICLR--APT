@@ -119,7 +119,8 @@ ordinary/oracle/expected-prior scores are 0.141/0.385/0.180.
 The oracle-minus-prior difference is $+0.205$ ($[0.174,0.217]$).
 Figure~\ref{fig:lineage_structure} reports every lineage. Differences from the
 matched-input experiment cannot be attributed to training-cell budget alone,
-because architecture, optimization and selection also differ.
+because APT preprocessing, architecture, optimization and selection also differ
+(Table~\ref{tab:identity_training_config}).
 
 \begin{figure}[H]
 \centering
@@ -154,6 +155,7 @@ nor the remaining error identifies an assay-specific information ceiling.
 \input{tables/true_lineage_oracle}
 
 
+\clearpage
 \subsection{Complete Per-Subtype Reporting}
 \label{sec:appendix:subtype_audit}
 

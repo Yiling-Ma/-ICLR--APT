@@ -58,7 +58,7 @@ for width in [2000,5000]:
             sub=df[(df.task==task)&(df.model==model)].set_index('comparison')
             delta=sub.loc['rna_apt-minus-rna']
             vals=' & '.join(f"{sub.loc[m,'estimate']:.3f}" for m in ['rna','rna_apt','rna_noise','rna_shuffled_apt'])
-            rows.append(f"{width:,} & {task.title()} & {model.upper()} & {vals} & {delta.estimate:+.3f} [{delta.low:.3f}, {delta.high:.3f}]"+r' \\')
+            rows.append(f"{width:,} & {task.title()} & {model.upper()} & {vals} & {delta.estimate:+.4f} [{delta.low:.4f}, {delta.high:.4f}]"+r' \\')
 table=r'''\begin{table}[H]
 \centering\small\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lllccccc}
@@ -72,7 +72,8 @@ HVGs & Task & Model & RNA & Paired & Noise & Patient shuffle & Paired minus RNA 
 paired differences have joint seed/patient 95\% intervals. Patient shuffle
 uses one draw per seed in this grid; the targeted 2,000-HVG experiment uses
 three draws per seed for each shuffle type. All normalization and HVG selection
-are training-partition-only. Noise adds 293 dimensions.}
+are training-partition-only. Noise adds 293 dimensions. Differences are computed
+before rounding; differences and interval endpoints use four decimal places.}
 \label{tab:rna_width_repeats}
 \end{table}
 '''

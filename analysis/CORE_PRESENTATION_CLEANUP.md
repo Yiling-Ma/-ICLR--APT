@@ -64,3 +64,18 @@ values, shared macro precision and ontology counts. The 19-page PDF compiles
 without unresolved references/citations or overfull boxes; rendered main results
 and the configuration table have been checked. No experiment was added to seek
 significance. Owner-dependent release and provenance TODOs are unchanged.
+
+## Final Consistency Polish
+
+The abstract now presents ordinary full-budget MLP fine F1 (0.141) before
+privileged true-lineage F1 (0.385), alongside the conditional prior (0.180).
+Section 5.2 and B.4 explicitly include APT preprocessing among the differences
+between full-budget and matched recipes. This is an explanation of existing
+conditions, not a correction to fitting or evidence of an experimental error.
+
+The width-sensitivity table is rebuilt from unrounded CSV contrasts with four
+decimal places for differences and interval endpoints. The conditional-shuffle
+table retains its negative -0.00018 lower bound. Figure 1 follows the complete
+introduction, Table 1 sits within section 5.1, and all 27 subtype rows fit on
+page 18 without changing the subtype table font. The obsolete universal-sampling-
+law phrase is removed. The PDF remains 19 pages; no new training was performed.

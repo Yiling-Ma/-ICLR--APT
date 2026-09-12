@@ -56,6 +56,7 @@ class BootstrapContractTests(unittest.TestCase):
                  (df.comparison=='rna_apt-minus-rna')]['estimate'].item()
         macros=(ROOT/'tables/paired_effect_values.tex').read_text()
         self.assertIn(r'\newcommand{\pairedMLPGainFiveK}{'+f'{value:.4f}'+'}',macros)
+        self.assertIn(f'{value:+.4f}',(ROOT/'tables/rna_width_repeats.tex').read_text())
         for file in ['iclr2027_conference.tex','main/intro.tex','main/results.tex']:
             self.assertIn(r'\pairedMLPGainFiveK{}',(ROOT/file).read_text())
         mapping=pd.read_csv(ROOT/'outputs/oof_composition_bridge/subtype_to_lineage_mapping.csv')

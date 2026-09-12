@@ -69,7 +69,11 @@ The full-budget MLP uses all development cells, a 256/128-unit network and
 AdamW with selected stopping; the matched probe caps training at 1,000 cells
 per patient and uses a 64-unit MLP for 40 epochs. Other has oracle F1 of
 0.886 in the former but 0.497 in the latter (conditional expected priors
-0.490/0.487). These settings do not isolate the effect of budget alone.
+0.490/0.487). The recipes also differ in APT preprocessing
+(Table~\ref{tab:identity_training_config}): log1p of raw counts in the matched
+probe versus provided APT expression without an added log transform in the
+full-budget MLP, each followed by training-set standardization.
+Their score differences therefore cannot be attributed to training-cell budget alone.
 Neither result justifies declaring Other universally identifiable or
 unidentifiable. The full-budget lineage plot and neural-reference replays
 are supporting evidence in Appendices~\ref{sec:appendix:full_budget_hierarchy}--\ref{sec:appendix:true_lineage_oracle}.
