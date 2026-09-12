@@ -222,6 +222,41 @@ Table~\ref{tab:hierarchy_sb_all} supplies the three additional classical
 references; Table~\ref{tab:main} contains the primary models.
 \input{tables/hierarchy_subject_balanced_all}
 
+\subsection{Main-Table Training Protocols}
+\label{sec:appendix:main_protocols}
+
+Table~\ref{tab:main_training_protocols} separates the data used to select a
+recipe from the final model's fit data. Counts come from keyed cell/patient
+records and saved splits, not equal-size-fold approximations. All six
+references evaluate the same 361,792 cells in five outer patient partitions
+with the fixed five-lineage/27-subtype ontology and the SB pooling in
+\S\ref{sec:data:imbalance}. Historical neural exports lack cell IDs, but the
+separate exact-prediction checkpoint replays retain them and were checked
+against the classical and MLP test sets without intersection filtering.
+
+\input{tables/main_training_protocols}
+
+The recipes use the provided 293-feature \texttt{apt\_expression} matrix,
+not the raw-count-plus-\texttt{log1p} input of the matched modality probes.
+Historical loaders fit feature-wise mean/SD on the fit partition only;
+MLP fits a new StandardScaler in each inner fit and outer refit. Saved MLP
+feature IDs and outer-refit scaler statistics were verified against the
+keyed input and development cells. The original classical estimator/scaler
+snapshots and complete historical search histories are unavailable; surviving
+code documents their fixed recipes, not an independently recovered tuning
+log. Historical neural feature order is supported by exact keyed replay,
+not a separately serialized original feature-ID manifest. No disease label
+enters the LR, XGBoost, MLP, Flat or HCE training objective.
+
+The machine-readable audit provides exact fold/seed/stage counts, selected
+MLP settings, checkpoint provenance and unrecoverable fields. Earlier neural
+configurations sometimes permit five head-calibration epochs, but all 15
+final parameter dictionaries match the validation-selected pre-calibration
+checkpoints exactly; replay disables calibration. Complete discarded-run
+compute and search histories are unavailable, so shared epoch limits do not
+establish equal total tuning cost. The P/SP intervals in Table~\ref{tab:main}
+do not include repeated model selection.
+
 \subsection{Archived Analyses}
 
 The version archive retains the earlier resource-comparison table,

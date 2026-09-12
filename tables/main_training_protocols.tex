@@ -1,0 +1,27 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{>{\raggedright\arraybackslash}p{.14\linewidth}>{\raggedright\arraybackslash}p{.12\linewidth}>{\raggedright\arraybackslash}p{.16\linewidth}>{\raggedright\arraybackslash}p{.24\linewidth}>{\raggedright\arraybackslash}p{.16\linewidth}>{\raggedright\arraybackslash}p{.10\linewidth}}
+\toprule
+Model & Fit data & Validation / refit & Selection / training budget & Supervision / weights & Training seeds \\
+\midrule
+Logistic Regression & D, all cells & None; one direct fit & Fixed retained recipe$^\dagger$: LBFGS, maximum 500 iterations & Separate coarse/fine CE; train-class balanced & No RNG used \\
+XGBoost & D, all cells & None; one direct fit & Fixed retained recipe$^\dagger$: 400 trees, depth 6, learning rate 0.1 & Separate coarse/fine labels; no sample weights & Not recovered \\
+Plain MLP & Inner T; final D, all cells & V selects; fresh initialization and outer refit on D & Two decays ($10^{-5},10^{-3}$), 50 epochs each; task-specific SB-F1 selection & Separate coarse/fine CE; unweighted & 20260912, 20260913, 20260914 \\
+Flat Transformer & T, all cells & V selects checkpoint; no D refit & Maximum 50 epochs, patience 10; fine CW-F1 on observed-label union & Coarse/fine CE; unweighted & 42 \\
+HCE Transformer & T, all cells & V selects checkpoint; no D refit & Maximum 50 epochs, patience 10; fine CW-F1 on observed-label union & Two-level HCE; unweighted & 42 \\
+Soft-cascade Transformer & T, all cells & V selects checkpoint; no D refit & Maximum 50 epochs, patience 10; fine CW-F1 on all 27 classes & Coarse/fine CE plus disease-based contrastive term; unweighted & 42 \\
+\bottomrule
+\end{tabular}
+\caption{Training protocols for Table~\ref{tab:main}. D: 32 development
+patients, 275,553--294,812 cells; T: 24 inner/Transformer training patients,
+206,704--226,431 cells; V: eight validation patients, 66,980--86,239 cells.
+Each outer test partition has eight patients and 66,980--86,239 cells.
+No training-cell cap is applied. $^\dagger$Complete original classical
+tuning/CLI records are unavailable: these settings are from surviving fit
+code, not a recovered search log. XGBoost's source default seed is 42, not
+an independently verified original invocation. Neural seed values are
+recovered from stored configurations; bootstrap seeds are not training seeds.}
+\label{tab:main_training_protocols}
+\end{table}

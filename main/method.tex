@@ -90,14 +90,14 @@ w_{\text{contrast}}(t)\mathcal{L}_{\text{contrast}},
 \end{equation}
 where $\mathcal{L}_{\text{fine}}$ and $\mathcal{L}_{\text{coarse}}$ are cross-entropy losses with $\lambda_{\text{fine}}=1.0$ and $\lambda_{\text{coarse}}=0.5$. The contrastive weight increases to 0.2 according to the schedule in \S\ref{sec:method:contrastive}.
 
-We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. Models are trained for at most 50 epochs with early stopping based on validation fine-level macro-F1 with patience 10. The final configuration does not use class-balanced sampling because it underperformed natural sampling after matching the number of optimization steps; the development-only variant was not retained.
+We optimize the cascade using AdamW with learning rate $10^{-4}$ and weight decay $10^{-5}$, gradient clipping at norm 1.0, batch size 512, and mixed-precision training. The retained training configuration uses a maximum of 50 epochs and patience 10 on validation fine-level cell-weighted (CW) Macro-F1 over the fixed 27 classes. It uses unweighted mini-batch sampling; no independent benefit or harm of sampling weights is inferred from the reference comparison.
 
 \paragraph{Backbone-matched Transformer references.}
 \label{sec:method:baselines}
 The flat FT-style Transformer
 reference \citep{gorishniy2021revisiting} removes the cascade while retaining the
-identical APT tokenizer, Transformer dimensions, optimizer, early stopping, and
-training budget above. We call it FT-style because its tokenizer is exactly the APT
+APT tokenizer, Transformer dimensions, optimizer, patience and maximum-epoch
+budget above. We call it FT-style because its tokenizer is exactly the APT
 feature tokenizer used by \ourmethod{}, rather than the original numerical/categorical
 FT-Transformer tokenizer. This model and its HCE counterpart predict the same $M+K$
 lineage-and-subtype nodes. The flat model applies independent cross-entropy to the
@@ -112,13 +112,15 @@ unqualified reproduction of the mixed-granularity setting in the original work.
 Coarse HCE decoding maximizes subtree scores $s_m$, not raw internal-node
 logits; fine decoding maximizes leaf logits.
 All three Transformer models are evaluated from the checkpoint selected by
-patient-validation fine macro-F1, without an additional post-selection calibration
+held-out validation-patient fine CW Macro-F1, not SB-Macro-F1, without an additional post-selection calibration
 stage. Table~\ref{tab:transformer_components} makes the remaining objective
 differences explicit. In particular, only the soft-cascade reference uses disease
 labels to construct cross-disease contrastive pairs; Flat and HCE use no disease
-labels and no contrastive term. The ladder therefore holds backbone capacity,
-optimization budget, folds, and checkpoint selection, but it is not an
-objective-matched component ablation. We do not attribute any score difference to
+labels and no contrastive term. Flat/HCE use the sklearn observed-label union
+for validation Macro-F1; Soft-cascade uses all 27 classes. Shared backbone
+dimensions, data partitions and maximum-epoch limits therefore do not imply
+identical selection targets or realized training lengths. This is not an
+objective-matched component ablation (Table~\ref{tab:main_training_protocols}). We do not attribute any score difference to
 soft routing, hierarchical loss, or contrastive regularization in isolation.
 
 \input{tables/transformer_reference_components}

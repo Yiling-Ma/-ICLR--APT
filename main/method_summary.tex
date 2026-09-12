@@ -7,6 +7,9 @@ Transformers and a Soft-cascade Transformer provide backbone-matched neural
 recipes. All use APT at inference and the same outer patient partitions.
 Training and validation follow each recipe's documented protocol; identical
 outer folds do not imply identical training-set sizes or fully matched tuning.
+Table~\ref{tab:main_training_protocols} documents all six main-table recipes,
+including selection-stage versus final-fit data, weighting, seeds and
+recoverable training budgets.
 Linear SVM, Random Forest, and reference correlation are additional
 appendix references. A plain MLP uses all development cells in each outer fold,
 with three fixed training seeds, inner-patient selection, and outer refitting.

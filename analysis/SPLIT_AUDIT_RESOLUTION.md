@@ -1,5 +1,13 @@
 # Historical split audit: Route A resolution
 
+Follow-up provenance update (Concern 3): inspection of the five original
+patient-disjoint Soft-cascade `best.pt` configurations subsequently recovered
+their maximum training budget as 50 epochs. The earlier unavailable statement
+below was conditional on the replay `resolved_config.json` files alone.
+The cell-split maximum was not reassessed. See `CONCERN3_RESOLUTION_ZH.md` and
+`generated/main_protocol_audit.json`; this does not change the split-audit scores
+or its descriptive scope.
+
 ## Applicability and disposition
 
 Audited against manuscript source at 7299c5a and the subsequent changes in

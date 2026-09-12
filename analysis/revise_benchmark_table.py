@@ -1,4 +1,8 @@
-"""Re-score frozen OOF predictions; do not retrain or change checkpoints."""
+"""Historical pre-MLP re-scoring stage; not the current Table 1 entry point.
+
+Use render_main_protocol_audit.py for the current six-recipe table. This script
+is retained to reproduce the older reweighted metric/CI artifacts.
+"""
 from pathlib import Path
 import json
 import hashlib
