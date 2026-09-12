@@ -100,3 +100,15 @@ controls. The search does NOT establish an exhaustive absence of prior work.
 The manuscript makes no "first" claim. The full JACS/Science publisher pages
 were access-limited; descriptions are bounded to the accessible author abstracts.
 Do not assert that every analysis in those supplements lacks a particular control.
+
+## Verification
+
+- `analysis/test_findings_bootstrap.py`: all five tests pass.
+- `latexmk -pdf -interaction=nonstopmode -halt-on-error iclr2027_conference.tex`:
+  successful 21-page build; no undefined citations/references or overfull boxes.
+- Rendered all pages for layout inspection. Main results end on page 7;
+  matched-budget Figure 2 and paired-contrast Table 2 appear on pages 5 and 6.
+- Preserved the title update from Overleaf commit `dd5f7a1` when merging the
+  concurrent remote changes. No experiments were rerun or added for significance.
+- The tracked PDFs are regenerated from the merged manuscript. An Overleaf
+  pull/recompile is a separate UI action, not implied by a GitHub push.
