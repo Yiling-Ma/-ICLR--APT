@@ -1,12 +1,30 @@
 \section{Introduction}
 
-Single-cell aptamer profiling links cell-surface binding measurements to
-transcriptomic annotations. Apt-seq demonstrated this principle in cell-line
-mixtures \citep{delley2018combined}, and subsequent Aptomics work extended
-molecular profiling to clinical specimens \citep{wu2025aptomics}.
-These capabilities motivate a distinct evaluation question: in patients
-absent from training, which annotated identities can APT recover, and does
-paired APT improve on a specified RNA-only reference?
+Beyond transcriptomic profiling, single-cell technologies increasingly aim
+to capture complementary molecular layers from the same cell, including
+cell-surface protein states that RNA alone does not resolve. Aptamers offer
+one route to this: short, selected oligonucleotide probes that bind surface
+targets and, because their identity is itself a nucleic-acid sequence, can
+be read out and paired with transcriptome sequencing on the same cell.
+Apt-seq first demonstrated that jointly measured aptamer-binding and RNA
+profiles resolve cell composition in defined cell-line mixtures
+\citep{delley2018combined}. Subsequent work extended this along two
+directions: Aptomics scaled aptamer-based profiling to proteins, glycans,
+and RNA in clinical specimens, capturing tumor heterogeneity and T-cell
+differentiation states \citep{wu2025aptomics}, while SPARK-seq combined
+CRISPR perturbation with aptamer and RNA sequencing to identify and
+kinetically characterize surface-binding targets \citep{luo2026spark}.
+Together, these studies establish that APT measurements are feasible at
+single-cell resolution, discriminate defined cell populations, and support
+downstream biological characterization. What remains less established is
+whether APT features on their own support reliable identification of a
+cell's annotated identity -- an evaluation that determines what downstream
+model development and clinical application this modality can support. As
+single-cell APT data accumulates across patient cohorts, this capability
+needs to be evaluated directly: which annotated cell identities can APT
+features support in a patient who contributed no data to model
+development, and does paired APT improve on a specified RNA-only
+reference?
 
 Two comparisons are needed to answer this question. First, low fine-subtype
 performance does not establish a lack of APT information: parent-lineage
