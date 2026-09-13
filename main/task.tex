@@ -3,24 +3,7 @@
 
 \begin{figure}[H]
 \centering
-\setlength{\fboxsep}{7pt}
-\fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
-\textbf{Blood-derived profiles}\\[4pt]
-\numaptfeatures{} APT measurements per cell\\[3pt]
-Paired RNA supplies reference annotations
-\end{minipage}}
-\hfill$\longrightarrow$\hfill
-\fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
-\textbf{Split by patient}\\[4pt]
-Five fixed outer folds\\[3pt]
-No patient shared between development and test
-\end{minipage}}
-\hfill$\longrightarrow$\hfill
-\fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
-\textbf{Evaluate cell typing}\\[4pt]
-5 lineages / \numsubtypes{} subtypes\\[3pt]
-Equal patient weight; frozen APT-only references
-\end{minipage}}
+\includegraphics[width=\linewidth]{figures/cell_patient_overview.pdf}
 \caption{The primary \ourbench{} contract. Patient-disjoint outer folds evaluate
 cell typing in new individuals; subject-normalized confusion pooling assigns
 equal total scoring weight to each patient.}
