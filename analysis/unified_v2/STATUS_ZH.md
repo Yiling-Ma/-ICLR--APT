@@ -17,10 +17,39 @@
 
 PROTOCOL.md 在新 outer 结果生成前冻结。run.py 保存输入哈希、各阶段人数/细胞数、scaler、选择历史、checkpoint、完整 cell/patient IDs、真实标签和概率。summarize.py 缺任何模型/seed/fold 即失败，不输出残缺主表；验证完整 OOF 集合，逐 fit SB-F1 后平均，生成配对差值及 2×2 交互；5000次共同 patient/seed resampling。
 
-运行：vllab11，CUDA_VISIBLE_DEVICES=4，单 worker，CPU线程4。
+初始运行：vllab11，CUDA_VISIBLE_DEVICES=4，单 worker，CPU线程4。
 目录：/ssd3/mayiling/apt_agent_runtime/unified_v2
 日志：worker.log；结果：results/；代码快照：code/。
 启动时已确认主进程及 MLP fold0 进程存在。其后进度须以实时日志/sidecar为准，不能把启动当作完成。
+
+## 2026-09-13 parallel dispatch
+
+The user authorized moving unstarted jobs to vllab15. MLP, Flat, Cascade,
+and HCE already completed their five folds on vllab11. Keep its active
+flat_contrast fold 0 process (PID 2669115) running. The old launcher PID
+1966980 was stopped and killed without terminating that child, preventing
+duplicate dispatch. Its disappearance is intentional, not a training failure.
+
+vllab15 uses /ssd2/mayiling/apt_unified_v2 with results/ and worker_*.log.
+launch_vllab15.sh assigns non-overlapping jobs:
+
+- GPU 0: cascade_contrast folds 0,1.
+- GPU 1: cascade_contrast folds 2,3,4.
+- GPU 2: flat_contrast folds 1,2.
+- GPU 3: flat_contrast folds 3,4.
+- CPU lr worker: all five LR folds; CPU xgb worker: all five XGBoost folds.
+
+The training script and frozen protocol remain byte-identical across hosts.
+No seeds, search grids, input definitions, or stopping rules were changed.
+XGBoost remains CPU hist as specified; GPU migration applies to neural jobs.
+The /home project and Python environment are accessible on both hosts;
+new predictions/checkpoints are stored on vllab15 local /ssd2, not home.
+Hardware differs, so timing is host-specific and no bitwise cross-GPU
+reproducibility is claimed. Final aggregation must combine both hosts by
+the assignment above, without overwriting or rerunning completed fits.
+Expected final predictions: 90 neural joint NPZ, 10 LR task NPZ, 30 XGB
+task NPZ; scaler files do not count as completed fits. The completion
+monitor now checks both hosts and requires all 130 prediction artifacts.
 
 三个训练host测试通过：所有神经配置输出形状及梯度、contrastive有限值/无正样本处理、固定27类SB计分。无需重写临床/发布TODO。
 
