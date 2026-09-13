@@ -18,14 +18,15 @@
 \usepackage{makecell}
 
 
-\title{APT-Bench: Benchmarking Cross-Patient Cell Typing from
+\input{paper_constants}
+
+\title{\ourbench{}: Benchmarking Cross-Patient Cell Typing from
 \mbox{Single-Cell} Aptamer Profiles}
 
 % Global paper constants
 
 \newcommand{\ourmethod}{Soft-cascade Transformer\xspace}
 
-\newcommand{\numsubtypes}{27}
 \input{tables/paired_effect_values}
 
 % Authors must not appear in the submitted version. They should be hidden
@@ -64,9 +65,9 @@ Address \\
 
 \begin{abstract}
 Which cell identities can aptamer profiles recover in new patients, and what
-do they add beyond RNA? APT-Bench specifies this comparison using 361{,}792
-paired cells from 40 participants, 293 aptamer measurements, five lineages,
-27 RNA-derived subtypes, and fixed patient-disjoint folds. Two findings emerge.
+do they add beyond RNA? \ourbench{} specifies this comparison using \numcells{}
+paired cells from \numparticipants{} participants, \numaptfeatures{} aptamer measurements, \numlineages{} lineages,
+\numsubtypes{} RNA-derived subtypes, and fixed patient-disjoint folds. Two findings emerge.
 First, the full-training-budget MLP achieves fine subject-balanced Macro-F1
 of 0.141, rising to 0.385 with true-lineage decoding, compared with 0.180 for a training-only
 conditional-proportion prior. This comparison shows additional discrimination relative to the
@@ -123,7 +124,7 @@ do not substitute for this author verification.}
 \subsection*{Ethics statement}
 
 % (This section is \textbf{recommended} and does not count toward the page limit.)
-APT-Bench is intended for research evaluation, not clinical decision-making.
+\ourbench{} is intended for research evaluation, not clinical decision-making.
 The small single-cohort sample and unresolved acquisition effects preclude
 claims of clinical validity or demographic fairness. Strong patient-specific
 signals also create a privacy concern: removing direct identifiers alone does

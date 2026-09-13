@@ -1,0 +1,26 @@
+% Benchmark identity and dataset constants. Keep experimental scores elsewhere.
+\definecolor{benchAPTStart}{HTML}{185A9D}
+\definecolor{benchAPTEnd}{HTML}{087F8C}
+\definecolor{benchNameStart}{HTML}{B56816}
+\definecolor{benchNameEnd}{HTML}{AA3546}
+\newif\ifbenchcolor
+\benchcolortrue % Use \benchcolorfalse for monochrome output.
+\DeclareRobustCommand{\ourbench}{%
+  \ifbenchcolor
+    \textcolor{benchAPTStart}{A}%
+    \textcolor{benchAPTStart!50!benchAPTEnd}{P}%
+    \textcolor{benchAPTEnd}{T}%
+    -%
+    \textcolor{benchNameStart}{B}%
+    \textcolor{benchNameStart!75!benchNameEnd}{e}%
+    \textcolor{benchNameStart!50!benchNameEnd}{n}%
+    \textcolor{benchNameStart!25!benchNameEnd}{c}%
+    \textcolor{benchNameEnd}{h}%
+  \else APT-Bench\fi\xspace}
+\pdfstringdefDisableCommands{\def\ourbench{APT-Bench}}
+\newcommand{\numcells}{361{,}792}
+\newcommand{\numparticipants}{40}
+\newcommand{\numaptfeatures}{293}
+\newcommand{\numlineages}{5}
+\newcommand{\numsubtypes}{27}
+\newcommand{\numfolds}{5}

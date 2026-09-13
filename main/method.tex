@@ -11,9 +11,9 @@ structure; their comparison does not isolate individual components.
 \subsection{Cell Encoder}
 \label{sec:method:backbone}
 
-Each cell is represented by a standardized APT vector $x \in \mathbb{R}^{293}$. We embed feature identity and feature value separately. For aptamer index $i$, we form a token
+Each cell is represented by a standardized APT vector $x \in \mathbb{R}^{\numaptfeatures{}}$. We embed feature identity and feature value separately. For aptamer index $i$, we form a token
 \begin{equation}
-t_i = \mathrm{Emb}(i) + \mathrm{MLP}_{\mathrm{val}}(x_i), \qquad i=1,\dots,293.
+t_i = \mathrm{Emb}(i) + \mathrm{MLP}_{\mathrm{val}}(x_i), \qquad i=1,\dots,\numaptfeatures{}.
 \end{equation}
 A learnable \texttt{[CLS]} token is prepended to the resulting sequence and processed by a pre-norm Transformer encoder with 4 layers, 8 attention heads, hidden dimension 256, feed-forward dimension 512, GELU activations, and dropout 0.1. The final \texttt{[CLS]} representation
 \begin{equation}

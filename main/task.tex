@@ -6,7 +6,7 @@
 \setlength{\fboxsep}{7pt}
 \fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
 \textbf{Blood-derived profiles}\\[4pt]
-293 APT measurements per cell\\[3pt]
+\numaptfeatures{} APT measurements per cell\\[3pt]
 Paired RNA supplies reference annotations
 \end{minipage}}
 \hfill$\longrightarrow$\hfill
@@ -18,10 +18,10 @@ No patient shared between development and test
 \hfill$\longrightarrow$\hfill
 \fbox{\begin{minipage}[t]{0.25\textwidth}\small\raggedright
 \textbf{Evaluate cell typing}\\[4pt]
-5 lineages / 27 subtypes\\[3pt]
+5 lineages / \numsubtypes{} subtypes\\[3pt]
 Equal patient weight; frozen APT-only references
 \end{minipage}}
-\caption{The primary APT-Bench contract. Patient-disjoint outer folds evaluate
+\caption{The primary \ourbench{} contract. Patient-disjoint outer folds evaluate
 cell typing in new individuals; subject-normalized confusion pooling assigns
 equal total scoring weight to each patient.}
 \label{fig:cell_patient_overview}
@@ -30,19 +30,19 @@ equal total scoring weight to each patient.}
 \subsection{Blood Profiles and Reference Labels}
 \label{sec:data:description}
 
-APT-Bench is derived from peripheral-blood specimens from 40 participants in
+\ourbench{} is derived from peripheral-blood specimens from \numparticipants{} participants in
 five cancer groups (CRC, GC, HCC, PC, and BTC) and healthy controls, with 6--8
-participants per group. The paired assay measures transcriptomic state and 293
+participants per group. The paired assay measures transcriptomic state and \numaptfeatures{}
 aptamer features on the same cells. Transcriptomic counts
 were processed with Seurat \citep{hao2021integrated}; predicted doublets and
 low-quality cells were removed, and clusters were manually annotated using
 canonical markers from prior PBMC and pan-cancer studies
 \citep{mcginnis2019doubletfinder,zhang2024pan,yang2024pan}. These annotations
-define five lineages and \numsubtypes{} subtypes. They are operational reference
+define \numlineages{} lineages and \numsubtypes{} subtypes. They are operational reference
 labels, not independently measured biological truth.
 
 The linked post-QC cohort contains 374{,}854 cells. Excluding the uncertain
-\emph{Unknown} subtype leaves 361{,}792 benchmark cells. Each subtype has one
+\emph{Unknown} subtype leaves \numcells{} benchmark cells. Each subtype has one
 fixed parent lineage. Disease is a six-class patient attribute, not the root of
 the cell hierarchy: any given lineage can occur in multiple disease groups.
 We evaluate the lineage-to-subtype hierarchy without imposing a
@@ -61,7 +61,7 @@ development-patient disease labels for contrastive pairing.
 Open-set subtype discovery is outside the contract; all primary cell tasks
 use the fixed five-lineage/27-subtype ontology.
 
-Five frozen disease-stratified folds each hold out eight patients. All cells
+\numfolds{} frozen disease-stratified folds each hold out eight patients. All cells
 from a patient remain together. Benchmark-fitted transforms, model selection,
 and fitting use development patients; the upstream provenance of the supplied
 APT expression remains incompletely recovered

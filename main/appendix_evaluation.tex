@@ -4,9 +4,9 @@
 \label{sec:appendix:dataset_documentation}
 
 The available study workflow establishes the high-level sequence used to construct
-APT-Bench: clinical peripheral-blood specimens from five cancer groups and healthy
+\ourbench{}: clinical peripheral-blood specimens from five cancer groups and healthy
 controls are converted to single-cell suspensions; cell-profile and viability quality
-control precedes a paired single-cell transcriptome and 293-aptamer assay; separate
+control precedes a paired single-cell transcriptome and \numaptfeatures{}-aptamer assay; separate
 transcriptome and aptamer-barcode libraries are linked at the cell level; and
 transcriptome-derived clusters and annotations provide the cell labels. For a
 benchmark release, this overview must be accompanied by the following provenance
@@ -62,7 +62,7 @@ expression or biological state is invariant across diseases. Each subtype is
 assigned to one of five parent lineages by a manually curated lookup.
 The exported lookup and structural audit are available under
 \texttt{benchmark/release\_audit/}: the existing subtype summary has 27 unique
-subtypes, five parents, and 361{,}792 cells, and the fold manifest has five
+subtypes, five parents, and \numcells{} cells, and the fold manifest has five
 disjoint groups of eight patients. These checks establish internal bookkeeping
 consistency, not independent biological validity.
 \todo{Document independent validation of the subtype-to-lineage mapping, including
@@ -79,14 +79,14 @@ reviewers, disagreements, adjudication, and any marker-based checks.}
     and cryopreservation procedures, quality-control thresholds, and sample/cell
     exclusion counts.}
     \item \todo{Report assay/platform and reagent versions, sequencing instruments and
-    depth, 293-probe panel design, and a verified protein-target manifest or explicitly
+    depth, \numaptfeatures{}-probe panel design, and a verified protein-target manifest or explicitly
     state why only anonymized probe identifiers can be released.}
     \item \todo{Report barcode-matching rates, APT normalization and filtering,
     all remaining software versions and parameters, and whether annotation was
     performed before investigators examined APT profiles or disease labels.}
     \item The documented final cell-flow accounting is
     $374{,}854\ \text{linked post-QC cells}
-    -13{,}062\ \text{Unknown cells}=361{,}792\ \text{benchmark cells}$.
+    -13{,}062\ \text{Unknown cells}=\numcells{}\ \text{benchmark cells}$.
     \todo{Data owners: provide participant and cell counts at all earlier
     collection/QC exclusions before a complete cohort-flow diagram can be
     drawn. Supply the approval, consent, access, and licensing evidence listed
@@ -142,7 +142,7 @@ APT--RNA comparison in Figure~\ref{fig:matched_lineage_identity}.}
 We replay the 15 frozen final checkpoints (three neural references, five
 patient-disjoint folds), retain explicit cell IDs and ontology columns,
 and require exact reconstruction of their original coarse and fine predictions
-before computing this diagnostic. For each of the same 361{,}792 held-out cells,
+before computing this diagnostic. For each of the same \numcells{} held-out cells,
 we mask the fine score vector to subtypes whose parent is the true lineage,
 then take its argmax. We do not change Soft-cascade routing or condition the
 evaluation set on a correct coarse prediction. The diagnostic therefore uses
@@ -159,7 +159,7 @@ nor the remaining error identifies an assay-specific information ceiling.
 \subsection{Complete Per-Subtype Reporting}
 \label{sec:appendix:subtype_audit}
 
-Table~\ref{tab:subtype_per_class} retains all 27 subtypes, cell counts,
+Table~\ref{tab:subtype_per_class} retains all \numsubtypes{} subtypes, cell counts,
 patient coverage, and historical cell-weighted per-class F1 with 2,000
 patient-bootstrap intervals. These are not the subject-balanced main metric.
 They support transparent class-level inspection, not a biological
@@ -201,7 +201,7 @@ patients per fold, without a validation partition; Soft-cascade uses 24/8/8
 training/validation/test patients. Both cell-split runs instead use
 253,254/54,269/54,269 cells, with all 40 patients represented in each partition.
 An audit of the two saved cell-level split manifests verified pairwise-disjoint
-training, validation and test cell-ID sets. Patient-disjoint scores pool 361,792
+training, validation and test cell-ID sets. Patient-disjoint scores pool \numcells{}
 OOF cells; cell-split scores use 54,269 cells, not a common test set across
 protocols. The historical Soft-cascade CSV exports used in this split audit,
 both patient-disjoint pooled OOF and cell-split test predictions, retain
@@ -228,7 +228,7 @@ references; Table~\ref{tab:main} contains the primary models.
 Table~\ref{tab:main_training_protocols} separates the data used to select a
 recipe from the final model's fit data. Counts come from keyed cell/patient
 records and saved splits, not equal-size-fold approximations. All six
-references evaluate the same 361,792 cells in five outer patient partitions
+references evaluate the same \numcells{} cells in five outer patient partitions
 with the fixed five-lineage/27-subtype ontology and the SB pooling in
 \S\ref{sec:data:imbalance}. Historical neural exports lack cell IDs, but the
 separate exact-prediction checkpoint replays retain them and were checked
@@ -236,7 +236,7 @@ against the classical and MLP test sets without intersection filtering.
 
 \input{tables/main_training_protocols}
 
-The recipes use the provided 293-feature \texttt{apt\_expression} matrix,
+The recipes use the provided \numaptfeatures{}-feature \texttt{apt\_expression} matrix,
 not the raw-count-plus-\texttt{log1p} input of the matched modality probes.
 The available audit does not recover the complete upstream transformation
 that produced this supplied expression. Verified training-partition scaling
@@ -267,7 +267,7 @@ do not include repeated model selection.
 \label{sec:appendix:mlp_failures}
 
 This analysis uses the same 15 saved fine-task score arrays (three seeds,
-five folds), all 361,792 OOF cells, and the full-budget APT preprocessing
+five folds), all \numcells{} OOF cells, and the full-budget APT preprocessing
 recipe of Table~\ref{tab:main_training_protocols}. Cell IDs, patient membership,
 true labels, score-column ontology, parent mapping and saved ordinary/oracle
 confusion matrices are checked without filtering to an intersection. No
@@ -330,7 +330,7 @@ training budget or model limitations without further evidence.
 \begin{figure}[p]
 \centering
 \includegraphics[width=\linewidth]{analysis/hierarchy_failures/results/ordinary_confusion.pdf}
-\caption{All 27 subtypes under ordinary full-budget MLP decoding. Rows are true
+\caption{All \numsubtypes{} subtypes under ordinary full-budget MLP decoding. Rows are true
 and columns predicted subtype, ordered by lineage then fixed subtype order;
 white lines separate lineages. Color uses the same 0--1 scale as
 Figure~\ref{fig:mlp_oracle_confusion}. Each patient first has unit total mass,
