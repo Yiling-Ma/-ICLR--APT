@@ -26,43 +26,18 @@ features support in a patient who contributed no data to model
 development, and does paired APT improve on a specified RNA-only
 reference?
 
-Two comparisons are needed to answer this question. First, low fine-subtype
-performance does not establish a lack of APT information: parent-lineage
-errors, candidate-set size, annotation ambiguity and the fitted model all
-affect reconstruction. True-lineage decoding must therefore be compared
-with a training-only prior given the same privileged lineage. Second, an
-RNA+APT gain can reflect patient structure or coarse-lineage correspondence
-rather than finer cell pairing. Shuffling APT within patient and then within
-patient and lineage provides progressively more specific controls.
+For a fixed aptamer panel, two complementary questions arise. First, which annotated cell identities can APT profiles predict in patients absent from training? Second, when RNA is also available, does adding paired APT improve prediction over an RNA-only reference? The first question evaluates APT as a standalone predictive input; the second evaluates its incremental utility under a specified multimodal learning setup. Paired measurements allow both questions to be studied on the same cells and reference labels. Existing single-cell benchmarking efforts provide foundations for defining tasks and comparing multimodal methods (Luecken et al., 2025; Liu et al., 2025). Here, we focus this evaluation on cross-patient cell typing from a fixed APT panel, with explicit attention to the interpretation of hierarchical prediction errors and multimodal gains.
 
-APT-Bench brings these comparisons into one clinical PBMC evaluation
-setting: 361{,}792 paired cells from 40 participants, 293 APT measurements,
-and a fixed five-lineage/27-subtype ontology. Five patient-disjoint folds
-and subject-balanced pooled Macro-F1 define a common new-patient target.
-Classical and neural APT-only models establish reference performance;
-Soft-cascade is one hierarchy-aware reference rather than a separate
-algorithmic contribution. Our contributions are:
-\begin{itemize}
-    \item \textbf{An APT cell-typing evaluation resource.}
-    A fixed input panel, operational hierarchy, patient folds, explicit scoring
-    units and reference predictions support comparisons on the same target.
-    Complete data access and portable reproduction remain release requirements.
-    \item \textbf{Within-lineage discrimination beyond a candidate-set prior.}
-    The full-budget MLP reaches oracle fine F1 of 0.385 versus 0.180 for a
-    conditional-proportion baseline. Matched-budget APT/RNA results reveal
-    heterogeneous recoverability across lineages, rather than a uniform
-    assay-resolution deficit inferred from coarse/fine scores.
-    \item \textbf{An RNA-reference increment with a bounded interpretation.}
-    Paired APT improves MLP fine F1 by \pairedMLPGainTwoK{} and
-    \pairedMLPGainFiveK{} at two RNA widths.
-    Its overall patient-by-lineage-shuffle contrast remains unresolved:
-    improvement over these RNA references does not yet establish finer-grained
-    pairing specificity.
-\end{itemize}
+Answering these questions requires more than an overall classification score. Cells from the same patient share biological and acquisition conditions, making the patient an essential unit of separation when the target is prediction in new individuals. Cell identities also form a hierarchy: an incorrect subtype prediction may cross a broad lineage boundary or confuse closely related subtypes within the correct lineage. Low subtype performance therefore combines distinct failure modes. Conversely, restricting predictions to a known lineage reduces the candidate set, so the resulting gain must be interpreted relative to a baseline receiving the same lineage information. Multimodal gains introduce a further ambiguity: improvement from RNA to RNA+APT may depend on patient-level structure or coarse-lineage correspondence, without requiring the original pairing between individual cells’ RNA and APT profiles. An informative evaluation should examine these possibilities alongside reference performance.
 
-The resulting findings concern recoverability under a specified cohort,
-taxonomy and training recipe. RNA-derived annotations are not independent
-biological truth, and an increment over a restricted RNA representation is
-not evidence that RNA intrinsically lacks that information. Patient-disjoint
-testing supplies the evaluation foundation, not evidence of blood-based
-diagnostic validity.
+We introduce APT-Bench, a patient-disjoint evaluation setting comprising 361,792 paired cells from 40 participants, 293 APT features, and an RNA-derived taxonomy of five lineages and 27 subtypes. Five fixed patient folds define the new-patient prediction target, and subject-balanced pooled Macro-F1 gives each patient equal total weight in the pooled confusion matrix. Classical and neural APT-only models provide reference predictions on the same held-out patients. To investigate their failure structure, we combine cross-lineage and within-lineage error analysis with true-lineage decoding and training-only conditional priors. A separate probe matches training budgets across input conditions and compares RNA, RNA+APT, and controls that shuffle APT within patients or within patient–lineage groups. These comparisons connect predictive performance to specific questions about label hierarchy and cell pairing.
+
+Our contributions are threefold:
+
+* **A defined evaluation setting for cross-patient APT cell typing.** APT-Bench specifies the feature panel, reference taxonomy, patient partitions, scoring convention, and classical and neural reference results. These shared evaluation targets provide a basis for subsequent APT model development and comparison.
+
+* **Prior-controlled diagnostics of hierarchical prediction.** For the full-training-budget MLP, fine subject-balanced Macro-F1 rises from 0.141 to 0.385 when decoding is restricted to the true lineage, compared with 0.180 for a conditional-proportion baseline given the same lineage. Together with matched-budget APT/RNA comparisons and subtype-level error analysis, these results reveal heterogeneous within-lineage discrimination under the tested models.
+
+* **A controlled assessment of incremental predictive utility.** In the capped-budget paired-input probe, adding APT improves MLP fine Macro-F1 by 0.0180 and 0.0165 over RNA references using 2,000 and 5,000 training-selected genes, respectively. However, the overall advantage over APT shuffled within patient and true lineage remains statistically unresolved. The experiments therefore support an increment over the tested RNA references while leaving the contribution of finer-grained cell pairing uncertain.
+
+Throughout, RNA-derived annotations serve as operational reference labels. The findings characterize prediction within this cohort and taxonomy under the evaluated training recipes; they provide concrete reference points and diagnostic questions for improving APT cell typing.
