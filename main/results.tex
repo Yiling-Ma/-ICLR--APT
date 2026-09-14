@@ -5,18 +5,35 @@
 \label{sec:results:subtype_audit}
 
 Table~\ref{tab:main} reports APT-only typing on the same 40 held-out patients.
-LR and XGBoost reach coarse/fine SB-Macro-F1 of 0.298/0.126 and 0.325/0.137;
-the full-budget MLP reaches 0.334/0.141. The Transformer references achieve
-fine scores of 0.139--0.145 without an established Soft-cascade advantage.
-These are reference-recipe comparisons, not objective-matched ablations.
-The interval labels distinguish conditional patient uncertainty from the
-MLP's joint seed/patient uncertainty.
-The close point estimates establish neither equivalence nor component effects;
-training and selection differences are summarized in
-Table~\ref{tab:main_training_protocols}. Overlap of individual-model intervals
-is not a paired superiority test.
+Under the unified v2 protocol, fine SB-Macro-F1 is 0.134 for LR and XGBoost,
+0.137 for MLP, 0.147 for Flat, 0.146 for HCE and 0.148 for Cascade without
+disease supervision. The prespecified descriptive Flat-minus-MLP difference
+is $+0.0100$ (paired 95\% CI $[-0.0047,0.0234]$), and Cascade-minus-Flat is
+$+0.0011$ ($[-0.0093,0.0093]$). These intervals do not establish superiority
+or equivalence. Models share input transforms, inner partitions and fresh
+outer refits, but retain model-specific objectives and optimization budgets
+(Appendix~\ref{sec:appendix:unified_v2}).
 
 \input{tables/main_result}
+
+\paragraph{Structure and extra supervision.}
+Table~\ref{tab:unified_ablation} separates the full cascade structure from
+cross-disease contrastive supervision. Adding contrastive supervision changes
+fine SB-F1 by $+0.0006$ for Flat and $+0.0017$ for Cascade; their paired
+intervals and the interaction interval include zero. This does not establish
+that these recipes are equivalent or that hierarchy is unhelpful. In
+particular, Cascade-minus-Flat changes the global/expert/routing combination,
+not soft routing alone.
+\input{tables/unified_ablation}
+
+\paragraph{Can predicted parents realize the oracle gain?}
+Frozen-score diagnostics in Table~\ref{tab:unified_decoding} compare ordinary
+subtype prediction with predicted-parent masking (D1), probability-consistent
+combination (D2), and true-parent masking (D4). For the v2 MLP, fine SB-F1 is
+0.137, 0.131, 0.134 and 0.376 respectively. Thus these two deployable readout
+rules do not realize the oracle gain for this recipe. This is not a test of
+all possible trained hierarchical classifiers. The prior-controlled analyses
+below use their original, separately identified fits.
 
 Five-lineage and 27-subtype tasks differ in cardinality, prevalence and label
 boundaries. Their raw F1 difference alone does not identify an APT resolution
@@ -31,7 +48,8 @@ Appendices~\ref{sec:appendix:subtype_audit} and
 
 True-lineage decoding masks each frozen fine score vector to the correct
 parent's children. Both the model and the training-only conditional priors
-receive this privileged label. For the full-budget MLP, ordinary fine F1 is
+receive this privileged label. For the earlier full-budget provided-expression
+MLP (Table~\ref{tab:historical_main}, not the raw-count v2 MLP), ordinary fine F1 is
 0.141 and oracle F1 is 0.385, versus 0.148 for conditional majority decoding
 and 0.180 for the conditional-proportion expected-confusion baseline.
 The oracle-minus-expected-prior difference is $+0.205$

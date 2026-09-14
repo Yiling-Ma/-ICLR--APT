@@ -1,0 +1,18 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{llcc}
+\toprule
+Model & CI & Coarse SB-Macro-F1 $\uparrow$ & Fine SB-Macro-F1 $\uparrow$ \\
+\midrule
+Logistic Regression & P & 0.298 [0.281, 0.315] & 0.126 [0.107, 0.139] \\
+XGBoost & P & 0.325 [0.302, 0.345] & 0.137 [0.120, 0.149] \\
+Plain MLP (3 seeds) & SP & 0.334 [0.311, 0.355] & 0.141 [0.125, 0.155] \\
+Flat Transformer & P & 0.326 [0.300, 0.348] & 0.139 [0.114, 0.155] \\
+HCE Transformer & P & 0.335 [0.310, 0.356] & 0.143 [0.121, 0.160] \\
+\ourmethod{} & P & 0.332 [0.306, 0.354] & 0.145 [0.122, 0.160] \\
+\bottomrule
+\end{tabular}
+\caption{Historical provided-expression APT-only comparison (not unified v2): five patient-disjoint folds, 40 patients, 361{,}792 cells. All inputs are APT. Entries are subject-balanced pooled Macro-F1 with pointwise 95\% intervals (2{,}000 resamples). CI type P conditions on frozen fits and resamples patients; SP resamples both training seeds and patients for the MLP three-seed mean. These uncertainty targets differ; interval widths are not directly comparable evidence of model stability. Comparisons are descriptive: training recipes and Transformer auxiliary supervision differ (Tables~\ref{tab:main_training_protocols} and~\ref{tab:transformer_components}).}
+\label{tab:historical_main}
+\end{table}

@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+Model & Ordinary D0 & Hard D1 & Consistent D2 & Oracle D4 \\
+\midrule
+Logistic Regression & 0.134 & 0.110 & 0.116 & 0.360 \\
+XGBoost & 0.134 & 0.126 & 0.131 & 0.362 \\
+Plain MLP & 0.137 & 0.131 & 0.134 & 0.376 \\
+Flat Transformer & 0.147 & 0.137 & 0.142 & 0.371 \\
+HCE Transformer & 0.146 & 0.142 & 0.146 & 0.371 \\
+Soft-cascade (no disease) & 0.148 & 0.136 & 0.143 & 0.371 \\
+Flat + contrastive & 0.148 & 0.137 & 0.143 & 0.372 \\
+Cascade + contrastive & 0.150 & 0.138 & 0.143 & 0.376 \\
+\bottomrule
+\end{tabular}
+\caption{Frozen-score decoding diagnostics for all unified v2 recipes (fine SB-F1, seed means). D1 restricts candidates to the predicted parent; D2 combines predicted parent probabilities with within-parent subtype probabilities. Both are deployable post-processing rules using the same frozen scores. D4 uses the true parent and is privileged, not a deployable score or an information upper bound. LR/XGBoost use separately selected parent models; neural references use their auxiliary parent outputs, with subtree probabilities for HCE. No retraining or test-based tuning of the decoding rules is performed. Full scores, seed values and paired intervals are released in the v2 CSV summaries.}
+\label{tab:unified_decoding}
+\end{table}

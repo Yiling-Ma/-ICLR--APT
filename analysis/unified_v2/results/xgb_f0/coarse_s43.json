@@ -1,0 +1,15 @@
+{
+  "seed": 43,
+  "task": "coarse",
+  "seconds": 99.8172173500061,
+  "selected": {
+    "config": {
+      "max_depth": 6,
+      "learning_rate": 0.1,
+      "n_estimators": 500
+    },
+    "score": 0.3361178852980643
+  },
+  "training_cells": 294812,
+  "test_cells": 66980
+}

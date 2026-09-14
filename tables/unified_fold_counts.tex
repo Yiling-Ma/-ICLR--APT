@@ -1,0 +1,17 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+Fold & Inner fit & Validation & Outer refit & Test \\
+\midrule
+1 & 24 / 226,431 & 8 / 68,381 & 32 / 294,812 & 8 / 66,980 \\
+2 & 24 / 207,172 & 8 / 86,239 & 32 / 293,411 & 8 / 68,381 \\
+3 & 24 / 206,704 & 8 / 68,849 & 32 / 275,553 & 8 / 86,239 \\
+4 & 24 / 221,600 & 8 / 71,343 & 32 / 292,943 & 8 / 68,849 \\
+5 & 24 / 223,469 & 8 / 66,980 & 32 / 290,449 & 8 / 71,343 \\
+\bottomrule
+\end{tabular}
+\caption{Exact unified v2 patient / cell counts, reconstructed from input IDs and frozen partitions and checked against every recipe. All methods share these counts. Validation is the next cyclic outer fold; remaining patients form the inner fit. Outer refit combines inner fit and validation. Counts include all annotated benchmark cells, without a cap.}
+\label{tab:unified_fold_counts}
+\end{table}

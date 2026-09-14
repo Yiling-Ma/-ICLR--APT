@@ -21,9 +21,11 @@ not a claimed algorithmic advance. These references establish comparison
 points for improving APT cell typing without changing the input modality,
 ontology, or held-out patient partitions. Complete data access, permissions,
 annotation provenance, and a portable evaluator remain necessary release
-requirements. The completed full-cell-budget MLP adds a non-Transformer
-reference; more comprehensive APT-compatible annotation baselines and
-matched-objective comparisons remain useful extensions.
+requirements. The unified comparison supplies full-cell-budget classical and neural
+references, with separate structure/supervision contrasts. Neither the
+Flat-minus-MLP nor Cascade-minus-Flat interval establishes superiority or
+equivalence. More comprehensive APT-compatible annotation baselines remain
+useful extensions.
 
 \paragraph{Boundaries of the evidence.}
 The APT cohort contains \numparticipants{} participants and RNA-derived reference labels.
@@ -37,9 +39,10 @@ it is not evidence of irreducible information absent from RNA. The capped
 probe does not establish an increment over a full-cell-budget,
 capacity-controlled RNA reference. Likewise, oracle-versus-prior performance
 does not substitute for an APT-only, patient-by-lineage-shuffled control,
-or show that predicted-lineage decoding can realize the oracle gain.
-These are distinct unanswered comparisons, not conclusions from the existing
-multimodal shuffle experiment. True-lineage
+or guarantee that predicted-lineage decoding realizes the oracle gain.
+The v2 frozen-score tests address two such deployable rules, without covering
+all possible trained hierarchical models; an APT-only conditional shuffle
+remains a distinct unanswered comparison. True-lineage
 masking and shuffling are privileged diagnostics, and the latter does not
 identify a causal or molecular mechanism. Three training seeds and
 pointwise resampling intervals also provide limited uncertainty evidence.

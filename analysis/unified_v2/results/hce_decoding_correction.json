@@ -1,0 +1,155 @@
+{
+  "status": "PASS",
+  "new_training": 0,
+  "checkpoint_replays": 15,
+  "reason": "HCE parent probability must include node and descendant probability mass",
+  "original_exports": "hce_f*/original_head_exports/",
+  "affected": [
+    "coarse",
+    "D1",
+    "D2"
+  ],
+  "unchanged": [
+    "D0",
+    "D4",
+    "fine selection",
+    "all model weights"
+  ],
+  "records": [
+    {
+      "fold": 0,
+      "seed": 17,
+      "checkpoint_sha256": "a325c00b7ba311fd21bcf03421c8cbd2ca12742ece4fba673f37ef11184903ce",
+      "original_npz_sha256": "0dc38cd5cca73d4f8128a2ce627445f5cbfb4a38bc49e33cf76e442a6eee6014",
+      "corrected_npz_sha256": "90afc68eaba499c4921a6ebd2d1454238cf4d7f7b860ad6b297c7e07a4d7ef41",
+      "fine_argmax_exact": true,
+      "seconds": 10.632349967956543
+    },
+    {
+      "fold": 0,
+      "seed": 29,
+      "checkpoint_sha256": "d988254102a6755cfa13b2b9d979b2a8285c389507bd78da0036640b45b2d459",
+      "original_npz_sha256": "e84fa5846f9dc22d897b81e317fb275be95d0c9a1790556ebb91976292669892",
+      "corrected_npz_sha256": "79bd4cf01af05da7862e835c82d5442530f0739f40a69e81deb19f8c45012f94",
+      "fine_argmax_exact": true,
+      "seconds": 2.2143075466156006
+    },
+    {
+      "fold": 0,
+      "seed": 43,
+      "checkpoint_sha256": "f45c092f1b29dde91dbf2b004d89d4f663fb53595f99478213b519409215edd3",
+      "original_npz_sha256": "c6e6720037da2ed4d47cc708da4806caefd7cdaab7a4859fe820c3fc299f23fb",
+      "corrected_npz_sha256": "631b758153ead0ff21c709aafdaaea7ef097f8c301584104474d06c518029adf",
+      "fine_argmax_exact": true,
+      "seconds": 2.2191593647003174
+    },
+    {
+      "fold": 1,
+      "seed": 17,
+      "checkpoint_sha256": "eb515f10c7eb8675c8a80694c39d4b658da79b10e0b2d11f9965404e5f378720",
+      "original_npz_sha256": "94c0524311755413ff54f46af6a0da7169183a8653347afa92263d3e4d85ec2c",
+      "corrected_npz_sha256": "072eab3f561b53c7c61134c644ec8e3b07b762d919b126fe4976e67660007611",
+      "fine_argmax_exact": true,
+      "seconds": 2.273226022720337
+    },
+    {
+      "fold": 1,
+      "seed": 29,
+      "checkpoint_sha256": "87326443f36551e928e52e9f5d327b115a1b8c48dcee25711406770008420e69",
+      "original_npz_sha256": "75e5bc1a520766cdd186259082df7c41fe9cc1eaf4735c886017b7f3b52c2d2e",
+      "corrected_npz_sha256": "be6fc2686abb4ddf65fd8d91fde7b5d61265937481078d3cf5e5f55d3f385141",
+      "fine_argmax_exact": true,
+      "seconds": 2.259275197982788
+    },
+    {
+      "fold": 1,
+      "seed": 43,
+      "checkpoint_sha256": "1fd51b16be1174c6a200755a5e74383576a016aee5cc970088432cee26fc6875",
+      "original_npz_sha256": "ef822341b31411df2d59d610bbaea4a45346a7d96bedaeb8aa6f9be86ce87587",
+      "corrected_npz_sha256": "b3ec32970090deef66305c40e9aa9542fdcfe1e519c7e3f5035aecca9b59074f",
+      "fine_argmax_exact": true,
+      "seconds": 2.2685556411743164
+    },
+    {
+      "fold": 2,
+      "seed": 17,
+      "checkpoint_sha256": "c435fb5ba1fd8bc8064b715579fae93f3b0247a14fc5f9f16f910ed7e1dab1c3",
+      "original_npz_sha256": "4a5efdc4e24fe591c1fe6148c8bee4aad3f54ee7e1ce0688bb750ac928931fe0",
+      "corrected_npz_sha256": "f37504de51c5152c5d4df3ba294328c15d9c7c825896ec8fa1003620482de3ef",
+      "fine_argmax_exact": true,
+      "seconds": 2.860022783279419
+    },
+    {
+      "fold": 2,
+      "seed": 29,
+      "checkpoint_sha256": "6ecd5f1965e39d8fedeabe5a6c5ebd6e20da2ccbc2db2d43d8e6f3ee1bf510c6",
+      "original_npz_sha256": "38214020027f1ad3592e0a02306edab1fe6de45d523b0a371be05c8b51ecb514",
+      "corrected_npz_sha256": "da8c31d97c6db6f4cf0cbd06c0914228591d13b7061f4eac788e2958476c0be8",
+      "fine_argmax_exact": true,
+      "seconds": 2.8464696407318115
+    },
+    {
+      "fold": 2,
+      "seed": 43,
+      "checkpoint_sha256": "19f464d307b7e3d5b69400f4e9b7674320e086033b5d0be75eae58639782d4b7",
+      "original_npz_sha256": "ba5fd9cf58d89518290428fbe98dbe60340de0e864a312c7143616552e1a417e",
+      "corrected_npz_sha256": "ee7744a3034db8592c4a8971bd4c8c8672fdc53861b6f76a5bb63e040b525caf",
+      "fine_argmax_exact": true,
+      "seconds": 2.852524995803833
+    },
+    {
+      "fold": 3,
+      "seed": 17,
+      "checkpoint_sha256": "f974a3788ee49537d202b5afdb64da07cc4d82d7371f73eb408c6f246229e568",
+      "original_npz_sha256": "4d9dab5d1ce2079c3458b2b161cbe2d560ec53daff57abbb12ca724da84a4c84",
+      "corrected_npz_sha256": "8bb869253125deb87bd6f4c18e1678355b81eec4505cbf82322a9abb6ea84158",
+      "fine_argmax_exact": true,
+      "seconds": 2.279420852661133
+    },
+    {
+      "fold": 3,
+      "seed": 29,
+      "checkpoint_sha256": "0a730cae1fb096abd577959c70f839bde951fecc8a48078aa6b174d65b0b928b",
+      "original_npz_sha256": "531bd754c9c6ccea94b3a50d0f1d7891ddcea11ef4c1346eeb2db16b61997c8a",
+      "corrected_npz_sha256": "cd393ae49be57e487efd475ae150f9d6d2a0cf58e9bf3a270b2e6c5c4c32690e",
+      "fine_argmax_exact": true,
+      "seconds": 2.2726519107818604
+    },
+    {
+      "fold": 3,
+      "seed": 43,
+      "checkpoint_sha256": "8b50c5ef971b2a9400e018cce801ad228cb9f0968645e67a095587a040e0c1e6",
+      "original_npz_sha256": "01c939fd8e1a4579c9585e55284d8a97511c61c0189df85e3f251daa05f65f0d",
+      "corrected_npz_sha256": "6ecde23cdbae02a92f2148d864c9305b21a895b0f82c637ac285eff7445aa5fc",
+      "fine_argmax_exact": true,
+      "seconds": 2.276855945587158
+    },
+    {
+      "fold": 4,
+      "seed": 17,
+      "checkpoint_sha256": "3b9333fd586c4c6fd918626aaa62c0d1692c207957651fb1ccc32ee2f8c37e85",
+      "original_npz_sha256": "1d394e5b24001c42e5ac9e79bc4c1ad0dd78977b6d123288b8d73f7081712020",
+      "corrected_npz_sha256": "8d3611e96f454e3cc047cb4b17179145ab6d09040ec6fe724ca2ca173ef47245",
+      "fine_argmax_exact": true,
+      "seconds": 2.3720173835754395
+    },
+    {
+      "fold": 4,
+      "seed": 29,
+      "checkpoint_sha256": "c5c7743815aaa342578241d13184787bdbe4599d6024a448930ab7682d98572e",
+      "original_npz_sha256": "9521c9d6a502620e9f78256db3b703266d1a4200cdee53784967c4e4baedd5f4",
+      "corrected_npz_sha256": "30c19cf8967ed25012505922cf7154d760480eed07352a236202a26c00e8b5ae",
+      "fine_argmax_exact": true,
+      "seconds": 2.3921797275543213
+    },
+    {
+      "fold": 4,
+      "seed": 43,
+      "checkpoint_sha256": "7792032d0df6da9fb87af48a0484681db1543e01bf39c5a0755c50a264d4e013",
+      "original_npz_sha256": "55ec7795a636657c056f7736f54ded74cc91741816c251c8e3cfd680166d516e",
+      "corrected_npz_sha256": "7bf6751374ac8eedf93c1089dd8ce649c53b58b3f44fe5d3e35e61fabf0ea98a",
+      "fine_argmax_exact": true,
+      "seconds": 2.371915102005005
+    }
+  ]
+}

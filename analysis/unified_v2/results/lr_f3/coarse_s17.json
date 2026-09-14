@@ -1,0 +1,13 @@
+{
+  "seed": 17,
+  "task": "coarse",
+  "seconds": 33.00497055053711,
+  "selected": {
+    "config": {
+      "C": 0.1
+    },
+    "score": 0.2735898200059296
+  },
+  "training_cells": 292943,
+  "test_cells": 68849
+}

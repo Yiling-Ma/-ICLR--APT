@@ -39,15 +39,18 @@ Appendix~\ref{sec:appendix:dataset_documentation}.
 
 The primary task is cell typing in new patients.
 \textbf{Cell identity} predicts lineage and subtype using APT alone at inference.
-Training supervision is recipe-specific: only Soft-cascade additionally uses
-development-patient disease labels for contrastive pairing.
+All unified main-table recipes use cell-identity supervision only.
+Disease-based contrastive supervision is evaluated separately for Flat and
+Soft-cascade; it is not an input required at inference.
 Open-set subtype discovery is outside the contract; all primary cell tasks
 use the fixed five-lineage/27-subtype ontology.
 
 \numfolds{} frozen disease-stratified folds each hold out eight patients. All cells
 from a patient remain together. Benchmark-fitted transforms, model selection,
-and fitting use development patients; the upstream provenance of the supplied
-APT expression remains incompletely recovered
+and fitting use development patients. The unified main comparison uses raw
+APT counts followed by log1p and fit-partition standardization. The separately
+retained historical provided-expression diagnostics have an upstream
+transformation provenance limitation
 (Appendix~\ref{sec:appendix:main_protocols}). We pool predictions across the five
 out-of-fold (OOF) partitions. The release
 interface records cell and patient IDs, ontology, folds, predictions, and
@@ -68,18 +71,19 @@ $K$-class ontology and $n_p$ its number of evaluated cells. Define
 \end{equation}
 A zero denominator contributes zero. Each patient's entire matrix, not each
 class row, is normalized to unit mass. This differs from cell-weighted pooled
-Macro-F1 and from mean within-subject Macro-F1. We retrospectively re-score the
-frozen OOF predictions under this primary reporting convention; checkpoints
-are not reselected.
+Macro-F1 and from mean within-subject Macro-F1. Unified models use this scoring
+convention for validation and final reporting. Historical frozen references
+are retrospectively re-scored without checkpoint reselection.
 
-Main-table intervals use 2{,}000 resamples and explicitly label their target:
-P denotes patient uncertainty conditional on frozen fits, and SP additionally
-resamples the three MLP training seeds. Each SP replicate averages three
+Main-table intervals use 5{,}000 resamples and explicitly label their target:
+P denotes patient uncertainty for deterministic LR, and SP additionally
+resamples the three training seeds of each randomized model. Each SP replicate averages three
 seed-specific scores, using the same patient draw across them. Both are
 pointwise and conditional on the fixed fold design; neither repeats model
 selection. The comparison is descriptive, and an individual-score interval
 is not a pairwise superiority test. Full resampling order is given in
-Appendix~\ref{sec:appendix:identity_questions}.
+Appendix~\ref{sec:appendix:unified_v2}. Historical and paired-input diagnostic
+intervals retain their separately specified resampling protocols.
 
 The paired-RNA probe also uses subject-balanced pooled Macro-F1, but has a
 different training budget and preprocessing protocol; its scores must not be

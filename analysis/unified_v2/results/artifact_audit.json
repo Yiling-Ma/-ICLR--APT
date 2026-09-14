@@ -1,0 +1,542 @@
+{
+  "status": "PASS",
+  "prediction_count": 130,
+  "cells": 361792,
+  "patients": 40,
+  "checks": [
+    "exact source-label and fold alignment for all 130 predictions",
+    "train-only raw-count log1p scalers independently reconstructed",
+    "audit split patient sets and cell counts",
+    "recorded selection maximum and earliest epoch ties",
+    "fixed class order and probability shape/normalization",
+    "code and protocol hashes"
+  ],
+  "input_sha256": {
+    "/home/mayiling/projs/apt_agent/data/ALL_PBMC_APT_Cell_matrix.npz": "556a0ec2f960867d105462c86a88f1bb65074de364d08c3fcd96f83656b35e1d",
+    "/home/mayiling/projs/apt_agent/data/cells.tsv": "23cc5f8551fd6bca6704f1ef28b4363ab477e492c285019c0f5aabe98cef43ec"
+  },
+  "code_sha256": "3b3e2311aaff93390e1c9d46e98df2ad2255bb21e2c05f4d5418c08d746ffa2a",
+  "protocol_sha256": "dba82544337ae2c62cf5f3e1494d71d9e1b9a115895cb6a2b98652cbd733eed4",
+  "sources": [
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f0/fine_s17.npz",
+      "sha256": "2ddc3ff311f5f5ca355cf2cd41ceb25e1af6840248e7ca9afe04c8d022c8fa7c"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f0/coarse_s17.npz",
+      "sha256": "1ce18e2e99612a614d80b05e811909044bb2cb2b0ef263d7aac209d80df26301"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f0/fine_s17.npz",
+      "sha256": "5650bfb8f6991742bbce555ec1f2db0efa562747f302da48d59dff017413203f"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f0/fine_s29.npz",
+      "sha256": "01e96077672800471ad434bcf5f2f21beea31fe739f7e28b74f0ae01b4f00afa"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f0/fine_s43.npz",
+      "sha256": "ed09a599e384041a0cf5a1efefc760dcf5d93a24f55d7c054da5798b5beea88a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f0/coarse_s17.npz",
+      "sha256": "3fabad226da802c6a42062a9e4c3c95d7de8338cabb626373f52e9aa9064af1e"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f0/coarse_s29.npz",
+      "sha256": "cba15d832d18a5a416ff3c7d807edb2a11803e5c76e76054b392d843646ba917"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f0/coarse_s43.npz",
+      "sha256": "6761ba4bbada8c8332235b98abf58ffefccd357a7ea4796c5582fe26f6ad1133"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f0/joint_s17.npz",
+      "sha256": "3677634e04041882216303ba8293cd45f4d0d895e388d436bd86e9523ca5d4c5"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f0/joint_s29.npz",
+      "sha256": "4e155c1425ae8a1810bf8e081a20ecc5028de4e6f9e4b3de69096f172003de1a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f0/joint_s43.npz",
+      "sha256": "abba7d22cf2dacbddb909f6a528e8abf566f6e91cf12249bd12bd59b332aeed9"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f0/joint_s17.npz",
+      "sha256": "07bd7cb56af5c021d9e40523b3549628b29b316a6f7af178734418b30af4a3f9"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f0/joint_s29.npz",
+      "sha256": "b23292e99cd12585360f220054d47dbe6465da16c74b821a6d05de5111694eb5"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f0/joint_s43.npz",
+      "sha256": "7beeea1f9d2beff9c72334b123b4fc8595c146438052d51ab0286ac80fc6eab8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f0/joint_s17.npz",
+      "sha256": "90afc68eaba499c4921a6ebd2d1454238cf4d7f7b860ad6b297c7e07a4d7ef41"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f0/joint_s29.npz",
+      "sha256": "79bd4cf01af05da7862e835c82d5442530f0739f40a69e81deb19f8c45012f94"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f0/joint_s43.npz",
+      "sha256": "631b758153ead0ff21c709aafdaaea7ef097f8c301584104474d06c518029adf"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f0/joint_s17.npz",
+      "sha256": "2550911cdadc941c2d820cce30015fd2c7100846982adc6f379edf620cfb7110"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f0/joint_s29.npz",
+      "sha256": "6a1c91f77d5b535634b1c7890674c58f1c3c45320a2eadb33be0b3f516b337fa"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f0/joint_s43.npz",
+      "sha256": "885be13a5499ae86d0515b3681193017f008ab5260adacc97f6b4cfd2308a871"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f0/joint_s17.npz",
+      "sha256": "756be91a1cf8e46441074aaf1f2d8fc1007aeca34725fa60e5f8980d71e71a88"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f0/joint_s29.npz",
+      "sha256": "c67a44b7a73daf13507a728e2c5a4d50c50583b5e9523f235667fe2a027afb0a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f0/joint_s43.npz",
+      "sha256": "5ca61d4213e1404daf1fb12ced3deed69021d7c38b3a497ca1fb53a34183fcc3"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f0/joint_s17.npz",
+      "sha256": "3c07816213e534d23c685891810416768789b5fe239df09c507b76a15f1e0d8f"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f0/joint_s29.npz",
+      "sha256": "6d5c180f89e5db5ecce8479f56607058b9eee7aec43a423f7a55330a471ed5fe"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f0/joint_s43.npz",
+      "sha256": "4a1ad8cd1ad52747fab41787d730110870bb3854bc42e57c73ee1a97002d10ac"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f1/fine_s17.npz",
+      "sha256": "57651c655fa1fe7d6eac6cac9831fff39d9ea58c2f1eebbc7649288f6abaf77e"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f1/coarse_s17.npz",
+      "sha256": "0328d3ba01da7de16d997a77f12fff100dd493994c7814efbea8c0dc33769826"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f1/fine_s17.npz",
+      "sha256": "8d0ccfdad67abf50559581b4b14ac1a965b0b75762913ecdfd6172e1d00d1ddd"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f1/fine_s29.npz",
+      "sha256": "1d59e2db8dbc0e70fbd73421f15f936ebe6d9dd9c8a9e9174341cdacbb59de24"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f1/fine_s43.npz",
+      "sha256": "85fb648e81bcf98f0538ecda24e08b073557dbdbb68543158447cc9f4cb4ea56"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f1/coarse_s17.npz",
+      "sha256": "3ee72230e4ad369d0647480f742601395262bcffbd012d9530fcde55a32845ea"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f1/coarse_s29.npz",
+      "sha256": "3d811579b8a742017c73aeb4752af5f506709ed87e82b851500f0fa0ff9c7089"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f1/coarse_s43.npz",
+      "sha256": "24f2558c6d6b11bd0c458008eb498332ee86aabe81336f4296f94b18c3b1d116"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f1/joint_s17.npz",
+      "sha256": "ab6f7d8d8cf96999706b424b87e85382d520138dcc1b9531a0a8f11d1daee03d"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f1/joint_s29.npz",
+      "sha256": "86911ea039220ce736a9d502a8ffecb056cfb23959ce031aefde578f94090ca2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f1/joint_s43.npz",
+      "sha256": "2e20c4a87f2ec72fbeaf67072efab46b26f01efbf758b56751d50ed8dd4d537a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f1/joint_s17.npz",
+      "sha256": "ce426d819b12349c555e58efb484c57f42fefc1da7bf3e38d5da494fbdee1a04"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f1/joint_s29.npz",
+      "sha256": "383c784b78124714c1474a4d20e7e6eab1b12cf7eed31298317aa6c216ca4d58"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f1/joint_s43.npz",
+      "sha256": "e915dcd8c4d1c00b15332fb6a654fd546a9fccf46342f7805c65bade33389347"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f1/joint_s17.npz",
+      "sha256": "072eab3f561b53c7c61134c644ec8e3b07b762d919b126fe4976e67660007611"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f1/joint_s29.npz",
+      "sha256": "be6fc2686abb4ddf65fd8d91fde7b5d61265937481078d3cf5e5f55d3f385141"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f1/joint_s43.npz",
+      "sha256": "b3ec32970090deef66305c40e9aa9542fdcfe1e519c7e3f5035aecca9b59074f"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f1/joint_s17.npz",
+      "sha256": "c963a489f32e5f825e1eda414b237d7a3812bad2ea63125c5883138c46a5f622"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f1/joint_s29.npz",
+      "sha256": "ae5022b76dacb32e25711c087f53f9940666793af1ed6431c8908fb11fe8b97c"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f1/joint_s43.npz",
+      "sha256": "44c3633ce6b669b4142c04fc9c3a527feaa8ce53eea2678b9db70eb0c4668deb"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f1/joint_s17.npz",
+      "sha256": "3abf1bc004b16ab1b8eb1a9879a2143db5856b17968757c22076e890d6993d3f"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f1/joint_s29.npz",
+      "sha256": "ba692d21ba696f4399f26dacd0735a84fd1223e83d0af85cf772f8d9465da018"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f1/joint_s43.npz",
+      "sha256": "e9ea4e61cbca003323468df581be7e2217748e0d4fff5453f3c838ffa625576e"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f1/joint_s17.npz",
+      "sha256": "fb2944397abdb58591f51d9555d5f6c17f318633679adbc376d03274ace74883"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f1/joint_s29.npz",
+      "sha256": "2c0989db59b0d5f92b430596b6d94e7c954af28203ba2f436f4d94158eb37880"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f1/joint_s43.npz",
+      "sha256": "c3b0198baf9c58dc947b6f6f41790b16f0cb76037a8291d8c1368aee4ead53cb"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f2/fine_s17.npz",
+      "sha256": "c69cfcf21f9cfc05f859e95a7bcf099a7203ab7e6d576baf1dd2495a8a4ca492"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f2/coarse_s17.npz",
+      "sha256": "ebe3a38ed3ff7b654095afd548894d97eac04444e1f2124300e407754f97000a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f2/fine_s17.npz",
+      "sha256": "0479f997057092154a503d2ac345a936c2c95c935e093697febb4da1fbc3f917"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f2/fine_s29.npz",
+      "sha256": "456bd2183e116f1df327a5bf51a756e7fe4e33ccf9164d61336bb849f67dd07d"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f2/fine_s43.npz",
+      "sha256": "054b0fa11c03d1f5b094479cfe76b179f3d1baf5a7d117950657a21b69a5c8a4"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f2/coarse_s17.npz",
+      "sha256": "68f4262a77a3a162c45fe45e00edf2b136df4584840bb00fefa1b39ee41b2d9a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f2/coarse_s29.npz",
+      "sha256": "542ede1b196ef126da91d520b040b5ebe7cc5af54e136993ef29ae029c5cc40e"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f2/coarse_s43.npz",
+      "sha256": "ee3067f68af233d1b038a85173d05a9861e1dd02a7d105bb96b1a00794030b0a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f2/joint_s17.npz",
+      "sha256": "9e27f859f26736979cfccd4ddffcee3bfa8b7845010a774ea9faa0e60f9868c2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f2/joint_s29.npz",
+      "sha256": "916049f47685e768cd849c0f2d477ca5b3d0604842e1583e2394659c47c4786e"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f2/joint_s43.npz",
+      "sha256": "c11c66833f349ae30f3011a8a19a23dfa6bc2769d91001059cc82c2babae9ce8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f2/joint_s17.npz",
+      "sha256": "01674216b07f4c220725677309b5ac78e074ba5c5acdda47fb420623535da1a7"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f2/joint_s29.npz",
+      "sha256": "6cc9736fc147a939b4442abac8bc34a290ffbb74f748fa7a5ef3bebcd6cd12a2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f2/joint_s43.npz",
+      "sha256": "7c9a8f8f7d8b6996fb345e146d619e9a26e9aa3d38fe4a5bac62783514b73338"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f2/joint_s17.npz",
+      "sha256": "f37504de51c5152c5d4df3ba294328c15d9c7c825896ec8fa1003620482de3ef"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f2/joint_s29.npz",
+      "sha256": "da8c31d97c6db6f4cf0cbd06c0914228591d13b7061f4eac788e2958476c0be8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f2/joint_s43.npz",
+      "sha256": "ee7744a3034db8592c4a8971bd4c8c8672fdc53861b6f76a5bb63e040b525caf"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f2/joint_s17.npz",
+      "sha256": "76570197af2bd08c95766fac381f103446eb678b585d75ce081b198b6b7b4a60"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f2/joint_s29.npz",
+      "sha256": "0087736871c4b2d5339a9061e3520ddec5465b6f7ef928e37a83f2d306794106"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f2/joint_s43.npz",
+      "sha256": "b1832568765560238a2f6c1c9fa86183bfa23bfc70dbfb4a02f6bdba41bf120f"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f2/joint_s17.npz",
+      "sha256": "00440599e53a6bd79c3ba7c7aca41c9d506b08c41a06eaad0f79123c935a79f9"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f2/joint_s29.npz",
+      "sha256": "a6023289c5a52a202f1589556b8e1197298d1037ec266a802c31c99d25e5d205"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f2/joint_s43.npz",
+      "sha256": "a6011ff579fb0b9fe169e3bbbe9e0e310d79cc3b75ed3cc1bb847e99b7597e51"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f2/joint_s17.npz",
+      "sha256": "e03d5dcd2cfa4d34c3aecaf6f4924bceb20466caf6b2a356e203d34f4ce5095d"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f2/joint_s29.npz",
+      "sha256": "44238c9f7404507a250b4691e38b6d3270e2b17b177b19749631d454474ffd70"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f2/joint_s43.npz",
+      "sha256": "c44a549877f35332675622ff6d64760a5b87aa7a3f71b44f511df506a8f9c0b8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f3/fine_s17.npz",
+      "sha256": "36a50e316d6c4ae161d3d161b74e7386d42c5cd99fabe7a3563bafefb4c42d98"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f3/coarse_s17.npz",
+      "sha256": "fbcd713ef91c6c3e69a094818c818c8d7033cce318772be3428dbb0f04859e0b"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f3/fine_s17.npz",
+      "sha256": "228bd8458e38a993822e787465e997556dce22089bf1de7b85fd09e03d62cae9"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f3/fine_s29.npz",
+      "sha256": "fa292d7592e294b9af7df0fe7757ffee616c1ffa37ae1b834ee6e142a448d0cf"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f3/fine_s43.npz",
+      "sha256": "af33de91031beb9bff0589f985bb8f866f0e95be09e7168513bef25cef5e51a2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f3/coarse_s17.npz",
+      "sha256": "4c85abed60db0a0e49cd4031627d3967cc2446a3486ce16fcd78b99f199720bc"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f3/coarse_s29.npz",
+      "sha256": "690a2f396bcb93d403c4930a059d4d1cbc1a09aa503e918397eec1c512015cb2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f3/coarse_s43.npz",
+      "sha256": "82d5ad16472a68844aa6ab7fdc191b8c68a4416f989cef6a81b8af87d25008e8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f3/joint_s17.npz",
+      "sha256": "4834973056a1ab6dadb28990b9958761d70c360f636083800b46852224556429"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f3/joint_s29.npz",
+      "sha256": "a455f0bab06e335dc70ee351d9a9b9c8987e516e1eb54c99c04a2219dc38c97a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f3/joint_s43.npz",
+      "sha256": "dba64b7390ca17df12cd279433b97e9972fb7a2788469c57903284093e2740ee"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f3/joint_s17.npz",
+      "sha256": "afe6303ac8f5024a8fe1c84710e832c1ce29d7ba7a34a7d0bb3fd48f93ff4137"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f3/joint_s29.npz",
+      "sha256": "9a48951088034f8192856271d40c5368e57a18d5d723de383613a9e2d3c3bc72"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f3/joint_s43.npz",
+      "sha256": "0243b8e0a3e907f32929e86a09c51073398fe9e11931fb8c7e182d22df879546"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f3/joint_s17.npz",
+      "sha256": "8bb869253125deb87bd6f4c18e1678355b81eec4505cbf82322a9abb6ea84158"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f3/joint_s29.npz",
+      "sha256": "cd393ae49be57e487efd475ae150f9d6d2a0cf58e9bf3a270b2e6c5c4c32690e"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f3/joint_s43.npz",
+      "sha256": "6ecde23cdbae02a92f2148d864c9305b21a895b0f82c637ac285eff7445aa5fc"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f3/joint_s17.npz",
+      "sha256": "bfdd93ad1e495bc6015a7302ac13cd1d324a41bff88d92b3f1781e80f3f9af12"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f3/joint_s29.npz",
+      "sha256": "a86dd55dd630bf8286fdf8268e94fcf4b18eeb5290306eb05bbf73d09c0f1ef7"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f3/joint_s43.npz",
+      "sha256": "c6ee12d007ab885e50bfc0b843971e839f56ef62625d53d7e544543b17a817c6"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f3/joint_s17.npz",
+      "sha256": "54599004afc02a5a3378508682b9bc0aced6b258fb8cba91ea6dc36ba58e1a01"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f3/joint_s29.npz",
+      "sha256": "d38b171ad2bb7c8ede709dbeb2b33a437759de5e70ca2bfa23b0c4bcd589fecc"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f3/joint_s43.npz",
+      "sha256": "829b6bccdad338186b796b2212d8068ab5db79f63f74272f84dece7cae4e9133"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f3/joint_s17.npz",
+      "sha256": "f1f19f3cba3c2657dd7aebcaf281da4a0c6d173b7bda67231af2ae161106dcbf"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f3/joint_s29.npz",
+      "sha256": "75c3e61759293116ae56544b9b3152277c8a1d5b3591bb6508146843d3881fc7"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f3/joint_s43.npz",
+      "sha256": "2bbc3823d4e9a354971ce20738ba3e04c4afc9e67a0b8414edb72b0a67970a34"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f4/fine_s17.npz",
+      "sha256": "9a74eaebb0646a86357e254ca893b699cee3d616d3b0f6a55aac60020a10b7a0"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/lr_f4/coarse_s17.npz",
+      "sha256": "8b70838018ed772552ea1579a35c81c8ab611eaddf05bdd29952d7d1701fab69"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f4/fine_s17.npz",
+      "sha256": "4e4a36067288e81489c0fbd207394033e9eeb0b58f6272334cd6312409d42e9b"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f4/fine_s29.npz",
+      "sha256": "4a3298b87dcf0674f1d978eabc1e576a47ddc3b8749d79487d49a4b72aad7d8f"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f4/fine_s43.npz",
+      "sha256": "a8b8755fc265a9f10f548ef1faa93c77ab407b72caccd97f87bf886c7fcc44c5"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f4/coarse_s17.npz",
+      "sha256": "cbb233eebd8b6d81a12ef404defef272fff16e67b3f8ac3ce75f9a6ab1c8e026"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f4/coarse_s29.npz",
+      "sha256": "6bf41a1deb20afe67ae00ab0ab7fdc7ffa6042e4f490e7de5512ac338249745d"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/xgb_f4/coarse_s43.npz",
+      "sha256": "a3cfe01ab4e379eba11311d209b8121a084f9faadc77e9b84128f19b09424a5a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f4/joint_s17.npz",
+      "sha256": "b0e04aee800cca0ca768b59d6c4b12fb05ac842e8bd5b6e9a1afc269c2ee0fc5"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f4/joint_s29.npz",
+      "sha256": "02b7dfb119bb6aeece01cab035bf9d2264d5ce702dd949f5f17dea6ace336226"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/mlp_f4/joint_s43.npz",
+      "sha256": "a6ff5648786cce53ed34760f5d48416ca8403562a4f6f16b27e545efdb8742e2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f4/joint_s17.npz",
+      "sha256": "fcb170fb92eaa3d72c6b23b10b29574f34bbf63904c335ee0e04d6059537d92b"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f4/joint_s29.npz",
+      "sha256": "738597804bb2e7c731f5b7814f2a26de326ba43cc47c9e90ac95cdac4b3fd5b8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_f4/joint_s43.npz",
+      "sha256": "75b94ec172e391150f78ce371f535c9bd283c29a5469d90206cdb5f8c5be0805"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f4/joint_s17.npz",
+      "sha256": "8d3611e96f454e3cc047cb4b17179145ab6d09040ec6fe724ca2ca173ef47245"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f4/joint_s29.npz",
+      "sha256": "30c19cf8967ed25012505922cf7154d760480eed07352a236202a26c00e8b5ae"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/hce_f4/joint_s43.npz",
+      "sha256": "7bf6751374ac8eedf93c1089dd8ce649c53b58b3f44fe5d3e35e61fabf0ea98a"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f4/joint_s17.npz",
+      "sha256": "656fab01a7161120d2691e3d15df9dd70426019ce1084d6cbdddf84af711f452"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f4/joint_s29.npz",
+      "sha256": "657b0d4b6a466128ab2abcaa3984598b892cbc09c4a8eac13e612d5c95861086"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_f4/joint_s43.npz",
+      "sha256": "bb94ff7275553ae1894725a66077de27e550719ce25dea9d24f25dda537369e4"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f4/joint_s17.npz",
+      "sha256": "1b93d1484a9ceabe051a79f52bd9c031ee9b5831b50e153486d80722c1a942d8"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f4/joint_s29.npz",
+      "sha256": "f8af184f024057299de6e26b8192fc9c1d504d53551f65c6c089ac72f9270b95"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/flat_contrast_f4/joint_s43.npz",
+      "sha256": "b8406bf3654205da9856b01467b1e731030213fb1bfc49287f825842fd2c96ee"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f4/joint_s17.npz",
+      "sha256": "364a25f2b32d5fc633fdbd9c61d2e54b74c5235b77d12ff7c802e7d126b11df2"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f4/joint_s29.npz",
+      "sha256": "1931807c282f0896e1698b35cbb24ed02fa4c95ed801e162532966a8f4936450"
+    },
+    {
+      "path": "/ssd2/mayiling/apt_unified_v2/combined/cascade_contrast_f4/joint_s43.npz",
+      "sha256": "210b5fd3d6f14a39d90068e8adb809c0dabd5863c58f7ac194985df1fa823ed7"
+    }
+  ]
+}

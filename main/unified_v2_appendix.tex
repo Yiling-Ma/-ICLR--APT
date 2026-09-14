@@ -1,0 +1,143 @@
+\subsection{Unified Reference Protocol and Completed Follow-up}
+\label{sec:appendix:unified_v2}
+
+The unified v2 comparison replaces the historical reference-recipe leaderboard
+in Table~\ref{tab:main}, not the separate prior-controlled and paired-RNA
+diagnostics. The protocol was fixed before generating the v2 outer predictions;
+the existing outer folds had already been examined, so this is an exploratory
+follow-up rather than an untouched confirmatory evaluation.
+
+\paragraph{Common data and isolation.}
+The input is the barcode-aligned raw APT count matrix with 293 columns in
+fixed source order. Each count is transformed by log1p, then standardized
+feature-wise using only the current fit partition. All annotated benchmark
+cells are used, without patient caps, class weights, patient weights or
+replacement sampling. Equal patient weight is used for scoring, not training.
+For test fold $f$, validation is $(f+1)\bmod 5$ and the other three folds
+form the inner fit. A new scaler and a newly initialized model are fitted
+on all development patients after selection. Outer-test cells are never used
+for fitting the scaler, choosing a configuration or determining stopping.
+Table~\ref{tab:unified_fold_counts} gives exact observed counts.
+\input{tables/unified_fold_counts}
+
+\paragraph{Model-specific search spaces.}
+LR uses unweighted multinomial logistic regression with LBFGS, a maximum of
+1{,}000 iterations and $C\in\{0.01,0.1,1,10\}$. XGBoost uses CPU histogram
+trees (four requested threads), depth $\{3,6\}$, learning rate
+$\{0.03,0.1\}$, and tree counts $\{100,300,500\}$, with row and column
+subsampling both 0.8. All twelve combinations are fitted separately; this
+is not continuous tree-wise early stopping. LR and XGBoost independently
+select coarse and fine configurations by fixed-ontology validation SB-F1,
+then refit using the chosen $C$ or tree configuration.
+
+The plain MLP has 256/128-unit ReLU hidden layers, dropout 0.1 and separate
+linear fine/coarse heads. All Transformer variants share the existing APT
+feature-identity/value tokenizer and pre-norm encoder, with hidden dimension
+128, two layers, four attention heads, feed-forward dimension 256 and dropout
+0.1. These dimensions differ from the historical 256-dimensional,
+four-layer references in Appendix~\ref{sec:method}.
+Neural models use AdamW with the full grid
+$\mathrm{lr}\in\{3\times10^{-4},10^{-3}\}$ and
+$\mathrm{weight\ decay}\in\{10^{-5},10^{-3}\}$. Batch size is 1{,}024 for
+MLP and 128 for Transformers. Each candidate trains for at most 50 epochs,
+with validation fine SB-F1 after every epoch and patience eight. Strict
+improvement updates the best epoch; ties retain the earliest epoch and first
+candidate. Fresh outer refits run for that selected epoch count without test
+monitoring. The v2 loop uses float32, no gradient clipping and no learning-rate
+schedule. The historical mixed-precision and contrastive warm-up settings
+are not used here.
+
+\paragraph{Objectives and component scope.}
+MLP, Flat and Cascade minimize unweighted fine CE plus 0.5 coarse CE.
+Cascade retains the global path, lineage experts and log compatibility term
+in Eq.~\ref{eq:cascade}, with temperature 1, expert scale 1, $\epsilon=0.1$
+and constant $\gamma=0.5$ (no ramp). Flat bypasses experts and routing.
+The wrapper retains the common projection head and unused expert parameters
+for Flat; effective capacity and compute are therefore not identical.
+HCE instead minimizes the leaf and parent negative log subtree masses, with
+weights 1 and 0.5, over the joint 32-node softmax. Fine prediction selects
+among leaves; parent prediction sums each internal node and its descendants.
+No main-table model uses disease labels as training supervision; the inherited
+outer folds remain disease-stratified.
+
+For the additional Flat/Cascade contrastive variants, normalize projected
+embeddings to unit length. With $P_i$ the same-subtype, different-disease
+training examples in the mini-batch, the added objective is
+\begin{equation}
+0.1\mathcal L_{\rm con},\qquad
+\mathcal L_{\rm con}=-\frac{1}{|V|}\sum_{i\in V}\frac{1}{|P_i|}
+\sum_{j\in P_i}\log\frac{\exp(u_i^\top u_j/0.1)}
+{\sum_{a\ne i}\exp(u_i^\top u_a/0.1)}.
+\end{equation}
+Here $V$ contains anchors with positives; a mini-batch without valid anchors
+contributes zero. All non-self examples enter the denominator, including
+same-subtype/same-disease examples. This common v2 loss is distinct from the
+historical positive-mass objective in Appendix~\ref{sec:method:contrastive}.
+No disease labels are required at inference. Each of the four recipes selects
+its own validation optimum under the same grid: the resulting contrasts
+compare whole training/selection procedures, not a routing-only intervention.
+
+\paragraph{Seeds, scoring and intervals.}
+Selection is performed once per model/fold (and per classical task) with
+seed 17; randomized final fits use seeds 17, 29 and 43. LR is deterministic
+and is fitted once per task/fold. A seed controls model initialization and,
+for neural models, a without-replacement cell permutation each epoch; it
+does not change the folds or number of unique training cells. Scores first
+pool patient-normalized confusion matrices over the complete OOF set, then
+average the resulting seed-specific F1 values, not predictions.
+Fine and coarse ontologies always contain 27 and five labels respectively,
+with zero-denominator F1 set to zero.
+
+The bootstrap uses 5{,}000 replicates and RNG seed 20260915. Each replicate
+draws 40 patients with replacement and three seed indices with replacement.
+The same patient draw and matched seed slots are used across all conditions;
+F1 is computed separately in each seed slot and then averaged. LR reuses its
+one fit, so its uncertainty reflects only patient resampling. Paired
+differences and the $2\times2$ interaction are computed within each replicate,
+with percentile 95\% intervals. These are pointwise, exploratory intervals,
+conditional on the chosen configurations, folds and finite seed set; they
+do not repeat model selection or correct for multiplicity. Shared development
+sets also prevent interpreting the OOF patients as independent fitted models.
+No equivalence margin or equivalence test is supplied, so overlapping or
+zero-containing intervals do not establish equivalence.
+
+\paragraph{Deployable versus privileged decoding.}
+Let $p_k$ be the frozen fine probabilities, $q_m$ the frozen parent
+probabilities and $g(k)$ the fixed parent mapping. D0 takes $\arg\max_k p_k$.
+D1 restricts that argmax to $g(k)=\arg\max_m q_m$.
+D2 takes the argmax of
+$q_{g(k)}p_k/\sum_{j:g(j)=g(k)}p_j$ (a $10^{-30}$ denominator floor).
+D4 restricts the argmax to the true reference parent. No weights change,
+and D4 is not used to select a model or report deployable performance.
+These rules use subtype probabilities and a fixed ontology; they are not
+new fitted hierarchical models. All conditions, including unfavorable
+decoding results, are retained in Table~\ref{tab:unified_decoding}.
+\input{tables/unified_decoding}
+
+\paragraph{Artifact validation and HCE readout correction.}
+All 130 final score arrays are checked against the original cell IDs,
+patient IDs, labels, fixed class order and outer-fold membership without
+intersection filtering. Recorded fit counts and input hashes agree across
+recipes; inner and outer standardization statistics are independently
+reconstructed from the raw inputs. The selected candidate and earliest best
+epoch are checked against saved validation histories. During aggregation,
+the initial HCE export was found to normalize internal-node logits alone
+for its parent readout. This does not match its subtree-supervised objective.
+Fifteen frozen HCE checkpoints were replayed to recover joint-node subtree
+probabilities, without retraining, reselection or changing fine predictions.
+Only coarse, D1 and D2 results are affected; D0 and D4 remain unchanged.
+The original exports, checkpoint hashes and correction record are retained.
+This was a readout correction, not a new training experiment.
+
+\paragraph{Compute and reproducibility artifacts.}
+Runs were split between vllab11 and vllab15, both using RTX 6000 Ada GPUs for
+neural fits; LR/XGBoost remained on CPU. Per-fit audit records identify
+hardware, exact counts, seeds, selected parameters and search/refit timing.
+Table~\ref{tab:unified_compute} summarizes realized budgets.
+The repository directory \texttt{analysis/unified\_v2/} contains the frozen
+protocol, training and scoring scripts, source-validation script, HCE replay,
+machine-readable stage inventory, per-seed scores, all paired contrasts and
+source hashes. These supplement rather than resolve the existing data-access
+requirements. Historical scores and diagnostics remain separately identified
+in the following appendices; they are not pooled with v2 fits.
+\input{tables/unified_compute}

@@ -1,12 +1,15 @@
-\section{Transformer Reference Implementation Details}
+\section{Historical Transformer Reference Implementation Details}
 \label{sec:method}
 
-This appendix gives the implementation details for the hierarchy-aware
-reference ladder introduced in Section~\ref{sec:method_summary}: a flat
+This appendix gives the historical implementation details for the hierarchy-aware
+reference ladder: a flat
 Transformer, its HCE counterpart, and \ourmethod{}. The cascade focuses on the
 cell-level hierarchy, lineage $\rightarrow$ subtype. The
 reference recipes differ in auxiliary supervision as well as hierarchy
 structure; their comparison does not isolate individual components.
+These settings apply to historical exports and frozen-checkpoint diagnostics,
+not the unified v2 main table. The v2 configuration and its separate
+$2\times2$ comparison are specified in Appendix~\ref{sec:appendix:unified_v2}.
 
 \subsection{Cell Encoder}
 \label{sec:method:backbone}

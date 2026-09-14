@@ -1,0 +1,109 @@
+{
+  "trials": [
+    {
+      "config": {
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "n_estimators": 100
+      },
+      "score": 0.08752545764861992
+    },
+    {
+      "config": {
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "n_estimators": 300
+      },
+      "score": 0.11009614215616313
+    },
+    {
+      "config": {
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "n_estimators": 500
+      },
+      "score": 0.11695174268932067
+    },
+    {
+      "config": {
+        "max_depth": 3,
+        "learning_rate": 0.1,
+        "n_estimators": 100
+      },
+      "score": 0.11249911785827535
+    },
+    {
+      "config": {
+        "max_depth": 3,
+        "learning_rate": 0.1,
+        "n_estimators": 300
+      },
+      "score": 0.1358464615478687
+    },
+    {
+      "config": {
+        "max_depth": 3,
+        "learning_rate": 0.1,
+        "n_estimators": 500
+      },
+      "score": 0.13984858010282858
+    },
+    {
+      "config": {
+        "max_depth": 6,
+        "learning_rate": 0.03,
+        "n_estimators": 100
+      },
+      "score": 0.10523652044700361
+    },
+    {
+      "config": {
+        "max_depth": 6,
+        "learning_rate": 0.03,
+        "n_estimators": 300
+      },
+      "score": 0.11737871167033177
+    },
+    {
+      "config": {
+        "max_depth": 6,
+        "learning_rate": 0.03,
+        "n_estimators": 500
+      },
+      "score": 0.12036144046265666
+    },
+    {
+      "config": {
+        "max_depth": 6,
+        "learning_rate": 0.1,
+        "n_estimators": 100
+      },
+      "score": 0.12016294211906407
+    },
+    {
+      "config": {
+        "max_depth": 6,
+        "learning_rate": 0.1,
+        "n_estimators": 300
+      },
+      "score": 0.12333728127071204
+    },
+    {
+      "config": {
+        "max_depth": 6,
+        "learning_rate": 0.1,
+        "n_estimators": 500
+      },
+      "score": 0.12269732628088173
+    }
+  ],
+  "selected": {
+    "config": {
+      "max_depth": 3,
+      "learning_rate": 0.1,
+      "n_estimators": 500
+    },
+    "score": 0.13984858010282858
+  },
+  "seconds": 2502.1535584926605
+}

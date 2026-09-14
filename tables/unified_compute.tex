@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+Recipe & Candidate fits & Refit epochs & Search h & Refit h \\
+\midrule
+Logistic Regression & 40 & --- & 0.53 & 0.20 \\
+XGBoost & 120 & --- & 4.32 & 2.31 \\
+Plain MLP & 20 & 15--26 & 0.08 & 0.04 \\
+Flat Transformer & 20 & 14--45 & 4.73 & 3.79 \\
+HCE Transformer & 20 & 14--37 & 4.10 & 3.34 \\
+Soft-cascade (no disease) & 20 & 11--39 & 5.07 & 3.84 \\
+Flat + contrastive & 20 & 11--47 & 5.85 & 6.19 \\
+Cascade + contrastive & 20 & 19--46 & 6.23 & 7.03 \\
+\bottomrule
+\end{tabular}
+\caption{Realized v2 search/refit records summed across folds (and across tasks for LR/XGBoost). Neural search uses four candidates per fold; LR uses four and XGBoost twelve per task/fold. Epoch ranges are selected stopping epochs, not the epochs actually consumed by all search trials. Times are accumulated timed-block wall hours, not elapsed project time or GPU-hours: parallel jobs overlap, hosts differ, and input/scaler preparation is outside these blocks. Neural runs used RTX 6000 Ada GPUs; classical runs used CPU. This is a reproducibility record, not a cross-hardware efficiency ranking. HCE correction inference is excluded.}
+\label{tab:unified_compute}
+\end{table}

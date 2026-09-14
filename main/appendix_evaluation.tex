@@ -129,7 +129,7 @@ because APT preprocessing, architecture, optimization and selection also differ
 seed/patient 95\% intervals. Each eligible patient's matrix is normalized
 within the displayed lineage, then pooled before Macro-F1 is computed over
 its fixed children. Outside-lineage predictions remain false negatives.
-These scores cannot be averaged across lineages to reconstruct Table~\ref{tab:main}.
+These scores cannot be averaged across lineages to reconstruct Table~\ref{tab:historical_main}.
 The conditional-proportion baseline is F1 of an expected confusion matrix,
 not expected F1. Oracle information is privileged. This is not the capped-budget
 APT--RNA comparison in Figure~\ref{fig:matched_lineage_identity}.}
@@ -219,11 +219,18 @@ not an estimate of a pure leakage effect.
 \label{sec:appendix:consistency}
 
 Table~\ref{tab:hierarchy_sb_all} supplies the three additional classical
-references; Table~\ref{tab:main} contains the primary models.
+references; Table~\ref{tab:main} contains the unified v2 primary models.
+These additional historical recipes are not trained under that protocol.
 \input{tables/hierarchy_subject_balanced_all}
 
-\subsection{Main-Table Training Protocols}
+\input{main/unified_v2_appendix}
+
+\subsection{Historical Reference Training Protocols}
 \label{sec:appendix:main_protocols}
+
+Table~\ref{tab:historical_main} retains the earlier provided-expression scores
+that support the original MLP diagnostics. They are not v2 comparison rows.
+\input{tables/historical_main_result}
 
 Table~\ref{tab:main_training_protocols} separates the data used to select a
 recipe from the final model's fit data. Counts come from keyed cell/patient
@@ -259,7 +266,7 @@ configurations sometimes permit five head-calibration epochs, but all 15
 final parameter dictionaries match the validation-selected pre-calibration
 checkpoints exactly; replay disables calibration. Complete discarded-run
 compute and search histories are unavailable, so shared epoch limits do not
-establish equal total tuning cost. The P/SP intervals in Table~\ref{tab:main}
+establish equal total tuning cost. The P/SP intervals in Table~\ref{tab:historical_main}
 do not include repeated model selection.
 
 \clearpage

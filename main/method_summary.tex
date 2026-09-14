@@ -2,35 +2,33 @@
 \label{sec:method_summary}
 
 \paragraph{APT-only comparisons.}
-LR and XGBoost provide linear and nonlinear tabular references. Flat and HCE
-Transformers and a Soft-cascade Transformer provide backbone-matched neural
-recipes. All use APT at inference and the same outer patient partitions.
-Training and validation follow each recipe's documented protocol; identical
-outer folds do not imply identical training-set sizes or fully matched tuning.
-Table~\ref{tab:main_training_protocols} documents all six main-table recipes,
-including selection-stage versus final-fit data, weighting, seeds and
-recoverable training budgets.
-Linear SVM, Random Forest, and reference correlation are additional
-appendix references. A plain MLP uses all development cells in each outer fold,
-with three fixed training seeds, inner-patient selection, and outer refitting.
-Its 256/128-unit ReLU network uses dropout 0.1, AdamW, and training-fold
-standardization; the inner fold selects weight decay and epoch (at most 50).
-This completes a full-cell-budget reference, not an objective- or
-optimizer-matched ablation of the Transformers.
+LR and XGBoost provide linear and nonlinear tabular references. Plain MLP,
+Flat and HCE Transformers, and Soft-cascade provide neural references.
+The unified v2 main comparison uses raw-count log1p inputs, training-only
+standardization, the same 24/8 inner training/validation patients, and fresh
+refits on all 32 development patients. All available annotated cells are used.
+Appendix~\ref{sec:appendix:unified_v2} specifies model-specific search grids,
+exact fold counts, three randomized refit seeds and realized budgets.
+LR is deterministic; LR/XGBoost select coarse and fine tasks independently,
+whereas neural coarse outputs accompany fine-selected fits. Common data and
+selection rules do not imply identical optimization or compute costs.
+Historical Linear SVM, Random Forest and reference-correlation results remain
+appendix references, not additional rows of this unified comparison.
 
 \paragraph{Hierarchy-aware reference.}
-Soft-cascade Transformer embeds aptamer identities and values and combines
-a global subtype head with lineage-specific experts weighted by coarse
-probabilities. Appendix~\ref{sec:method} specifies the routing equation and
-training objective.
-The independent coarse and fine heads are evaluated without constrained
-decoding. Flat removes the cascade; HCE instead uses a two-level hierarchical
-loss adaptation \citep{cultrera2026improving}. Only Soft-cascade uses
-cross-disease supervised contrastive pairing, so their objectives and
-auxiliary disease-label usage differ. These are reference-recipe comparisons,
-not component ablations. No routing or contrastive contribution is claimed
-in isolation. Appendix~\ref{sec:method} gives the full architecture, losses,
-hyperparameters, and component matrix.
+Soft-cascade embeds aptamer identities and values and combines a global
+subtype head with lineage-specific experts weighted by coarse probabilities.
+Eq.~\ref{eq:cascade} specifies the routing form; v2 dimensions and objectives
+are given in Appendix~\ref{sec:appendix:unified_v2}. Ordinary fine predictions
+are not restricted to the predicted parent. Flat bypasses the cascade;
+HCE uses a two-level hierarchical loss adaptation
+\citep{cultrera2026improving}, with parent probabilities decoded from subtree
+mass. No main-table model uses disease supervision. A separate $2\times2$
+comparison adds the same cross-disease contrastive term to Flat and Cascade.
+It tests the whole cascade structure and added supervision under a shared
+search protocol, not individual routing components. The earlier architecture,
+loss and component matrix in Appendix~\ref{sec:method} describe historical
+references and should not be substituted for v2 settings.
 
 \paragraph{Input compatibility.}
 Gene-based pretrained models such as scGPT and Geneformer
@@ -49,5 +47,7 @@ model input (Appendix~\ref{sec:appendix:identity_questions}).
 RNA also supplies the reference annotations, so this is an internal
 reconstruction comparison, not independent label validation. HVG selection
 and scaling are fitted separately within each inner and outer training
-partition. Table~\ref{tab:identity_training_config} gives the input transforms,
+partition. Table~\ref{tab:identity_training_config} gives input transforms,
 training weights, optimization settings and selection grids.
+The existing provided-expression MLP oracle/prior and failure analyses are
+also retained as a separate diagnostic recipe; they do not use the v2 MLP fits.
