@@ -34,6 +34,18 @@ HCE 的 parent 输出是修正后的 subtree mass，不是独立 coarse-head sof
 
 ## 正在运行
 
+2026-09-14 14:22 UTC：MLP 阶段 60/60 最终预测完成，独立 source audit
+PASS；配对汇总完成。真实 APT oracle 为 0.37557，条件打乱 oracle 为
+0.21601，主要差值 +0.15956，95% CI [0.13233, 0.17223]。
+Conditional MLP 的可部署分数为 0.13783（普通 MLP 0.13705），
+差值 +0.00078，区间 [-0.00565, 0.00559]，尚未建立实际预测优势。
+其 oracle 为 0.38901，相对普通 MLP oracle 增量 +0.01344，
+区间 [0.00567, 0.02244]。这是特权诊断改善，不是部署收益。
+预先规定的 Flat gate 因总体 cell-signal 下界大于零而开启；
+GPU 0/1/2 已开始 Flat 的三次打乱复核，尚未完成。所有 lineage
+结果保存在 summary_mlp/，不得把总体正差值扩大为每个 lineage 都成立。
+论文整合待 Flat 阶段及完整复核后进行。
+
 主机 vllab15，目录 `/ssd2/mayiling/apt_hierarchy_signal`，使用本地磁盘。
 GPU 0/1/2 对应打乱 101/211/307，GPU 3 为 conditional MLP。
 启动时 GPU 空闲，本地磁盘剩余约 185 GB；本实验不写 home 大型产物。
