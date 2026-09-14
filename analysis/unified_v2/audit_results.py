@@ -88,7 +88,7 @@ def main(root):
                     checked.append(str(path))
     assert len(checked) == 130
     with (root/'protocol_inventory.csv').open('w',newline='') as stream:
-        w=csv.DictWriter(stream,fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+        w=csv.DictWriter(stream,fieldnames=list(rows[0]),lineterminator='\n'); w.writeheader(); w.writerows(rows)
     (root/'artifact_audit.json').write_text(json.dumps(dict(status='PASS',prediction_count=len(checked),
         cells=361792,patients=40,checks=['exact source-label and fold alignment for all 130 predictions',
         'train-only raw-count log1p scalers independently reconstructed',
