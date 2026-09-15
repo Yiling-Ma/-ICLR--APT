@@ -96,6 +96,22 @@ separates two statements: APT contains cell-level within-lineage signal under
 the oracle diagnostic, and the simple conditional training recipe tested here
 does not yet make that signal useful for overall deployed subtype prediction.
 
+\paragraph{Does directly targeting the bottleneck help?}
+We next keep the same MLP capacity and test fine-head parent-mass supervision,
+coarse--fine consistency, privileged within-lineage distillation, and their
+combinations (Table~\ref{tab:hbm_ablation}). A fresh reproduction of the v2 MLP
+scores 0.136, close to the committed 0.137 reference. Distillation alone has
+the largest new point estimate, 0.140; its paired difference from the reproduced
+MLP is $+0.0040$ (95\% CI $[-0.0018,0.0087]$). Its overall cross-lineage error
+does not fall ($+0.0011$, $[-0.0054,0.0068]$), and its oracle score rises more
+than its ordinary score, so the hierarchy gap does not close. The full objective
+scores 0.138 (difference $+0.0015$, $[-0.0025,0.0060]$) and changes cross-lineage
+error by $+0.0045$ ($[-0.0005,0.0097]$). Its smaller oracle gap is driven mainly
+by lower oracle performance (0.372 versus 0.378), not by the student approaching
+the original oracle. Thus none of these objectives establishes a deployable
+gain or reduces cross-lineage routing errors under the tested protocol.
+\input{tables/hbm_ablation}
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/matched_lineage_identity.pdf}

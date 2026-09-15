@@ -1,0 +1,22 @@
+{
+  "bootstrap_replicates": 2000,
+  "cells": 361792,
+  "conditions": [
+    "plain",
+    "parent",
+    "parent_cons",
+    "kd",
+    "parent_kd",
+    "full"
+  ],
+  "outer_folds": 5,
+  "patients": 40,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "status": "PASS",
+  "tables_generated_from_predictions": true,
+  "uncertainty": "paired seed-slot and held-out-patient bootstrap"
+}

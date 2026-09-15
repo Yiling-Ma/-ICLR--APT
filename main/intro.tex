@@ -19,8 +19,11 @@ evaluated raw-count MLP and Flat Transformer recipes, true-lineage decoding
 yields higher overall subtype SB-Macro-F1 than both training-only conditional
 priors and APT models retrained after patient--true-lineage shuffling.
 This supports cell-level APT correspondence in a privileged diagnostic setting,
-while a deployable conditional subtype MLP does not yet convert that signal
-into an overall prediction gain.
+while neither a deployable conditional subtype MLP nor targeted parent-mass,
+consistency, and privileged-distillation objectives convert that signal into a
+resolved overall prediction gain. This negative intervention study shows that
+the observed hierarchy bottleneck is not removed by these straightforward
+training objectives.
 
 \item We demonstrate predictive gains from adding APT to the tested
 RNA-only references. In the 2,000-gene setting, the overall advantage

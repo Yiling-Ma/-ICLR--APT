@@ -55,3 +55,20 @@ patient--lineage shuffle control. It also tests a trained conditional subtype
 MLP, separating cell-level diagnostic signal from deployable prediction.
 The existing provided-expression MLP oracle/prior and failure analyses are
 retained as historical supporting diagnostics; they do not use the v2 MLP fits.
+
+\paragraph{Targeted hierarchy-bottleneck mitigation.}
+We additionally test whether the diagnosed oracle--deployable gap is actionable
+without changing input modality or backbone capacity. The hierarchy-bottleneck
+mitigation (HBM) student retains
+the v2 MLP encoder and fine/coarse heads. If $p_k$ is its fine distribution and
+$G_m$ contains the subtypes under lineage $m$, the implied parent distribution
+is $a_m=\sum_{k\in G_m}p_k$. Training can add parent-mass NLL
+$-\log a_{m^*}$ and symmetric KL agreement between $a$ and the explicit coarse
+distribution $q$. A fold-specific privileged teacher receives APT and the true
+training lineage, and supplies temperature-scaled soft targets only among
+$G_{m^*}$. The student distillation term is
+$T^2\mathrm{KL}(p_T(\cdot\mid x,m^*)\Vert
+p_S(\cdot\mid x,m^*))$. The teacher is frozen before distillation; the
+deployable student receives only APT and predicts from its ordinary 27-way fine
+head. Appendix~\ref{sec:appendix:hbm} gives the staged validation grids,
+isolation checks and complete diagnostics.

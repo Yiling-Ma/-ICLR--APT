@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Training objective & Fine & Coarse & Cross error & Outside $\mid$ coarse correct & Oracle & Gap \\
+\midrule
+Plain MLP & 0.136 & 0.335 & 0.491 & 0.176 & 0.378 & 0.242 \\
+$+$ parent mass & 0.136 & 0.334 & 0.496 & 0.179 & 0.378 & 0.242 \\
+$+$ parent mass $+$ consistency & 0.139 & 0.337 & 0.495 & 0.178 & 0.380 & 0.241 \\
+$+$ distillation & \textbf{0.140} & 0.335 & 0.492 & 0.172 & 0.384 & 0.244 \\
+$+$ parent mass $+$ distillation & 0.139 & 0.332 & 0.492 & 0.178 & 0.375 & 0.236 \\
+Full HBM & 0.138 & 0.336 & 0.495 & 0.180 & 0.372 & 0.235 \\
+\bottomrule
+\end{tabular}}
+\caption{Hierarchy-bottleneck mitigation with the unified MLP backbone.
+Fine, coarse and oracle columns are subject-balanced Macro-F1; cross error is
+the patient-balanced fraction of all predictions that are both wrong and
+cross-lineage. Outside $\mid$ coarse correct is the fraction of cells whose
+fine prediction leaves the true lineage among cells with a correct auxiliary
+coarse prediction. Gap is oracle minus ordinary fine F1. Entries average three
+matched seed slots over the same five patient folds. Oracle decoding supplies
+the true lineage and is diagnostic, not deployable. Bold identifies the highest
+deployable fine point estimate, not statistical superiority.}
+\label{tab:hbm_ablation}
+\end{table}

@@ -1,0 +1,7 @@
+model,fine_sb_macro_f1,coarse_sb_macro_f1,oracle_fine_sb_macro_f1,artifact
+Plain MLP,0.13704932352911,0.3328045425221244,0.3755713077989781,committed unified_v2
+Flat Transformer,0.147065292370623,0.3416616755448554,0.3714348358250485,committed unified_v2
+HCE Transformer,0.146255308887423,0.3394829880975565,0.3707568195210387,committed unified_v2
+Soft-cascade,0.1481954864292336,0.3359563103971958,0.3705219118709756,committed unified_v2
+Conditional subtype MLP,0.1378317428197328,,0.389007707946893,committed hierarchy_signal
+Full HBM (new reproduction),0.1375286671417639,0.3364814631228804,0.3721337876762232,new saved HBM predictions

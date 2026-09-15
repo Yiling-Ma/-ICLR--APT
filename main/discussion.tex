@@ -8,7 +8,10 @@ separate three explanations for the large ordinary-oracle gap. Training-only
 lineage priors do not explain it; neither does retraining after preserving
 patient-by-lineage APT distributions while breaking cell-level correspondence.
 However, a simple trained conditional subtype MLP does not yield a resolved
-overall deployable gain. The paired-input increment asks a different question:
+overall deployable gain. A targeted follow-up that directly penalizes fine-head
+parent mass, aligns coarse and fine-implied lineage distributions, and distills
+a true-lineage teacher reaches at most a small unresolved point gain; it does
+not reduce cross-lineage errors. The paired-input increment asks a different question:
 it persists over the two tested RNA widths, but the RNA+APT advantage over the
 repeated patient-by-lineage-shuffle control remains unresolved overall.
 Improvements over RNA alone therefore do not establish finer-grained pairing
@@ -40,9 +43,9 @@ it is not evidence of irreducible information absent from RNA. The capped
 probe does not establish an increment over a full-cell-budget,
 capacity-controlled RNA reference. Likewise, oracle-versus-prior performance
 does not guarantee that predicted-lineage decoding realizes the oracle gain.
-The v2 frozen-score tests address two deployable readout rules, and the
-conditional subtype MLP tests one trained alternative, without covering all
-possible hierarchical learners. True-lineage masking and shuffling are
+The v2 frozen-score tests address two deployable readout rules; the conditional
+subtype MLP and HBM objectives test a limited set of trained alternatives,
+without covering all possible hierarchical learners. True-lineage masking and shuffling are
 privileged diagnostics, and the latter does not identify a causal or molecular
 mechanism. Three training seeds and
 pointwise resampling intervals also provide limited uncertainty evidence.
@@ -63,7 +66,9 @@ Training-prior-controlled oracle decoding reveals usable but heterogeneous
 within-lineage discrimination under the tested APT-only models, and the
 patient-by-lineage shuffle control supports cell-level APT correspondence in
 that privileged diagnostic setting. The tested conditional subtype MLP does
-not yet translate this signal into an overall deployable gain. The repeated
+not translate this signal into an overall deployable gain, nor do direct
+fine-head parent supervision, coarse--fine consistency, or privileged
+within-lineage distillation resolve the gap. The repeated
 paired RNA+APT probe improves over the tested RNA-only references at both
 widths, while its overall advantage over patient-by-lineage-shuffled APT
 remains unresolved. Distinguishing these findings avoids equating improved

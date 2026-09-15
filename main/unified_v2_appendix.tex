@@ -163,6 +163,87 @@ $+0.0008$ with interval $[-0.0057,0.0056]$. Thus this simple conditional
 training recipe does not establish an overall deployable gain, even though its
 oracle diagnostic reaches 0.389.
 
+\paragraph{Hierarchy-bottleneck mitigation protocol.}
+\label{sec:appendix:hbm}
+The targeted HBM experiment retains the exact 293--256--128 v2 MLP backbone,
+dropout 0.1, separate 27-way fine and five-way coarse heads, and the baseline
+loss $\mathcal L_{\rm fine}+0.5\mathcal L_{\rm coarse}$. Let $z_k$ denote fine
+logits, $G_m$ the fixed children of lineage $m$, and
+\[
+\log a_m=\operatorname{LSE}_{k\in G_m}z_k-
+          \operatorname{LSE}_{j=1}^{27}z_j.
+\]
+The parent-mass loss is $\mathcal L_{\rm parent}=-\log a_{m^*}$.
+The consistency loss is symmetric KL,
+\[
+\mathcal L_{\rm cons}=\tfrac12\mathrm{KL}(q\Vert a)
+                     +\tfrac12\mathrm{KL}(a\Vert q),
+\]
+with gradients through both distributions. The privileged teacher uses the
+same encoder scale, concatenates a 16-dimensional true-lineage embedding, and
+normalizes only over $G_{m^*}$. It is trained and frozen separately in each
+fold. For temperature $T$, the student and teacher logits are restricted and
+renormalized over the same true-lineage children during training, giving
+$\mathcal L_{\rm KD}=T^2\mathrm{KL}(t\Vert s)$. The complete objective is
+\[
+\mathcal L=\mathcal L_{\rm fine}+0.5\mathcal L_{\rm coarse}
++\lambda_p\mathcal L_{\rm parent}
++\lambda_c\mathcal L_{\rm cons}
++\lambda_{\rm KD}\mathcal L_{\rm KD}.
+\]
+True lineage is never an input to the student. Ordinary validation and test
+predictions are the argmax of its fine head; true-lineage masking is computed
+afterward only as an oracle diagnostic.
+
+Selection is staged on inner validation patients rather than using a Cartesian
+grid. Parent-only compares $\lambda_p\in\{0.25,0.5,1\}$; consistency then
+reuses the selected parent weight and compares
+$\lambda_c\in\{0.1,0.25\}$. Distillation first compares
+$T\in\{1,2,4\}$ at $\lambda_{\rm KD}=0.5$, then compares
+$\lambda_{\rm KD}\in\{0.25,0.5,1\}$ at the selected temperature. Combined
+conditions reuse these fold-specific validation selections. All other
+optimization, stopping and outer-refit rules match v2. Final fits use seeds
+17, 29 and 43. Selection teachers use only inner-training cells, with inner
+validation patients used for stopping and selection; final teachers use only
+outer-development patients. Teacher checkpoints are fold specific, and scaler
+and patient-disjointness assertions are checked before distillation.
+
+For each condition we report fine/coarse SB-Macro-F1, the fraction of errors
+that cross or remain within lineage, overall cross-lineage error, fine-head
+parent violation conditional on a correct coarse head, true-lineage oracle F1,
+and the oracle--ordinary gap. Paired intervals use 2{,}000 matched patient and
+seed-slot bootstrap draws with RNG seed 20260914. They are exploratory,
+conditional on the examined folds, finite seed set and validation selections,
+and do not repeat selection. Representation distillation, post-hoc hierarchy
+calibration and selective prediction were optional and not run.
+
+Figure~\ref{fig:hbm_bottleneck} shows that the large privileged gap persists.
+Figure~\ref{fig:hbm_errors} shows that the error partition changes little.
+The best ordinary point estimate is distillation alone (0.140 versus 0.136;
+paired difference $+0.0040$, $[-0.0018,0.0087]$), while Full HBM is 0.138
+($+0.0015$, $[-0.0025,0.0060]$). Neither condition lowers overall
+cross-lineage error. Full HBM's smaller gap reflects lower oracle performance,
+not successful transfer of the original oracle gain.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/hbm_bottleneck_mitigation.pdf}
+\caption{Deployable APT-only fine SB-Macro-F1 and true-lineage oracle
+SB-Macro-F1 for the reproduced MLP and HBM ablations. The oracle supplies the
+reference lineage only for diagnosis; it is not a deployable prediction.}
+\label{fig:hbm_bottleneck}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/hbm_error_structure.pdf}
+\caption{Patient-balanced subtype prediction partition for the HBM ablations.
+Correct, cross-lineage error and within-lineage error sum to one within each
+condition. Direct hierarchy supervision and distillation do not visibly reduce
+the cross-lineage component.}
+\label{fig:hbm_errors}
+\end{figure}
+
 \paragraph{Saved-prediction failure structure.}
 \label{sec:appendix:v2_failure_structure}
 For the v2 MLP, Flat, HCE and no-disease Cascade, ordinary predictions are

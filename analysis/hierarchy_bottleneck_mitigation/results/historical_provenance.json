@@ -1,0 +1,6 @@
+{
+  "conditional_scores": "/ssd2/mayiling/apt_hbm_v1/provenance/hierarchy_signal_scores.csv",
+  "conditional_scores_sha256": "b71563f74da33a1f2d85ee5b85cf7212429732f6d83804d2afbd416fc9847956",
+  "unified_scores": "/ssd2/mayiling/apt_hbm_v1/provenance/unified_v2_scores.csv",
+  "unified_scores_sha256": "af27164308e60487b897d2f57af45e0b799c2210ce71a4dcca808ba989d02832"
+}
