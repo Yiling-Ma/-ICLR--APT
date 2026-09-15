@@ -12,6 +12,7 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 import run_full_budget_mlp as unified  # noqa: E402
+import patient_cell_scaling as benchmark  # noqa: E402
 
 SEEDS = (17, 29, 43)
 REFERENCE = 0.13601048390624015
@@ -22,30 +23,31 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    meta, _, _ = benchmark.load_data()
+    folds = benchmark.load_folds()
+    ids = meta.sample_id.astype(str).to_numpy()
     per_seed = []
-    canonical_patients = None
     for seed in SEEDS:
         matrices = []
-        patients = []
-        cells = []
+        observed_cells = 0
         for fold in range(5):
             path = args.output / "plain" / f"seed{seed}" / f"fold{fold}" / "predictions.npz"
             if not path.exists():
                 raise FileNotFoundError(path)
             with np.load(path, allow_pickle=False) as item:
-                matrices.append(item["fine_cm"])
-                patients.append(item["patients"].astype(str))
-                cells.append(item["cell_ids"].astype(str))
-        patient_order = np.concatenate(patients)
-        cell_order = np.concatenate(cells)
-        if len(patient_order) != len(set(patient_order)) or len(patient_order) != 40:
-            raise AssertionError("Plain OOF patients are incomplete or duplicated")
-        if len(cell_order) != len(set(cell_order)) or len(cell_order) != 361792:
-            raise AssertionError("Plain OOF cells are incomplete or duplicated")
-        if canonical_patients is None:
-            canonical_patients = patient_order
-        else:
-            np.testing.assert_array_equal(canonical_patients, patient_order)
+                matrix = item["fine_cm"]
+            if matrix.shape != (8, 27, 27):
+                raise AssertionError(f"Unexpected patient confusion shape: {matrix.shape}")
+            expected = int(np.isin(ids, folds[fold]).sum())
+            if int(matrix.sum()) != expected:
+                raise AssertionError(f"Fold {fold} confusion support does not match metadata")
+            sidecar = json.loads((path.parent / "metrics.json").read_text())
+            if sidecar["fold"] != fold or sidecar["seed"] != seed or sidecar["n_test_cells"] != expected:
+                raise AssertionError("Prediction sidecar does not match requested fold/seed")
+            matrices.append(matrix)
+            observed_cells += expected
+        if observed_cells != 361792:
+            raise AssertionError("Plain OOF cell coverage is incomplete")
         per_seed.append(unified.score(np.concatenate(matrices)))
     estimate = float(np.mean(per_seed))
     passed = abs(estimate - REFERENCE) <= TOLERANCE
