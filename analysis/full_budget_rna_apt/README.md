@@ -8,15 +8,15 @@ before running. Existing capped results are never overwritten.
 export APT_FULL_PYTHON=/home/mayiling/opt/apt-ft-baselines/bin/python
 export APT_FULL_APT_CACHE=/ssd2/mayiling/apt_hbm_v1/cache/raw_log1p.npy
 export APT_FULL_SOURCE_HASH=GITHUB_COMMIT_CONTAINING_THIS_PROTOCOL
-export FULL_OUT=/ssd2/mayiling/apt_full_budget_rna_apt_v1
+export FULL_OUT=/home/mayiling/experiments/apt_full_budget_rna_apt_v1
 
 # Freeze/audit and generate training-only 5k/10k features.
 bash analysis/full_budget_rna_apt/run_stage.sh "$FULL_OUT" prepare \
   --rscript /home/mayiling/opt/apt-rna-r/bin/Rscript
 
 # Selection must finish before any outer refit is launched.
-bash analysis/full_budget_rna_apt/run_stage.sh "$FULL_OUT" select --device cpu
-bash analysis/full_budget_rna_apt/run_stage.sh "$FULL_OUT" refit --device cpu
+bash analysis/full_budget_rna_apt/run_stage.sh "$FULL_OUT" select --device cuda
+bash analysis/full_budget_rna_apt/run_stage.sh "$FULL_OUT" refit --device cuda
 
 # Rebuild all scores, paired intervals, tables, and the figure without retraining.
 bash analysis/full_budget_rna_apt/run_stage.sh "$FULL_OUT" aggregate

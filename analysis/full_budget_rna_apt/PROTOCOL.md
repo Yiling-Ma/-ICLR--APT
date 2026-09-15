@@ -15,8 +15,10 @@ within patient and true lineage. Shuffles retrain the model and are applied
 separately to inner train, validation, outer refit, and outer test partitions.
 
 The raw matrix contains 36,294 genes and approximately 5.24e8 nonzero entries.
-An all-gene neural fit is omitted from the frozen primary analysis because its
-compute and I/O cost is disproportionate on the available CPU-only node. The
+An all-gene neural fit is omitted from the frozen primary analysis because
+materializing fold-specific full-gene matrices and repeating the complete
+selection/refit grid has disproportionate shared-filesystem I/O and compute
+cost even with the available GPUs. The
 optional learning curve and parameter-matched-width control are also deferred;
 neither may delay or alter the primary 5k/10k analysis.
 
@@ -59,6 +61,9 @@ configuration and epoch. Selection seed is 17. Fresh outer refits use seeds
 the same grid and compute budget. Primary same-architecture comparisons differ
 only in input features; parameter counts are recorded, and the RNA+noise
 control exactly matches RNA+APT input dimensionality and parameter count.
+All neural selection and refit jobs run on CUDA GPUs; the implementation rejects
+CPU training. CPU use is limited to the existing R-based sparse RNA
+normalization/HVG preparation, artifact I/O, and metric aggregation.
 
 ## Metrics and uncertainty
 

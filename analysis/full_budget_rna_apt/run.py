@@ -146,6 +146,10 @@ def train(rna, extra, fine_y, coarse_y, patient_ids, config, seed, epochs,
 
 def run(args):
     freeze_protocol(args.output)
+    if not str(args.device).startswith("cuda"):
+        raise ValueError("The frozen protocol requires GPU training; CPU is disabled")
+    if not torch.cuda.is_available():
+        raise RuntimeError("CUDA is unavailable; refusing to fall back to CPU")
     if args.condition in CONTROLS and args.width != 10000:
         raise ValueError("Predeclared controls are restricted to the 10k-HVG experiment")
     meta, _, _ = core.load_data()
@@ -254,7 +258,7 @@ def main():
     parser.add_argument("--condition", choices=PRIMARY + CONTROLS, required=True)
     parser.add_argument("--fold", type=int, choices=range(5), required=True)
     parser.add_argument("--seed", type=int, default=17)
-    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--device", default="cuda")
     parser.add_argument("--apt-cache", type=Path)
     parser.add_argument("--source-git-hash", default="unknown")
     args = parser.parse_args()
