@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llcccc}
+\toprule
+Model & Scope & Real oracle & Shuffled oracle & Prior & Real $-$ shuffled \\
+\midrule
+MLP & All & 0.376 & 0.216 & 0.180 & \makecell{$+0.160$\\$[0.132,0.172]$} \\
+Flat & All & 0.371 & 0.216 & 0.180 & \makecell{$+0.156$\\$[0.125,0.175]$} \\
+\midrule
+MLP & B & 0.469 & 0.182 & 0.193 & \makecell{$+0.288$\\$[0.229,0.321]$} \\
+MLP & Myeloid & 0.265 & 0.111 & 0.124 & \makecell{$+0.155$\\$[0.125,0.182]$} \\
+MLP & NK & 0.869 & 0.872 & 0.478 & \makecell{$-0.003$\\$[-0.011,0.004]$} \\
+MLP & Other & 0.844 & 0.496 & 0.490 & \makecell{$+0.349$\\$[0.051,0.422]$} \\
+MLP & T & 0.225 & 0.136 & 0.096 & \makecell{$+0.089$\\$[0.072,0.101]$} \\
+\bottomrule
+\end{tabular}
+\caption{APT-only conditional-pairing diagnostic under true-lineage decoding
+(fine SB-Macro-F1). Real APT keeps each cell's original APT vector; shuffled
+APT retrains after permuting whole vectors within patient and true lineage in
+each partition. The prior is the training-only conditional-proportion
+expected-confusion baseline. MLP lineages are exploratory; Flat is the
+prespecified overall replication. Intervals jointly resample patients,
+training seeds and shuffle realizations. These privileged-label diagnostics
+are not deployable scores.}
+\label{tab:apt_shuffle_signal}
+\end{table}

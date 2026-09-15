@@ -47,25 +47,54 @@ Appendices~\ref{sec:appendix:subtype_audit} and
 \label{sec:results:within_lineage}
 
 True-lineage decoding masks each frozen fine score vector to the correct
-parent's children. Both the model and the training-only conditional priors
-receive this privileged label. For the earlier full-budget provided-expression
-MLP (Table~\ref{tab:historical_main}, not the raw-count v2 MLP), ordinary fine F1 is
-0.141 and oracle F1 is 0.385, versus 0.148 for conditional majority decoding
-and 0.180 for the conditional-proportion expected-confusion baseline.
-The oracle-minus-expected-prior difference is $+0.205$
-(joint 95\% CI $[0.174,0.217]$).
-Thus APT supports discrimination beyond these candidate-set controls under
-this recipe; the comparison does not measure all information in the assay.
+parent's children. This is a privileged diagnostic, not a deployable prediction:
+it supplies the reference parent at test time and narrows the candidate set.
+We therefore compare it with training-only conditional priors and with a
+stronger APT-only control that retrains after shuffling whole APT vectors within
+each patient and true lineage. The shuffle preserves patient- and lineage-level
+APT distributions while breaking each cell's original APT--subtype pairing.
 
-Saved-score diagnostics further locate the errors: in this full-budget MLP,
-cross-parent and within-parent subtype errors occupy 49.4\% and 17.3\% of
-patient-balanced cell mass, respectively. Oracle corrects 63.2\% of cross-parent
-errors when correction fractions are first computed within each patient.
-The two largest remaining directed confusions are CD8 Tem-1 to CD4 + Tcm-1
-and the reverse, ranked first and second in all three seeds. Both subtypes
-occur in all 40 patients. These error rates complement, rather than additively
-decompose, Macro-F1; complete diagnostics appear in
-Appendix~\ref{sec:appendix:mlp_failures}.
+Under the unified raw-count protocol, the MLP rises from 0.137 ordinary fine
+SB-Macro-F1 to 0.376 with true-lineage decoding (Table~\ref{tab:apt_shuffle_signal}).
+The corresponding patient-by-lineage-shuffled oracle is 0.216, giving a
+real-minus-shuffled difference of $+0.160$ (95\% CI $[0.132,0.172]$);
+the training-only conditional-proportion prior is 0.180. The Flat Transformer
+replication gives a similar overall contrast, $+0.156$ ($[0.125,0.175]$).
+Thus the oracle gain is not explained by candidate-set restriction or by the
+preserved patient-by-lineage APT distribution alone. It supports cell-level
+APT correspondence in this diagnostic setting, without identifying a molecular
+mechanism or an assay information ceiling.
+
+\input{tables/apt_shuffle_signal}
+
+The signal is not uniform. For the MLP, the real-minus-shuffled oracle contrast
+is positive for B, Myeloid, Other and T scopes, but unresolved and slightly
+negative for NK ($-0.003$, $[-0.011,0.004]$), where real and shuffled oracle
+scores are both high. This prevents a simple statement that every lineage
+contains recoverable subtype information under APT. It instead shows that the
+useful diagnostic signal depends on the parent lineage and its child taxonomy.
+
+Error diagnostics explain why ordinary prediction remains difficult. Across
+the v2 MLP, Flat, HCE and no-disease Cascade, roughly 73--74\% of ordinary
+subtype errors cross parent lineages, and true-lineage decoding repairs about
+64\% of those cross-parent errors. Even when the auxiliary coarse head predicts
+the correct parent, the fine head still assigns an out-of-parent subtype for
+14--18\% of such cells, showing imperfect coordination between the heads.
+These are patient-balanced error rates, not additive components of Macro-F1.
+Complete cross-model summaries and 27-by-27 ordinary/oracle matrices appear in
+Appendix~\ref{sec:appendix:v2_failure_structure}.
+
+Finally, a trained conditional subtype MLP asks whether this diagnostic signal
+can be converted into deployable performance. The model uses a shared MLP
+encoder, a lineage head, and within-lineage subtype heads trained only against
+the true parent during training; at test time it predicts by
+$q_{g(k)}(x)r_{k\mid g(k)}(x)$ without access to the true parent. Its ordinary
+fine score is 0.138, compared with 0.137 for the ordinary v2 MLP
+($+0.0008$, $[-0.0057,0.0056]$). Its true-lineage oracle score is 0.389,
+but the deployable gain remains unresolved. The current evidence therefore
+separates two statements: APT contains cell-level within-lineage signal under
+the oracle diagnostic, and the simple conditional training recipe tested here
+does not yet make that signal useful for overall deployed subtype prediction.
 
 \begin{figure}[t]
 \centering

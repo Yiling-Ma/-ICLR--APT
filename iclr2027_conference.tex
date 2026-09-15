@@ -68,11 +68,13 @@ Which cell identities can aptamer profiles recover in new patients, and what
 do they add beyond RNA? \ourbench{} specifies this comparison using \numcells{}
 paired cells from \numparticipants{} participants, \numaptfeatures{} aptamer measurements, \numlineages{} lineages,
 \numsubtypes{} RNA-derived subtypes, and fixed patient-disjoint folds. Two findings emerge.
-First, a separately evaluated full-training-budget MLP achieves fine subject-balanced Macro-F1
-of 0.141, rising to 0.385 with true-lineage decoding, compared with 0.180 for a training-only
-conditional-proportion prior. This comparison shows additional discrimination relative to the
-tested training-only lineage priors; matched-budget APT/RNA comparisons reveal substantial lineage
-heterogeneity. Second, adding paired APT improves MLP fine Macro-F1 by
+First, full-budget raw-count MLP and Flat Transformer references achieve ordinary fine
+subject-balanced Macro-F1 of 0.137 and 0.147, rising to 0.376 and 0.371
+with true-lineage decoding. Under the same privileged decoder, patient-by-lineage
+APT shuffling falls to 0.216 for both models, compared with 0.180 for a
+training-only conditional-proportion prior. This identifies cell-level APT
+correspondence in the diagnostic oracle setting, but a trained conditional
+subtype MLP does not improve deployable prediction overall. Second, adding paired APT improves MLP fine Macro-F1 by
 \pairedMLPGainTwoK{} and \pairedMLPGainFiveK{} over RNA references using 2{,}000 and 5{,}000 training-selected
 genes, respectively. Yet the overall advantage over APT shuffled within
 patient and true lineage remains statistically unresolved. Thus an increment

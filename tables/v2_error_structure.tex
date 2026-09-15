@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & Correct & Cross & Within & Cross/errors & Repaired/cross & Fine cross $|$ coarse correct \\
+\midrule
+Plain MLP & 34.1 & 49.1 & 16.9 & 74.4 & 63.6 & 17.6 \\
+Flat Transformer & 33.5 & 48.8 & 17.6 & 73.5 & 64.2 & 14.4 \\
+HCE Transformer & 33.7 & 49.1 & 17.2 & 74.0 & 64.2 & 15.4 \\
+Soft-cascade & 33.3 & 49.3 & 17.5 & 73.8 & 64.0 & 15.9 \\
+\bottomrule
+\end{tabular}
+\caption{Unified v2 ordinary subtype error structure (percent), averaged
+within patient and then across three training seeds. Correct, cross-parent
+and within-parent partition all evaluated cells. Cross-parent uses the parent
+of the predicted subtype, not the independent coarse head. Repaired/cross is
+the fraction of cross-parent subtype errors whose subtype becomes correct
+under true-lineage oracle decoding, averaged over patients with cross-parent
+errors. The last column asks a separate diagnostic question: among cells for
+which the auxiliary coarse head predicts the correct parent, how often does
+the ordinary fine prediction still choose a subtype outside that parent?
+These rates diagnose saved predictions and are not an additive decomposition
+of SB-Macro-F1.}
+\label{tab:v2_error_structure}
+\end{table}

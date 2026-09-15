@@ -15,10 +15,12 @@ specified inputs, annotations, patient splits, metrics, and baseline
 results to support subsequent method comparison.
 
 \item We characterize hierarchical prediction failures. Under the
-evaluated MLP recipes, true-lineage decoding yields higher overall
-subtype SB-Macro-F1 than the tested training-only conditional priors.
-Lineage-specific comparisons against corresponding priors and RNA
-references reveal variation obscured by the overall score.
+evaluated raw-count MLP and Flat Transformer recipes, true-lineage decoding
+yields higher overall subtype SB-Macro-F1 than both training-only conditional
+priors and APT models retrained after patient--true-lineage shuffling.
+This supports cell-level APT correspondence in a privileged diagnostic setting,
+while a deployable conditional subtype MLP does not yet convert that signal
+into an overall prediction gain.
 
 \item We demonstrate predictive gains from adding APT to the tested
 RNA-only references. In the 2,000-gene setting, the overall advantage

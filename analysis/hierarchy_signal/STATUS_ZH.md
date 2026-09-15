@@ -32,7 +32,7 @@ Flat 打乱仅当 MLP 总体主要差值的 95% CI 下界大于零时，按冻�
 HCE 的 parent 输出是修正后的 subtree mass，不是独立 coarse-head softmax。
 这些比例不是 Macro-F1 的加性分解，也不证明测量上限、标签噪声或可解决机制。
 
-## 正在运行
+## 已完成的补实验结论
 
 2026-09-14 14:22 UTC：MLP 阶段 60/60 最终预测完成，独立 source audit
 PASS；配对汇总完成。真实 APT oracle 为 0.37557，条件打乱 oracle 为
@@ -41,21 +41,29 @@ Conditional MLP 的可部署分数为 0.13783（普通 MLP 0.13705），
 差值 +0.00078，区间 [-0.00565, 0.00559]，尚未建立实际预测优势。
 其 oracle 为 0.38901，相对普通 MLP oracle 增量 +0.01344，
 区间 [0.00567, 0.02244]。这是特权诊断改善，不是部署收益。
-预先规定的 Flat gate 因总体 cell-signal 下界大于零而开启；
-GPU 0/1/2 已开始 Flat 的三次打乱复核，尚未完成。所有 lineage
-结果保存在 summary_mlp/，不得把总体正差值扩大为每个 lineage 都成立。
-论文整合待 Flat 阶段及完整复核后进行。
+
+2026-09-14 23:36 UTC：预先规定的 Flat gate 因 MLP 总体 cell-signal
+下界大于零而开启并完成。Flat 阶段 45/45 最终预测完成，独立 source
+audit PASS。Flat 真实 APT oracle 为 0.37143，条件打乱 oracle 为
+0.21577，主要差值 +0.15566，95% CI [0.12550, 0.17490]。
+这复核了 MLP 的总体方向。Lineage 分析仍是探索性：MLP 和 Flat 的 NK
+real-minus-shuffle oracle 差值均跨零并略为负，不能写成每个 lineage 都有
+稳定 cell-level APT signal。
+
+2026-09-14 晚：论文已按 ICLR 风格整合新结果。主文新增 APT-only
+patient x true-lineage shuffle 结果表；附录补充打乱协议、conditional
+subtype MLP 目标函数、跨模型错误结构表和诊断图。可选 fuller-budget RNA
+连接实验未启动；现有 RNA+APT patient x lineage shuffle 结论仍保持
+overall unresolved。
+
+## 运行位置与产物
 
 主机 vllab15，目录 `/ssd2/mayiling/apt_hierarchy_signal`，使用本地磁盘。
-GPU 0/1/2 对应打乱 101/211/307，GPU 3 为 conditional MLP。
-启动时 GPU 空闲，本地磁盘剩余约 185 GB；本实验不写 home 大型产物。
-初始 launcher PID 894188，worker_0.log 至 worker_3.log 保存进度。
-finish.sh 等待完整阶段结束，随后独立核查 source indices/scalers/labels/选择历史，
-生成配对结果；只有冻结的 MLP gate 通过才运行 Flat 复核。
-finish.log 的 ALL_HIERARCHY_SIGNAL_COMPLETE 是计算流水线完成标记，
-不代表论文已经更新。训练进行中不得将 validation 分数当作结论。
-后处理 PID 902414。已建立每十分钟静默检查的任务监控，仅在阶段完成、
-触发/未触发预定 Flat 复核、失败或全部完成时通知。
+GPU 0/1/2 对应 Flat 打乱 101/211/307，GPU 3 用于 conditional MLP。
+finish.log 已出现 `ALL_HIERARCHY_SIGNAL_COMPLETE`。本地仓库同步了轻量
+JSON/CSV/PDF 产物：`summary_mlp/`、`summary_flat/`、`reanalysis/`、以及
+`results/mlp_source_audit.json` 和 `results/flat_source_audit.json`。
+大型 NPZ/checkpoint 留在远端 SSD，不提交到论文仓库。
 
 ## 复核与论文更新入口
 
@@ -63,5 +71,5 @@ finish.log 的 ALL_HIERARCHY_SIGNAL_COMPLETE 是计算流水线完成标记，
 不改变 run_signal.py 或 PROTOCOL.md；每个运行记录代码哈希且拒绝不一致续跑。
 汇总需要对应 `{model}_source_audit.json` PASS，缺 fold/seed 时失败而非取交集。
 summary_mlp/、可选 summary_flat/ 中保存总体和五 lineage 的配对差值。
-全部完成后先审查审计、原始记录、分母、区间及失败日志，再更新正文/附录。
-未完成实验不得预填结果，不因区间跨零追加 seed。
+全部完成后已审查审计、原始记录、分母、区间及失败日志，再更新正文/附录。
+未因区间跨零追加 seed。

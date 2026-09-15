@@ -49,5 +49,9 @@ reconstruction comparison, not independent label validation. HVG selection
 and scaling are fitted separately within each inner and outer training
 partition. Table~\ref{tab:identity_training_config} gives input transforms,
 training weights, optimization settings and selection grids.
+The v2 APT-only hierarchy-signal follow-up instead keeps the full raw-count
+APT budget and asks whether true-lineage oracle performance survives a
+patient--lineage shuffle control. It also tests a trained conditional subtype
+MLP, separating cell-level diagnostic signal from deployable prediction.
 The existing provided-expression MLP oracle/prior and failure analyses are
-also retained as a separate diagnostic recipe; they do not use the v2 MLP fits.
+retained as historical supporting diagnostics; they do not use the v2 MLP fits.

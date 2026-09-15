@@ -114,13 +114,91 @@ new fitted hierarchical models. All conditions, including unfavorable
 decoding results, are retained in Table~\ref{tab:unified_decoding}.
 \input{tables/unified_decoding}
 
+\paragraph{APT-only patient-by-lineage shuffling.}
+To test whether the true-lineage oracle gain contains cell-level APT
+correspondence rather than only candidate-set restriction or patient-lineage
+structure, we retrain APT-only controls after shuffling entire
+\numaptfeatures{}-dimensional APT vectors within each patient and true
+lineage. The permutation is performed separately inside the inner-fit,
+validation, outer-refit and test partitions; it never moves cells across
+patients or reference lineages, and it is not a test-time perturbation of a
+model trained on real APT. Singleton groups and unchanged assignments are
+retained and recorded. MLP controls use shuffle seeds 101, 211 and 307 crossed
+with training seeds 17, 29 and 43 over all five folds. After the MLP overall
+real-minus-shuffled oracle interval was positive under the frozen rule, the
+same overall Flat Transformer control was run as the prespecified replication.
+Both models reuse the v2 raw-count log1p preprocessing, training-only
+standardization, candidate grid, validation rule and fresh outer refit
+described above. The source audits pass for 60 MLP and 45 Flat prediction
+artifacts.
+
+The primary APT-only diagnostic is
+\[
+\Delta_{\mathrm{cell}} =
+F_1(\mathrm{real\ APT,\ true\ parent})
+-F_1(\mathrm{patient}\times\mathrm{lineage\ shuffled\ APT,\ true\ parent}).
+\]
+The bootstrap uses the same patient draw across real and shuffled conditions,
+resamples three seed slots with replacement, and within each selected seed
+averages three sampled shuffle realizations before subtracting. The resulting
+interval is conditional on the examined folds and finite seed/shuffle set.
+Lineage-specific rows are exploratory and use only patients with cells in the
+displayed lineage.
+
+\paragraph{Trained conditional subtype MLP.}
+We also fit a deployable conditional subtype MLP using the same 256/128-unit
+backbone and parameter count as the ordinary v2 MLP. The model has a lineage
+head $q_m(x)$ and subtype heads $r_{k\mid m}(x)$ normalized within each
+lineage. Training uses the observed parent only to choose the appropriate
+subtype loss:
+\[
+\mathcal L = 0.5\,\mathrm{CE}(q(x),m)
+             - \log r_{y\mid m}(x).
+\]
+At test time no true parent is supplied; deployment predicts
+$\arg\max_k q_{g(k)}(x) r_{k\mid g(k)}(x)$. True-parent masking of this trained
+model is reported only as a diagnostic. The ordinary score is 0.138, compared
+with 0.137 for the ordinary v2 MLP; the paired deployable difference is
+$+0.0008$ with interval $[-0.0057,0.0056]$. Thus this simple conditional
+training recipe does not establish an overall deployable gain, even though its
+oracle diagnostic reaches 0.389.
+
+\paragraph{Saved-prediction failure structure.}
+\label{sec:appendix:v2_failure_structure}
+For the v2 MLP, Flat, HCE and no-disease Cascade, ordinary predictions are
+partitioned into correct, cross-parent errors and within-parent errors using
+the parent of the predicted subtype. Oracle decoding is then applied to the
+same score vectors without changing weights, routing or the evaluated cells.
+Table~\ref{tab:v2_error_structure} reports the resulting patient-balanced
+diagnostics, and Figure~\ref{fig:v2_failure_overview} visualizes the same
+cross-model pattern. Complete 27-by-27 ordinary and oracle confusion matrices,
+per-subtype summaries, directed oracle confusions and validation records are
+released under \texttt{analysis/hierarchy\_signal/reanalysis/}. These analyses
+describe observable prediction structure; they do not distinguish annotation
+noise, assay limitation, preprocessing, model capacity or training budget as
+mechanisms.
+\input{tables/v2_error_structure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{analysis/hierarchy_signal/reanalysis/failure_overview.pdf}
+\caption{Unified v2 saved-prediction diagnostics for the MLP, Flat, HCE and
+no-disease Cascade references. Left: patient-balanced partition of ordinary
+subtype predictions into correct, cross-parent error and within-parent error.
+Right: ordinary, predicted-parent/post-processing and true-parent oracle
+readouts on the same frozen scores. True-parent masking is a privileged
+diagnostic; the deployable readout rules do not close the ordinary-oracle gap.}
+\label{fig:v2_failure_overview}
+\end{figure}
+
 \paragraph{Artifact validation and HCE readout correction.}
-All 130 final score arrays are checked against the original cell IDs,
-patient IDs, labels, fixed class order and outer-fold membership without
-intersection filtering. Recorded fit counts and input hashes agree across
-recipes; inner and outer standardization statistics are independently
-reconstructed from the raw inputs. The selected candidate and earliest best
-epoch are checked against saved validation histories. During aggregation,
+The original v2 final score arrays and the hierarchy-signal follow-up
+artifacts are checked against the original cell IDs, patient IDs, labels,
+fixed class order and outer-fold membership without intersection filtering.
+Recorded fit counts and input hashes agree across recipes; inner and outer
+standardization statistics are independently reconstructed from the raw inputs.
+The selected candidate and earliest best epoch are checked against saved
+validation histories. During aggregation,
 the initial HCE export was found to normalize internal-node logits alone
 for its parent readout. This does not match its subtree-supervised objective.
 Fifteen frozen HCE checkpoints were replayed to recover joint-node subtree
