@@ -94,9 +94,10 @@ def load_inputs(args, meta, lineage, split, stage: str, seed: int):
 
 def predict(model, rna, extra, device):
     model.eval(); fine = []; coarse = []
+    n_cells = rna.shape[0]
     with torch.no_grad():
-        for start in range(0, len(rna), 4096):
-            indices = np.arange(start, min(start + 4096, len(rna)))
+        for start in range(0, n_cells, 4096):
+            indices = np.arange(start, min(start + 4096, n_cells))
             values = torch.as_tensor(dense_batch(rna, extra, indices), device=device)
             f, c = model(values)
             fine.append(f.softmax(1).cpu().numpy())
@@ -113,10 +114,11 @@ def train(rna, extra, fine_y, coarse_y, patient_ids, config, seed, epochs,
     optimizer = torch.optim.AdamW(model.parameters(), lr=config["lr"],
                                   weight_decay=config["weight_decay"])
     rng = np.random.default_rng(seed)
+    n_cells = rna.shape[0]
     best_score, best_epoch, history = -np.inf, 1, []
     for epoch in range(1, epochs + 1):
         model.train()
-        order = rng.permutation(len(rna))
+        order = rng.permutation(n_cells)
         for start in range(0, len(order), 1024):
             indices = order[start:start + 1024]
             values = torch.as_tensor(dense_batch(rna, extra, indices), device=device)
