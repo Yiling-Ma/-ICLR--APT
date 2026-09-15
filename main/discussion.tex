@@ -8,15 +8,17 @@ separate three explanations for the large ordinary-oracle gap. Training-only
 lineage priors do not explain it; neither does retraining after preserving
 patient-by-lineage APT distributions while breaking cell-level correspondence.
 However, a simple trained conditional subtype MLP does not yield a resolved
-overall deployable gain. A targeted follow-up that directly penalizes fine-head
-parent mass, aligns coarse and fine-implied lineage distributions, and distills
-a true-lineage teacher reaches at most a small unresolved point gain; it does
-not reduce cross-lineage errors. The paired-input increment asks a different question:
-it persists over the two tested RNA widths, but the RNA+APT advantage over the
-repeated patient-by-lineage-shuffle control remains unresolved overall.
-Improvements over RNA alone therefore do not establish finer-grained pairing
-specificity. Patient-disjoint testing and subject-balanced scoring provide the
-common evaluation foundation, not an additional claim of methodological novelty.
+overall deployable gain. Targeted follow-ups that directly penalize fine-head
+parent mass, align coarse and fine-implied lineage distributions, or use
+RNA-privileged teachers reach at most small unresolved point gains; they do not
+substantially close the oracle--deployable gap. The paired-input increment asks
+a different question: it persists over the capped RNA widths and, at 10{,}000
+HVGs, over a full-cell-budget RNA reference. Yet the RNA+APT advantage over
+patient- and patient-by-lineage-shuffle controls remains unresolved overall.
+Improvements over RNA alone therefore establish incremental APT-associated
+signal for specified references, not finer-grained pairing specificity.
+Patient-disjoint testing and subject-balanced scoring provide the common
+evaluation foundation, not an additional claim of methodological novelty.
 
 \paragraph{A reusable comparison setting.}
 The resource specifies an APT input, operational ontology, fixed patient folds,
@@ -46,16 +48,18 @@ manuscript makes no disease classification or clinical-validation claim.
 Disentangling disease-associated from acquisition-associated variation would
 require crossed-batch samples or an independent APT cohort. RNA supplies the reference labels, and its apparent
 difficulty depends on features, preprocessing, and the fitted reference.
-An APT increment over either 2{,}000 or 5{,}000 HVGs may reflect restricted RNA representation;
-it is not evidence of irreducible information absent from RNA. The capped
-probe does not establish an increment over a full-cell-budget,
-capacity-controlled RNA reference. Likewise, oracle-versus-prior performance
-does not guarantee that predicted-lineage decoding realizes the oracle gain.
-The v2 frozen-score tests address two deployable readout rules; the conditional
-subtype MLP and HBM objectives test a limited set of trained alternatives,
-without covering all possible hierarchical learners. True-lineage masking and shuffling are
-privileged diagnostics, and the latter does not identify a causal or molecular
-mechanism. Three training seeds and
+An APT increment over either 2{,}000 or 5{,}000 capped HVGs may reflect restricted RNA representation,
+but the new 10{,}000-HVG full-budget sensitivity analysis argues that the
+increment is not solely an artifact of a capped RNA baseline. The same analysis
+also shows that patient- and patient-lineage-level APT structure can account
+for much of the gain, because paired APT does not exceed the shuffled controls.
+Likewise, oracle-versus-prior performance does not guarantee that
+predicted-lineage decoding realizes the oracle gain. The v2 frozen-score tests
+address two deployable readout rules; the conditional subtype MLP, HBM
+objectives, and RNA-privileged distillation test a limited set of trained
+alternatives, without covering all possible hierarchical learners.
+True-lineage masking and shuffling are privileged diagnostics, and the latter
+does not identify a causal or molecular mechanism. Three training seeds and
 pointwise resampling intervals also provide limited uncertainty evidence.
 The outer folds have been examined repeatedly during this study; fixed
 follow-up analyses on them are not untouched confirmatory tests. Their
@@ -83,9 +87,9 @@ within-lineage discrimination under the tested APT-only models, and the
 patient-by-lineage shuffle control supports cell-level APT correspondence in
 that privileged diagnostic setting. The tested conditional subtype MLP does
 not translate this signal into an overall deployable gain, nor do direct
-fine-head parent supervision, coarse--fine consistency, or privileged
-within-lineage distillation resolve the gap. The repeated
-paired RNA+APT probe improves over the tested RNA-only references at both
-widths, while its overall advantage over patient-by-lineage-shuffled APT
+fine-head parent supervision, coarse--fine consistency, or RNA-privileged
+distillation resolve the gap. The repeated paired RNA+APT probes improve over
+specified RNA-only references, including a full-budget 10{,}000-HVG RNA
+reference, while their overall advantage over patient-by-lineage-shuffled APT
 remains unresolved. Distinguishing these findings avoids equating improved
 reference reconstruction with established subtype-specific complementarity.

@@ -1,0 +1,15 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & Fine SB-F1 & Coarse SB-F1 & Cross-lineage & Outside$\mid$coarse correct & Oracle F1 & Gap \\
+\midrule
+Plain APT MLP & 0.137 & 0.333 & 0.491 & 0.176 & 0.376 & 0.239 \\
+$+$ routing KD & 0.138 & 0.332 & 0.495 & 0.187 & 0.372 & 0.234 \\
+$+$ within-lineage KD & 0.142 & 0.330 & 0.490 & 0.168 & 0.386 & 0.244 \\
+$+$ representation alignment & 0.137 & 0.333 & 0.492 & 0.175 & 0.379 & 0.242 \\
+$+$ routing KD $+$ alignment & 0.138 & 0.337 & 0.500 & 0.186 & 0.379 & 0.241 \\
+$+$ routing $+$ within-lineage KD & 0.143 & 0.329 & 0.489 & 0.167 & 0.384 & 0.242 \\
+Full RPH-Distill & 0.142 & 0.332 & 0.489 & 0.171 & 0.386 & 0.244 \\
+Full RPH (shuffled teacher) & 0.129 & 0.332 & 0.495 & 0.179 & 0.355 & 0.226 \\
+Strong lineage-label control & 0.138 & 0.338 & 0.491 & 0.172 & 0.371 & 0.233 \\
+\bottomrule
+\end{tabular}

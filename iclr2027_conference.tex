@@ -76,14 +76,17 @@ APT shuffling falls to 0.216 for both models, compared with 0.180 for a
 training-only conditional-proportion prior. This identifies cell-level APT
 correspondence in the diagnostic oracle setting, but neither a trained
 conditional subtype model nor targeted parent-mass, consistency and privileged
-distillation objectives establish a deployable improvement. Second, adding paired APT improves MLP fine Macro-F1 by
+distillation objectives establish a deployable improvement; a follow-up
+RNA-privileged teacher gives only a small unresolved point gain. Second,
+adding paired APT improves MLP fine Macro-F1 by
 \pairedMLPGainTwoK{} and \pairedMLPGainFiveK{} over RNA references using 2{,}000 and 5{,}000 training-selected
-genes, respectively. Yet the overall advantage over APT shuffled within
-patient and true lineage remains statistically unresolved. Thus an increment
-over these RNA references is established without establishing finer-grained
-pairing specificity. Classical and neural APT-only baselines anchor a reusable
-new-patient comparison, separating recoverable identity from claims of an
-intrinsic assay limit or a biological mechanism.
+genes, respectively. A full-cell-budget 10{,}000-HVG sensitivity analysis also
+improves over RNA alone (0.749 versus 0.728; paired 95\% CI for the difference
+[0.0004,0.0374]), but not over patient- or patient-lineage-shuffled APT
+controls. Thus an increment over RNA references is established without
+establishing finer-grained pairing specificity. Classical and neural APT-only
+baselines anchor a reusable new-patient comparison, separating recoverable
+identity from claims of an intrinsic assay limit or a biological mechanism.
 \end{abstract}
 
 

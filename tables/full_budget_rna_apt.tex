@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{\textbf{Full-budget matched RNA versus RNA+APT sensitivity analysis.}
+All rows use the same patient-disjoint outer folds, full development-cell budget, matched MLP architecture, training-only preprocessing, and three matched final seeds.  Values are subject-balanced macro-F1; paired intervals compare RNA+APT against the row's stated reference using matched seed slots and held-out patients.}
+\label{tab:full_budget_rna_apt}
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llccc}
+\toprule
+RNA features & Condition & Fine SB-F1 & Coarse SB-F1 & $\Delta$ Fine SB-F1 \\
+\midrule
+5k HVG & RNA-only & 0.727 & 0.919 & -- \\
+5k HVG & RNA+APT & 0.724 & 0.920 & $-0.0037$ [$-0.0146$, 0.0165] \\
+\midrule
+10k HVG & RNA-only & 0.728 & 0.920 & -- \\
+10k HVG & RNA+APT & 0.749 & 0.922 & $+0.0204$ [0.0004, 0.0374] \\
+10k HVG & RNA+noise & 0.727 & 0.919 & $+0.0220$ [0.0008, 0.0400] \\
+10k HVG & RNA+APT shuffled within patient & 0.752 & 0.922 & $-0.0036$ [$-0.0131$, 0.0061] \\
+10k HVG & RNA+APT shuffled within patient-lineage & 0.751 & 0.920 & $-0.0017$ [$-0.0059$, 0.0039] \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

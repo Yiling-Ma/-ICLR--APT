@@ -112,6 +112,21 @@ the original oracle. Thus none of these objectives establishes a deployable
 gain or reduces cross-lineage routing errors under the tested protocol.
 \input{tables/hbm_ablation}
 
+\paragraph{Does an RNA-privileged teacher transfer the missing structure?}
+We further tested whether a stronger privileged teacher can convert the
+true-lineage oracle phenomenon into deployable APT-only predictions. The teacher
+uses RNA or true lineage only during training; all student predictions in
+Table~\ref{tab:rph_distill} use the 293 APT features alone at inference. The
+best point estimate, routing plus within-lineage distillation, improves fine
+SB-Macro-F1 from 0.137 to 0.143 and reduces the fine-outside-parent diagnostic
+from 0.176 to 0.167. Its paired difference from the plain APT MLP is
+$+0.0057$ (95\% CI $[-0.0005,0.0127]$), so the improvement remains unresolved.
+The shuffled-teacher control is worse than the plain MLP (0.129), indicating
+that teacher structure matters, but the oracle--deployable gap remains large.
+Thus the hierarchy bottleneck is empirically actionable at most modestly under
+these straightforward privileged-distillation objectives.
+\input{tables/rph_distill}
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/matched_lineage_identity.pdf}
@@ -185,3 +200,17 @@ targeted experiment; the separate one-shuffle-per-seed width grid is labeled
 as a sensitivity analysis in the appendix.
 Lineage-specific contrasts remain exploratory supporting analyses
 (Appendix~\ref{sec:appendix:identity_questions}).
+
+\paragraph{Does the APT increment survive a stronger RNA reference?}
+Because the capped probe does not rule out an underpowered RNA baseline, we ran
+a full-cell-budget matched sensitivity experiment with the same patient folds,
+inner validation patients, preprocessing isolation, hidden architecture,
+optimizer, stopping rule, model-selection metric, and final seed slots for
+RNA-only and RNA+APT. At 5{,}000 HVGs, RNA+APT does not improve over RNA-only.
+At 10{,}000 HVGs, RNA+APT improves fine SB-Macro-F1 from 0.728 to 0.749
+($+0.0204$, 95\% CI $[0.0004,0.0374]$), and it also improves over an
+RNA+noise dimensionality control. However, RNA+APT does not improve over APT
+shuffled within patient or within patient--lineage groups. This supports
+incremental APT-associated predictive value beyond a stronger full-budget RNA
+reference, but not exact cell-level pairing specificity.
+\input{tables/full_budget_rna_apt}

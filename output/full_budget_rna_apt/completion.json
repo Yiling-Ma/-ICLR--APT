@@ -1,0 +1,16 @@
+{
+  "bootstrap": 5000,
+  "cells": 361792,
+  "conditions": 7,
+  "missing_capped_summaries": [
+    "outputs/remaining_modality_hvg2000_v1/summary.csv",
+    "outputs/remaining_modality_hvg5000_v1/summary.csv"
+  ],
+  "patients": 40,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "status": "PASS"
+}

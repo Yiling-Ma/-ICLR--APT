@@ -1,0 +1,25 @@
+{
+  "bootstrap_replicates": 5000,
+  "cells": 361792,
+  "conditions": [
+    "plain",
+    "route",
+    "within",
+    "align",
+    "route_align",
+    "route_within",
+    "full",
+    "full_shuffled",
+    "strong_lineage"
+  ],
+  "outer_folds": 5,
+  "patients": 40,
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "status": "PASS",
+  "tables_generated_from_predictions": true,
+  "uncertainty": "paired seed-slot and held-out-patient bootstrap"
+}
