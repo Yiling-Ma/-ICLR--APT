@@ -18,7 +18,7 @@ import torch.nn.functional as F
 from common import (
     CONDITIONS, RNATeacher, apt_partition, assert_frozen, atomic_json,
     cosine_alignment, dense_rna_batch, fold_indices, grouped_target_permutation,
-    load_benchmark, rna_partition, routing_kd_loss, validation_score,
+    load_benchmark, protocol_hash, rna_partition, routing_kd_loss, validation_score,
 )
 from hbm_core import (
     FINAL_SEEDS, HBMStudent, diagnostic_counts, oracle_predictions, set_seed,
@@ -33,6 +33,9 @@ TEACHER_GRID = ((3e-4, 1e-5), (3e-4, 1e-3), (1e-3, 1e-5), (1e-3, 1e-3))
 
 
 def source_hash() -> str:
+    frozen = os.environ.get("APT_RPH_SOURCE_REVISION")
+    if frozen:
+        return frozen
     root = Path(__file__).resolve().parents[2]
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True,
                             capture_output=True, check=False).stdout.strip() or "unavailable"
@@ -368,7 +371,14 @@ def main():
     elif args.command == "refit" and args.condition == "teacher": refit_teacher(args, data, index, destination, device)
     elif args.command == "select": select_student(args, data, index, destination, device)
     else: refit_student(args, data, index, destination, device)
-    print("COMPLETE", args.command, args.condition, args.seed, args.fold, round(time.time() - started, 1), flush=True)
+    runtime = time.time() - started
+    atomic_json(destination / f"{args.command}_run.json", {
+        "command": args.command, "condition": args.condition, "seed": args.seed, "fold": args.fold,
+        "runtime_seconds": runtime, "hardware": torch.cuda.get_device_name(device),
+        "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"), "source_hash": source_hash(),
+        "protocol_sha256": protocol_hash(),
+    })
+    print("COMPLETE", args.command, args.condition, args.seed, args.fold, round(runtime, 1), flush=True)
 
 
 if __name__ == "__main__":
