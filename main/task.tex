@@ -34,6 +34,18 @@ subtype ontology is conditional on that choice.
 \todocheck{Double check the annotation audit numbers reported here against the
 source spreadsheet before submission.}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figures/collect_data.pdf}
+\caption{\textbf{Workflow for collecting paired single-cell RNA--aptamer data for
+\ourbench{}.} Peripheral blood specimens from a multi-cancer and healthy-control
+cohort are processed into single-cell suspensions, quality controlled, and
+profiled with barcode-linked RNA and \numaptfeatures{}-aptamer measurements from
+the same cells. The resulting paired matrices and transcriptome-derived labels
+define the patient-disjoint benchmark construction.}
+\label{fig:collect_data}
+\end{figure}
+
 The linked post-QC cohort contains 374{,}854 cells. Excluding the uncertain
 \emph{Unknown} subtype leaves \numcells{} benchmark cells. Each subtype has one
 fixed parent lineage. Disease is a six-class patient attribute, not the root of
