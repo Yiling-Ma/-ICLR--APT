@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Group-level acquisition timeline. Each entry is the single date
+recorded for that processing stage and disease/control group in the source
+record, not a per-patient or per-sample date. The BTC library-preparation date
+is malformed in the source record and is flagged rather than corrected.}
+\label{tab:acquisition_timeline}
+\begin{tabular}{lcccccc}
+\toprule
+ & BTC & PC & HCC & GC & CRC & Healthy \\
+\midrule
+Blood collection    & 2024-07-21 & 2024-09-17 & 2024-12-10 & 2025-02-23 & 2025-03-10 & 2025-12-03 \\
+Sample processing   & 2024-07-21 & 2024-09-17 & 2024-12-10 & 2025-02-24 & 2025-03-11 & 2025-12-04 \\
+APT experiment       & 2024-07-22 & 2024-09-18 & 2024-12-11 & 2025-02-24 & 2025-03-11 & 2025-12-04 \\
+Library preparation  & [VERIFY]\textsuperscript{a} & 2024-09-19 & 2024-12-12 & 2025-02-25 & 2025-03-12 & 2025-12-05 \\
+Sequencing           & 2024-07-30 & 2024-09-25 & 2024-12-17 & 2025-03-02 & 2025-03-20 & 2025-12-20 \\
+\bottomrule
+\end{tabular}
+\\[2pt]
+{\footnotesize\textsuperscript{a}Source value \texttt{"224.7.23"}; likely \texttt{2024-07-23} given
+the surrounding BTC dates, but not corrected without confirmation from the data owner.}
+\end{table}

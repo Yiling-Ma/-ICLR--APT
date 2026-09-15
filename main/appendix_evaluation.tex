@@ -12,18 +12,33 @@ transcriptome-derived clusters and annotations provide the cell labels. For a
 benchmark release, this overview must be accompanied by the following provenance
 and protocol fields.
 
-\paragraph{Outstanding disease-confounding validation.}
-\todo{Obtain a sample-linked acquisition manifest from the data owner: patient
-and sample IDs, collection and processing dates, APT assay batch, plate/pool,
-reagent lot, library-preparation batch, sequencing run, site, and available
-fresh/frozen and handling records. Audit disease-by-batch overlap before
-choosing a validation design. Where disease groups have adequate cross-batch
-support, evaluate patient-disjoint, held-out-batch generalization with all
-preprocessing and selection restricted to training data. If disease and batch
-are inseparable, obtain crossed-batch samples or an independent APT cohort;
-statistical adjustment alone cannot identify their separate contributions.
-The NC matrices must not be treated as external validation if they are the
-healthy subset of this cohort. These validations are pending, not completed.}
+\paragraph{Acquisition timeline and disease confounding.}
+A group-level processing record documents, for each of the six disease/control
+groups (BTC, PC, HCC, GC, CRC, and healthy controls), a single blood-collection,
+sample-processing, APT-experiment, library-preparation, and sequencing date
+(Table~\ref{tab:acquisition_timeline}); it records the date completed for the
+group, not a per-patient or per-sample identifier. Under this record, every
+disease/control group's processing falls within its own contiguous calendar
+window (BTC: Jul 2024; PC: Sep 2024; HCC: Dec 2024; GC: Feb--Mar 2025; CRC: Mar
+2025; healthy controls: Dec 2025), and these six windows do not overlap. Disease
+group and acquisition period are therefore not crossed in the available cohort:
+each disease/control group was processed as its own batch, so disease-associated
+and acquisition-associated variation cannot be statistically separated from this
+record alone. Patient-disjoint evaluation (\S\ref{sec:data:contract}) still
+correctly measures generalization to unseen patients, but it is not
+batch-disjoint validation, and the healthy-control matrices cannot serve as an
+acquisition-independent control for this reason. Disentangling disease-associated
+from acquisition-associated variation would require crossed-batch samples or an
+independent APT cohort.
+\todo{Obtain patient- and sample-level batch identifiers (plate/pool, reagent
+lot, exact sequencing run, site, fresh/frozen and handling records) underlying
+the group-level dates reported here. The library-preparation date recorded for
+BTC (source value \texttt{"224.7.23"}) is malformed and requires verification
+against the data owner's records before use; it is not corrected in this
+manuscript.}
+
+\input{tables/acquisition_timeline}
+
 Expression and QC matrices alone do not establish acquisition provenance;
 archived disease analyses cannot establish disease-specific biological effects.
 
@@ -40,19 +55,43 @@ parameter and random seed, the exact UMI/gene/mitochondrial thresholds, and cell
 counts before and after each filter.}
 
 \paragraph{Manual annotation and reference-label reliability.}
-After Seurat clustering, investigators manually assigned lineage and subtype
-names by inspecting canonical marker-gene expression reported in prior PBMC and
-pan-cancer studies \citep{zhang2024pan,yang2024pan}. No quantitative annotation
-confidence, inter-annotator agreement, or external reference-transfer score is
-available. Accordingly, these labels are operational reference annotations, not
-error-free biological ground truth, and benchmark scores are conditional on this
-manual taxonomy. The \emph{Unknown} label was assigned when a cluster did not show
-a coherent canonical marker pattern for the expected PBMC subtypes; this was a
-manual reject decision rather than a calibrated confidence threshold. Unknown
-cells are excluded from the primary 27-subtype benchmark. \todo{Provide the full
-subtype-by-marker citation table, the number and expertise of annotators, whether
-they were blinded to disease, the adjudication procedure, and the explicit rule
-used to assign Unknown.}
+After Seurat clustering, the original annotations used throughout this work were
+assigned by inspecting canonical marker-gene expression reported in prior PBMC
+and pan-cancer studies \citep{zhang2024pan,yang2024pan}. A subsequent
+marker-based annotation audit had three additional reviewers independently
+propose a lineage and subtype label for all 28 reviewed clusters, each with
+supporting positive- and negative-marker evidence
+(Table~\ref{tab:annotation_audit}); the one \emph{Unknown}/low-quality cluster,
+already excluded from the primary subtype benchmark, was independently flagged
+as non-informative by all three reviewers. Broad lineage assignment was
+concordant across all three reviewers for every reviewed cluster (28/28).
+Fine-grained subtype calls were less stable: after normalizing case, diacritics,
+and within-cluster numbering, the three reviewers proposed the same base subtype
+label for 13 of the 27 non-Unknown clusters, partially agreed (two of three) for
+4, and gave three mutually distinct calls for the remaining 10, concentrated
+among T-cell activation/differentiation states (e.g., naive versus
+central/effector memory, and in a few clusters CD4 versus CD8) and B-cell
+differentiation stages (naive, transitional, memory, effector, atypical, and
+germinal-center). The original operational label matched all three reviewers for
+10 of these 27 clusters and matched none of them for 16; in two clusters
+(positive markers \texttt{SLC4A10, KLRB1}), all three independent reviewers
+concurred on a MAIT-cell call where the original label was CD8$^+$ CTL. This
+audit does not establish independent biological ground truth: the reviewers
+worked from the same marker-expression data as the original annotation, fine-grained
+disagreements were not formally adjudicated, and reviewer qualifications and
+blinding to disease or APT labels are not documented. Accordingly, these labels
+remain operational reference annotations, and evaluation against the
+27-subtype ontology remains conditional on this taxonomy. The \emph{Unknown}
+label was assigned when a cluster did not show a coherent canonical marker
+pattern for the expected PBMC subtypes; this was a manual reject decision rather
+than a calibrated confidence threshold. Unknown cells are excluded from the
+primary 27-subtype benchmark.
+\todo{Provide the full subtype-by-marker literature citation table, the
+qualifications of all annotators/reviewers, whether they were blinded to disease
+or APT profiles, and a formal adjudication of the fine-grained disagreements
+documented above.}
+
+\input{tables/annotation_audit}
 
 \paragraph{Cross-disease semantics and hierarchy mapping.}
 The same 27 subtype labels and definitions were applied across all six disease
@@ -64,9 +103,11 @@ The exported lookup and structural audit are available under
 \texttt{benchmark/release\_audit/}: the existing subtype summary has 27 unique
 subtypes, five parents, and \numcells{} cells, and the fold manifest has five
 disjoint groups of eight patients. These checks establish internal bookkeeping
-consistency, not independent biological validity.
-\todo{Document independent validation of the subtype-to-lineage mapping, including
-reviewers, disagreements, adjudication, and any marker-based checks.}
+consistency, not independent biological validity. Independent marker-based
+review of the subtype-to-lineage assignment is documented above (28/28 lineage
+concordance across three independent reviewers).
+\todo{Formal adjudication of the fine-grained subtype disagreements identified
+in that audit remains outstanding.}
 
 \begin{itemize}
     \item \todo{Report recruiting site(s) and dates, prospective versus retrospective

@@ -20,9 +20,17 @@ aptamer features on the same cells. Transcriptomic counts
 were processed with Seurat \citep{hao2021integrated}; predicted doublets and
 low-quality cells were removed, and clusters were manually annotated using
 canonical markers from prior PBMC and pan-cancer studies
-\citep{mcginnis2019doubletfinder,zhang2024pan,yang2024pan}. These annotations
-define \numlineages{} lineages and \numsubtypes{} subtypes. They are operational reference
-labels, not independently measured biological truth.
+\citep{mcginnis2019doubletfinder,zhang2024pan,yang2024pan}, yielding the operational
+labels used throughout this work. A subsequent marker-based annotation audit had
+three additional reviewers independently propose a lineage and subtype call, with
+supporting positive- and negative-marker evidence, for all 28 reviewed clusters.
+Broad lineage assignment was concordant across all three reviewers for every
+cluster; fine-grained subtype calls were less stable, particularly among
+T-cell activation/differentiation states and B-cell differentiation stages
+(Appendix~\ref{sec:appendix:dataset_documentation}). These annotations
+define \numlineages{} lineages and \numsubtypes{} subtypes. They remain operational reference
+labels, not independently measured biological truth, and evaluation against this
+subtype ontology is conditional on that choice.
 
 The linked post-QC cohort contains 374{,}854 cells. Excluding the uncertain
 \emph{Unknown} subtype leaves \numcells{} benchmark cells. Each subtype has one

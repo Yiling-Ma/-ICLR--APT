@@ -32,11 +32,19 @@ equivalence. More comprehensive APT-compatible annotation baselines remain
 useful extensions.
 
 \paragraph{Boundaries of the evidence.}
-The APT cohort contains \numparticipants{} participants and RNA-derived reference labels.
-Independent annotation checks and additional APT cohorts are needed to
-assess broader generalization. Patient-disjoint testing does not remove
-disease-correlated acquisition effects; this manuscript makes no disease
-classification or clinical-validation claim. RNA supplies the reference labels, and its apparent
+The APT cohort contains \numparticipants{} participants and RNA-derived reference labels;
+a marker-based annotation audit (Appendix~\ref{sec:appendix:dataset_documentation}) now
+documents lineage- and subtype-level reference reliability, though independent
+annotation checks by external reviewers and additional APT cohorts remain needed
+to assess broader generalization. Blood collection, sample processing, the APT
+assay, library preparation, and sequencing were each carried out for one
+disease/control group at a time, in six non-overlapping calendar windows; disease
+group and acquisition period are therefore not crossed in the available cohort.
+Patient-disjoint evaluation still correctly tests generalization to unseen
+patients, but it does not constitute batch-disjoint validation, and this
+manuscript makes no disease classification or clinical-validation claim.
+Disentangling disease-associated from acquisition-associated variation would
+require crossed-batch samples or an independent APT cohort. RNA supplies the reference labels, and its apparent
 difficulty depends on features, preprocessing, and the fitted reference.
 An APT increment over either 2{,}000 or 5{,}000 HVGs may reflect restricted RNA representation;
 it is not evidence of irreducible information absent from RNA. The capped
@@ -53,6 +61,12 @@ The outer folds have been examined repeatedly during this study; fixed
 follow-up analyses on them are not untouched confirmatory tests. Their
 overlapping development sets also limit interpreting OOF bootstrap intervals
 as uncertainty for a learning algorithm on an independently sampled cohort.
+The annotation audit offers a complementary perspective on this hierarchy: broad
+lineage assignments were stable under independent marker-based review, whereas
+several fine-grained T- and B-lymphocyte subtype labels admitted alternative
+interpretations among reviewers. This does not explain the model's hierarchy
+gap, but it reinforces the value of reporting lineage and subtype recoverability
+separately rather than as a single blended score.
 
 \section{Conclusion}
 \label{sec:conclusion}
