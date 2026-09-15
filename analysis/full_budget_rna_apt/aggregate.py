@@ -81,14 +81,35 @@ def bootstrap(arrays, n_boot, seed):
     return pd.DataFrame(rows), pd.DataFrame(contrasts)
 
 
-def tables(report, scores, contrasts, capped_root):
+def load_capped(capped_root):
     capped = []
+    missing = []
     for width in (2000, 5000):
-        frame = pd.read_csv(capped_root / f"remaining_modality_hvg{width}_v1" / "summary.csv")
+        path = capped_root / f"remaining_modality_hvg{width}_v1" / "summary.csv"
+        if not path.exists():
+            missing.append(str(path))
+            continue
+        frame = pd.read_csv(path)
         for condition in ("rna", "rna_apt"):
             row = frame[(frame.task == "fine") & (frame.model == "mlp") & (frame.comparison == condition)].iloc[0]
             capped.append({"rna_width": width, "budget": "capped", "condition": condition,
                            "task": "fine", "estimate": row.estimate})
+            coarse = frame[(frame.task == "coarse") & (frame.model == "mlp") & (frame.comparison == condition)]
+            if not coarse.empty:
+                capped.append({"rna_width": width, "budget": "capped", "condition": condition,
+                               "task": "coarse", "estimate": coarse.iloc[0].estimate})
+        delta = frame[(frame.task == "fine") & (frame.model == "mlp") &
+                      (frame.comparison == "rna_apt-minus-rna")]
+        if not delta.empty:
+            row = delta.iloc[0]
+            capped.append({"rna_width": width, "budget": "capped", "condition": "rna_apt-minus-rna",
+                           "task": "fine", "estimate": row.estimate,
+                           "ci_low": getattr(row, "low", np.nan), "ci_high": getattr(row, "high", np.nan)})
+    columns = ["rna_width", "budget", "condition", "task", "estimate", "ci_low", "ci_high"]
+    return pd.DataFrame(capped, columns=columns), missing
+
+
+def tables(report, scores, contrasts, capped):
     combined = pd.concat([pd.DataFrame(capped), scores], ignore_index=True, sort=False)
     combined.to_csv(report / "comparison_table.csv", index=False)
     contrasts.to_csv(report / "paired_contrasts.csv", index=False)
@@ -102,6 +123,9 @@ def tables(report, scores, contrasts, capped_root):
                           (combined.condition == row.condition) & (combined.task == "coarse")]
         delta = contrasts[(contrasts.rna_width == row.rna_width) & (contrasts.task == "fine") &
                           (contrasts.comparison == "rna_apt-minus-rna")] if row.condition == "rna_apt" else pd.DataFrame()
+        if delta.empty and row.condition == "rna_apt":
+            delta = combined[(combined.rna_width == row.rna_width) & (combined.budget == row.budget) &
+                             (combined.condition == "rna_apt-minus-rna") & (combined.task == "fine")]
         d = "" if delta.empty else f"{delta.iloc[0].estimate:+.4f}"
         ci = "" if delta.empty else f"[{delta.iloc[0].ci_low:.4f}, {delta.iloc[0].ci_high:.4f}]"
         c = "" if coarse.empty else f"{coarse.iloc[0].estimate:.3f}"
@@ -109,32 +133,31 @@ def tables(report, scores, contrasts, capped_root):
     (report / "comparison_table.md").write_text("\n".join(lines) + "\n")
 
 
-def figure(report, scores, contrasts, capped_root):
-    labels = ["2k\ncapped", "5k\ncapped", "5k\nfull", "10k\nfull"]
+def figure(report, scores, contrasts, capped):
+    labels = []
     rna = []; apt = []
     for width in (2000, 5000):
-        frame = pd.read_csv(capped_root / f"remaining_modality_hvg{width}_v1" / "summary.csv")
-        query = frame[(frame.task == "fine") & (frame.model == "mlp")]
-        rna.append(float(query[query.comparison == "rna"].estimate.iloc[0]))
-        apt.append(float(query[query.comparison == "rna_apt"].estimate.iloc[0]))
+        query = capped[(capped.rna_width == width) & (capped.task == "fine")]
+        if query.empty:
+            continue
+        labels.append(f"{width // 1000}k\ncapped")
+        rna.append(float(query[query.condition == "rna"].estimate.iloc[0]))
+        apt.append(float(query[query.condition == "rna_apt"].estimate.iloc[0]))
     for width in WIDTHS:
         query = scores[(scores.rna_width == width) & (scores.task == "fine")]
+        labels.append(f"{width // 1000}k\nfull")
         rna.append(float(query[query.condition == "rna"].estimate.iloc[0]))
         apt.append(float(query[query.condition == "rna_apt"].estimate.iloc[0]))
     fig, axes = plt.subplots(1, 2, figsize=(8.2, 3.2), gridspec_kw={"width_ratios": [1.5, 1]})
-    x = np.arange(4); width = .35
-    axes[0].bar(x-width/2, rna, width, label="RNA-only")
-    axes[0].bar(x+width/2, apt, width, label="RNA+APT")
+    x = np.arange(len(labels)); width = .35
+    axes[0].bar(x - width / 2, rna, width, label="RNA-only")
+    axes[0].bar(x + width / 2, apt, width, label="RNA+APT")
     axes[0].set_xticks(x, labels); axes[0].set_ylabel("Fine SB-Macro-F1"); axes[0].set_ylim(0, 0.75); axes[0].legend(frameon=False)
     full = contrasts[(contrasts.task == "fine") & (contrasts.comparison == "rna_apt-minus-rna")].sort_values("rna_width")
-    historical = []
-    for width_value in (2000, 5000):
-        frame = pd.read_csv(capped_root / f"remaining_modality_hvg{width_value}_v1" / "summary.csv")
-        historical.append(frame[(frame.task == "fine") & (frame.model == "mlp") &
-                                (frame.comparison == "rna_apt-minus-rna")].iloc[0])
-    delta = np.r_[[row.estimate for row in historical], full.estimate]
-    low = np.r_[[row.low for row in historical], full.ci_low]
-    high = np.r_[[row.high for row in historical], full.ci_high]
+    historical = capped[(capped.task == "fine") & (capped.condition == "rna_apt-minus-rna")].sort_values("rna_width")
+    delta = np.r_[historical.estimate.to_numpy(), full.estimate.to_numpy()]
+    low = np.r_[historical.ci_low.to_numpy(), full.ci_low.to_numpy()]
+    high = np.r_[historical.ci_high.to_numpy(), full.ci_high.to_numpy()]
     axes[1].axhline(0, color="black", linewidth=.8)
     axes[1].errorbar(x, delta, yerr=[delta-low, high-delta], fmt="o", capsize=3)
     axes[1].set_xticks(x, labels); axes[1].set_ylabel("Delta Fine SB-Macro-F1")
@@ -154,10 +177,12 @@ def main():
     arrays = load_all(args.input)
     scores, contrasts = bootstrap(arrays, args.n_boot, 20260915)
     scores.to_csv(args.output / "scores.csv", index=False)
-    tables(args.output, scores, contrasts, args.capped_root)
-    figure(args.output, scores, contrasts, args.capped_root)
+    capped, missing_capped = load_capped(args.capped_root)
+    tables(args.output, scores, contrasts, capped)
+    figure(args.output, scores, contrasts, capped)
     atomic_json(args.output / "completion.json", {"status": "PASS", "bootstrap": args.n_boot,
-                "conditions": len(arrays), "seeds": list(SEEDS), "patients": 40, "cells": 361792})
+                "conditions": len(arrays), "seeds": list(SEEDS), "patients": 40, "cells": 361792,
+                "missing_capped_summaries": missing_capped})
 
 
 if __name__ == "__main__": main()
